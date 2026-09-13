@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Nils Wlömert">
-<meta name="dcterms.date" content="2026-09-13">
 
-<title>Marketing Analytics</title>
+<title>Introduction – Marketing Analytics</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -38,7 +36,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./00-introduction.html" rel="next">
+<link href="./01-foundations.html" rel="next">
+<link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -90,7 +89,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome!</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./00-introduction.html">Introduction</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -120,13 +119,13 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome!</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./00-introduction.html" class="sidebar-item-text sidebar-link">
+  <a href="./00-introduction.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Introduction</span></a>
   </div>
 </li>
@@ -146,7 +145,20 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome!</a></li>
+  <li><a href="#course-structure" id="toc-course-structure" class="nav-link active" data-scroll-target="#course-structure">Course structure</a>
+  <ul class="collapse">
+  <li><a href="#schedule" id="toc-schedule" class="nav-link" data-scroll-target="#schedule">Schedule</a></li>
+  <li><a href="#grading-tbc" id="toc-grading-tbc" class="nav-link" data-scroll-target="#grading-tbc">Grading <strong>(TBC)</strong></a></li>
+  </ul></li>
+  <li><a href="#course-materials" id="toc-course-materials" class="nav-link" data-scroll-target="#course-materials">Course materials</a>
+  <ul class="collapse">
+  <li><a href="#main-reference" id="toc-main-reference" class="nav-link" data-scroll-target="#main-reference">Main reference</a></li>
+  <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings">Further readings</a></li>
+  <li><a href="#discussion-forum" id="toc-discussion-forum" class="nav-link" data-scroll-target="#discussion-forum">Discussion forum</a></li>
+  <li><a href="#other-web-resources" id="toc-other-web-resources" class="nav-link" data-scroll-target="#other-web-resources">Other web resources</a></li>
+  <li><a href="#contact-tbc" id="toc-contact-tbc" class="nav-link" data-scroll-target="#contact-tbc">Contact <strong>(TBC)</strong></a></li>
+  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -155,26 +167,14 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Marketing Analytics</h1>
+<h1 class="title">Introduction</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Nils Wlömert </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">September 13, 2026</p>
-    </div>
-  </div>
   
     
   </div>
@@ -184,17 +184,350 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="welcome" class="level1 unnumbered">
-<h1 class="unnumbered">Welcome!</h1>
-<p>Welcome to the course <strong>Marketing Analytics</strong>! This course covers the conceptual foundations of data analysis for marketing decision-making and the application of these methods to real marketing problems using the statistical software <strong>R</strong>.</p>
-<p>The course is organized around one guiding idea: most questions marketing managers care about are questions about <em>what would happen if we acted</em> — and answering such questions well requires understanding how your data came into being. The chapters on this site develop this idea step by step, from describing data, through quantifying uncertainty, to learning from experiments, observational data, and panel data.</p>
-<p>Each chapter opens with a real marketing decision, develops the concepts with simulated and real examples, shows the implementation in R with commented code, and closes with a learning check. Technical details are available in collapsible “Under the hood” boxes — read them when you want depth; skip them on first reading.</p>
-<p>This website accompanies the in-person sessions: work through the assigned chapter <em>after</em> each session to consolidate, and use the R onboarding module <em>before</em> the second session to set up your environment.</p>
-<p>If you have any questions, feel free to send me a short email.</p>
-<p>Nils Wlömert<br>
-<a href="mailto:nils.wloemert@wu.ac.at" class="email">nils.wloemert@wu.ac.at</a></p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Status: preliminary">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Status: preliminary
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This page has been migrated from last year’s course site as a placeholder. The session dates and rooms below are the confirmed dates for winter term 2026/27; items marked <strong>(TBC)</strong> — chapter assignments, assignment dates, coaching slots, and grading details — will be finalized before the semester starts.</p>
+</div>
+</div>
+<section id="course-structure" class="level2">
+<h2 class="anchored" data-anchor-id="course-structure">Course structure</h2>
+<p>This course combines self-study elements (the chapters on this website) with weekly in-person interactive sessions. The syllabus consists of three main parts, as reflected by the structure of this website:</p>
+<ol type="1">
+<li><strong>Lecture notes</strong>: the chapters on this website explain the concepts and methods behind marketing analytics and show you how to apply them using the statistical software R.</li>
+<li><strong>Individual assignments</strong>: the individual assignments require you to apply the acquired knowledge to new data sets.</li>
+<li><strong>Group project</strong>: in the group project you will design and conduct your own market research project — including a real randomized experiment — and transfer the knowledge to a real business setting.</li>
+</ol>
+<p>The general approach is that students first familiarize themselves with the contents by going through the materials on their own. This <strong>self-study</strong> process is complemented with in-person <strong>weekly interactive sessions</strong>, which provide ample opportunities to ask questions and clarify points that require further discussion. Before the second session, you should complete the self-paced <strong>R onboarding module</strong>, which walks you through installing R and RStudio (or working in Posit Cloud as a zero-install alternative).</p>
+<section id="schedule" class="level3">
+<h3 class="anchored" data-anchor-id="schedule">Schedule</h3>
+<section id="in-person-lecture" class="level4">
+<h4 class="anchored" data-anchor-id="in-person-lecture">In-person lecture</h4>
+<p>The contents on this website are divided into weekly readings. To be able to follow the curriculum and complete the assignments, you need to work through the materials assigned for the respective week. The relevant chapters are indicated in the table below <strong>(assignment of chapters to sessions: TBC)</strong>. As a preparation for the in-class discussions, you should go through the <strong>Learning check</strong> section at the end of each chapter to self-assess your progress and identify knowledge gaps.</p>
+<p><strong>Lecture dates — Group A</strong></p>
+<table class="caption-top table">
+<caption>Dates and times are indicated for group A.</caption>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Date</th>
+<th>Day</th>
+<th>Time</th>
+<th>Room</th>
+<th>Topics (preliminary)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Oct.&nbsp;05</td>
+<td>Monday</td>
+<td>01:00 PM – 04:00 PM</td>
+<td>TC.4.03</td>
+<td>Module 1: Questions, decisions &amp; data</td>
+</tr>
+<tr class="even">
+<td>Oct.&nbsp;12</td>
+<td>Monday</td>
+<td>01:00 PM – 05:00 PM</td>
+<td>D3.0.233</td>
+<td>Module 2: Describing data</td>
+</tr>
+<tr class="odd">
+<td>Oct.&nbsp;19</td>
+<td>Monday</td>
+<td>01:00 PM – 05:00 PM</td>
+<td>D3.0.233</td>
+<td>Module 3: Uncertainty · Module 4: Experiments I</td>
+</tr>
+<tr class="even">
+<td>Oct.&nbsp;27</td>
+<td>Tuesday</td>
+<td>01:00 PM – 04:00 PM</td>
+<td>TC.5.05</td>
+<td>Module 4: Experiments II</td>
+</tr>
+<tr class="odd">
+<td>Nov.&nbsp;02</td>
+<td>Monday</td>
+<td>01:00 PM – 04:00 PM</td>
+<td>TC.4.03</td>
+<td>Module 5: Observational data I</td>
+</tr>
+<tr class="even">
+<td>Nov.&nbsp;09</td>
+<td>Monday</td>
+<td>01:00 PM – 04:00 PM</td>
+<td>TC.4.03</td>
+<td>Module 5: Observational data II</td>
+</tr>
+<tr class="odd">
+<td>Nov.&nbsp;16</td>
+<td>Monday</td>
+<td>01:00 PM – 04:00 PM</td>
+<td>TC.4.03</td>
+<td>Module 5: Observational data III</td>
+</tr>
+<tr class="even">
+<td>Nov.&nbsp;23</td>
+<td>Monday</td>
+<td>01:00 PM – 04:00 PM</td>
+<td>TC.4.03</td>
+<td>Group project: questionnaire design &amp; coaching (TBC)</td>
+</tr>
+<tr class="odd">
+<td>Nov.&nbsp;30</td>
+<td>Monday</td>
+<td>01:00 PM – 05:00 PM</td>
+<td>D3.0.233</td>
+<td>Module 6: Panel data &amp; quasi-experiments</td>
+</tr>
+<tr class="even">
+<td>Dec.&nbsp;15</td>
+<td>Tuesday</td>
+<td>10:00 AM – 12:00 PM</td>
+<td>D5.0.001</td>
+<td>Final exam (TBC)</td>
+</tr>
+<tr class="odd">
+<td>Jan.&nbsp;07</td>
+<td>Thursday</td>
+<td>01:00 PM – 05:00 PM</td>
+<td>Online</td>
+<td>Module 7 &amp; project presentations (TBC)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Lecture dates — Group B</strong></p>
+<table class="caption-top table">
+<caption>Dates and times are indicated for group B.</caption>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Date</th>
+<th>Day</th>
+<th>Time</th>
+<th>Room</th>
+<th>Topics (preliminary)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Oct.&nbsp;08</td>
+<td>Thursday</td>
+<td>01:00 PM – 04:00 PM</td>
+<td>TC.5.03</td>
+<td>Module 1: Questions, decisions &amp; data</td>
+</tr>
+<tr class="even">
+<td>Oct.&nbsp;15</td>
+<td>Thursday</td>
+<td>01:30 PM – 05:30 PM</td>
+<td>TC.3.03</td>
+<td>Module 2: Describing data</td>
+</tr>
+<tr class="odd">
+<td>Oct.&nbsp;22</td>
+<td>Thursday</td>
+<td>01:00 PM – 05:00 PM</td>
+<td>TC.5.15</td>
+<td>Module 3: Uncertainty · Module 4: Experiments I</td>
+</tr>
+<tr class="even">
+<td>Oct.&nbsp;29</td>
+<td>Thursday</td>
+<td>01:00 PM – 04:00 PM</td>
+<td>TC.5.03</td>
+<td>Module 4: Experiments II</td>
+</tr>
+<tr class="odd">
+<td>Nov.&nbsp;05</td>
+<td>Thursday</td>
+<td>01:00 PM – 04:00 PM</td>
+<td>TC.5.03</td>
+<td>Module 5: Observational data I</td>
+</tr>
+<tr class="even">
+<td>Nov.&nbsp;12</td>
+<td>Thursday</td>
+<td>01:00 PM – 04:00 PM</td>
+<td>TC.5.03</td>
+<td>Module 5: Observational data II</td>
+</tr>
+<tr class="odd">
+<td>Nov.&nbsp;19</td>
+<td>Thursday</td>
+<td>01:00 PM – 04:00 PM</td>
+<td>TC.5.03</td>
+<td>Module 5: Observational data III</td>
+</tr>
+<tr class="even">
+<td>Nov.&nbsp;26</td>
+<td>Thursday</td>
+<td>01:30 PM – 04:30 PM</td>
+<td>TC.3.03</td>
+<td>Group project: questionnaire design &amp; coaching (TBC)</td>
+</tr>
+<tr class="odd">
+<td>Dec.&nbsp;03</td>
+<td>Thursday</td>
+<td>02:00 PM – 06:00 PM</td>
+<td>TC.3.01</td>
+<td>Module 6: Panel data &amp; quasi-experiments</td>
+</tr>
+<tr class="even">
+<td>Dec.&nbsp;15</td>
+<td>Tuesday</td>
+<td>10:00 AM – 12:00 PM</td>
+<td>D5.0.001</td>
+<td>Final exam (TBC)</td>
+</tr>
+<tr class="odd">
+<td>Jan.&nbsp;08</td>
+<td>Friday</td>
+<td>02:00 PM – 06:00 PM</td>
+<td>Online</td>
+<td>Module 7 &amp; project presentations (TBC)</td>
+</tr>
+</tbody>
+</table>
+<p>We understand that the self-study format might pose challenges to the learning process because we cannot troubleshoot in person outside of the classroom sessions. Remember that it is very unlikely that you are the only student encountering a particular problem. So please make use of the forum on CANVAS WU (see below) to interact with your peers or ask us questions so that everyone else will benefit from the answer (there are no stupid questions!). In case you cannot get answers to address a specific problem, we will be available during the in-person classroom sessions for coaching.</p>
+</section>
+<section id="individual-assignments-tbc" class="level4">
+<h4 class="anchored" data-anchor-id="individual-assignments-tbc">Individual assignments <strong>(TBC)</strong></h4>
+<p>There will be individual assignments complemented with optional coaching sessions. The assignments need to be submitted in a reproducible reporting format via CANVAS WU; the reporting format is introduced together with the first assignment. <strong>The number of assignments, the assignment topics, and all dates will be announced here before the semester starts.</strong></p>
+<table class="caption-top table">
+<caption>Assignment schedule (identical structure for both groups; dates differ — TBC).</caption>
+<thead>
+<tr class="header">
+<th>Assignment</th>
+<th>Assigned</th>
+<th>Coaching</th>
+<th>Submission</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Assignment 1 (TBC)</td>
+<td>TBC</td>
+<td>TBC</td>
+<td>TBC</td>
+</tr>
+<tr class="even">
+<td>Assignment 2 (TBC)</td>
+<td>TBC</td>
+<td>TBC</td>
+<td>TBC</td>
+</tr>
+<tr class="odd">
+<td>Assignment 3 (TBC)</td>
+<td>TBC</td>
+<td>TBC</td>
+<td>TBC</td>
+</tr>
+<tr class="even">
+<td>Assignment 4 (TBC)</td>
+<td>TBC</td>
+<td>TBC</td>
+<td>TBC</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="group-project" class="level4">
+<h4 class="anchored" data-anchor-id="group-project">Group project</h4>
+<p>The marketing research group project consists of multiple consecutive steps:</p>
+<ul>
+<li>the design of a questionnaire containing a randomized experiment</li>
+<li>data collection using an online survey</li>
+<li>data handling &amp; data analysis</li>
+<li>presentation of your results</li>
+</ul>
+<p>We will offer coaching sessions throughout this process, providing feedback and allowing you to ask questions. <strong>The coaching slots and submission dates will be announced here (TBC)</strong>; the in-class coaching sessions are marked in the lecture schedule above.</p>
+<p>Your main point of contact for the group project is me (<a href="mailto:nils.wloemert@wu.ac.at" class="email">nils.wloemert@wu.ac.at</a>).</p>
+</section>
+</section>
+<section id="grading-tbc" class="level3">
+<h3 class="anchored" data-anchor-id="grading-tbc">Grading <strong>(TBC)</strong></h3>
+<p>Grading is planned to be based on the following components <strong>(weights and details TBC)</strong>:</p>
+<ul>
+<li><strong>Market research group project</strong> (questionnaire design, data collection &amp; analysis, reporting &amp; presentation) [weight: 30%]</li>
+<li><strong>Individual take-home computer exercises</strong> [weight: 30%]</li>
+<li><strong>Final exam</strong> (concepts &amp; methods) [weight: 30%]</li>
+<li><strong>Class participation</strong> (quantity &amp; quality of contributions during the weekly sessions, contributions in the online forum, etc.) [weight: 10%]</li>
+</ul>
+<p>The <strong>final exam</strong> is scheduled for December 15, 2026 (Tue), 10:00 AM – 12:00 PM, in D5.0.001 <strong>(TBC)</strong>. The exam covers questions about the concepts and methods (no coding); example exams from previous years will be provided.</p>
+<p>To ensure an equal contribution of group members for the group assignment, a <strong>peer assessment</strong> will be conducted among group members, which enters into the computation of the individual grades for the project.</p>
+<p><strong>To successfully pass this course, your weighted final grade needs to exceed 60%.</strong></p>
+</section>
+</section>
+<section id="course-materials" class="level2">
+<h2 class="anchored" data-anchor-id="course-materials">Course materials</h2>
+<section id="main-reference" class="level3">
+<h3 class="anchored" data-anchor-id="main-reference">Main reference</h3>
+<p>The main reference for this course is this website along with the corresponding slides (linked from each chapter). The aim of the materials is to condense the contents and direct your attention to the most relevant aspects, so that we can focus our attention during the classroom sessions on application, discussion, and the points that require clarification.</p>
+<p>At the end of each chapter, you will find a section with references. It is highly recommended that you consult these references for further clarification in case you require additional information on a topic.</p>
+</section>
+<section id="further-readings" class="level3">
+<h3 class="anchored" data-anchor-id="further-readings">Further readings</h3>
+<p>In addition to these lecture notes, there are many excellent books available (many of them for free) that focus on different aspects of R and data analysis. There are so many free resources available by now that a team of R programmers has set up a website that provides an overview of the available resources by topic: <a href="https://www.bigbookofr.com/">Big Book of R</a>.</p>
+<p>In case you would like to learn more about the topics of this course, I can particularly recommend the following books:</p>
+<ul>
+<li><strong><a href="https://gabors-data-analysis.com/">Data Analysis for Business, Economics, and Policy</a></strong> (Békés &amp; Kézdi) — an excellent, case-based treatment of data analysis, prediction, and causal inference whose spirit this course shares.</li>
+<li><strong><a href="https://r4ds.hadley.nz/">R for Data Science</a></strong> — Hadley Wickham’s introduction to R as a tool for doing data science, focusing on the tidyverse. [FREE online version]</li>
+<li><strong><a href="https://www.statlearning.com/">An Introduction to Statistical Learning</a></strong> — an introduction to statistical learning methods, from linear regression to more advanced methods. [FREE online version]</li>
+<li><strong><a href="http://r-marketing.r-forge.r-project.org/">R for Marketing Research and Analytics</a></strong> — designed to teach R to marketing practitioners and data scientists.</li>
+<li><strong><a href="https://moderndive.com/">Statistical Inference via Data Science</a></strong> — an accessible treatment of statistical inference. [FREE online version]</li>
+<li><strong><a href="http://tidytextmining.com/">Text Mining with R</a></strong> — analyzing unstructured data (texts) using R. [FREE online version]</li>
+<li><strong><a href="https://r-graphics.org/">R Graphics Cookbook</a></strong> — more than 150 recipes for generating high-quality graphs quickly. [FREE online version]</li>
+<li><strong><a href="http://www.urfie.net/read/index.html">Using R For Introductory Econometrics</a></strong> — an introduction to R with a focus on standard tools and methods used in econometrics. [FREE online version]</li>
+<li><strong><a href="https://www.amazon.de/Discovering-Statistics-Using-Andy-Field/dp/1446200469">Discovering Statistics Using R</a></strong> (Field, Miles &amp; Field, 2012) — an accessible and comprehensive introduction to statistics.</li>
+</ul>
+</section>
+<section id="discussion-forum" class="level3">
+<h3 class="anchored" data-anchor-id="discussion-forum">Discussion forum</h3>
+<p><strong>We strongly encourage you to ask your questions via the online forum</strong> on the course page on the WU learning platform. The purpose of the forum is to allow you to discuss questions related to the contents with your classmates and us. Please make use of this forum as much as possible and ask questions if something remained unclear. Remember that there are no stupid questions! And if you know the answer to a question that is asked in the forum, it is also a good exercise to explain the concepts to your classmates.</p>
+</section>
+<section id="other-web-resources" class="level3">
+<h3 class="anchored" data-anchor-id="other-web-resources">Other web resources</h3>
+<ul>
+<li><a href="https://www.r-project.org/" class="uri">https://www.r-project.org/</a> — official R website</li>
+<li><a href="https://www.rdocumentation.org/" class="uri">https://www.rdocumentation.org/</a> — R documentation aggregator</li>
+<li><a href="https://stackoverflow.com/" class="uri">https://stackoverflow.com/</a> — general discussion forum for programmers, incl.&nbsp;R</li>
+<li><a href="https://stats.stackexchange.com/" class="uri">https://stats.stackexchange.com/</a> — discussion forum on statistics and data analytics</li>
+<li><a href="https://www.r-bloggers.com/" class="uri">https://www.r-bloggers.com/</a> — R blog aggregator</li>
+<li><a href="http://www.cookbook-r.com/" class="uri">http://www.cookbook-r.com/</a> — useful examples for all kinds of R problems</li>
+<li><a href="https://ggplot2.tidyverse.org/reference/index.html" class="uri">https://ggplot2.tidyverse.org/reference/index.html</a> — reference for data visualization</li>
+</ul>
+</section>
+<section id="contact-tbc" class="level3">
+<h3 class="anchored" data-anchor-id="contact-tbc">Contact <strong>(TBC)</strong></h3>
+<p>We are happy to answer your questions, so feel free to send a short email — teaching-assistant contact <strong>(TBC)</strong> for the individual assignments, or myself (<a href="mailto:nils.wloemert@wu.ac.at" class="email">nils.wloemert@wu.ac.at</a>) for the lectures and the group project. We will be available during the weekly sessions to clarify your questions. <strong>However, please note that before you contact us, you should try to solve problems on your own first</strong> (e.g., by using this website, your AI assistant of choice, the online forum, or discussion with your classmates).</p>
+</section>
+<section id="acknowledgements" class="level3">
+<h3 class="anchored" data-anchor-id="acknowledgements">Acknowledgements</h3>
+<p>This tutorial is supported through Digital Learning Project Funding by WU Vienna. None of the materials covered in this tutorial are new. We intend to provide a summary of existing methods from a marketing research perspective and cite the corresponding sources. If you should have any comments or suggestions, please <a href="https://github.com/WU-RDS">contact us through the GitHub page of this course</a>.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -600,10 +933,13 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Welcome!">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Welcome!</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./00-introduction.html" class="pagination-link" aria-label="Introduction">
-        <span class="nav-page-text">Introduction</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./01-foundations.html" class="pagination-link" aria-label="Marketing Analytics as Decision-Making">
+        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Marketing Analytics as Decision-Making</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
