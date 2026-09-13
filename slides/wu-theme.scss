@@ -1,0 +1,70 @@
+/*-- scss:defaults --*/
+
+// ---- Adjust these to the official WU corporate colors ----
+$wu-blue: #0f5da8;        // primary brand color (placeholder – replace with official hex)
+$wu-blue-dark: #0a3d6e;
+$wu-grey: #58585a;
+$wu-light: #f2f6fa;
+
+$font-family-sans-serif: "Source Sans Pro", "Segoe UI", Helvetica, Arial, sans-serif;
+$presentation-heading-color: $wu-blue-dark;
+$presentation-heading-font-weight: 600;
+$presentation-h2-font-size: 1.35em;
+$presentation-font-size-root: 34px;
+$link-color: $wu-blue;
+$code-color: $wu-blue-dark;
+
+/*-- scss:rules --*/
+
+// Section divider slides
+.divider {
+  h1 {
+    color: white;
+    font-size: 1.6em;
+  }
+  .section-number {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 1.1em;
+    display: block;
+    margin-bottom: 0.3em;
+  }
+}
+
+// Footer & slide number, kept discreet
+.reveal .footer {
+  font-size: 0.45em;
+  color: $wu-grey;
+}
+.reveal .slide-number {
+  font-size: 0.5em;
+  color: $wu-grey;
+}
+
+// Emphasis boxes
+.keybox {
+  background-color: $wu-light;
+  border-left: 6px solid $wu-blue;
+  padding: 0.5em 0.8em;
+  margin-top: 0.6em;
+  border-radius: 0 6px 6px 0;
+}
+
+.discussion {
+  background-color: #fdf6ec;
+  border-left: 6px solid #d99a2b;
+  padding: 0.5em 0.8em;
+  margin-top: 0.6em;
+  border-radius: 0 6px 6px 0;
+}
+
+// Slightly smaller tables
+.reveal table {
+  font-size: 0.72em;
+}
+
+// Source lines under exhibits
+.source {
+  font-size: 0.45em;
+  color: $wu-grey;
+  margin-top: 0.4em;
+}

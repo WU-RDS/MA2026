@@ -1,0 +1,34 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Marketing Analytics"
+  author: "Nils Wlömert"
+  date: last-modified
+  chapters:
+    - index.qmd
+    - 01-foundations.qmd
+  # Add further chapters here as they are migrated, e.g.:
+  #  - 02-describing-data.qmd
+  repo-url: https://github.com/wu-rds/MA2026   # adjust to the actual repo
+  sidebar:
+    search: true
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+    css: book-style.css
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: true
+    code-summary: "Show the code"
+    fig-dpi: 200
+
+execute:
+  warning: false
+  message: false
+  freeze: auto

@@ -1,0 +1,511 @@
+---
+title: "Marketing Analytics"
+subtitle: "Chapter 1 · Marketing Analytics as Decision-Making"
+author: "Nils Wlömert"
+institute: "Vienna University of Economics and Business (WU)"
+date: last-modified
+date-format: "MMMM YYYY"
+format:
+  revealjs:
+    theme: [default, wu-theme.scss]
+    width: 1280
+    height: 720
+    margin: 0.08
+    slide-number: c/t
+    footer: "Marketing Analytics — Nils Wlömert"
+    # logo: img/wu-logo.png        # <- drop the WU logo into img/ and uncomment
+    transition: none
+    center: false
+    menu: true
+    pdf-separate-fragments: false  # incremental builds collapse to one page in the PDF handout
+    fig-dpi: 200
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+source("../R/ch01-figures.R")
+```
+
+## Today's session {.smaller}
+
+::: columns
+::: {.column width="55%"}
+**Part A — Why we are here**
+
+1.1 Why marketing runs on data\
+1.2 A \$50 million question
+
+**Part B — The framework of the course**
+
+1.3 Four kinds of questions\
+1.4 Correlation, causation & what data can show\
+1.5 The cast of variables\
+1.6 Why randomization works\
+1.7 Between the poles: quasi-experiments
+:::
+
+::: {.column width="45%"}
+**Part C — Making it work**
+
+1.8 From business problem to research design\
+1.9 The analytics workflow (and AI assistants)\
+1.10 The course at a glance
+
+::: keybox
+**One promise for today:** no formulas, no R output, no tests. Concepts and pictures only — the machinery follows in later sessions.
+:::
+:::
+:::
+
+::: notes
+Organizational items (grading, project, schedule) are deferred to 1.10 — start with content, not bureaucracy. Total budget: 3h incl. two breaks.
+:::
+
+# 1.1 Why marketing runs on data {.divider background-color="#0a3d6e"}
+
+## The manager's job description has changed
+
+::: columns
+::: {.column width="55%"}
+::: incremental
+-   Every purchase, click, swipe, and like leaves a trace — firms sit on more behavioral data than they can use
+-   Surveys of CMOs consistently rank **data & analytics competence** among the top changes to the marketing role
+-   The bottleneck is no longer *collecting* data — it is **drawing valid conclusions** from it
+:::
+:::
+
+::: {.column width="45%"}
+<!-- Re-use one strong exhibit from the current deck, e.g. the Deloitte CMO survey chart: -->
+
+<!-- ![](img/deloitte_cmo_2024.png){width="100%"} -->
+
+<!-- ::: source -->
+<!-- Source: Deloitte CMO Insights (2024) -->
+<!-- ::: -->
+:::
+:::
+
+::: keybox
+This course is **not** about producing numbers. It is about knowing **which analysis answers which managerial question** — and executing it credibly in R.
+:::
+
+::: notes
+Keep to ≤ 5 minutes. One exhibit is enough; the eBay case carries the real motivation.
+:::
+
+# 1.2 A \$50 million question {.divider background-color="#0a3d6e"}
+
+## eBay, 2012: does paid search advertising pay off?
+
+::: columns
+::: {.column width="50%"}
+-   eBay spent \~ \$50M **per year** on paid search ads (Google, Bing, Yahoo)
+-   The analytics team examined the data: users **exposed to ads bought far more** than users who weren't
+-   Measured "returns" on brand-keyword ads looked spectacular
+:::
+
+::: {.column width="50%"}
+```{r ebay-naive, fig.width=6, fig.height=4.6}
+fig_ebay_naive()
+```
+:::
+:::
+
+::: discussion
+**Discuss (5 min):** Would you keep spending the \$50M? What could go wrong with this conclusion?
+:::
+
+::: notes
+Collect hypotheses on the board before revealing. Students usually find "people who search for eBay would have gone there anyway" — perfect setup.
+:::
+
+## What the experiment revealed
+
+::: incremental
+-   In 2012, economists convinced eBay to run a **large-scale experiment**: paid search was **switched off** in randomly selected US regions and kept on in others
+-   Result: sales in the switched-off regions **barely moved** — most clicks came from people who **would have bought anyway**
+-   The naive analysis had compared **shoppers with intent** to **shoppers without intent** — and credited the difference to the ads
+-   Estimated true returns for the average keyword: **negative**
+:::
+
+. . .
+
+::: keybox
+Smart people, huge data, careful computation — and a conclusion that was off by tens of millions of dollars. **The problem was not the math. It was the comparison.**
+:::
+
+::: source
+Case based on Blake, Nosko & Tadelis (2015), *Econometrica* — details in the course book.
+:::
+
+## The comparison that matters
+
+**The causal question:** *What would eBay's sales have been **without** the ads — everything else unchanged?*
+
+<br>
+
+|                                | Observed              | Needed                             |
+|--------------------------------|-----------------------|-------------------------------------|
+| Group A                        | Exposed users' sales  | Exposed users' sales                |
+| Group B                        | Unexposed users' sales| **The same users**, unexposed       |
+| Difference measures…           | Exposure **+ intent** | Effect of exposure only             |
+
+<br>
+
+::: keybox
+The "needed" Group B is a **counterfactual** — a world we can never observe directly. All of causal inference is about **constructing a credible stand-in** for it. This single idea organizes the entire course.
+:::
+
+# 1.3 Four kinds of questions {.divider background-color="#0a3d6e"}
+
+## Every analytics task answers one of four questions {.smaller}
+
+| # | Question | Type | Marketing examples |
+|---|----------------------------|-------------|----------------------------------------|
+| 1 | **What is going on?** | Descriptive | Segment sizes, churn rate, funnel drop-off, satisfaction tracking |
+| 2 | **What will happen?** | Predictive | Which customers will churn next quarter? Demand next month? |
+| 3 | **What happens if we act?** | Causal | Does the discount *cause* extra sales? Did the campaign work? |
+| 4 | **What should we do?** | Prescriptive | Set the price; allocate budget across channels |
+
+. . .
+
+::: keybox
+**Prescription requires causation.** To choose an action you must know what each action would *cause* — i.e., compare counterfactuals. Prediction alone is not enough… and confusing 2 with 3 is precisely the eBay mistake.
+:::
+
+::: notes
+Anchor each row with a quick show of hands: "who has seen a dashboard like this?" The table returns as the orientation slide of every future session.
+:::
+
+## Prediction ≠ causation: same data, different questions
+
+**"Customers who see our newsletter churn 40% less."**
+
+::: columns
+::: {.column width="50%"}
+**As a predictive statement ✓**
+
+Newsletter readership *predicts* retention — useful for **targeting**: flag non-readers as churn risks.
+
+*Valid even if the newsletter does nothing.*
+:::
+
+::: {.column width="50%"}
+**As a causal statement ✗ (so far)**
+
+"Send more newsletters → churn drops"?\
+Only if readership *causes* retention — but engaged customers **both** read newsletters **and** stay.
+
+*Requires a counterfactual comparison.*
+:::
+:::
+
+. . .
+
+::: discussion
+**Classify these (2 min, neighbor discussion):** (a) "Which ad creative will get the highest CTR?" (b) "How large is our Gen-Z segment?" (c) "Should we raise the price by 5%?"
+:::
+
+# 1.4 Correlation, causation & what data can show {.divider background-color="#0a3d6e"}
+
+## Two pictures of "X relates to Y"
+
+```{r two-pictures, fig.width=12.5, fig.height=5}
+fig_two_pictures()
+```
+
+::: keybox
+The two pictures can look **equally convincing** — yet only (a) licenses a causal conclusion. The difference is invisible in the plot: it lies in **how the data came to be** (the *data-generating process*).
+:::
+
+## Three ways to get the same scatter plot
+
+```{r three-scatters, fig.width=12.5, fig.height=4.6}
+fig_three_scatters()
+```
+
+::: incremental
+-   All three panels show a similar positive correlation — **the data alone cannot distinguish them**
+-   Panel 2: the relationship is created by a third variable (color = customer segment) — **within** each segment, it vanishes
+-   Panel 3: any two trending series correlate — time is the ultimate confounder
+:::
+
+::: notes
+These are simulated, so *we* know the truth in each panel — make that explicit: "I generated these; the labels are correct by construction. With real data, you never get the labels for free."
+:::
+
+## Reverse causality: who is causing whom?
+
+**Observed:** regions with higher ad spend show higher sales.
+
+::: columns
+::: {.column width="50%"}
+```{r reverse-1, fig.width=5.6, fig.height=2.2}
+dgm_reverse("forward")
+```
+
+*Story 1:* advertising drives sales.
+:::
+
+::: {.column width="50%"}
+```{r reverse-2, fig.width=5.6, fig.height=2.2}
+dgm_reverse("backward")
+```
+
+*Story 2:* budgets are **set as a % of sales** — sales drive ad spend.
+:::
+:::
+
+::: keybox
+Both stories produce identical data. Marketing budget rules make reverse causality a **routine** hazard in marketing data, not an exotic one.
+:::
+
+# 1.5 The cast of variables {.divider background-color="#0a3d6e"}
+
+## The two lead roles
+
+```{r dv-iv, fig.width=8, fig.height=2.4, fig.align='center'}
+dgm_dv_iv()
+```
+
+-   **Outcome / dependent variable (DV):** the quantity the manager cares about
+-   **Treatment / independent variable (IV):** the lever the manager can pull
+
+::: keybox
+Defining these two precisely — *whose* purchases, over *what horizon*, *which* discount — is half of research design (§1.8).
+:::
+
+## The villain: the confounder
+
+::: columns
+::: {.column width="52%"}
+```{r confounder, fig.width=6.2, fig.height=4}
+dgm_confounder()
+```
+:::
+
+::: {.column width="48%"}
+-   Causes **both** treatment and outcome
+-   Creates correlation **without** causation — panel 2 of our gallery
+-   **The eBay confounder:** purchase intent → people search for "eBay" → see the ad → and buy anyway
+-   Whole toolkits (Ch. 5–6) exist to deal with confounders in observational data
+:::
+:::
+
+## Supporting roles: mediator and moderator {.smaller}
+
+::: columns
+::: {.column width="50%"}
+```{r mediator, fig.width=6, fig.height=3.4}
+dgm_mediator()
+```
+
+**Mediator — the *how***
+
+Lies **on the path**: the mechanism through which X works.\
+Why care? It tells you **what to optimize** (creative that builds awareness).
+:::
+
+::: {.column width="50%"}
+```{r moderator, fig.width=6, fig.height=3.4}
+dgm_moderator()
+```
+
+**Moderator — the *for whom / when***
+
+Points **at the arrow**: changes the **strength** of the effect.\
+"The discount works for new customers, not loyal ones."
+:::
+:::
+
+. . .
+
+::: keybox
+Today: **recognize** the roles. Chapter 5 teaches how to **handle** each one — and shows that mishandling them (e.g., "controlling" for a mediator) can wreck an analysis.
+:::
+
+## The full cast around one causal question
+
+```{r full-cast, fig.width=10.5, fig.height=4.8, fig.align='center'}
+dgm_full_cast()
+```
+
+::: notes
+This figure is the recurring visual anchor — it reappears verbatim at the start of Ch. 5 (mediation/moderation) and Ch. 6. Blue = your question; red = threatens it; green = explains it; orange = qualifies it.
+:::
+
+# 1.6 Why randomization works {.divider background-color="#0a3d6e"}
+
+## Randomization cuts every arrow into the treatment
+
+::: columns
+::: {.column width="50%"}
+```{r random-dag, fig.width=6, fig.height=3.8}
+dgm_randomization()
+```
+:::
+
+::: {.column width="50%"}
+::: incremental
+-   Assignment now depends **only on the coin** — not on intent, engagement, income, mood, …
+-   Confounders (known **and unknown**) are balanced across groups *in expectation*
+-   The control group becomes a valid **counterfactual**: same kinds of people, minus the treatment
+-   Differences in outcomes can then be attributed to the treatment (up to chance — quantified in Ch. 3)
+:::
+:::
+:::
+
+## "Balanced — even on what we never measured"
+
+```{r balance, fig.width=12, fig.height=4.6}
+fig_balance()
+```
+
+::: keybox
+Left: the groups differ systematically — including on **intent**, which we (realistically) never observe. Right: one coin flip balances everything at once, **without knowing what needs balancing**. That is the magic randomization buys.
+:::
+
+## The price of observational data
+
+**Causal conclusions from observational data require assuming:**
+
+::: keybox
+**No unobserved confounders** — every variable that drives both treatment and outcome has been measured and correctly adjusted for.
+:::
+
+::: incremental
+-   This assumption is **untestable in principle**: you cannot check balance on variables you did not observe
+-   Experiments **buy** the assumption *by design*; observational studies must **argue** for it — with domain knowledge, not statistics
+-   This asymmetry is the most important sentence of the course: it determines what your data can and cannot claim
+-   It is *not* a counsel of despair — Ch. 5–6 develop the toolkit for making the argument as credible as possible
+:::
+
+::: notes
+If one idea survives from today, it should be this slide. Refer back to it whenever a student says "we controlled for everything".
+:::
+
+# 1.7 Between the poles: quasi-experiments {.divider background-color="#0a3d6e"}
+
+## Sometimes the world randomizes for you (almost)
+
+**A spectrum of designs:**
+
+| | Experiment | Quasi-experiment | Observational |
+|---|---|---|---|
+| Who assigns treatment? | The researcher (coin flip) | External event / rule | The units themselves |
+| Example | A/B test of a discount | Platform launches in some countries first | Newsletter readers vs. non-readers |
+| Key requirement | Correct execution | "As-good-as-random" timing/rule | **No unobserved confounders** |
+
+. . .
+
+-   Policy changes, staggered rollouts, regional boundaries → treatment variation **not chosen by the units**
+-   Workhorse method: **difference-in-differences** — compare *changes* in treated vs. untreated markets
+-   Extremely common in practice (and in marketing research) → dedicated session in **Module 6 (panel data)**
+
+::: notes
+Insert a one-slide teaser from your own research here — e.g., a streaming-platform entry staggered across markets. Concrete beats abstract for the preview.
+:::
+
+# 1.8 From business problem to research design {.divider background-color="#0a3d6e"}
+
+## The translation template
+
+**Manager:** *"I want to know whether our loyalty program is worth the money."*
+
+| Design element | Your translation |
+|---|---|
+| **Outcome (DV)** | Customer contribution margin, 12 months |
+| **Treatment (IV)** | Loyalty program membership |
+| **Unit of analysis** | Customer |
+| **Question type** | Causal (→ prescriptive decision) |
+| **Likely confounders** | Purchase frequency & engagement *before* joining |
+| **Feasible design?** | Randomize invitations? Staggered regional rollout? Observational + adjustment? |
+
+::: keybox
+A precise, falsifiable formulation ("membership increases 12-month margin") beats a vague aspiration ("the program creates value") — it dictates data, design, and analysis.
+:::
+
+## Your turn (pairs, 10 min)
+
+::: discussion
+**Translate one of these into the template:**
+
+1.  "Should we invest more in influencer marketing?"
+2.  "Is our app driving retention, or do loyal customers just download the app?"
+3.  "Did last spring's rebranding damage sales in Germany?"
+
+For each: DV, IV, unit, question type, two plausible confounders, and the **best feasible design** (experiment / quasi-experiment / observational).
+:::
+
+::: notes
+Debrief: #2 is reverse causality on a silver platter; #3 has no possible experiment (one-shot event) → motivates quasi-experimental thinking with comparison markets.
+:::
+
+# 1.9 The analytics workflow — and AI assistants {.divider background-color="#0a3d6e"}
+
+## Where AI helps — and where it cannot replace you {.smaller}
+
+| Workflow step | Nature of the work | AI assistant… |
+|---|---|---|
+| Formulate the question | **Judgment** | can challenge you — cannot know your business |
+| Choose design & method | **Judgment** | suggests options — *you* own the assumptions |
+| Write & debug R code | Mechanical | **excellent** — use it freely, including in this course |
+| Interpret results | **Judgment** | drafts text — but cannot verify the causal claim |
+| Communicate to stakeholders | Mixed | strong support, needs your framing |
+
+. . .
+
+::: keybox
+**Course policy in one line:** use AI to *accelerate* your learning of the judgment steps, not to *skip* them. Assessments in this course are designed so that the judgment steps are what earns the points.
+:::
+
+::: notes
+Be explicit and non-moralizing. Demo (2 min): a lazy prompt ("analyze this data") vs. a good prompt (states DV, IV, design, asks for assumptions) — same tool, different learning.
+:::
+
+# 1.10 The course at a glance {.divider background-color="#0a3d6e"}
+
+## One map for the whole course {.smaller}
+
+| Module | Sessions | Driving question |
+|---|---|---|
+| 1 · Questions, decisions & data | 05.10. | Which question am I really asking? *(today)* |
+| 2 · Describing data | 12.10. | What is going on? |
+| 3 · Uncertainty | 19.10. | How sure can I be? |
+| 4 · Learning from experiments | 19.10. / 27.10. | Did it work? |
+| 5 · Learning from observational data | 02.11. / 09.11. / 16.11. | What if we cannot randomize? |
+| 6 · Panel data & quasi-experiments | 30.11. | What if the world randomizes for us? |
+| 7 · From estimate to decision | 07.01. | What should we do? |
+| Group project coaching | 23.11. / 15.12. | Your own experiment, end to end |
+
+::: keybox
+**Group project preview:** design a survey **containing a real randomized experiment**, field it, analyze it. Everything from today — counterfactuals, randomization, confounders — becomes something you *build*, not just recognize.
+:::
+
+## Learning check — can you spot the reasoning? {.smaller}
+
+1.  An analyst reports: *"App users have 2× the lifetime value of non-users — the app clearly pays off."* Which question type is being **answered**, which is being **claimed**? Name the most plausible confounder.
+2.  A platform's advertising dashboard compares purchases of users who clicked an ad vs. users who saw it and didn't click. Is this an experiment? What role does "interest in the product" play?
+3.  Your CMO wants to know whether to extend a price promotion nationally after a pilot in Vienna. What design element makes the pilot informative — and what is the counterfactual?
+4.  For each: newsletter → *(opens →)* purchases; discount effect stronger for students — mediator or moderator?
+
+::: notes
+These four map onto: (1) prediction vs. causation + confounder, (2) selection bias in platform tools — bridge to Ch. 4, (3) counterfactual thinking, (4) mediator/moderator vocabulary.
+:::
+
+## Next session
+
+**Module 2 · Describing data** — *What is going on?*
+
+-   Getting data into R, cleaning it, and not trusting it too early
+-   Summary statistics and the visualizations that earn their place
+-   **Before the session:** complete the R onboarding module (installation *or* Posit Cloud) — link on the course site. Any AI assistant is an endorsed study aid for this.
+
+<br>
+
+::: source
+Course book chapter 1 (consolidation reading for today) is online — including all simulated examples from these slides, with their code.
+:::
