@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>1&nbsp; Marketing Analytics as Decision-Making – Marketing Analytics</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-d3f7f8e73c8d287b30bcf59c2b563615.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="book-style.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01-foundations.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Marketing Analytics as Decision-Making</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Marketing Analytics</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/wu-rds/MA2026" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome!</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-foundations.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Marketing Analytics as Decision-Making</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-why-data" id="toc-sec-why-data" class="nav-link active" data-scroll-target="#sec-why-data"><span class="header-section-number">1.1</span> Why marketing runs on data</a></li>
+  <li><a href="#sec-ebay" id="toc-sec-ebay" class="nav-link" data-scroll-target="#sec-ebay"><span class="header-section-number">1.2</span> A $50 million question</a></li>
+  <li><a href="#sec-four-questions" id="toc-sec-four-questions" class="nav-link" data-scroll-target="#sec-four-questions"><span class="header-section-number">1.3</span> Four kinds of questions</a></li>
+  <li><a href="#sec-dgp" id="toc-sec-dgp" class="nav-link" data-scroll-target="#sec-dgp"><span class="header-section-number">1.4</span> Correlation, causation, and what data can show</a>
+  <ul class="collapse">
+  <li><a href="#two-pictures-of-x-relates-to-y" id="toc-two-pictures-of-x-relates-to-y" class="nav-link" data-scroll-target="#two-pictures-of-x-relates-to-y"><span class="header-section-number">1.4.1</span> Two pictures of “X relates to Y”</a></li>
+  <li><a href="#three-ways-to-get-the-same-scatter-plot" id="toc-three-ways-to-get-the-same-scatter-plot" class="nav-link" data-scroll-target="#three-ways-to-get-the-same-scatter-plot"><span class="header-section-number">1.4.2</span> Three ways to get the same scatter plot</a></li>
+  <li><a href="#reverse-causality" id="toc-reverse-causality" class="nav-link" data-scroll-target="#reverse-causality"><span class="header-section-number">1.4.3</span> Reverse causality</a></li>
+  </ul></li>
+  <li><a href="#sec-cast" id="toc-sec-cast" class="nav-link" data-scroll-target="#sec-cast"><span class="header-section-number">1.5</span> The cast of variables</a>
+  <ul class="collapse">
+  <li><a href="#the-two-lead-roles-outcome-and-treatment" id="toc-the-two-lead-roles-outcome-and-treatment" class="nav-link" data-scroll-target="#the-two-lead-roles-outcome-and-treatment"><span class="header-section-number">1.5.1</span> The two lead roles: outcome and treatment</a></li>
+  <li><a href="#the-villain-the-confounder" id="toc-the-villain-the-confounder" class="nav-link" data-scroll-target="#the-villain-the-confounder"><span class="header-section-number">1.5.2</span> The villain: the confounder</a></li>
+  <li><a href="#the-mechanism-the-mediator" id="toc-the-mechanism-the-mediator" class="nav-link" data-scroll-target="#the-mechanism-the-mediator"><span class="header-section-number">1.5.3</span> The mechanism: the mediator</a></li>
+  <li><a href="#the-qualifier-the-moderator" id="toc-the-qualifier-the-moderator" class="nav-link" data-scroll-target="#the-qualifier-the-moderator"><span class="header-section-number">1.5.4</span> The qualifier: the moderator</a></li>
+  <li><a href="#the-full-cast" id="toc-the-full-cast" class="nav-link" data-scroll-target="#the-full-cast"><span class="header-section-number">1.5.5</span> The full cast</a></li>
+  </ul></li>
+  <li><a href="#sec-randomization" id="toc-sec-randomization" class="nav-link" data-scroll-target="#sec-randomization"><span class="header-section-number">1.6</span> Why randomization works</a>
+  <ul class="collapse">
+  <li><a href="#randomization-cuts-every-arrow-into-the-treatment" id="toc-randomization-cuts-every-arrow-into-the-treatment" class="nav-link" data-scroll-target="#randomization-cuts-every-arrow-into-the-treatment"><span class="header-section-number">1.6.1</span> Randomization cuts every arrow into the treatment</a></li>
+  <li><a href="#seeing-it-balanced-even-on-the-unmeasured" id="toc-seeing-it-balanced-even-on-the-unmeasured" class="nav-link" data-scroll-target="#seeing-it-balanced-even-on-the-unmeasured"><span class="header-section-number">1.6.2</span> Seeing it: balanced even on the unmeasured</a></li>
+  <li><a href="#the-price-of-observational-data" id="toc-the-price-of-observational-data" class="nav-link" data-scroll-target="#the-price-of-observational-data"><span class="header-section-number">1.6.3</span> The price of observational data</a></li>
+  </ul></li>
+  <li><a href="#sec-quasi" id="toc-sec-quasi" class="nav-link" data-scroll-target="#sec-quasi"><span class="header-section-number">1.7</span> Between the poles: quasi-experiments</a></li>
+  <li><a href="#sec-design" id="toc-sec-design" class="nav-link" data-scroll-target="#sec-design"><span class="header-section-number">1.8</span> From business problem to research design</a></li>
+  <li><a href="#sec-ai" id="toc-sec-ai" class="nav-link" data-scroll-target="#sec-ai"><span class="header-section-number">1.9</span> The analytics workflow — and AI assistants</a></li>
+  <li><a href="#sec-course-map" id="toc-sec-course-map" class="nav-link" data-scroll-target="#sec-course-map"><span class="header-section-number">1.10</span> The course at a glance</a></li>
+  <li><a href="#sec-lc-01" id="toc-sec-lc-01" class="nav-link" data-scroll-target="#sec-lc-01">Learning check</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-foundations" class="quarto-section-identifier"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Marketing Analytics as Decision-Making</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This chapter lays the foundation for everything that follows in this course. Its goal is <em>not</em> to teach you a statistical method — no formulas, no R output, no tests will appear on the following pages. Instead, this chapter will equip you with a way of thinking about data that separates good analysts from dangerous ones: the ability to recognize <strong>which question you are actually asking</strong>, <strong>what your data can and cannot tell you</strong>, and <strong>why two analyses that look identical can support completely different conclusions</strong>. After working through this chapter you will be able to:</p>
+<ul>
+<li>Distinguish the four types of questions that analytics can answer — descriptive, predictive, causal, and prescriptive — and explain why most managerial decisions ultimately depend on the causal one</li>
+<li>Explain what a counterfactual is and why causal claims are always claims about counterfactuals</li>
+<li>Recognize the roles that variables can play in an analysis: outcome, treatment, confounder, mediator, and moderator</li>
+<li>Explain why randomization licenses causal conclusions — and what must be <em>assumed</em> when we work with data that were not randomized</li>
+<li>Translate a vague management problem into a precise, answerable research question</li>
+</ul>
+<p>Everything else in this course — summary statistics, standard errors, tests, regression, panel data methods — exists to serve the ideas in this chapter.</p>
+<section id="sec-why-data" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="sec-why-data"><span class="header-section-number">1.1</span> Why marketing runs on data</h2>
+<p>The task of allocating marketing budgets effectively has always been plagued by uncertainty. As the nineteenth-century Philadelphia retailer John Wanamaker supposedly said:</p>
+<blockquote class="blockquote">
+<p>“Half the money I spend on advertising is wasted; the trouble is I don’t know which half.”</p>
+<p>— John Wanamaker</p>
+</blockquote>
+<p>More than a century later, the underlying problem is unchanged — but the environment has been transformed. Every purchase, click, swipe, share, and like leaves a trace, and most firms today sit on far more behavioral data than they are able to use. Surveys among marketing executives consistently rank data and analytics competence among the most important changes to the marketing profession, and the ability to make data-driven decisions has become a baseline expectation for marketing careers rather than a specialist skill.</p>
+<p>This has an important implication for what you should take away from this course. The bottleneck in modern marketing organizations is rarely the <em>production</em> of numbers — dashboards, tracking tools, and, increasingly, AI assistants produce numbers in abundance and at almost no cost. The bottleneck is <strong>judgment</strong>: knowing which analysis answers which question, what a given number does and does not license you to conclude, and where an analysis can silently go wrong. That judgment is what this course trains. The story in the next section shows what happens when it is missing — even at a company with world-class data and world-class analysts.</p>
+</section>
+<section id="sec-ebay" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="sec-ebay"><span class="header-section-number">1.2</span> A $50 million question</h2>
+<p>In the early 2010s, eBay was spending roughly $50 million <em>per year</em> on paid search advertising — the sponsored links that appear above the results on Google, Bing, and Yahoo when users search for terms like “ebay shoes” or simply “ebay”. Was that money well spent?</p>
+<p>The data seemed to leave little doubt. Users who were exposed to eBay’s search ads purchased far more than users who were not. Weeks with higher ad spending were weeks with higher sales. Measured this way, the return on advertising looked spectacular — the kind of number that makes a budget discussion very short. <a href="#fig-ebay-naive" class="quarto-xref">Figure&nbsp;<span>1.1</span></a> shows a stylized version of the picture the analysts were looking at.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-ebay-naive" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ebay-naive-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-ebay-naive-1.png" class="img-fluid figure-img" width="1400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ebay-naive-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: A stylized version of the evidence for eBay’s search advertising: weeks with higher ad spend were weeks with higher sales (simulated data for illustration).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Before reading on, pause for a moment and ask yourself: would you keep spending the $50 million? And is there anything that could be wrong with the conclusion that the ads are working?</p>
+<p>Here is what happened next. A team of economists convinced eBay to run a large-scale field experiment <span class="citation" data-cites="blake2015">(<a href="01-foundations.html#ref-blake2015" role="doc-biblioref">Blake et al. 2015</a>)</span>: in a randomly selected set of US regions, paid search advertising was <strong>switched off entirely</strong>, while it continued running everywhere else. If the ads were driving the sales, the switched-off regions should have fallen behind.</p>
+<p>They barely moved. Sales in the regions without search advertising were almost indistinguishable from sales in the regions with it. The users who clicked on the ad for “ebay” were overwhelmingly people who had <em>searched</em> for eBay — people on their way to the site anyway, who would simply have clicked the free link one centimeter below the ad. For the average keyword, the experiment implied that the true returns on the advertising were <em>negative</em>.</p>
+<p>Take a moment to appreciate what went wrong here — because it was not a lack of data, computing power, or intelligence. The naive analysis compared people <strong>with purchase intent</strong> (those who searched and saw the ad) to people <strong>without purchase intent</strong> (those who never searched) and credited the entire difference to the advertising. The comparison was flawed, and no amount of additional data would have fixed it. More data would only have made the wrong answer more precise.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="The counterfactual">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>The counterfactual
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The question eBay actually needed to answer was: <em>what would our sales have been <strong>without</strong> the ads — everything else unchanged?</em> This hypothetical alternative world is called the <strong>counterfactual</strong>. A causal claim (“the ads increased sales by X”) is always a comparison between the world we observed and a counterfactual world we did not observe. Since we can never observe both worlds at once, all of causal inference is about constructing a credible <strong>stand-in</strong> for the counterfactual. The exposed and unexposed users in eBay’s data were <em>not</em> credible stand-ins for one another — they differed in exactly the characteristic that mattered most (intent). The experiment’s randomly switched-off regions <em>were</em> credible stand-ins. That single difference was worth about $50 million a year.</p>
+</div>
+</div>
+<p>This story sets the agenda for the entire course. To avoid eBay’s mistake, you need to know which type of question you are asking (<a href="#sec-four-questions" class="quarto-xref"><span>Section 1.3</span></a>), how your data came into being (<a href="#sec-dgp" class="quarto-xref"><span>Section 1.4</span></a> is where we return to this), which variables are playing which roles (<a href="#sec-cast" class="quarto-xref"><span>Section 1.5</span></a>), and why randomization has the special status it has (<a href="#sec-randomization" class="quarto-xref"><span>Section 1.6</span></a>).</p>
+</section>
+<section id="sec-four-questions" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="sec-four-questions"><span class="header-section-number">1.3</span> Four kinds of questions</h2>
+<p>Every analytics task you will encounter — in this course and in your career — answers one of four kinds of questions. This classification, adapted from <span class="citation" data-cites="hernan2019">Hernán et al. (<a href="01-foundations.html#ref-hernan2019" role="doc-biblioref">2019</a>)</span>, is the single most useful piece of structure you can impose on any analytics problem, and we will return to it at the start of every session of this course.</p>
+<div id="tbl-four-questions" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-four-questions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.1: The four kinds of analytics questions
+</figcaption>
+<div aria-describedby="tbl-four-questions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Question</th>
+<th>Type</th>
+<th>Typical marketing examples</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td><em>What is going on?</em></td>
+<td><strong>Descriptive</strong></td>
+<td>How large are our customer segments? What is our churn rate? Where in the funnel do we lose users?</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><em>What will happen?</em></td>
+<td><strong>Predictive</strong></td>
+<td>Which customers are likely to churn next quarter? How much demand should we expect next month?</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><em>What happens if we act?</em></td>
+<td><strong>Causal</strong></td>
+<td>Does the discount <em>cause</em> additional sales? Did the campaign <em>work</em>?</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td><em>What should we do?</em></td>
+<td><strong>Prescriptive</strong></td>
+<td>Which price should we set? How should we allocate the budget across channels?</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p><strong>Descriptive questions</strong> ask you to capture and compactly represent the structure of your data: summarizing, visualizing, segmenting. Descriptive analysis is where every project starts — you cannot model data you do not understand — and it is the subject of Module 2.</p>
+<p><strong>Predictive questions</strong> ask you to forecast an unknown outcome from known inputs. The defining feature of prediction is that you do <em>not</em> need to understand <em>why</em> the inputs relate to the outcome; you only need the relationship to be stable. If customers who read your newsletter churn less, then newsletter readership is a useful churn predictor — <em>even if the newsletter itself does absolutely nothing</em>, because readership may simply reveal engagement. For targeting purposes (“flag the non-readers as churn risks”), that is perfectly fine.</p>
+<p><strong>Causal questions</strong> ask what an <em>intervention</em> would change: they compare the observed world to a counterfactual. This is a fundamentally harder question, because the counterfactual is unobservable. Note the contrast with prediction: the newsletter’s predictive value tells you <em>nothing</em> about whether sending more newsletters would reduce churn. That would only follow if readership <em>causes</em> retention — and engaged customers both read newsletters <em>and</em> stay, whether or not the newsletter does anything.</p>
+<p><strong>Prescriptive questions</strong> — what should we do? — are the questions managers are actually paid to answer. And here is the crucial link: <strong>prescription requires causation</strong>. To choose between actions, you must know what each action would <em>cause</em>; that is, you must compare counterfactuals. A prediction, however accurate, is not a basis for action on the predicted variable itself. Confusing question 2 with question 3 — using a predictive relationship as if it described the effect of an intervention — is precisely the eBay mistake, and it is the most common serious error in applied analytics.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Why this course is structured the way it is">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Why this course is structured the way it is
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Because most managerial questions are ultimately causal, this course devotes most of its time to the question of <em>when a comparison supports a causal conclusion</em>. Modules 2–3 build the descriptive and statistical foundations; Modules 4–6 then work through the three ways of earning a causal claim — experiments, adjusted observational comparisons, and quasi-experiments — and Module 7 returns to the prescriptive step: turning an estimate into a decision.</p>
+</div>
+</div>
+</section>
+<section id="sec-dgp" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="sec-dgp"><span class="header-section-number">1.4</span> Correlation, causation, and what data can show</h2>
+<section id="two-pictures-of-x-relates-to-y" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="two-pictures-of-x-relates-to-y"><span class="header-section-number">1.4.1</span> Two pictures of “X relates to Y”</h3>
+<p>Consider the two panels in <a href="#fig-two-pictures" class="quarto-xref">Figure&nbsp;<span>1.2</span></a>. Panel (a) shows the result of an experiment: customers were <em>randomly assigned</em> to receive a discount or not, and their subsequent purchases were recorded. Panel (b) shows observational data: for a sample of customers, we recorded how many of the firm’s newsletters they read and how much they purchased — without intervening in any way.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-two-pictures" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-two-pictures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-two-pictures-1.png" class="img-fluid figure-img" width="2200">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-two-pictures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.2: Two pictures of a relationship between X and Y. Panel (a): experimental data — the discount was randomly assigned. Panel (b): observational data — customers chose for themselves how many newsletters to read. The plots are equally convincing to the eye; only one of them licenses a causal conclusion (simulated data).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Both pictures are “positive results”. Both would look good on a slide. But they mean entirely different things. In panel (a), <em>we</em> changed X, and Y moved: because the discount was assigned by chance, the treated and untreated customers are alike in every other respect, and the difference in purchases can be attributed to the discount. In panel (b), X and Y merely <em>move together</em>, and the plot is silent about why. Perhaps newsletters drive purchases. Perhaps engaged customers both read more and buy more. Perhaps loyal customers subscribe to newsletters <em>because</em> they buy so much.</p>
+<p>The uncomfortable and important lesson: <strong>the difference between the two panels is invisible in the data</strong>. It lies in the <strong>data-generating process (DGP)</strong> — the real-world mechanism by which the numbers came into being. Two datasets with identical statistical properties can support completely different conclusions depending on how they were generated. This is why “let the data speak” is bad advice: data never speak about causation on their own. Throughout this course, the first question you should ask about any dataset is therefore not “what’s in it?” but “<strong>how did it come to be?</strong>”</p>
+</section>
+<section id="three-ways-to-get-the-same-scatter-plot" class="level3" data-number="1.4.2">
+<h3 data-number="1.4.2" class="anchored" data-anchor-id="three-ways-to-get-the-same-scatter-plot"><span class="header-section-number">1.4.2</span> Three ways to get the same scatter plot</h3>
+<p>To make this concrete, <a href="#fig-three-scatters" class="quarto-xref">Figure&nbsp;<span>1.3</span></a> shows three scatter plots with very similar positive correlations. All three are simulated — which is the honest way to teach this point, because for simulated data <em>we know the true mechanism with certainty</em>, since we wrote it.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-three-scatters" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-three-scatters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-three-scatters-1.png" class="img-fluid figure-img" width="2200">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-three-scatters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.3: Three data-generating processes, one visual pattern. Panel 1: X truly causes Y. Panel 2: a third variable (customer segment, shown by color) drives both X and Y — within each segment, the relationship vanishes. Panel 3: two independently trending series correlate by construction (simulated data).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>In <strong>panel 1</strong>, X genuinely causes Y: intervening on X would move Y. In <strong>panel 2</strong>, a third variable — here a customer segment — drives both X and Y. The pooled cloud shows a clear positive relationship, but look at the colors: <em>within</em> each segment, X and Y are unrelated. If you intervened on X, nothing would happen to Y. In <strong>panel 3</strong>, X and Y are two completely independent series that both trend over time. Any two trending quantities correlate — time is, in this sense, the ultimate lurking variable, and this is the mechanism behind most of the absurd examples you may know from the <a href="https://www.tylervigen.com/spurious-correlations">spurious correlations</a> collection (US cheese consumption tracking deaths by bedsheet entanglement, and so on).</p>
+<p>The three panels are indistinguishable without knowledge of the DGP. This is the precise sense in which “correlation does not imply causation”: correlation is a property of the data; causation is a property of the process that generated them.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: the classical conditions for causality">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Under the hood: the classical conditions for causality
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The methodological literature <span class="citation" data-cites="field2012">(<a href="01-foundations.html#ref-field2012" role="doc-biblioref">Field et al. 2012</a>)</span> states three conditions that must hold for X to be accepted as a cause of Y: (1) <strong>concomitant variation</strong> — X and Y vary together as the hypothesis predicts; (2) <strong>temporal order</strong> — the cause precedes the effect; and (3) <strong>absence of other possible causal factors</strong> — no alternative explanation accounts for the association. Notice that data can directly establish only the first condition, and sometimes the second. The entire difficulty of causal inference lives in the third condition — and the tools of this course (randomization, adjustment, quasi-experimental designs) are all strategies for making it plausible.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="reverse-causality" class="level3" data-number="1.4.3">
+<h3 data-number="1.4.3" class="anchored" data-anchor-id="reverse-causality"><span class="header-section-number">1.4.3</span> Reverse causality</h3>
+<p>There is one more way a correlation can mislead, and marketing data are unusually rich in it. Suppose you observe that regions with higher advertising spend have higher sales. The natural reading is that advertising drives sales. But many firms set advertising budgets <strong>as a percentage of (expected) sales</strong> — in which case sales drive advertising, and the correlation would appear even if advertising were completely ineffective. The same pattern of data supports two opposite stories:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-reverse" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-reverse-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-reverse-1.png" class="img-fluid figure-img" width="1800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-reverse-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.4: Two stories, one correlation: advertising drives sales (left) — or budget rules make sales drive advertising (right).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Because budgeting rules, targeting algorithms, and managerial reactions to performance are everywhere in marketing, <strong>reverse causality is a routine hazard in marketing data, not an exotic one</strong>. Whenever you see a correlation involving a variable that managers <em>set in response to something</em>, ask which way the arrow runs.</p>
+</section>
+</section>
+<section id="sec-cast" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="sec-cast"><span class="header-section-number">1.5</span> The cast of variables</h2>
+<p>You now know that whether a comparison supports a causal claim depends on the process behind the data. To reason about such processes, it helps enormously to have names for the roles that variables can play. Think of them as the recurring cast of characters in every causal story. In this chapter your job is only to <em>recognize</em> them; the tools for <em>handling</em> each of them come in Modules 4–6.</p>
+<section id="the-two-lead-roles-outcome-and-treatment" class="level3" data-number="1.5.1">
+<h3 data-number="1.5.1" class="anchored" data-anchor-id="the-two-lead-roles-outcome-and-treatment"><span class="header-section-number">1.5.1</span> The two lead roles: outcome and treatment</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-dv-iv" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dv-iv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-dv-iv-1.png" class="img-fluid figure-img" width="1300">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dv-iv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.5: The two lead roles in every causal question.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The <strong>outcome</strong> (or <strong>dependent variable, DV</strong>) is the quantity the manager ultimately cares about: sales, churn, willingness-to-pay, clicks. The <strong>treatment</strong> (or <strong>independent variable, IV</strong>) is the lever under consideration: the discount, the campaign, the redesign, the price change. Defining these two <em>precisely</em> is half of research design, and vagueness here is a reliable early-warning sign of a doomed analysis. “Does advertising work?” is not a research question. “Does exposure to the retargeting campaign increase the probability that a website visitor purchases within 30 days?” is: it names the treatment, the outcome, the unit of analysis, and the time horizon.</p>
+</section>
+<section id="the-villain-the-confounder" class="level3" data-number="1.5.2">
+<h3 data-number="1.5.2" class="anchored" data-anchor-id="the-villain-the-confounder"><span class="header-section-number">1.5.2</span> The villain: the confounder</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-confounder" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-confounder-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-confounder-1.png" class="img-fluid figure-img" width="1200">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confounder-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.6: The confounder: a variable that causes both the treatment and the outcome, creating an association between them that is not causal.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>A <strong>confounder</strong> is a variable that causes <em>both</em> the treatment and the outcome. Confounders manufacture correlation without causation — panel 2 of <a href="#fig-three-scatters" class="quarto-xref">Figure&nbsp;<span>1.3</span></a> was exactly this structure, and so was the eBay case: <em>purchase intent</em> caused people to search for eBay (and thus see the ad) and <em>also</em> caused them to buy. The apparent effect of the ad was, to a first approximation, entirely the work of the confounder.</p>
+<p>Confounders are the central villain of observational data analysis. They can be dealt with — if they are <em>observed</em>, they can be adjusted for, which is a large part of what regression is for (Module 5) — but as we will see in <a href="#sec-randomization" class="quarto-xref"><span>Section 1.6</span></a>, the ones you cannot see are the ones that should keep you up at night.</p>
+</section>
+<section id="the-mechanism-the-mediator" class="level3" data-number="1.5.3">
+<h3 data-number="1.5.3" class="anchored" data-anchor-id="the-mechanism-the-mediator"><span class="header-section-number">1.5.3</span> The mechanism: the mediator</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-mediator" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mediator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-mediator-1.png" class="img-fluid figure-img" width="1200">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mediator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.7: The mediator: the channel through which the treatment affects the outcome.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>A <strong>mediator</strong> lies <em>on the causal path</em> between treatment and outcome: it is the mechanism through which the effect operates. An advertising campaign may increase sales <em>by way of</em> increased brand awareness; a price cut may increase repurchase <em>by way of</em> higher perceived fairness. Why should a manager care about the mechanism, and not just the total effect? Because the mechanism tells you <strong>what to optimize</strong>: if the campaign works through awareness, then creative that builds awareness is the design goal, and awareness is worth tracking as an early indicator. Mediation analysis — decomposing a total effect into its direct and indirect (mediated) components — is part of Module 5.</p>
+</section>
+<section id="the-qualifier-the-moderator" class="level3" data-number="1.5.4">
+<h3 data-number="1.5.4" class="anchored" data-anchor-id="the-qualifier-the-moderator"><span class="header-section-number">1.5.4</span> The qualifier: the moderator</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-moderator" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-moderator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-moderator-1.png" class="img-fluid figure-img" width="1200">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-moderator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.8: The moderator: a variable that changes the strength (or direction) of the treatment effect — visually, it points at the arrow, not at a variable.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>A <strong>moderator</strong> does not sit on the causal path — it changes the <em>strength</em> of the effect. “The discount increases purchases among new customers, but does nothing for loyal ones”: here, customer type moderates the discount effect. Notice the visual convention in the diagram: the moderator’s dashed arrow points <em>at the causal arrow itself</em>, not at a variable. Moderators answer the questions <em>for whom?</em> and <em>under what conditions?</em> — which is often exactly what a manager needs for targeting decisions. Statistically, moderation corresponds to an interaction effect, which you will estimate in Module 5.</p>
+</section>
+<section id="the-full-cast" class="level3" data-number="1.5.5">
+<h3 data-number="1.5.5" class="anchored" data-anchor-id="the-full-cast"><span class="header-section-number">1.5.5</span> The full cast</h3>
+<p><a href="#fig-full-cast" class="quarto-xref">Figure&nbsp;<span>1.9</span></a> assembles all roles around a single causal question. This figure will accompany us for the rest of the course — it reappears when we formalize these ideas in Module 5.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-full-cast" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-full-cast-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-full-cast-1.png" class="img-fluid figure-img" width="1800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-full-cast-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.9: The full cast of variables around one causal question. Blue: the question itself. Red: threatens the causal interpretation. Green: explains the mechanism. Orange: qualifies the effect.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="A preview of a subtle danger">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>A preview of a subtle danger
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You might think the safe strategy is to “control for everything you can measure”. It is not. Adjusting for a <strong>mediator</strong> removes part of the very effect you are trying to measure, and adjusting for certain other variables (so-called <em>colliders</em>) can <em>create</em> bias out of nothing. Which variables to adjust for is a question about the causal structure, not about data availability — one of the most practically important lessons of Module 5. For now, remember only: <strong>the roles matter, and “more controls” is not automatically better.</strong></p>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-randomization" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="sec-randomization"><span class="header-section-number">1.6</span> Why randomization works</h2>
+<p>We have established that causal questions are comparisons with counterfactuals, and that confounders are what make naive comparisons break down. Experiments — introduced by example in the eBay story — deserve their special status because randomization solves the confounding problem <em>wholesale</em>. As <span class="citation" data-cites="box1978">Box et al. (<a href="01-foundations.html#ref-box1978" role="doc-biblioref">1978</a>)</span> put it:</p>
+<blockquote class="blockquote">
+<p>“To find out what happens when you change something, it is necessary to change it.”</p>
+<p>— Box, Hunter &amp; Hunter (1978)</p>
+</blockquote>
+<section id="randomization-cuts-every-arrow-into-the-treatment" class="level3" data-number="1.6.1">
+<h3 data-number="1.6.1" class="anchored" data-anchor-id="randomization-cuts-every-arrow-into-the-treatment"><span class="header-section-number">1.6.1</span> Randomization cuts every arrow into the treatment</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-random-dag" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-random-dag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-random-dag-1.png" class="img-fluid figure-img" width="1200">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-random-dag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.10: Randomization severs the arrow from the confounder into the treatment: exposure now depends only on the coin flip. Intent may still drive purchases — but it can no longer create a spurious association between exposure and purchases.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>When treatment is assigned by a coin flip (or its digital equivalent), assignment depends on <em>nothing else</em>: not on intent, not on engagement, not on income, not on the weather, not on anything a targeting algorithm might quietly use. In the language of <a href="#sec-cast" class="quarto-xref"><span>Section 1.5</span></a>: randomization <strong>cuts every arrow pointing into the treatment</strong>. Confounders may still affect the outcome — intent still drives purchases — but they can no longer differ systematically between the groups, and therefore can no longer masquerade as a treatment effect.</p>
+<p>The consequence is what makes experiments the gold standard: the control group becomes a valid stand-in for the counterfactual. The treated and untreated groups are, in expectation, alike in <em>every</em> respect — <strong>including characteristics nobody measured, and characteristics nobody even thought of</strong>. That last clause is the remarkable part, and it deserves to be seen rather than believed.</p>
+</section>
+<section id="seeing-it-balanced-even-on-the-unmeasured" class="level3" data-number="1.6.2">
+<h3 data-number="1.6.2" class="anchored" data-anchor-id="seeing-it-balanced-even-on-the-unmeasured"><span class="header-section-number">1.6.2</span> Seeing it: balanced even on the unmeasured</h3>
+<p><a href="#fig-balance" class="quarto-xref">Figure&nbsp;<span>1.11</span></a> shows a simulation of 2,000 customers with six characteristics, one of which — purchase intent — we will pretend is unobservable, as it realistically is. In the left panel, customers <em>self-select</em> into ad exposure (as they did at eBay): the exposed and unexposed groups differ substantially, and they differ most on the variable we cannot see. In the right panel, the <em>same customers</em> are split by a coin flip: every characteristic is balanced, including the unobserved one.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-balance" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-balance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-balance-1.png" class="img-fluid figure-img" width="2000">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-balance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.11: Covariate balance under self-selection vs.&nbsp;randomization (simulation, n = 2,000). Randomization balances all characteristics at once — including ‘intent’, which we never measured. Self-selection produces groups that differ most on exactly the variable we cannot see.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Pause on the right panel: the coin flip balanced <em>intent</em> without knowing that intent existed. Randomization is the only design that protects you against the confounders you have not thought of. This is why <span class="citation" data-cites="angrist2009">Angrist and Pischke (<a href="01-foundations.html#ref-angrist2009" role="doc-biblioref">2009</a>)</span> write that “the most credible and influential research designs use random assignment” — and why online firms run thousands of randomized experiments (A/B tests) every day. The practical craft of running experiments well — units of randomization, spillovers, and the ways even platform A/B-testing tools can quietly break randomization — is the subject of Module 4.</p>
+</section>
+<section id="the-price-of-observational-data" class="level3" data-number="1.6.3">
+<h3 data-number="1.6.3" class="anchored" data-anchor-id="the-price-of-observational-data"><span class="header-section-number">1.6.3</span> The price of observational data</h3>
+<p>If experiments are so powerful, why does most analysis use observational data anyway? The statistician Andrew Gelman gives the honest answer:</p>
+<blockquote class="blockquote">
+<p>“Given the manifest virtues of experiments, why do I almost always analyze observational data? The short answer is almost all data out there are observational.”</p>
+<p>— <span class="citation" data-cites="gelman2010">Gelman (<a href="01-foundations.html#ref-gelman2010" role="doc-biblioref">2010</a>)</span></p>
+</blockquote>
+<p>Experiments can be infeasible (you cannot randomize your brand’s reputation), unethical or commercially risky (customers resent randomized prices), too slow, or simply not what happened — the data you have are the data that exist. Working with observational data is therefore not a lapse of rigor; it is the normal condition of applied analytics. But it has a price, and the price should be stated in one precise sentence:</p>
+<div class="callout callout-style-default callout-important callout-titled" title="The key assumption — and its epistemic status">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>The key assumption — and its epistemic status
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Causal conclusions from observational data require the assumption of <strong>no unobserved confounders</strong>: every variable that affects both the treatment and the outcome has been measured and appropriately adjusted for.</p>
+<p>This assumption is <strong>untestable in principle</strong>. You can check balance on the variables you observed — but by definition, you cannot check it on the ones you did not. No statistical test, no matter how sophisticated, can certify the assumption; it can only be made more or less <em>plausible</em> through domain knowledge and design.</p>
+<p>This is the fundamental asymmetry of the course: <strong>experiments buy this assumption by design; observational studies must argue for it.</strong> Whenever you read (or write) a causal claim based on observational data, the first question is: <em>what is the argument that nothing unobserved drives both X and Y?</em></p>
+</div>
+</div>
+<p>If one sentence from this chapter survives into your professional life, it should be that boxed asymmetry. It is not a counsel of despair — Modules 5 and 6 are devoted to making the argument as credible as possible — but it draws the line between what your data can show and what you must assume.</p>
+</section>
+</section>
+<section id="sec-quasi" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="sec-quasi"><span class="header-section-number">1.7</span> Between the poles: quasi-experiments</h2>
+<p>Experiments and observational studies are not a binary; there is fertile ground between them. Sometimes the world assigns treatment in a way that is <em>almost</em> as good as random — through a policy change, a staggered product rollout, a regulatory boundary, or a platform entering some markets before others. Such settings are called <strong>quasi-experiments</strong> (or <em>natural experiments</em>): the researcher did not randomize, but treatment variation came from <em>outside</em> the units being studied, rather than from their own choices.</p>
+<div id="tbl-spectrum" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-spectrum-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.2: The spectrum of research designs
+</figcaption>
+<div aria-describedby="tbl-spectrum-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Experiment</th>
+<th>Quasi-experiment</th>
+<th>Observational study</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Who assigns treatment?</td>
+<td>The researcher (coin flip)</td>
+<td>An external event or rule</td>
+<td>The units themselves</td>
+</tr>
+<tr class="even">
+<td>Marketing example</td>
+<td>A/B test of a discount</td>
+<td>Streaming service launches in some markets first</td>
+<td>Newsletter readers vs.&nbsp;non-readers</td>
+</tr>
+<tr class="odd">
+<td>Key requirement</td>
+<td>Correct execution</td>
+<td>Assignment “as good as random”; comparable trends</td>
+<td><strong>No unobserved confounders</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>An example from research conducted at our institute: when Spotify entered the market, <span class="citation" data-cites="wloemert2016">Wlömert and Papies (<a href="01-foundations.html#ref-wloemert2016" role="doc-biblioref">2016</a>)</span> tracked a panel of music consumers over time — observing their spending on CDs and downloads <em>before and after</em> some of them adopted the streaming service. Adopters and non-adopters clearly self-selected (music enthusiasts adopt first!), so a simple comparison at one point in time would be confounded. But because the <em>same individuals</em> are observed over time, one can compare <em>changes</em>: how did the adopters’ spending change relative to the change among non-adopters over the same period? This logic — the <strong>difference-in-differences</strong> design — is the workhorse of quasi-experimental analysis and one of the most widely used causal tools in industry and research alike.</p>
+<p>We flag quasi-experiments here for two reasons. First, so that the spectrum in <a href="#tbl-spectrum" class="quarto-xref">Table&nbsp;<span>1.2</span></a> completes your mental map from day one: <em>experiment / quasi-experiment / observational study</em>, ordered by how hard you must work to defend a causal claim. Second, as a preview: Module 6 is dedicated to panel data — data that follow the same units over time — and to difference-in-differences analysis, where you will estimate designs like the Spotify study yourself.</p>
+</section>
+<section id="sec-design" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="sec-design"><span class="header-section-number">1.8</span> From business problem to research design</h2>
+<p>The concepts are now in place; what remains is the craft of <em>using</em> them — translating a manager’s loosely stated problem into a design you can actually execute. This translation is a skill you will practice all semester (and in the group project, where you will design and field your own experiment). The template is simple; filling it in rigorously is not.</p>
+<p>Consider a typical request: <em>“I want to know whether our loyalty program is worth the money.”</em> A useful translation:</p>
+<div id="tbl-translation" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-translation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.3: From management problem to research design
+</figcaption>
+<div aria-describedby="tbl-translation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Design element</th>
+<th>Translation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Outcome (DV)</strong></td>
+<td>Customer contribution margin over 12 months</td>
+</tr>
+<tr class="even">
+<td><strong>Treatment (IV)</strong></td>
+<td>Loyalty program membership</td>
+</tr>
+<tr class="odd">
+<td><strong>Unit of analysis</strong></td>
+<td>Customer</td>
+</tr>
+<tr class="even">
+<td><strong>Question type</strong></td>
+<td>Causal — feeding a prescriptive decision (continue, expand, or cut the program)</td>
+</tr>
+<tr class="odd">
+<td><strong>Likely confounders</strong></td>
+<td>Purchase frequency and engagement <em>before</em> joining (heavy buyers join loyalty programs!)</td>
+</tr>
+<tr class="even">
+<td><strong>Candidate designs</strong></td>
+<td>Randomize <em>invitations</em> to the program; staggered rollout across regions (quasi-experiment); observational comparison with adjustment (weakest)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Three habits are worth building from the start. First, <strong>state the hypothesis as a precise, falsifiable claim</strong> — “program membership increases 12-month contribution margin” — rather than a vague aspiration (“the program creates value”). Precision dictates what data you need and what analysis applies. Second, <strong>name the likely confounders before you see any data</strong>; if you cannot name them, you are not ready to interpret an observational comparison. Third, <strong>rank the feasible designs</strong> by the spectrum of <a href="#tbl-spectrum" class="quarto-xref">Table&nbsp;<span>1.2</span></a> and ask what stands in the way of the stronger ones — often, a partial experiment (randomizing <em>invitations</em>, a pilot region) is feasible where a full one is not.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Translate the following requests into the template above — outcome, treatment, unit, question type, two plausible confounders, best feasible design: (1) “Should we invest more in influencer marketing?” (2) “Is our app driving retention, or do loyal customers just download the app?” (3) “Did last spring’s rebranding damage our sales in Germany?” We will discuss these in the session; note that (2) is reverse causality on a silver platter, and (3) permits no experiment at all — the event already happened, and happened everywhere at once. What could a credible comparison look like anyway?</p>
+</div>
+</div>
+</section>
+<section id="sec-ai" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="sec-ai"><span class="header-section-number">1.9</span> The analytics workflow — and AI assistants</h2>
+<p>A realistic picture of analytics work in 2026 has four steps: <strong>formulate the question → obtain and understand the data → analyze → communicate</strong>. Generative AI assistants (Claude, ChatGPT, Copilot and their successors) have become genuinely excellent at parts of this workflow, and this course treats them as what they are: standard professional tools that you are encouraged to use.</p>
+<p>But the steps differ sharply in <em>kind</em>, and this difference determines where an AI assistant accelerates your work and where relying on it hollows your work out:</p>
+<div id="tbl-ai" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ai-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.4: Where AI helps — and where the work is yours
+</figcaption>
+<div aria-describedby="tbl-ai-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Workflow step</th>
+<th>Nature of the work</th>
+<th>An AI assistant…</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Formulate the question &amp; hypothesis</td>
+<td><strong>Judgment</strong></td>
+<td>can challenge and sharpen your thinking — but does not know your business, your data’s origin, or what is at stake</td>
+</tr>
+<tr class="even">
+<td>Choose the design &amp; method</td>
+<td><strong>Judgment</strong></td>
+<td>can list options and trade-offs — but <em>you</em> own the assumptions and their defense</td>
+</tr>
+<tr class="odd">
+<td>Write and debug R code</td>
+<td>Mechanical</td>
+<td>is excellent; use it freely, including in this course</td>
+</tr>
+<tr class="even">
+<td>Interpret the results</td>
+<td><strong>Judgment</strong></td>
+<td>can draft fluent text — but cannot verify a causal claim, and will happily narrate a confounded comparison as if it were an effect</td>
+</tr>
+<tr class="odd">
+<td>Communicate to stakeholders</td>
+<td>Mixed</td>
+<td>is a strong writing aid — the framing and the accountability remain yours</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Notice which steps are “judgment”: they are exactly the contents of this chapter. An AI assistant will fix your <code>ggplot</code> error in seconds — and will, just as fluently, compute a beautiful answer to the <em>wrong comparison</em> without protest. The eBay analysts of <a href="#sec-ebay" class="quarto-xref"><span>Section 1.2</span></a> lacked no computational help; what was missing was the judgment layer. Nothing about better tools has changed this; if anything, cheap fluent analysis makes the judgment layer <em>more</em> valuable, because it is the only step that is scarce.</p>
+<p>Hence the course policy, stated once and meant sincerely: <strong>use AI to accelerate your learning of the judgment steps, not to skip them.</strong> Practically: let an assistant explain error messages, draft code, and quiz you on concepts — and be suspicious of any output whose reasoning you could not reconstruct and defend yourself. The assessments in this course are designed so that the judgment steps are what earns the points; outsourcing them is therefore not a shortcut but a detour around the only part that will matter in your career.</p>
+<p>The mechanics of R itself — installation, packages, first steps — are deliberately <em>not</em> part of this chapter: they live in the self-paced <strong>R onboarding module</strong> on the course site, which you should complete before the next session. Installation problems are precisely the kind of mechanical obstacle where your AI assistant of choice is an endorsed study aid.</p>
+</section>
+<section id="sec-course-map" class="level2" data-number="1.10">
+<h2 data-number="1.10" class="anchored" data-anchor-id="sec-course-map"><span class="header-section-number">1.10</span> The course at a glance</h2>
+<p>You now hold the complete map of the course in your head; here it is on paper. Each module answers one of the four questions of <a href="#sec-four-questions" class="quarto-xref"><span>Section 1.3</span></a>, and the causal modules are ordered along the spectrum of <a href="#tbl-spectrum" class="quarto-xref">Table&nbsp;<span>1.2</span></a>.</p>
+<div id="tbl-course-map" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-course-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.5: The course map
+</figcaption>
+<div aria-describedby="tbl-course-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Module</th>
+<th>Driving question</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 · Questions, decisions &amp; data</td>
+<td>Which question am I really asking?</td>
+<td>This chapter</td>
+</tr>
+<tr class="even">
+<td>2 · Describing data</td>
+<td>What is going on?</td>
+<td>Data handling, summary statistics, visualization</td>
+</tr>
+<tr class="odd">
+<td>3 · Uncertainty</td>
+<td>How sure can I be?</td>
+<td>Sampling variation, standard errors, confidence intervals</td>
+</tr>
+<tr class="even">
+<td>4 · Learning from experiments</td>
+<td>Did it work?</td>
+<td>Comparing groups; tests; running experiments well</td>
+</tr>
+<tr class="odd">
+<td>5 · Learning from observational data</td>
+<td>What if we cannot randomize?</td>
+<td>Regression, adjustment, mediation &amp; moderation</td>
+</tr>
+<tr class="even">
+<td>6 · Panel data &amp; quasi-experiments</td>
+<td>What if the world randomizes for us?</td>
+<td>Fixed effects, difference-in-differences</td>
+</tr>
+<tr class="odd">
+<td>7 · From estimate to decision</td>
+<td>What should we do?</td>
+<td>Effect sizes in euros; communicating analyses</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>In the <strong>group project</strong>, you will put the full arc into practice: designing a survey that <em>contains a genuine randomized experiment</em>, fielding it, and analyzing the resulting data. Everything in this chapter — counterfactuals, randomization, confounders, precise hypotheses — will turn from something you recognize into something you build.</p>
+</section>
+<section id="sec-lc-01" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="sec-lc-01">Learning check</h2>
+<p><strong>(LC1.1)</strong> An analyst reports: <em>“Customers who use our app have twice the lifetime value of non-users — the app clearly pays off.”</em> Which type of question (per <a href="#tbl-four-questions" class="quarto-xref">Table&nbsp;<span>1.1</span></a>) does the comparison actually answer, and which type does the conclusion claim? Name the most plausible confounder.</p>
+<p><strong>(LC1.2)</strong> A social media platform’s advertising dashboard compares the purchases of users who clicked your ad with the purchases of users who saw it but did not click. Is this comparison an experiment? What role (in the sense of <a href="#sec-cast" class="quarto-xref"><span>Section 1.5</span></a>) does “interest in the product” play here?</p>
+<p><strong>(LC1.3)</strong> Your CMO wants to know whether to extend a price promotion nationally after a pilot in Vienna. What design feature would make the pilot informative for a causal conclusion — and what, precisely, is the counterfactual being estimated?</p>
+<p><strong>(LC1.4)</strong> Classify the role of the third variable in each statement — confounder, mediator, or moderator: (a) “The newsletter increases purchases <em>because it increases site visits</em>.” (b) “The discount works much better <em>for students</em>.” (c) “Households with more children buy more of both our cereal and our toys.”</p>
+<p><strong>(LC1.5)</strong> Which of the following statements are correct?</p>
+<ul class="task-list">
+<li><label><input type="checkbox">A sufficiently large dataset removes the need for the no-unobserved-confounders assumption</label></li>
+<li><label><input type="checkbox" checked="">Randomization balances treatment groups even on characteristics that were never measured</label></li>
+<li><label><input type="checkbox" checked="">A variable can be an excellent predictor of an outcome without having any causal effect on it</label></li>
+<li><label><input type="checkbox">The no-unobserved-confounders assumption can be verified with a statistical test if all observed covariates are balanced</label></li>
+<li><label><input type="checkbox">Adjusting for more variables always brings an observational estimate closer to the causal effect</label></li>
+</ul>
+<p><strong>(LC1.6)</strong> True or false? In a quasi-experiment, the treatment variation originates from the units’ own choices.</p>
+<ul class="task-list">
+<li><label><input type="checkbox">True</label></li>
+<li><label><input type="checkbox" checked="">False</label></li>
+</ul>
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-angrist2009" class="csl-entry" role="listitem">
+Angrist, Joshua D., and Jörn-Steffen Pischke. 2009. <em>Mostly Harmless
+Econometrics: An Empiricist’s Companion</em>. Princeton University
+Press.
+</div>
+<div id="ref-blake2015" class="csl-entry" role="listitem">
+Blake, Thomas, Chris Nosko, and Steven Tadelis. 2015. <span>“Consumer
+Heterogeneity and Paid Search Effectiveness: A Large-Scale Field
+Experiment.”</span> <em>Econometrica</em> 83 (1): 155–74.
+</div>
+<div id="ref-box1978" class="csl-entry" role="listitem">
+Box, George E. P., William G. Hunter, and J. Stuart Hunter. 1978.
+<em>Statistics for Experimenters</em>. John Wiley &amp; Sons.
+</div>
+<div id="ref-field2012" class="csl-entry" role="listitem">
+Field, Andy, Jeremy Miles, and Zoë Field. 2012. <em>Discovering
+Statistics Using r</em>. Sage Publications.
+</div>
+<div id="ref-gelman2010" class="csl-entry" role="listitem">
+Gelman, Andrew. 2010. <span>“Experimental Reasoning in Social
+Science.”</span> In <em>Field Experiments and Their Critics</em>. Yale
+University Press.
+</div>
+<div id="ref-hernan2019" class="csl-entry" role="listitem">
+Hernán, Miguel A., John Hsu, and Brian Healy. 2019. <span>“A Second
+Chance to Get Causal Inference Right: A Classification of Data Science
+Tasks.”</span> <em>CHANCE</em> 32 (1): 42–49.
+</div>
+<div id="ref-wloemert2016" class="csl-entry" role="listitem">
+Wlömert, Nils, and Dominik Papies. 2016. <span>“On-Demand Streaming
+Services and Music Industry Revenues — Insights from Spotify’s Market
+Entry.”</span> <em>International Journal of Research in Marketing</em>
+33 (2): 314–27.
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Welcome!">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Welcome!</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
