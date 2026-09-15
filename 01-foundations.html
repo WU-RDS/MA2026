@@ -249,7 +249,23 @@ div.csl-indent {
 <section id="sec-ebay" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="sec-ebay"><span class="header-section-number">1.2</span> A $50 million question</h2>
 <p>In the early 2010s, eBay was spending roughly $50 million <em>per year</em> on paid search advertising — the sponsored links that appear above the results on Google, Bing, and Yahoo when users search for terms like “ebay shoes” or simply “ebay”. Was that money well spent?</p>
-<p>The data seemed to leave little doubt. Users who were exposed to eBay’s search ads purchased far more than users who were not. Weeks with higher ad spending were weeks with higher sales. Measured this way, the return on advertising looked spectacular — the kind of number that makes a budget discussion very short. <a href="#fig-ebay-naive" class="quarto-xref">Figure&nbsp;<span>1.1</span></a> shows a stylized version of the picture the analysts were looking at.</p>
+<p>The data seemed to leave little doubt. Users who were exposed to eBay’s search ads purchased far more than users who were not — <a href="#fig-ebay-naive" class="quarto-xref">Figure&nbsp;<span>1.1</span></a> shows a stylized version of this comparison, with each dot representing one user. Measured this way, the return on advertising looked spectacular — the kind of number that makes a budget discussion very short. (Aggregate patterns told the same story: weeks with more advertising were weeks with more sales — a correlation with problems of its own, to which we return in <a href="#sec-dgp" class="quarto-xref"><span>Section 1.4</span></a>.)</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: where the naive numbers came from">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Under the hood: where the naive numbers came from
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The “spectacular returns” were produced by <strong>click-based attribution</strong>, the standard accounting of online advertising to this day: when a user clicks a paid link (recorded via a tracking parameter) and purchases within a set time window, the revenue is <em>attributed</em> to the ad. Attributed revenue divided by ad spend then yields the return figure shown in campaign dashboards. Notice what this measures: <em>how much revenue flowed through ad clicks</em> — not <em>how much revenue the ads caused</em>. For a user who searched “ebay” with the intent to buy, the purchase is attributed in full, even though she would have reached the site via the free organic link directly below the ad. Whenever you see a “ROAS” number in an advertising dashboard, this is how it was computed — and the eBay experiments showed how far it can be from a causal effect: when brand-keyword ads were switched off, organic clicks absorbed about 99.5% of the paid traffic <span class="citation" data-cites="blake2015">(<a href="01-foundations.html#ref-blake2015" role="doc-biblioref">Blake et al. 2015</a>)</span>.</p>
+</div>
+</div>
+</div>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-ebay-naive" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -258,15 +274,15 @@ div.csl-indent {
 <img src="01-foundations_files/figure-html/fig-ebay-naive-1.png" class="img-fluid figure-img" width="1400">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ebay-naive-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.1: A stylized version of the evidence for eBay’s search advertising: weeks with higher ad spend were weeks with higher sales (simulated data for illustration).
+Figure&nbsp;1.1: A stylized version of the evidence for eBay’s search advertising: users exposed to the ads purchased far more, on average, than unexposed users. The groups are self-selected — in this simulation, purchases are driven entirely by (unobserved) intent, and the true effect of ad exposure is exactly zero.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>Before reading on, pause for a moment and ask yourself: would you keep spending the $50 million? And is there anything that could be wrong with the conclusion that the ads are working?</p>
-<p>Here is what happened next. A team of economists convinced eBay to run a large-scale field experiment <span class="citation" data-cites="blake2015">(<a href="01-foundations.html#ref-blake2015" role="doc-biblioref">Blake et al. 2015</a>)</span>: in a randomly selected set of US regions, paid search advertising was <strong>switched off entirely</strong>, while it continued running everywhere else. If the ads were driving the sales, the switched-off regions should have fallen behind.</p>
-<p>They barely moved. Sales in the regions without search advertising were almost indistinguishable from sales in the regions with it. The users who clicked on the ad for “ebay” were overwhelmingly people who had <em>searched</em> for eBay — people on their way to the site anyway, who would simply have clicked the free link one centimeter below the ad. For the average keyword, the experiment implied that the true returns on the advertising were <em>negative</em>.</p>
+<p>Here is what happened next. A team of economists working inside eBay ran a series of large-scale field experiments <span class="citation" data-cites="blake2015">(<a href="01-foundations.html#ref-blake2015" role="doc-biblioref">Blake et al. 2015</a>)</span>. First, eBay <strong>halted all brand-keyword ads</strong> (queries containing “ebay”) on Yahoo! and Microsoft’s search engines, while keeping them running on Google as a comparison. If the ads were driving the attributed sales, traffic and sales should have collapsed on the affected platforms.</p>
+<p>They barely moved: about <strong>99.5% of the paid click traffic simply returned through the free organic link</strong> sitting directly below where the ad had been. The users who had clicked the ad for “ebay” were people who had <em>searched</em> for eBay — on their way to the site anyway. Second, for non-brand keywords (“used guitar”, “cheap shoes”), eBay <strong>suspended all search advertising in a randomly selected ~30% of US regions for 60 days</strong> and compared the change in sales against the unaffected regions. The ads turned out to influence only new and infrequent users, while the frequent shoppers who generate most clicks (and most ad cost) were unmoved — making the average returns on the spending <em>negative</em>.</p>
 <p>Take a moment to appreciate what went wrong here — because it was not a lack of data, computing power, or intelligence. The naive analysis compared people <strong>with purchase intent</strong> (those who searched and saw the ad) to people <strong>without purchase intent</strong> (those who never searched) and credited the entire difference to the advertising. The comparison was flawed, and no amount of additional data would have fixed it. More data would only have made the wrong answer more precise.</p>
 <div class="callout callout-style-default callout-important callout-titled" title="The counterfactual">
 <div class="callout-header d-flex align-content-center">
@@ -374,7 +390,7 @@ Figure&nbsp;1.2: Two pictures of a relationship between X and Y. Panel (a): expe
 </div>
 </div>
 </div>
-<p>Both pictures are “positive results”. Both would look good on a slide. But they mean entirely different things. In panel (a), <em>we</em> changed X, and Y moved: because the discount was assigned by chance, the treated and untreated customers are alike in every other respect, and the difference in purchases can be attributed to the discount. In panel (b), X and Y merely <em>move together</em>, and the plot is silent about why. Perhaps newsletters drive purchases. Perhaps engaged customers both read more and buy more. Perhaps loyal customers subscribe to newsletters <em>because</em> they buy so much.</p>
+<p>Both pictures are “positive results”. Both would look good on a slide. And notice: panel (a) has exactly the visual form of the eBay comparison in <a href="#fig-ebay-naive" class="quarto-xref">Figure&nbsp;<span>1.1</span></a> — two groups, a gap in means. The plots are indistinguishable; their meaning is not. But they mean entirely different things. In panel (a), <em>we</em> changed X, and Y moved: because the discount was assigned by chance, the treated and untreated customers are alike in every other respect, and the difference in purchases can be attributed to the discount. In panel (b), X and Y merely <em>move together</em>, and the plot is silent about why. Perhaps newsletters drive purchases. Perhaps engaged customers both read more and buy more. Perhaps loyal customers subscribe to newsletters <em>because</em> they buy so much.</p>
 <p>The uncomfortable and important lesson: <strong>the difference between the two panels is invisible in the data</strong>. It lies in the <strong>data-generating process (DGP)</strong> — the real-world mechanism by which the numbers came into being. Two datasets with identical statistical properties can support completely different conclusions depending on how they were generated. This is why “let the data speak” is bad advice: data never speak about causation on their own. Throughout this course, the first question you should ask about any dataset is therefore not “what’s in it?” but “<strong>how did it come to be?</strong>”</p>
 </section>
 <section id="three-ways-to-get-the-same-scatter-plot" class="level3" data-number="1.4.2">
@@ -397,7 +413,7 @@ Figure&nbsp;1.3: Three data-generating processes, one visual pattern. Panel 1: X
 <p>In <strong>panel 1</strong>, X genuinely causes Y: intervening on X would move Y. In <strong>panel 2</strong>, a third variable — here a customer segment — drives both X and Y. The pooled cloud shows a clear positive relationship, but look at the colors: <em>within</em> each segment, X and Y are unrelated. If you intervened on X, nothing would happen to Y. In <strong>panel 3</strong>, X and Y are two completely independent series that both trend over time. Any two trending quantities correlate — time is, in this sense, the ultimate lurking variable, and this is the mechanism behind most of the absurd examples you may know from the <a href="https://www.tylervigen.com/spurious-correlations">spurious correlations</a> collection (US cheese consumption tracking deaths by bedsheet entanglement, and so on).</p>
 <p>The three panels are indistinguishable without knowledge of the DGP. This is the precise sense in which “correlation does not imply causation”: correlation is a property of the data; causation is a property of the process that generated them.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Under the hood: the classical conditions for causality">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -406,7 +422,7 @@ Figure&nbsp;1.3: Three data-generating processes, one visual pattern. Panel 1: X
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The methodological literature <span class="citation" data-cites="field2012">(<a href="01-foundations.html#ref-field2012" role="doc-biblioref">Field et al. 2012</a>)</span> states three conditions that must hold for X to be accepted as a cause of Y: (1) <strong>concomitant variation</strong> — X and Y vary together as the hypothesis predicts; (2) <strong>temporal order</strong> — the cause precedes the effect; and (3) <strong>absence of other possible causal factors</strong> — no alternative explanation accounts for the association. Notice that data can directly establish only the first condition, and sometimes the second. The entire difficulty of causal inference lives in the third condition — and the tools of this course (randomization, adjustment, quasi-experimental designs) are all strategies for making it plausible.</p>
 </div>
@@ -661,6 +677,7 @@ Table&nbsp;1.2: The spectrum of research designs
 </figure>
 </div>
 <p>An example from research conducted at our institute: when Spotify entered the market, <span class="citation" data-cites="wloemert2016">Wlömert and Papies (<a href="01-foundations.html#ref-wloemert2016" role="doc-biblioref">2016</a>)</span> tracked a panel of music consumers over time — observing their spending on CDs and downloads <em>before and after</em> some of them adopted the streaming service. Adopters and non-adopters clearly self-selected (music enthusiasts adopt first!), so a simple comparison at one point in time would be confounded. But because the <em>same individuals</em> are observed over time, one can compare <em>changes</em>: how did the adopters’ spending change relative to the change among non-adopters over the same period? This logic — the <strong>difference-in-differences</strong> design — is the workhorse of quasi-experimental analysis and one of the most widely used causal tools in industry and research alike.</p>
+<p>In fact, you have already met a quasi-experimental design in this chapter: eBay’s non-brand experiment suspended advertising in a random set of <em>regions</em> and compared the <em>change</em> in sales against the remaining regions — a geographic difference-in-differences. The method you will learn in Module 6 is literally how the chapter’s opening case was analyzed.</p>
 <p>We flag quasi-experiments here for two reasons. First, so that the spectrum in <a href="#tbl-spectrum" class="quarto-xref">Table&nbsp;<span>1.2</span></a> completes your mental map from day one: <em>experiment / quasi-experiment / observational study</em>, ordered by how hard you must work to defend a causal claim. Second, as a preview: Module 6 is dedicated to panel data — data that follow the same units over time — and to difference-in-differences analysis, where you will estimate designs like the Spotify study yourself.</p>
 </section>
 <section id="sec-design" class="level2" data-number="1.8">
