@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Nils Wlömert">
-<meta name="dcterms.date" content="2026-09-15">
 
-<title>Marketing Analytics</title>
+<title>5&nbsp; Learning from Observational Data – Marketing Analytics</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -28,7 +26,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -38,7 +55,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./00-introduction.html" rel="next">
+<link href="./06-panel-data.html" rel="next">
+<link href="./04-experiments.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -90,7 +108,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome!</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./05-observational-data.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Learning from Observational Data</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -120,7 +138,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome!</span></a>
   </div>
 </li>
@@ -156,7 +174,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-observational-data.html" class="sidebar-item-text sidebar-link">
+  <a href="./05-observational-data.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Learning from Observational Data</span></span></a>
   </div>
 </li>
@@ -199,7 +217,15 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome!</a></li>
+  <li><a href="#the-adjustment-idea" id="toc-the-adjustment-idea" class="nav-link active" data-scroll-target="#the-adjustment-idea"><span class="header-section-number">5.1</span> The adjustment idea</a></li>
+  <li><a href="#simple-linear-regression" id="toc-simple-linear-regression" class="nav-link" data-scroll-target="#simple-linear-regression"><span class="header-section-number">5.2</span> Simple linear regression</a></li>
+  <li><a href="#multiple-regression" id="toc-multiple-regression" class="nav-link" data-scroll-target="#multiple-regression"><span class="header-section-number">5.3</span> Multiple regression</a></li>
+  <li><a href="#categorical-predictors-and-interactions" id="toc-categorical-predictors-and-interactions" class="nav-link" data-scroll-target="#categorical-predictors-and-interactions"><span class="header-section-number">5.4</span> Categorical predictors and interactions</a></li>
+  <li><a href="#mediation-analysis" id="toc-mediation-analysis" class="nav-link" data-scroll-target="#mediation-analysis"><span class="header-section-number">5.5</span> Mediation analysis</a></li>
+  <li><a href="#binary-outcomes-logistic-regression" id="toc-binary-outcomes-logistic-regression" class="nav-link" data-scroll-target="#binary-outcomes-logistic-regression"><span class="header-section-number">5.6</span> Binary outcomes: logistic regression</a></li>
+  <li><a href="#diagnostics-that-matter" id="toc-diagnostics-that-matter" class="nav-link" data-scroll-target="#diagnostics-that-matter"><span class="header-section-number">5.7</span> Diagnostics that matter</a></li>
+  <li><a href="#learning-check" id="toc-learning-check" class="nav-link" data-scroll-target="#learning-check">Learning check</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -208,26 +234,14 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Marketing Analytics</h1>
+<h1 class="title"><span id="sec-observational" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Learning from Observational Data</span></span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Nils Wlömert </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">September 15, 2026</p>
-    </div>
-  </div>
   
     
   </div>
@@ -237,18 +251,59 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="welcome" class="level1 unnumbered">
-<h1 class="unnumbered">Welcome!</h1>
-<p>Welcome to the course <strong>Marketing Analytics</strong>! This course covers the conceptual foundations of data analysis for marketing decision-making and the application of these methods to real marketing problems using the statistical software <strong>R</strong>.</p>
-<p>The course is organized around one guiding idea: most questions marketing managers care about are questions about <em>what would happen if we acted</em> — and answering such questions well requires understanding how your data came into being. The chapters on this site develop this idea step by step, from describing data, through quantifying uncertainty, to learning from experiments, observational data, and panel data.</p>
-<p>Each chapter opens with a real marketing decision, develops the concepts with simulated and real examples, shows the implementation in R with commented code, and closes with a learning check. Technical details are available in collapsible “Under the hood” boxes — read them when you want depth; skip them on first reading.</p>
-<p>This website accompanies the in-person sessions: work through the assigned chapter <em>after</em> each session to consolidate, and use the R onboarding module <em>before</em> the second session to set up your environment.</p>
-<p>If you have any questions, feel free to send me a short email.</p>
-<p>Nils Wlömert<br>
-<a href="mailto:nils.wloemert@wu.ac.at" class="email">nils.wloemert@wu.ac.at</a></p>
-<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4em;">
-<p><img src="img/logo_wu.jpg" class="img-fluid" width="150"></p>
-<p><img src="img/logo_rds.png" class="img-fluid" width="150"></p>
+<div class="callout callout-style-default callout-warning callout-titled" title="In preparation">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>In preparation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This chapter is a placeholder from the course revision. Structure and section headings reflect the planned contents; the text follows.</p>
+</div>
+</div>
+<!-- ::: {.callout-note appearance="simple"}
+📽 [Slides for this chapter](slides/chapterXX_slides.html){target="_blank" rel="noopener"} · [PDF handout](slides/chapterXX_slides_handout.pdf){target="_blank" rel="noopener"}
+::: -->
+<p><em>Driving question: <strong>What if we cannot randomize?</strong></em></p>
+<section id="the-adjustment-idea" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="the-adjustment-idea"><span class="header-section-number">5.1</span> The adjustment idea</h2>
+<p><em>Causal diagrams: forks, pipes, and colliders; which variables to adjust for — and which not.</em></p>
+</section>
+<section id="simple-linear-regression" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="simple-linear-regression"><span class="header-section-number">5.2</span> Simple linear regression</h2>
+<p><em>Line fitting, interpretation of coefficients, goodness of fit.</em></p>
+</section>
+<section id="multiple-regression" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="multiple-regression"><span class="header-section-number">5.3</span> Multiple regression</h2>
+<p><em>Adjusting for confounders; good and bad controls; omitted variables.</em></p>
+</section>
+<section id="categorical-predictors-and-interactions" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="categorical-predictors-and-interactions"><span class="header-section-number">5.4</span> Categorical predictors and interactions</h2>
+<p><em>Dummy variables; moderation as interaction effects.</em></p>
+</section>
+<section id="mediation-analysis" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="mediation-analysis"><span class="header-section-number">5.5</span> Mediation analysis</h2>
+<p><em>Decomposing effects into direct and indirect paths; why controlling for a mediator backfires.</em></p>
+</section>
+<section id="binary-outcomes-logistic-regression" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="binary-outcomes-logistic-regression"><span class="header-section-number">5.6</span> Binary outcomes: logistic regression</h2>
+<p><em>Modeling probabilities; odds ratios and marginal effects.</em></p>
+</section>
+<section id="diagnostics-that-matter" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="diagnostics-that-matter"><span class="header-section-number">5.7</span> Diagnostics that matter</h2>
+<p><em>The checks that change decisions: non-linearity, influential observations, heteroscedasticity.</em></p>
+</section>
+<section id="learning-check" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="learning-check">Learning check</h2>
+<p><em>Case-based questions to follow.</em></p>
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<div id="refs" role="list" style="display: none">
+
 </div>
 
 
@@ -657,10 +712,13 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./04-experiments.html" class="pagination-link" aria-label="Learning from Experiments">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Learning from Experiments</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./00-introduction.html" class="pagination-link" aria-label="Introduction">
-        <span class="nav-page-text">Introduction</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./06-panel-data.html" class="pagination-link" aria-label="Panel Data &amp; Quasi-Experiments">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Panel Data &amp; Quasi-Experiments</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

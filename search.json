@@ -168,5 +168,531 @@
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Marketing Analytics as Decision-Making</span>"
     ]
+  },
+  {
+    "objectID": "02-describing-data.html",
+    "href": "02-describing-data.html",
+    "title": "2  Describing Data",
+    "section": "",
+    "text": "2.1 A first conversation with your data\nDriving question: What is going on?\nWhy every analysis starts descriptively; the case for looking before modeling.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Describing Data</span>"
+    ]
+  },
+  {
+    "objectID": "02-describing-data.html#a-first-conversation-with-your-data",
+    "href": "02-describing-data.html#a-first-conversation-with-your-data",
+    "title": "2  Describing Data",
+    "section": "",
+    "text": "2.1.1 Getting data into R\n\n\n2.1.2 Data frames, variables, and observations\n\n\n2.1.3 Levels of measurement — and why they matter",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Describing Data</span>"
+    ]
+  },
+  {
+    "objectID": "02-describing-data.html#data-wrangling",
+    "href": "02-describing-data.html#data-wrangling",
+    "title": "2  Describing Data",
+    "section": "2.2 Data wrangling",
+    "text": "2.2 Data wrangling\nFiltering, selecting, transforming, grouping, and joining data — the verbs of data handling.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Describing Data</span>"
+    ]
+  },
+  {
+    "objectID": "02-describing-data.html#summarizing-data",
+    "href": "02-describing-data.html#summarizing-data",
+    "title": "2  Describing Data",
+    "section": "2.3 Summarizing data",
+    "text": "2.3 Summarizing data\nMeasures of location and dispersion; summaries by group; tables that answer questions.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Describing Data</span>"
+    ]
+  },
+  {
+    "objectID": "02-describing-data.html#visualizing-data",
+    "href": "02-describing-data.html#visualizing-data",
+    "title": "2  Describing Data",
+    "section": "2.4 Visualizing data",
+    "text": "2.4 Visualizing data\nThe grammar of graphics; choosing chart types that earn their place; common visualization mistakes.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Describing Data</span>"
+    ]
+  },
+  {
+    "objectID": "02-describing-data.html#from-description-to-insight",
+    "href": "02-describing-data.html#from-description-to-insight",
+    "title": "2  Describing Data",
+    "section": "2.5 From description to insight",
+    "text": "2.5 From description to insight\nA worked descriptive case (segments, funnel); what description can and cannot conclude.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Describing Data</span>"
+    ]
+  },
+  {
+    "objectID": "02-describing-data.html#learning-check",
+    "href": "02-describing-data.html#learning-check",
+    "title": "2  Describing Data",
+    "section": "Learning check",
+    "text": "Learning check\nCase-based questions to follow.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Describing Data</span>"
+    ]
+  },
+  {
+    "objectID": "02-describing-data.html#references",
+    "href": "02-describing-data.html#references",
+    "title": "2  Describing Data",
+    "section": "References",
+    "text": "References",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Describing Data</span>"
+    ]
+  },
+  {
+    "objectID": "03-uncertainty.html",
+    "href": "03-uncertainty.html",
+    "title": "3  Uncertainty",
+    "section": "",
+    "text": "3.1 Why one sample is not the truth\nDriving question: How sure can I be?\nSampling variation made visible by simulation: drawing many samples from a known population.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Uncertainty</span>"
+    ]
+  },
+  {
+    "objectID": "03-uncertainty.html#the-sampling-distribution-and-the-standard-error",
+    "href": "03-uncertainty.html#the-sampling-distribution-and-the-standard-error",
+    "title": "3  Uncertainty",
+    "section": "3.2 The sampling distribution and the standard error",
+    "text": "3.2 The sampling distribution and the standard error\nThe standard error as the standard deviation of an estimate across hypothetical samples.\n\n3.2.1 Simulating the sampling distribution\n\n\n3.2.2 The standard error in practice",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Uncertainty</span>"
+    ]
+  },
+  {
+    "objectID": "03-uncertainty.html#confidence-intervals",
+    "href": "03-uncertainty.html#confidence-intervals",
+    "title": "3  Uncertainty",
+    "section": "3.3 Confidence intervals",
+    "text": "3.3 Confidence intervals\nInterval estimates and their interpretation; the bootstrap as a general-purpose tool.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Uncertainty</span>"
+    ]
+  },
+  {
+    "objectID": "03-uncertainty.html#from-uncertainty-to-comparison",
+    "href": "03-uncertainty.html#from-uncertainty-to-comparison",
+    "title": "3  Uncertainty",
+    "section": "3.4 From uncertainty to comparison",
+    "text": "3.4 From uncertainty to comparison\nError bars on a two-group comparison — the bridge into analyzing experiments.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Uncertainty</span>"
+    ]
+  },
+  {
+    "objectID": "03-uncertainty.html#learning-check",
+    "href": "03-uncertainty.html#learning-check",
+    "title": "3  Uncertainty",
+    "section": "Learning check",
+    "text": "Learning check\nCase-based questions to follow.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Uncertainty</span>"
+    ]
+  },
+  {
+    "objectID": "03-uncertainty.html#references",
+    "href": "03-uncertainty.html#references",
+    "title": "3  Uncertainty",
+    "section": "References",
+    "text": "References",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Uncertainty</span>"
+    ]
+  },
+  {
+    "objectID": "04-experiments.html",
+    "href": "04-experiments.html",
+    "title": "4  Learning from Experiments",
+    "section": "",
+    "text": "4.1 The anatomy of an A/B test\nDriving question: Did it work?\nUnits, random assignment, outcomes; checking that randomization worked.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Learning from Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "04-experiments.html#comparing-two-groups",
+    "href": "04-experiments.html#comparing-two-groups",
+    "title": "4  Learning from Experiments",
+    "section": "4.2 Comparing two groups",
+    "text": "4.2 Comparing two groups\nThe t-test; the same comparison as a regression with a dummy variable.\n\n4.2.1 Independent vs. paired comparisons",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Learning from Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "04-experiments.html#more-than-two-variants",
+    "href": "04-experiments.html#more-than-two-variants",
+    "title": "4  Learning from Experiments",
+    "section": "4.3 More than two variants",
+    "text": "4.3 More than two variants\nAnalysis of variance and post-hoc comparisons.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Learning from Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "04-experiments.html#proportions-and-counts",
+    "href": "04-experiments.html#proportions-and-counts",
+    "title": "4  Learning from Experiments",
+    "section": "4.4 Proportions and counts",
+    "text": "4.4 Proportions and counts\nTests for conversion rates and categorical outcomes (chi-square and friends).",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Learning from Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "04-experiments.html#ranks-and-non-normal-outcomes",
+    "href": "04-experiments.html#ranks-and-non-normal-outcomes",
+    "title": "4  Learning from Experiments",
+    "section": "4.5 Ranks and non-normal outcomes",
+    "text": "4.5 Ranks and non-normal outcomes\nNon-parametric alternatives and when they are worth it.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Learning from Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "04-experiments.html#choosing-the-right-test",
+    "href": "04-experiments.html#choosing-the-right-test",
+    "title": "4  Learning from Experiments",
+    "section": "4.6 Choosing the right test",
+    "text": "4.6 Choosing the right test\nThe decision flowchart: outcome type, number of groups, dependence structure.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Learning from Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "04-experiments.html#how-experiments-go-wrong",
+    "href": "04-experiments.html#how-experiments-go-wrong",
+    "title": "4  Learning from Experiments",
+    "section": "4.7 How experiments go wrong",
+    "text": "4.7 How experiments go wrong\nPower and sample size; peeking and p-hacking; selection bias in platform A/B-testing tools.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Learning from Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "04-experiments.html#running-experiments-in-practice",
+    "href": "04-experiments.html#running-experiments-in-practice",
+    "title": "4  Learning from Experiments",
+    "section": "4.8 Running experiments in practice",
+    "text": "4.8 Running experiments in practice\nBetween- vs. within-subjects designs; spillovers; field-experiment guidelines; survey experiments (group project).",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Learning from Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "04-experiments.html#learning-check",
+    "href": "04-experiments.html#learning-check",
+    "title": "4  Learning from Experiments",
+    "section": "Learning check",
+    "text": "Learning check\nCase-based questions to follow.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Learning from Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "04-experiments.html#references",
+    "href": "04-experiments.html#references",
+    "title": "4  Learning from Experiments",
+    "section": "References",
+    "text": "References",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Learning from Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "05-observational-data.html",
+    "href": "05-observational-data.html",
+    "title": "5  Learning from Observational Data",
+    "section": "",
+    "text": "5.1 The adjustment idea\nDriving question: What if we cannot randomize?\nCausal diagrams: forks, pipes, and colliders; which variables to adjust for — and which not.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Learning from Observational Data</span>"
+    ]
+  },
+  {
+    "objectID": "05-observational-data.html#simple-linear-regression",
+    "href": "05-observational-data.html#simple-linear-regression",
+    "title": "5  Learning from Observational Data",
+    "section": "5.2 Simple linear regression",
+    "text": "5.2 Simple linear regression\nLine fitting, interpretation of coefficients, goodness of fit.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Learning from Observational Data</span>"
+    ]
+  },
+  {
+    "objectID": "05-observational-data.html#multiple-regression",
+    "href": "05-observational-data.html#multiple-regression",
+    "title": "5  Learning from Observational Data",
+    "section": "5.3 Multiple regression",
+    "text": "5.3 Multiple regression\nAdjusting for confounders; good and bad controls; omitted variables.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Learning from Observational Data</span>"
+    ]
+  },
+  {
+    "objectID": "05-observational-data.html#categorical-predictors-and-interactions",
+    "href": "05-observational-data.html#categorical-predictors-and-interactions",
+    "title": "5  Learning from Observational Data",
+    "section": "5.4 Categorical predictors and interactions",
+    "text": "5.4 Categorical predictors and interactions\nDummy variables; moderation as interaction effects.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Learning from Observational Data</span>"
+    ]
+  },
+  {
+    "objectID": "05-observational-data.html#mediation-analysis",
+    "href": "05-observational-data.html#mediation-analysis",
+    "title": "5  Learning from Observational Data",
+    "section": "5.5 Mediation analysis",
+    "text": "5.5 Mediation analysis\nDecomposing effects into direct and indirect paths; why controlling for a mediator backfires.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Learning from Observational Data</span>"
+    ]
+  },
+  {
+    "objectID": "05-observational-data.html#binary-outcomes-logistic-regression",
+    "href": "05-observational-data.html#binary-outcomes-logistic-regression",
+    "title": "5  Learning from Observational Data",
+    "section": "5.6 Binary outcomes: logistic regression",
+    "text": "5.6 Binary outcomes: logistic regression\nModeling probabilities; odds ratios and marginal effects.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Learning from Observational Data</span>"
+    ]
+  },
+  {
+    "objectID": "05-observational-data.html#diagnostics-that-matter",
+    "href": "05-observational-data.html#diagnostics-that-matter",
+    "title": "5  Learning from Observational Data",
+    "section": "5.7 Diagnostics that matter",
+    "text": "5.7 Diagnostics that matter\nThe checks that change decisions: non-linearity, influential observations, heteroscedasticity.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Learning from Observational Data</span>"
+    ]
+  },
+  {
+    "objectID": "05-observational-data.html#learning-check",
+    "href": "05-observational-data.html#learning-check",
+    "title": "5  Learning from Observational Data",
+    "section": "Learning check",
+    "text": "Learning check\nCase-based questions to follow.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Learning from Observational Data</span>"
+    ]
+  },
+  {
+    "objectID": "05-observational-data.html#references",
+    "href": "05-observational-data.html#references",
+    "title": "5  Learning from Observational Data",
+    "section": "References",
+    "text": "References",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Learning from Observational Data</span>"
+    ]
+  },
+  {
+    "objectID": "06-panel-data.html",
+    "href": "06-panel-data.html",
+    "title": "6  Panel Data & Quasi-Experiments",
+    "section": "",
+    "text": "6.1 Panel data: the same units over time\nDriving question: What if the world randomizes for us?\nStructure of panel data; within- vs. between-unit variation.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Panel Data & Quasi-Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "06-panel-data.html#fixed-effects",
+    "href": "06-panel-data.html#fixed-effects",
+    "title": "6  Panel Data & Quasi-Experiments",
+    "section": "6.2 Fixed effects",
+    "text": "6.2 Fixed effects\nEvery unit as its own control group; what fixed effects can and cannot remove.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Panel Data & Quasi-Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "06-panel-data.html#difference-in-differences",
+    "href": "06-panel-data.html#difference-in-differences",
+    "title": "6  Panel Data & Quasi-Experiments",
+    "section": "6.3 Difference-in-differences",
+    "text": "6.3 Difference-in-differences\nThe workhorse quasi-experimental design; parallel trends as the key assumption.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Panel Data & Quasi-Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "06-panel-data.html#case-study-platform-entry",
+    "href": "06-panel-data.html#case-study-platform-entry",
+    "title": "6  Panel Data & Quasi-Experiments",
+    "section": "6.4 Case study: platform entry",
+    "text": "6.4 Case study: platform entry\nStreaming adoption and music spending (Wlömert & Papies 2016); the eBay regional experiment revisited.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Panel Data & Quasi-Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "06-panel-data.html#threats-and-diagnostics",
+    "href": "06-panel-data.html#threats-and-diagnostics",
+    "title": "6  Panel Data & Quasi-Experiments",
+    "section": "6.5 Threats and diagnostics",
+    "text": "6.5 Threats and diagnostics\nTesting parallel trends; anticipation; staggered adoption (outlook).",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Panel Data & Quasi-Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "06-panel-data.html#learning-check",
+    "href": "06-panel-data.html#learning-check",
+    "title": "6  Panel Data & Quasi-Experiments",
+    "section": "Learning check",
+    "text": "Learning check\nCase-based questions to follow.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Panel Data & Quasi-Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "06-panel-data.html#references",
+    "href": "06-panel-data.html#references",
+    "title": "6  Panel Data & Quasi-Experiments",
+    "section": "References",
+    "text": "References",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Panel Data & Quasi-Experiments</span>"
+    ]
+  },
+  {
+    "objectID": "07-decisions.html",
+    "href": "07-decisions.html",
+    "title": "7  From Estimate to Decision",
+    "section": "",
+    "text": "7.1 Effect sizes in euros\nDriving question: What should we do?\nFrom statistical significance to economic significance; translating estimates into business terms.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>From Estimate to Decision</span>"
+    ]
+  },
+  {
+    "objectID": "07-decisions.html#from-causal-estimate-to-prescription",
+    "href": "07-decisions.html#from-causal-estimate-to-prescription",
+    "title": "7  From Estimate to Decision",
+    "section": "7.2 From causal estimate to prescription",
+    "text": "7.2 From causal estimate to prescription\nComparing counterfactual policies; heterogeneity and targeting; the limits of extrapolation.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>From Estimate to Decision</span>"
+    ]
+  },
+  {
+    "objectID": "07-decisions.html#communicating-analyses",
+    "href": "07-decisions.html#communicating-analyses",
+    "title": "7  From Estimate to Decision",
+    "section": "7.3 Communicating analyses",
+    "text": "7.3 Communicating analyses\nReporting uncertainty honestly; writing for decision-makers; the one-slide summary.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>From Estimate to Decision</span>"
+    ]
+  },
+  {
+    "objectID": "07-decisions.html#the-analysts-checklist",
+    "href": "07-decisions.html#the-analysts-checklist",
+    "title": "7  From Estimate to Decision",
+    "section": "7.4 The analyst’s checklist",
+    "text": "7.4 The analyst’s checklist\nThe questions to ask of any analysis — yours or anyone else’s.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>From Estimate to Decision</span>"
+    ]
+  },
+  {
+    "objectID": "07-decisions.html#learning-check",
+    "href": "07-decisions.html#learning-check",
+    "title": "7  From Estimate to Decision",
+    "section": "Learning check",
+    "text": "Learning check\nCase-based questions to follow.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>From Estimate to Decision</span>"
+    ]
+  },
+  {
+    "objectID": "07-decisions.html#references",
+    "href": "07-decisions.html#references",
+    "title": "7  From Estimate to Decision",
+    "section": "References",
+    "text": "References",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>From Estimate to Decision</span>"
+    ]
+  },
+  {
+    "objectID": "r-onboarding.html",
+    "href": "r-onboarding.html",
+    "title": "R Onboarding",
+    "section": "",
+    "text": "Option A: Installing R and RStudio\nStep-by-step installation for Windows and macOS; verifying the setup.",
+    "crumbs": [
+      "Appendices",
+      "R Onboarding"
+    ]
+  },
+  {
+    "objectID": "r-onboarding.html#option-b-posit-cloud-no-installation",
+    "href": "r-onboarding.html#option-b-posit-cloud-no-installation",
+    "title": "R Onboarding",
+    "section": "Option B: Posit Cloud (no installation)",
+    "text": "Option B: Posit Cloud (no installation)\nWorking in the browser; copying the pre-configured course project.",
+    "crumbs": [
+      "Appendices",
+      "R Onboarding"
+    ]
+  },
+  {
+    "objectID": "r-onboarding.html#first-steps-in-rstudio",
+    "href": "r-onboarding.html#first-steps-in-rstudio",
+    "title": "R Onboarding",
+    "section": "First steps in RStudio",
+    "text": "First steps in RStudio\nConsole vs. scripts; running code; installing and loading packages; getting help.",
+    "crumbs": [
+      "Appendices",
+      "R Onboarding"
+    ]
+  },
+  {
+    "objectID": "r-onboarding.html#reproducible-reports",
+    "href": "r-onboarding.html#reproducible-reports",
+    "title": "R Onboarding",
+    "section": "Reproducible reports",
+    "text": "Reproducible reports\nCreating and rendering documents; the assignment submission format.",
+    "crumbs": [
+      "Appendices",
+      "R Onboarding"
+    ]
+  },
+  {
+    "objectID": "r-onboarding.html#using-ai-assistants-well",
+    "href": "r-onboarding.html#using-ai-assistants-well",
+    "title": "R Onboarding",
+    "section": "Using AI assistants well",
+    "text": "Using AI assistants well\nEndorsed uses (error messages, code drafts, concept questions); how to prompt productively; where reliance backfires.",
+    "crumbs": [
+      "Appendices",
+      "R Onboarding"
+    ]
+  },
+  {
+    "objectID": "r-onboarding.html#troubleshooting-faq",
+    "href": "r-onboarding.html#troubleshooting-faq",
+    "title": "R Onboarding",
+    "section": "Troubleshooting & FAQ",
+    "text": "Troubleshooting & FAQ\nCommon installation problems and their fixes.",
+    "crumbs": [
+      "Appendices",
+      "R Onboarding"
+    ]
   }
 ]

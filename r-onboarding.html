@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Nils Wlömert">
-<meta name="dcterms.date" content="2026-09-15">
 
-<title>Marketing Analytics</title>
+<title>R Onboarding – Marketing Analytics</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -38,7 +36,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./00-introduction.html" rel="next">
+<link href="./07-decisions.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -90,7 +88,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome!</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r-onboarding.html">Appendices</a></li><li class="breadcrumb-item"><a href="./r-onboarding.html">R Onboarding</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -120,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome!</span></a>
   </div>
 </li>
@@ -183,7 +181,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./r-onboarding.html" class="sidebar-item-text sidebar-link">
+  <a href="./r-onboarding.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">R Onboarding</span></a>
   </div>
 </li>
@@ -199,35 +197,28 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome!</a></li>
+  <li><a href="#option-a-installing-r-and-rstudio" id="toc-option-a-installing-r-and-rstudio" class="nav-link active" data-scroll-target="#option-a-installing-r-and-rstudio">Option A: Installing R and RStudio</a></li>
+  <li><a href="#option-b-posit-cloud-no-installation" id="toc-option-b-posit-cloud-no-installation" class="nav-link" data-scroll-target="#option-b-posit-cloud-no-installation">Option B: Posit Cloud (no installation)</a></li>
+  <li><a href="#first-steps-in-rstudio" id="toc-first-steps-in-rstudio" class="nav-link" data-scroll-target="#first-steps-in-rstudio">First steps in RStudio</a></li>
+  <li><a href="#reproducible-reports" id="toc-reproducible-reports" class="nav-link" data-scroll-target="#reproducible-reports">Reproducible reports</a></li>
+  <li><a href="#using-ai-assistants-well" id="toc-using-ai-assistants-well" class="nav-link" data-scroll-target="#using-ai-assistants-well">Using AI assistants well</a></li>
+  <li><a href="#troubleshooting-faq" id="toc-troubleshooting-faq" class="nav-link" data-scroll-target="#troubleshooting-faq">Troubleshooting &amp; FAQ</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r-onboarding.html">Appendices</a></li><li class="breadcrumb-item"><a href="./r-onboarding.html">R Onboarding</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Marketing Analytics</h1>
+<h1 class="title"><span id="sec-onboarding" class="quarto-section-identifier">R Onboarding</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Nils Wlömert </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">September 15, 2026</p>
-    </div>
-  </div>
   
     
   </div>
@@ -237,19 +228,42 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="welcome" class="level1 unnumbered">
-<h1 class="unnumbered">Welcome!</h1>
-<p>Welcome to the course <strong>Marketing Analytics</strong>! This course covers the conceptual foundations of data analysis for marketing decision-making and the application of these methods to real marketing problems using the statistical software <strong>R</strong>.</p>
-<p>The course is organized around one guiding idea: most questions marketing managers care about are questions about <em>what would happen if we acted</em> — and answering such questions well requires understanding how your data came into being. The chapters on this site develop this idea step by step, from describing data, through quantifying uncertainty, to learning from experiments, observational data, and panel data.</p>
-<p>Each chapter opens with a real marketing decision, develops the concepts with simulated and real examples, shows the implementation in R with commented code, and closes with a learning check. Technical details are available in collapsible “Under the hood” boxes — read them when you want depth; skip them on first reading.</p>
-<p>This website accompanies the in-person sessions: work through the assigned chapter <em>after</em> each session to consolidate, and use the R onboarding module <em>before</em> the second session to set up your environment.</p>
-<p>If you have any questions, feel free to send me a short email.</p>
-<p>Nils Wlömert<br>
-<a href="mailto:nils.wloemert@wu.ac.at" class="email">nils.wloemert@wu.ac.at</a></p>
-<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4em;">
-<p><img src="img/logo_wu.jpg" class="img-fluid" width="150"></p>
-<p><img src="img/logo_rds.png" class="img-fluid" width="150"></p>
+<div class="callout callout-style-default callout-warning callout-titled" title="In preparation">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>In preparation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Complete this self-paced module <strong>before the second session</strong>. The sections below are placeholders from the course revision.</p>
+</div>
+</div>
+<section id="option-a-installing-r-and-rstudio" class="level2">
+<h2 class="anchored" data-anchor-id="option-a-installing-r-and-rstudio">Option A: Installing R and RStudio</h2>
+<p><em>Step-by-step installation for Windows and macOS; verifying the setup.</em></p>
+</section>
+<section id="option-b-posit-cloud-no-installation" class="level2">
+<h2 class="anchored" data-anchor-id="option-b-posit-cloud-no-installation">Option B: Posit Cloud (no installation)</h2>
+<p><em>Working in the browser; copying the pre-configured course project.</em></p>
+</section>
+<section id="first-steps-in-rstudio" class="level2">
+<h2 class="anchored" data-anchor-id="first-steps-in-rstudio">First steps in RStudio</h2>
+<p><em>Console vs.&nbsp;scripts; running code; installing and loading packages; getting help.</em></p>
+</section>
+<section id="reproducible-reports" class="level2">
+<h2 class="anchored" data-anchor-id="reproducible-reports">Reproducible reports</h2>
+<p><em>Creating and rendering documents; the assignment submission format.</em></p>
+</section>
+<section id="using-ai-assistants-well" class="level2">
+<h2 class="anchored" data-anchor-id="using-ai-assistants-well">Using AI assistants well</h2>
+<p><em>Endorsed uses (error messages, code drafts, concept questions); how to prompt productively; where reliance backfires.</em></p>
+</section>
+<section id="troubleshooting-faq" class="level2">
+<h2 class="anchored" data-anchor-id="troubleshooting-faq">Troubleshooting &amp; FAQ</h2>
+<p><em>Common installation problems and their fixes.</em></p>
 
 
 </section>
@@ -657,11 +671,11 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./07-decisions.html" class="pagination-link" aria-label="From Estimate to Decision">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">From Estimate to Decision</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./00-introduction.html" class="pagination-link" aria-label="Introduction">
-        <span class="nav-page-text">Introduction</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
