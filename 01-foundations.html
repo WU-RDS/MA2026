@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -94,6 +129,8 @@ div.csl-indent {
     "search-label": "Search"
   }
 }</script>
+<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="book-style.css">
@@ -655,6 +692,103 @@ Figure&nbsp;1.11: Covariate balance under self-selection vs.&nbsp;randomization 
 </div>
 </div>
 <p>Pause on the right panel: the coin flip balanced <em>intent</em> without knowing that intent existed. Randomization is the only design that protects you against the confounders you have not thought of. This is why <span class="citation" data-cites="angrist2009">Angrist and Pischke (<a href="01-foundations.html#ref-angrist2009" role="doc-biblioref">2009</a>)</span> write that “the most credible and influential research designs use random assignment” — and why online firms run thousands of randomized experiments (A/B tests) every day. The practical craft of running experiments well — units of randomization, spillovers, and the ways even platform A/B-testing tools can quietly break randomization — is the subject of Module 4.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Try it: can more data fix a biased comparison?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Try it: can more data fix a biased comparison?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="cell">
+<details class="code-fold hidden">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb1" data-startfrom="291" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 290;"><span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a>viewof n <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">200</span><span class="op">,</span> <span class="dv">50000</span>]<span class="op">,</span> {<span class="dt">step</span><span class="op">:</span> <span class="dv">200</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Sample size n"</span><span class="op">,</span> <span class="dt">transform</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">log</span><span class="op">,</span> <span class="dt">invert</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold hidden">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb2" data-startfrom="296" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 295;"><span id="cb2-296"><a href="#cb2-296" aria-hidden="true" tabindex="-1"></a>viewof sel <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span> {<span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="fl">1.2</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Selection strength (how much intent drives exposure)"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold hidden">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb3" data-startfrom="301" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 300;"><span id="cb3-301"><a href="#cb3-301" aria-hidden="true" tabindex="-1"></a>viewof redraw <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">button</span>(<span class="st">"Draw a new sample"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold hidden">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb4" data-startfrom="306" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 305;"><span id="cb4-306"><a href="#cb4-306" aria-hidden="true" tabindex="-1"></a>sim <span class="op">=</span> {</span>
+<span id="cb4-307"><a href="#cb4-307" aria-hidden="true" tabindex="-1"></a>  redraw<span class="op">;</span></span>
+<span id="cb4-308"><a href="#cb4-308" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> N <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>(n)<span class="op">;</span></span>
+<span id="cb4-309"><a href="#cb4-309" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rnorm <span class="op">=</span> d3<span class="op">.</span><span class="fu">randomNormal</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb4-310"><a href="#cb4-310" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> results <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb4-311"><a href="#cb4-311" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> intent <span class="op">=</span> <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>({<span class="dt">length</span><span class="op">:</span> N}<span class="op">,</span> rnorm)<span class="op">;</span></span>
+<span id="cb4-312"><a href="#cb4-312" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> purchases <span class="op">=</span> intent<span class="op">.</span><span class="fu">map</span>(v <span class="kw">=&gt;</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">max</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">20</span> <span class="op">+</span> <span class="dv">12</span> <span class="op">*</span> v <span class="op">+</span> d3<span class="op">.</span><span class="fu">randomNormal</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">6</span>)()))<span class="op">;</span></span>
+<span id="cb4-313"><a href="#cb4-313" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> expSel <span class="op">=</span> intent<span class="op">.</span><span class="fu">map</span>(v <span class="kw">=&gt;</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">&lt;</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>(<span class="op">-</span>(sel <span class="op">*</span> v <span class="op">-</span> <span class="fl">0.2</span>))) <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb4-314"><a href="#cb4-314" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> expRct <span class="op">=</span> intent<span class="op">.</span><span class="fu">map</span>(() <span class="kw">=&gt;</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">&lt;</span> <span class="fl">0.5</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb4-315"><a href="#cb4-315" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> [label<span class="op">,</span> exposure] <span class="kw">of</span> [[<span class="st">"Self-selected exposure"</span><span class="op">,</span> expSel]<span class="op">,</span> [<span class="st">"Randomized assignment"</span><span class="op">,</span> expRct]]) {</span>
+<span id="cb4-316"><a href="#cb4-316" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> g1 <span class="op">=</span> purchases<span class="op">.</span><span class="fu">filter</span>((_<span class="op">,</span> i) <span class="kw">=&gt;</span> exposure[i] <span class="op">===</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb4-317"><a href="#cb4-317" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> g0 <span class="op">=</span> purchases<span class="op">.</span><span class="fu">filter</span>((_<span class="op">,</span> i) <span class="kw">=&gt;</span> exposure[i] <span class="op">===</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb4-318"><a href="#cb4-318" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (g1<span class="op">.</span><span class="at">length</span> <span class="op">&lt;</span> <span class="dv">2</span> <span class="op">||</span> g0<span class="op">.</span><span class="at">length</span> <span class="op">&lt;</span> <span class="dv">2</span>) <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb4-319"><a href="#cb4-319" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> est <span class="op">=</span> d3<span class="op">.</span><span class="fu">mean</span>(g1) <span class="op">-</span> d3<span class="op">.</span><span class="fu">mean</span>(g0)<span class="op">;</span></span>
+<span id="cb4-320"><a href="#cb4-320" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> se <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(d3<span class="op">.</span><span class="fu">variance</span>(g1) <span class="op">/</span> g1<span class="op">.</span><span class="at">length</span> <span class="op">+</span> d3<span class="op">.</span><span class="fu">variance</span>(g0) <span class="op">/</span> g0<span class="op">.</span><span class="at">length</span>)<span class="op">;</span></span>
+<span id="cb4-321"><a href="#cb4-321" aria-hidden="true" tabindex="-1"></a>    results<span class="op">.</span><span class="fu">push</span>({<span class="dt">design</span><span class="op">:</span> label<span class="op">,</span> est<span class="op">,</span> <span class="dt">lo</span><span class="op">:</span> est <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> se<span class="op">,</span> <span class="dt">hi</span><span class="op">:</span> est <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> se})<span class="op">;</span></span>
+<span id="cb4-322"><a href="#cb4-322" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-323"><a href="#cb4-323" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> results<span class="op">;</span></span>
+<span id="cb4-324"><a href="#cb4-324" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold hidden">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb5" data-startfrom="329" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 328;"><span id="cb5-329"><a href="#cb5-329" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb5-330"><a href="#cb5-330" aria-hidden="true" tabindex="-1"></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">170</span><span class="op">,</span></span>
+<span id="cb5-331"><a href="#cb5-331" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">190</span><span class="op">,</span></span>
+<span id="cb5-332"><a href="#cb5-332" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Estimated 'effect' of ad exposure on purchases (true effect = 0)"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">14</span>]}<span class="op">,</span></span>
+<span id="cb5-333"><a href="#cb5-333" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="kw">null</span>}<span class="op">,</span></span>
+<span id="cb5-334"><a href="#cb5-334" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb5-335"><a href="#cb5-335" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleX</span>([<span class="dv">0</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#b03a2e"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})<span class="op">,</span></span>
+<span id="cb5-336"><a href="#cb5-336" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">text</span>([{<span class="dt">x</span><span class="op">:</span> <span class="fl">0.2</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"Self-selected exposure"</span><span class="op">,</span> <span class="dt">text</span><span class="op">:</span> <span class="st">"truth"</span>}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">text</span><span class="op">:</span> <span class="st">"text"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#b03a2e"</span><span class="op">,</span> <span class="dt">dy</span><span class="op">:</span> <span class="op">-</span><span class="dv">28</span><span class="op">,</span> <span class="dt">textAnchor</span><span class="op">:</span> <span class="st">"start"</span>})<span class="op">,</span></span>
+<span id="cb5-337"><a href="#cb5-337" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>(sim<span class="op">,</span> {<span class="dt">y</span><span class="op">:</span> <span class="st">"design"</span><span class="op">,</span> <span class="dt">x1</span><span class="op">:</span> <span class="st">"lo"</span><span class="op">,</span> <span class="dt">x2</span><span class="op">:</span> <span class="st">"hi"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#0f5da8"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span>})<span class="op">,</span></span>
+<span id="cb5-338"><a href="#cb5-338" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>(sim<span class="op">,</span> {<span class="dt">y</span><span class="op">:</span> <span class="st">"design"</span><span class="op">,</span> <span class="dt">x</span><span class="op">:</span> <span class="st">"est"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#0f5da8"</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="dv">5</span>})</span>
+<span id="cb5-339"><a href="#cb5-339" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb5-340"><a href="#cb5-340" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-5" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p>The bars are 95% confidence intervals. <strong>Increase n</strong>: both intervals shrink — but only one shrinks toward the truth. The self-selected comparison becomes <em>more confidently wrong</em>: that is what “inconsistent” means. Set the selection strength to 0 and the bias disappears — randomization is precisely the design that forces it to 0.</p>
+</div>
+</div>
 </section>
 <section id="the-price-of-observational-data" class="level3" data-number="1.6.3">
 <h3 data-number="1.6.3" class="anchored" data-anchor-id="the-price-of-observational-data"><span class="header-section-number">1.6.3</span> The price of observational data</h3>
@@ -990,6 +1124,17 @@ Entry.”</span> <em>International Journal of Research in Marketing</em>
 </section>
 
 </main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiBuID0gSW5wdXRzLnJhbmdlKFsyMDAsIDUwMDAwXSwge3N0ZXA6IDIwMCwgdmFsdWU6IDEwMDAsIGxhYmVsOiBcIlNhbXBsZSBzaXplIG5cIiwgdHJhbnNmb3JtOiBNYXRoLmxvZywgaW52ZXJ0OiBNYXRoLmV4cH0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTIiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ2aWV3b2Ygc2VsID0gSW5wdXRzLnJhbmdlKFswLCAyXSwge3N0ZXA6IDAuMSwgdmFsdWU6IDEuMiwgbGFiZWw6IFwiU2VsZWN0aW9uIHN0cmVuZ3RoIChob3cgbXVjaCBpbnRlbnQgZHJpdmVzIGV4cG9zdXJlKVwifSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiByZWRyYXcgPSBJbnB1dHMuYnV0dG9uKFwiRHJhdyBhIG5ldyBzYW1wbGVcIilcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InNpbSA9IHtcbiAgcmVkcmF3O1xuICBjb25zdCBOID0gTWF0aC5yb3VuZChuKTtcbiAgY29uc3Qgcm5vcm0gPSBkMy5yYW5kb21Ob3JtYWwoMCwgMSk7XG4gIGNvbnN0IHJlc3VsdHMgPSBbXTtcbiAgY29uc3QgaW50ZW50ID0gQXJyYXkuZnJvbSh7bGVuZ3RoOiBOfSwgcm5vcm0pO1xuICBjb25zdCBwdXJjaGFzZXMgPSBpbnRlbnQubWFwKHYgPT4gTWF0aC5tYXgoMCwgMjAgKyAxMiAqIHYgKyBkMy5yYW5kb21Ob3JtYWwoMCwgNikoKSkpO1xuICBjb25zdCBleHBTZWwgPSBpbnRlbnQubWFwKHYgPT4gTWF0aC5yYW5kb20oKSA8IDEgLyAoMSArIE1hdGguZXhwKC0oc2VsICogdiAtIDAuMikpKSA/IDEgOiAwKTtcbiAgY29uc3QgZXhwUmN0ID0gaW50ZW50Lm1hcCgoKSA9PiBNYXRoLnJhbmRvbSgpIDwgMC41ID8gMSA6IDApO1xuICBmb3IgKGNvbnN0IFtsYWJlbCwgZXhwb3N1cmVdIG9mIFtbXCJTZWxmLXNlbGVjdGVkIGV4cG9zdXJlXCIsIGV4cFNlbF0sIFtcIlJhbmRvbWl6ZWQgYXNzaWdubWVudFwiLCBleHBSY3RdXSkge1xuICAgIGNvbnN0IGcxID0gcHVyY2hhc2VzLmZpbHRlcigoXywgaSkgPT4gZXhwb3N1cmVbaV0gPT09IDEpO1xuICAgIGNvbnN0IGcwID0gcHVyY2hhc2VzLmZpbHRlcigoXywgaSkgPT4gZXhwb3N1cmVbaV0gPT09IDApO1xuICAgIGlmIChnMS5sZW5ndGggPCAyIHx8IGcwLmxlbmd0aCA8IDIpIGNvbnRpbnVlO1xuICAgIGNvbnN0IGVzdCA9IGQzLm1lYW4oZzEpIC0gZDMubWVhbihnMCk7XG4gICAgY29uc3Qgc2UgPSBNYXRoLnNxcnQoZDMudmFyaWFuY2UoZzEpIC8gZzEubGVuZ3RoICsgZDMudmFyaWFuY2UoZzApIC8gZzAubGVuZ3RoKTtcbiAgICByZXN1bHRzLnB1c2goe2Rlc2lnbjogbGFiZWwsIGVzdCwgbG86IGVzdCAtIDEuOTYgKiBzZSwgaGk6IGVzdCArIDEuOTYgKiBzZX0pO1xuICB9XG4gIHJldHVybiByZXN1bHRzO1xufVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC01IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiUGxvdC5wbG90KHtcbiAgaGVpZ2h0OiAxNzAsXG4gIG1hcmdpbkxlZnQ6IDE5MCxcbiAgeDoge2xhYmVsOiBcIkVzdGltYXRlZCAnZWZmZWN0JyBvZiBhZCBleHBvc3VyZSBvbiBwdXJjaGFzZXMgKHRydWUgZWZmZWN0ID0gMClcIiwgZG9tYWluOiBbLTIsIDE0XX0sXG4gIHk6IHtsYWJlbDogbnVsbH0sXG4gIG1hcmtzOiBbXG4gICAgUGxvdC5ydWxlWChbMF0sIHtzdHJva2U6IFwiI2IwM2EyZVwiLCBzdHJva2VXaWR0aDogMn0pLFxuICAgIFBsb3QudGV4dChbe3g6IDAuMiwgeTogXCJTZWxmLXNlbGVjdGVkIGV4cG9zdXJlXCIsIHRleHQ6IFwidHJ1dGhcIn1dLCB7eDogXCJ4XCIsIHk6IFwieVwiLCB0ZXh0OiBcInRleHRcIiwgZmlsbDogXCIjYjAzYTJlXCIsIGR5OiAtMjgsIHRleHRBbmNob3I6IFwic3RhcnRcIn0pLFxuICAgIFBsb3QucnVsZVkoc2ltLCB7eTogXCJkZXNpZ25cIiwgeDE6IFwibG9cIiwgeDI6IFwiaGlcIiwgc3Ryb2tlOiBcIiMwZjVkYThcIiwgc3Ryb2tlV2lkdGg6IDN9KSxcbiAgICBQbG90LmRvdChzaW0sIHt5OiBcImRlc2lnblwiLCB4OiBcImVzdFwiLCBmaWxsOiBcIiMwZjVkYThcIiwgcjogNX0pXG4gIF1cbn0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ24nKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnc2VsJykifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ3JlZHJhdycpIn1dfQ==
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../..";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
