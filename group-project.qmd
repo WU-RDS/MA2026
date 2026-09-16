@@ -1,0 +1,25 @@
+# Group Project {.unnumbered}
+
+::: {.callout-warning title="In preparation"}
+This appendix is being migrated from last year's course site. The section structure below reflects the planned contents; the full guidelines and topic descriptions follow.
+:::
+
+## Your tasks
+
+*The two parts of the project — questionnaire design & data collection, data analysis & video presentation — and the timeline with the two coaching sessions.*
+
+## Topics
+
+*The list of proposed topics with starter literature — or suggest your own.*
+
+## General information
+
+*Individual responsibility, peer assessment, contribution & AI-use statement, every member on camera; what to submit for each part.*
+
+## Part 1: Questionnaire design & data collection
+
+*Guidelines for the draft presentation (problem statement, hypotheses, design, measurement & scaling, planned analyses); designing in Qualtrics (see the [questionnaire design appendix](questionnaire-design.qmd)); testing; data collection.*
+
+## Part 2: Data analysis & video presentation
+
+*Guidelines for the analysis and the presentation; exporting data from Qualtrics; identifying randomized groups; importing with qualtRics; data handling for survey data; visualizations; reporting and interpreting results; peer review of two videos.*
