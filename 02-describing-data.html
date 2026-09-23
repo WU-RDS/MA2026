@@ -349,7 +349,7 @@ window.Quarto = {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>📽 <a href="slides/chapter02_slides.html" target="_blank" rel="noopener">Slides for this chapter</a> · <a href="slides/chapter02_slides_handout.pdf" target="_blank" rel="noopener">PDF handout</a></p>
+<p>📽 <a href="slides/chapter02_slides.html" target="_blank" rel="noopener">Slides for this chapter</a> · <a href="slides/chapter02_slides_handout.pdf" target="_blank" rel="noopener">PDF handout</a> · 💻 <a href="code/02-describing-data.R" download="02-describing-data.R">R code for this chapter</a></p>
 </div>
 </div>
 </div>
@@ -371,7 +371,7 @@ window.Quarto = {
 <p>It is tempting to jump straight to a model — a regression of streams on everything in the data. Resist the temptation. Every serious analysis starts with a <em>conversation</em> with the data: looking at what is in it, how it is distributed, where it is strange. There are two reasons. First, descriptive questions are managerially important in their own right: segment sizes, market shares, and funnel drop-offs are the everyday currency of marketing decisions. Second, description is where problems are caught — import errors, impossible values, duplicates, and quirks of how the data were collected. A model estimated on data you have not looked at inherits all of them silently.</p>
 <section id="summary-statistics-are-not-enough" class="level3" data-number="2.1.1">
 <h3 data-number="2.1.1" class="anchored" data-anchor-id="summary-statistics-are-not-enough"><span class="header-section-number">2.1.1</span> Summary statistics are not enough</h3>
-<p>A classic example makes the point. <a href="#fig-anscombe" class="quarto-xref">Figure&nbsp;<span>2.1</span></a> shows four small data sets constructed by the statistician Francis <span class="citation" data-cites="anscombe1973">(<a href="03-uncertainty.html#ref-anscombe1973" role="doc-biblioref"><strong>anscombe1973?</strong></a>)</span>. Their summary statistics are identical to two decimal places (<a href="#tbl-anscombe" class="quarto-xref">Table&nbsp;<span>2.1</span></a>): same means, same standard deviations, same correlation, and — as the orange lines show — the same regression line.</p>
+<p>A classic example makes the point. <a href="#fig-anscombe" class="quarto-xref">Figure&nbsp;<span>2.1</span></a> shows four small data sets constructed by the statistician Francis <span class="citation" data-cites="anscombe1973">(<a href="#ref-anscombe1973" role="doc-biblioref"><strong>anscombe1973?</strong></a>)</span>. Their summary statistics are identical to two decimal places (<a href="#tbl-anscombe" class="quarto-xref">Table&nbsp;<span>2.1</span></a>): same means, same standard deviations, same correlation, and — as the orange lines show — the same regression line.</p>
 <div class="cell">
 <div id="tbl-anscombe" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -696,7 +696,7 @@ $ expert_rating               &lt;chr&gt; "excellent", "good", "good", "poor", "
 </section>
 <section id="what-is-a-row-tidy-data-and-the-unit-of-observation" class="level3" data-number="2.2.4">
 <h3 data-number="2.2.4" class="anchored" data-anchor-id="what-is-a-row-tidy-data-and-the-unit-of-observation"><span class="header-section-number">2.2.4</span> What is a row? Tidy data and the unit of observation</h3>
-<p>Before any analysis, answer one question explicitly: <strong>what does one row represent?</strong> This is the <strong>unit of observation</strong> — the data counterpart of the unit of analysis in the research-design template of <a href="01-foundations.html#sec-design" class="quarto-xref"><span>Section 1.8</span></a>. Here, the answer seems obvious: one row is one track. Data organized this way are called <strong>tidy</strong> <span class="citation" data-cites="wickham2014">(<a href="03-uncertainty.html#ref-wickham2014" role="doc-biblioref"><strong>wickham2014?</strong></a>)</span>:</p>
+<p>Before any analysis, answer one question explicitly: <strong>what does one row represent?</strong> This is the <strong>unit of observation</strong> — the data counterpart of the unit of analysis in the research-design template of <a href="01-foundations.html#sec-design" class="quarto-xref"><span>Section 1.8</span></a>. Here, the answer seems obvious: one row is one track. Data organized this way are called <strong>tidy</strong> <span class="citation" data-cites="wickham2014">(<a href="#ref-wickham2014" role="doc-biblioref"><strong>wickham2014?</strong></a>)</span>:</p>
 <ol type="1">
 <li>Each <strong>variable</strong> is a column.</li>
 <li>Each <strong>observation</strong> is a row.</li>
