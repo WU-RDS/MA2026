@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -95,6 +130,35 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="book-style.css">
 </head>
@@ -202,7 +266,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./r-onboarding.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">R Onboarding</span></a>
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">R onboarding</span></span></a>
   </div>
 </li>
       </ul>
@@ -217,17 +281,61 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#a-first-conversation-with-your-data" id="toc-a-first-conversation-with-your-data" class="nav-link active" data-scroll-target="#a-first-conversation-with-your-data"><span class="header-section-number">2.1</span> A first conversation with your data</a>
+  <li><a href="#sec-desc-motivation" id="toc-sec-desc-motivation" class="nav-link active" data-scroll-target="#sec-desc-motivation"><span class="header-section-number">2.1</span> Motivation: a first conversation with your data</a>
   <ul class="collapse">
-  <li><a href="#getting-data-into-r" id="toc-getting-data-into-r" class="nav-link" data-scroll-target="#getting-data-into-r"><span class="header-section-number">2.1.1</span> Getting data into R</a></li>
-  <li><a href="#data-frames-variables-and-observations" id="toc-data-frames-variables-and-observations" class="nav-link" data-scroll-target="#data-frames-variables-and-observations"><span class="header-section-number">2.1.2</span> Data frames, variables, and observations</a></li>
-  <li><a href="#levels-of-measurement-and-why-they-matter" id="toc-levels-of-measurement-and-why-they-matter" class="nav-link" data-scroll-target="#levels-of-measurement-and-why-they-matter"><span class="header-section-number">2.1.3</span> Levels of measurement — and why they matter</a></li>
+  <li><a href="#summary-statistics-are-not-enough" id="toc-summary-statistics-are-not-enough" class="nav-link" data-scroll-target="#summary-statistics-are-not-enough"><span class="header-section-number">2.1.1</span> Summary statistics are not enough</a></li>
+  <li><a href="#what-description-can-and-cannot-do" id="toc-what-description-can-and-cannot-do" class="nav-link" data-scroll-target="#what-description-can-and-cannot-do"><span class="header-section-number">2.1.2</span> What description can — and cannot — do</a></li>
+  <li><a href="#the-data-tracks-in-the-streaming-charts" id="toc-the-data-tracks-in-the-streaming-charts" class="nav-link" data-scroll-target="#the-data-tracks-in-the-streaming-charts"><span class="header-section-number">2.1.3</span> The data: tracks in the streaming charts</a></li>
   </ul></li>
-  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling"><span class="header-section-number">2.2</span> Data wrangling</a></li>
-  <li><a href="#summarizing-data" id="toc-summarizing-data" class="nav-link" data-scroll-target="#summarizing-data"><span class="header-section-number">2.3</span> Summarizing data</a></li>
-  <li><a href="#visualizing-data" id="toc-visualizing-data" class="nav-link" data-scroll-target="#visualizing-data"><span class="header-section-number">2.4</span> Visualizing data</a></li>
-  <li><a href="#from-description-to-insight" id="toc-from-description-to-insight" class="nav-link" data-scroll-target="#from-description-to-insight"><span class="header-section-number">2.5</span> From description to insight</a></li>
-  <li><a href="#learning-check" id="toc-learning-check" class="nav-link" data-scroll-target="#learning-check">Learning check</a></li>
+  <li><a href="#sec-desc-import" id="toc-sec-desc-import" class="nav-link" data-scroll-target="#sec-desc-import"><span class="header-section-number">2.2</span> Getting data into R</a>
+  <ul class="collapse">
+  <li><a href="#reading-a-text-file" id="toc-reading-a-text-file" class="nav-link" data-scroll-target="#reading-a-text-file"><span class="header-section-number">2.2.1</span> Reading a text file</a></li>
+  <li><a href="#a-first-look" id="toc-a-first-look" class="nav-link" data-scroll-target="#a-first-look"><span class="header-section-number">2.2.2</span> A first look</a></li>
+  <li><a href="#other-file-formats" id="toc-other-file-formats" class="nav-link" data-scroll-target="#other-file-formats"><span class="header-section-number">2.2.3</span> Other file formats</a></li>
+  <li><a href="#what-is-a-row-tidy-data-and-the-unit-of-observation" id="toc-what-is-a-row-tidy-data-and-the-unit-of-observation" class="nav-link" data-scroll-target="#what-is-a-row-tidy-data-and-the-unit-of-observation"><span class="header-section-number">2.2.4</span> What is a row? Tidy data and the unit of observation</a></li>
+  </ul></li>
+  <li><a href="#sec-desc-measurement" id="toc-sec-desc-measurement" class="nav-link" data-scroll-target="#sec-desc-measurement"><span class="header-section-number">2.3</span> Variables and levels of measurement</a>
+  <ul class="collapse">
+  <li><a href="#four-levels-of-measurement" id="toc-four-levels-of-measurement" class="nav-link" data-scroll-target="#four-levels-of-measurement"><span class="header-section-number">2.3.1</span> Four levels of measurement</a></li>
+  <li><a href="#from-levels-of-measurement-to-r-types" id="toc-from-levels-of-measurement-to-r-types" class="nav-link" data-scroll-target="#from-levels-of-measurement-to-r-types"><span class="header-section-number">2.3.2</span> From levels of measurement to R types</a></li>
+  </ul></li>
+  <li><a href="#sec-desc-handling" id="toc-sec-desc-handling" class="nav-link" data-scroll-target="#sec-desc-handling"><span class="header-section-number">2.4</span> Data handling</a>
+  <ul class="collapse">
+  <li><a href="#choosing-rows-and-columns" id="toc-choosing-rows-and-columns" class="nav-link" data-scroll-target="#choosing-rows-and-columns"><span class="header-section-number">2.4.1</span> Choosing rows and columns</a></li>
+  <li><a href="#the-pipe-chaining-steps" id="toc-the-pipe-chaining-steps" class="nav-link" data-scroll-target="#the-pipe-chaining-steps"><span class="header-section-number">2.4.2</span> The pipe: chaining steps</a></li>
+  <li><a href="#creating-and-changing-variables" id="toc-creating-and-changing-variables" class="nav-link" data-scroll-target="#creating-and-changing-variables"><span class="header-section-number">2.4.3</span> Creating and changing variables</a></li>
+  <li><a href="#summaries-by-group" id="toc-summaries-by-group" class="nav-link" data-scroll-target="#summaries-by-group"><span class="header-section-number">2.4.4</span> Summaries by group</a></li>
+  <li><a href="#combining-tables" id="toc-combining-tables" class="nav-link" data-scroll-target="#combining-tables"><span class="header-section-number">2.4.5</span> Combining tables</a></li>
+  </ul></li>
+  <li><a href="#sec-desc-trust" id="toc-sec-desc-trust" class="nav-link" data-scroll-target="#sec-desc-trust"><span class="header-section-number">2.5</span> Not trusting your data too early</a>
+  <ul class="collapse">
+  <li><a href="#check-1-did-the-import-work" id="toc-check-1-did-the-import-work" class="nav-link" data-scroll-target="#check-1-did-the-import-work"><span class="header-section-number">2.5.1</span> Check 1: Did the import work?</a></li>
+  <li><a href="#check-2-missing-values-and-zeros-that-mean-unknown" id="toc-check-2-missing-values-and-zeros-that-mean-unknown" class="nav-link" data-scroll-target="#check-2-missing-values-and-zeros-that-mean-unknown"><span class="header-section-number">2.5.2</span> Check 2: Missing values — and zeros that mean “unknown”</a></li>
+  <li><a href="#check-3-impossible-values" id="toc-check-3-impossible-values" class="nav-link" data-scroll-target="#check-3-impossible-values"><span class="header-section-number">2.5.3</span> Check 3: Impossible values</a></li>
+  <li><a href="#check-4-duplicates-what-is-a-row-really" id="toc-check-4-duplicates-what-is-a-row-really" class="nav-link" data-scroll-target="#check-4-duplicates-what-is-a-row-really"><span class="header-section-number">2.5.4</span> Check 4: Duplicates — what is a row, really?</a></li>
+  <li><a href="#check-5-extreme-values-errors-or-information" id="toc-check-5-extreme-values-errors-or-information" class="nav-link" data-scroll-target="#check-5-extreme-values-errors-or-information"><span class="header-section-number">2.5.5</span> Check 5: Extreme values — errors or information?</a></li>
+  <li><a href="#sec-desc-selection" id="toc-sec-desc-selection" class="nav-link" data-scroll-target="#sec-desc-selection"><span class="header-section-number">2.5.6</span> How did the data come to be?</a></li>
+  </ul></li>
+  <li><a href="#sec-desc-summarizing" id="toc-sec-desc-summarizing" class="nav-link" data-scroll-target="#sec-desc-summarizing"><span class="header-section-number">2.6</span> Summarizing data</a>
+  <ul class="collapse">
+  <li><a href="#categorical-variables-frequencies" id="toc-categorical-variables-frequencies" class="nav-link" data-scroll-target="#categorical-variables-frequencies"><span class="header-section-number">2.6.1</span> Categorical variables: frequencies</a></li>
+  <li><a href="#continuous-variables-location-dispersion-shape" id="toc-continuous-variables-location-dispersion-shape" class="nav-link" data-scroll-target="#continuous-variables-location-dispersion-shape"><span class="header-section-number">2.6.2</span> Continuous variables: location, dispersion, shape</a></li>
+  <li><a href="#summaries-by-group-1" id="toc-summaries-by-group-1" class="nav-link" data-scroll-target="#summaries-by-group-1"><span class="header-section-number">2.6.3</span> Summaries by group</a></li>
+  <li><a href="#standardized-values-relative-position" id="toc-standardized-values-relative-position" class="nav-link" data-scroll-target="#standardized-values-relative-position"><span class="header-section-number">2.6.4</span> Standardized values: relative position</a></li>
+  </ul></li>
+  <li><a href="#sec-desc-visualizing" id="toc-sec-desc-visualizing" class="nav-link" data-scroll-target="#sec-desc-visualizing"><span class="header-section-number">2.7</span> Visualizing data</a>
+  <ul class="collapse">
+  <li><a href="#the-grammar-of-graphics" id="toc-the-grammar-of-graphics" class="nav-link" data-scroll-target="#the-grammar-of-graphics"><span class="header-section-number">2.7.1</span> The grammar of graphics</a></li>
+  <li><a href="#choosing-the-chart-that-fits-your-variables" id="toc-choosing-the-chart-that-fits-your-variables" class="nav-link" data-scroll-target="#choosing-the-chart-that-fits-your-variables"><span class="header-section-number">2.7.2</span> Choosing the chart that fits your variables</a></li>
+  <li><a href="#distributions-histograms-and-the-log-scale" id="toc-distributions-histograms-and-the-log-scale" class="nav-link" data-scroll-target="#distributions-histograms-and-the-log-scale"><span class="header-section-number">2.7.3</span> Distributions: histograms and the log scale</a></li>
+  <li><a href="#comparing-groups-boxplots" id="toc-comparing-groups-boxplots" class="nav-link" data-scroll-target="#comparing-groups-boxplots"><span class="header-section-number">2.7.4</span> Comparing groups: boxplots</a></li>
+  <li><a href="#relationships-scatter-plots" id="toc-relationships-scatter-plots" class="nav-link" data-scroll-target="#relationships-scatter-plots"><span class="header-section-number">2.7.5</span> Relationships: scatter plots</a></li>
+  <li><a href="#development-over-time-line-charts" id="toc-development-over-time-line-charts" class="nav-link" data-scroll-target="#development-over-time-line-charts"><span class="header-section-number">2.7.6</span> Development over time: line charts</a></li>
+  <li><a href="#honest-visualization" id="toc-honest-visualization" class="nav-link" data-scroll-target="#honest-visualization"><span class="header-section-number">2.7.7</span> Honest visualization</a></li>
+  <li><a href="#saving-charts" id="toc-saving-charts" class="nav-link" data-scroll-target="#saving-charts"><span class="header-section-number">2.7.8</span> Saving charts</a></li>
+  </ul></li>
+  <li><a href="#sec-desc-insight" id="toc-sec-desc-insight" class="nav-link" data-scroll-target="#sec-desc-insight"><span class="header-section-number">2.8</span> From description to insight</a></li>
+  <li><a href="#sec-lc-02" id="toc-sec-lc-02" class="nav-link" data-scroll-target="#sec-lc-02">Learning check</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -254,55 +362,1313 @@ div.csl-indent {
 </header>
 
 
-<div class="callout callout-style-default callout-warning callout-titled" title="In preparation">
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>📽 <a href="slides/chapter02_slides.html" target="_blank" rel="noopener">Slides for this chapter</a> · <a href="slides/chapter02_slides_handout.pdf" target="_blank" rel="noopener">PDF handout</a></p>
+</div>
+</div>
+</div>
+<p><em>Driving question: <strong>What is going on?</strong></em></p>
+<p>In <a href="01-foundations.html" class="quarto-xref"><span>Chapter 1</span></a>, we distinguished four kinds of questions that analytics can answer. This chapter is about the first one — the descriptive question <em>what is going on?</em> — and about the practical skills that every analysis rests on: getting data into R, understanding what each variable measures, handling and cleaning the data, and summarizing and visualizing it honestly. After working through this chapter you will be able to:</p>
+<ul>
+<li>Import data files correctly — and recognize when an import has gone silently wrong</li>
+<li>Classify variables by their level of measurement and choose summaries and charts accordingly</li>
+<li>Use the core verbs of data handling in R to filter, select, transform, group, and combine data</li>
+<li>Check a data set systematically for problems before you trust it — including the question of how the data came to be</li>
+<li>Summarize categorical and continuous variables, overall and by group</li>
+<li>Build charts with <code>ggplot2</code>, choose the chart type that fits your variables, and avoid misleading visualizations</li>
+<li>Report descriptive findings precisely — without claiming more than a description can support</li>
+</ul>
+<p>The chapter assumes that you have completed the <a href="./r-onboarding.html">R onboarding module</a>. All code is shown; run it along in your own RStudio Project.</p>
+<section id="sec-desc-motivation" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="sec-desc-motivation"><span class="header-section-number">2.1</span> Motivation: a first conversation with your data</h2>
+<p>Imagine you have just joined the data team of a record label. On your first day, the head of A&amp;R hands you a data set of tracks from the streaming charts and asks a simple question: <em>“What is going on in the charts?”</em> Which genres dominate? How concentrated is success? What distinguishes the hits from the rest?</p>
+<p>It is tempting to jump straight to a model — a regression of streams on everything in the data. Resist the temptation. Every serious analysis starts with a <em>conversation</em> with the data: looking at what is in it, how it is distributed, where it is strange. There are two reasons. First, descriptive questions are managerially important in their own right: segment sizes, market shares, and funnel drop-offs are the everyday currency of marketing decisions. Second, description is where problems are caught — import errors, impossible values, duplicates, and quirks of how the data were collected. A model estimated on data you have not looked at inherits all of them silently.</p>
+<section id="summary-statistics-are-not-enough" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="summary-statistics-are-not-enough"><span class="header-section-number">2.1.1</span> Summary statistics are not enough</h3>
+<p>A classic example makes the point. <a href="#fig-anscombe" class="quarto-xref">Figure&nbsp;<span>2.1</span></a> shows four small data sets constructed by the statistician Francis <span class="citation" data-cites="anscombe1973">(<a href="01-foundations.html#ref-anscombe1973" role="doc-biblioref"><strong>anscombe1973?</strong></a>)</span>. Their summary statistics are identical to two decimal places (<a href="#tbl-anscombe" class="quarto-xref">Table&nbsp;<span>2.1</span></a>): same means, same standard deviations, same correlation, and — as the orange lines show — the same regression line.</p>
+<div class="cell">
+<div id="tbl-anscombe" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-anscombe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.1: Summary statistics of Anscombe’s four data sets.
+</figcaption>
+<div aria-describedby="tbl-anscombe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Mean of x</th>
+<th style="text-align: right;">Mean of y</th>
+<th style="text-align: right;">SD of x</th>
+<th style="text-align: right;">SD of y</th>
+<th style="text-align: right;">Correlation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Data set 1</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">7.5</td>
+<td style="text-align: right;">3.32</td>
+<td style="text-align: right;">2.03</td>
+<td style="text-align: right;">0.82</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Data set 2</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">7.5</td>
+<td style="text-align: right;">3.32</td>
+<td style="text-align: right;">2.03</td>
+<td style="text-align: right;">0.82</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Data set 3</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">7.5</td>
+<td style="text-align: right;">3.32</td>
+<td style="text-align: right;">2.03</td>
+<td style="text-align: right;">0.82</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Data set 4</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">7.5</td>
+<td style="text-align: right;">3.32</td>
+<td style="text-align: right;">2.03</td>
+<td style="text-align: right;">0.82</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-anscombe" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-anscombe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02-describing-data_files/figure-html/fig-anscombe-1.png" class="img-fluid figure-img" width="2400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-anscombe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.1: Anscombe’s quartet: four data sets with identical summary statistics (Anscombe, 1973).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Yet the pictures could hardly be more different. Data set 1 shows a noisy linear relationship; data set 2 a perfect curve; data set 3 a perfect line distorted by one outlier; in data set 4, a single observation creates the entire “relationship”. Four different stories — which no table of summary statistics would have revealed. <strong>Summaries compress; pictures reveal.</strong> A good descriptive analysis always uses both.</p>
+</section>
+<section id="what-description-can-and-cannot-do" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="what-description-can-and-cannot-do"><span class="header-section-number">2.1.2</span> What description can — and cannot — do</h3>
+<p>Recall from <a href="01-foundations.html#sec-four-questions" class="quarto-xref"><span>Section 1.3</span></a> that description answers <em>what is going on?</em> — not <em>what happens if we act?</em>. A descriptive finding such as “tracks from the major labels have more streams” is a statement about the data, not about the effect of signing with a major label. This does not make description second-class: it is the foundation every other question builds on. But it means that the language of a descriptive finding must stay descriptive. We return to this in <a href="#sec-desc-insight" class="quarto-xref"><span>Section 2.8</span></a>.</p>
+</section>
+<section id="the-data-tracks-in-the-streaming-charts" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="the-data-tracks-in-the-streaming-charts"><span class="header-section-number">2.1.3</span> The data: tracks in the streaming charts</h3>
+<p>Throughout this chapter, we work with one data set: almost 67,000 tracks that appeared in the Spotify charts, together with their chart performance, audio characteristics, social media metrics, and label information. <a href="#tbl-music-vars" class="quarto-xref">Table&nbsp;<span>2.2</span></a> lists the variables.</p>
+<div id="tbl-music-vars" class="striped quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-music-vars-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.2: Variables in the music data set
+</figcaption>
+<div aria-describedby="tbl-music-vars-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable(s)</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>isrc</code></td>
+<td>International Standard Recording Code — an identifier for a recording</td>
+</tr>
+<tr class="even">
+<td><code>artist_id</code>, <code>artistName</code>, <code>trackName</code></td>
+<td>Identifiers and names of artist and track</td>
+</tr>
+<tr class="odd">
+<td><code>streams</code></td>
+<td>Number of streams</td>
+</tr>
+<tr class="even">
+<td><code>weeks_in_charts</code>, <code>n_regions</code></td>
+<td>Number of weeks in the charts; number of regions in whose charts the track appeared</td>
+</tr>
+<tr class="odd">
+<td><code>danceability</code>, <code>energy</code>, <code>speechiness</code>, <code>instrumentalness</code>, <code>liveness</code>, <code>valence</code></td>
+<td>Audio characteristics, each on a scale from 0 to 100</td>
+</tr>
+<tr class="even">
+<td><code>tempo</code>, <code>song_length</code>, <code>song_age</code></td>
+<td>Tempo (beats per minute), length (minutes), age of the track (weeks)</td>
+</tr>
+<tr class="odd">
+<td><code>explicit</code>, <code>top10</code></td>
+<td>Explicit lyrics (1 = yes); track reached the top 10 (1 = yes)</td>
+</tr>
+<tr class="even">
+<td><code>n_playlists</code>, <code>sp_popularity</code></td>
+<td>Number of playlists featuring the track; Spotify popularity score (0–100)</td>
+</tr>
+<tr class="odd">
+<td><code>youtube_views</code>, <code>tiktok_counts</code>, <code>shazam_counts</code></td>
+<td>Views, uses, and searches on other platforms</td>
+</tr>
+<tr class="even">
+<td><code>ins_followers_artist</code>, <code>monthly_listeners_artist</code>, <code>playlist_total_reach_artist</code>, <code>sp_fans_artist</code></td>
+<td>Artist-level reach metrics</td>
+</tr>
+<tr class="odd">
+<td><code>release_date</code>, <code>genre</code>, <code>label</code></td>
+<td>Release date, genre, and record label</td>
+</tr>
+<tr class="even">
+<td><code>expert_rating</code></td>
+<td>Rating of the track by music experts (poor – fair – good – excellent – masterpiece)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</section>
+</section>
+<section id="sec-desc-import" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="sec-desc-import"><span class="header-section-number">2.2</span> Getting data into R</h2>
+<section id="reading-a-text-file" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="reading-a-text-file"><span class="header-section-number">2.2.1</span> Reading a text file</h3>
+<p>Most data you will encounter in marketing come as <strong>text files</strong> in which each line is one row and the values are separated by a delimiter — most commonly <code>.csv</code> files (“comma-separated values”). Let us load the music data, which is stored in the course repository:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>music_url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/WU-RDS/MA2025/main/data/music_data_fin.csv"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>music_data <span class="ot">&lt;-</span> <span class="fu">read_csv2</span>(music_url)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Why <code>read_csv2()</code> and not <code>read_csv()</code>? Because “comma-separated” is a misnomer in much of Europe. In German-speaking countries, the comma is the <em>decimal</em> separator (3,14), so it cannot also separate the columns — European software therefore writes files with <strong>semicolons</strong> between the values and <strong>commas</strong> as decimal marks. <code>read_csv()</code> expects the international convention (commas between values, points as decimal marks); <code>read_csv2()</code> expects the European one. Look at what happens with the wrong function:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>wrong_import <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(music_url)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(wrong_import)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 66780     1</code></pre>
+</div>
+</div>
+<p>R did not complain — it simply read each entire line into a single column. Other versions of this error are far less visible: a file read with the wrong decimal convention may turn 3,14 into 314 without any warning. The lesson: <strong>an import that runs without errors is not necessarily correct.</strong> Always inspect the data immediately after importing them. If in doubt, look at the raw file first with <code>readLines(music_url, n = 3)</code>.</p>
+</section>
+<section id="a-first-look" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="a-first-look"><span class="header-section-number">2.2.2</span> A first look</h3>
+<p>Four functions give you a first overview:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(music_data)       <span class="co"># number of rows and columns</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 66796    31</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(music_data)   <span class="co"># every column: name, type, first values</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 66,796
+Columns: 31
+$ isrc                        &lt;chr&gt; "BRRGE1603547", "USUM71808193", "ES5701800…
+$ artist_id                   &lt;dbl&gt; 3679, 5239, 776407, 433730, 526471, 1939, …
+$ streams                     &lt;dbl&gt; 11944813, 8934097, 38835, 46766, 2930573, …
+$ weeks_in_charts             &lt;dbl&gt; 141, 51, 1, 1, 7, 226, 13, 1, 64, 7, 12, 8…
+$ n_regions                   &lt;dbl&gt; 1, 21, 1, 1, 4, 8, 1, 1, 5, 1, 1, 7, 1, 1,…
+$ danceability                &lt;dbl&gt; 50.9, 35.3, 68.3, 70.4, 84.2, 35.2, 73.0, …
+$ energy                      &lt;dbl&gt; 80.3, 75.5, 67.6, 56.8, 57.8, 91.1, 69.6, …
+$ speechiness                 &lt;dbl&gt; 4.00, 73.30, 14.70, 26.80, 13.80, 7.47, 35…
+$ instrumentalness            &lt;dbl&gt; 0.050000, 0.000000, 0.000000, 0.000253, 0.…
+$ liveness                    &lt;dbl&gt; 46.30, 39.00, 7.26, 8.91, 22.80, 9.95, 32.…
+$ valence                     &lt;dbl&gt; 65.1, 43.7, 43.4, 49.5, 19.0, 23.6, 58.4, …
+$ tempo                       &lt;dbl&gt; 166.018, 191.153, 98.992, 91.007, 74.496, …
+$ song_length                 &lt;dbl&gt; 3.118650, 3.228000, 3.015550, 3.453417, 3.…
+$ song_age                    &lt;dbl&gt; 228.285714, 144.285714, 112.285714, 50.714…
+$ explicit                    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, …
+$ n_playlists                 &lt;dbl&gt; 450, 768, 48, 6, 475, 20591, 6, 105, 547, …
+$ sp_popularity               &lt;dbl&gt; 51, 54, 32, 44, 52, 81, 44, 8, 59, 68, 24,…
+$ youtube_views               &lt;dbl&gt; 145030723, 13188411, 6116639, 0, 0, 202160…
+$ tiktok_counts               &lt;dbl&gt; 9740, 358700, 0, 13, 515, 67300, 0, 0, 653…
+$ ins_followers_artist        &lt;dbl&gt; 29613108, 3693566, 623778, 81601, 11962358…
+$ monthly_listeners_artist    &lt;dbl&gt; 4133393, 18367363, 888273, 143761, 1555187…
+$ playlist_total_reach_artist &lt;dbl&gt; 24286416, 143384531, 4846378, 156521, 9084…
+$ sp_fans_artist              &lt;dbl&gt; 3308630, 465412, 23846, 1294, 380204, 1651…
+$ shazam_counts               &lt;dbl&gt; 73100, 588550, 0, 0, 55482, 5281161, 0, 0,…
+$ artistName                  &lt;chr&gt; "Luan Santana", "Alessia Cara", "Ana Guerr…
+$ trackName                   &lt;chr&gt; "Eu, Você, O Mar e Ela", "Growing Pains", …
+$ release_date                &lt;date&gt; 2016-06-20, 2018-06-14, 2018-04-26, 2020-…
+$ genre                       &lt;chr&gt; "other", "Pop", "Pop", "HipHop/Rap", "HipH…
+$ label                       &lt;chr&gt; "Independent", "Universal Music", "Univers…
+$ top10                       &lt;dbl&gt; 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, …
+$ expert_rating               &lt;chr&gt; "excellent", "good", "good", "poor", "exce…</code></pre>
+</div>
+</div>
+<p><code>glimpse()</code> is the single most useful function after an import: it shows at a glance whether the number of columns is plausible, whether numbers were read as numbers (<code>&lt;dbl&gt;</code>), text as text (<code>&lt;chr&gt;</code>), and dates as dates (<code>&lt;date&gt;</code>). <code>head(music_data)</code> shows the first rows, and <code>summary()</code> gives a quick numerical overview of selected variables:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">select</span>(music_data, streams, danceability, song_length))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    streams            danceability    song_length      
+ Min.   :      1003   Min.   : 0.00   Min.   : 0.01667  
+ 1st Qu.:     55760   1st Qu.:56.80   1st Qu.: 2.92925  
+ Median :    333336   Median :68.00   Median : 3.33978  
+ Mean   :   7314674   Mean   :66.32   Mean   : 3.43116  
+ 3rd Qu.:   2181086   3rd Qu.:77.20   3rd Qu.: 3.81987  
+ Max.   :2165692479   Max.   :98.30   Max.   :29.78383  </code></pre>
+</div>
+</div>
+<p>Look at <code>streams</code>: the mean is more than twenty times the median. We will see in <a href="#sec-desc-summarizing" class="quarto-xref"><span>Section 2.6</span></a> what this tells us.</p>
+</section>
+<section id="other-file-formats" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="other-file-formats"><span class="header-section-number">2.2.3</span> Other file formats</h3>
+<p>The same logic applies to other formats — only the function differs:</p>
+<table class="table-striped caption-top table">
+<caption>Import functions for common file formats</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Format</th>
+<th>Package</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CSV, international convention (<code>,</code> and <code>.</code>)</td>
+<td>readr (tidyverse)</td>
+<td><code>read_csv("file.csv")</code></td>
+</tr>
+<tr class="even">
+<td>CSV, European convention (<code>;</code> and <code>,</code>)</td>
+<td>readr (tidyverse)</td>
+<td><code>read_csv2("file.csv")</code></td>
+</tr>
+<tr class="odd">
+<td>Other delimiters (e.g., tab)</td>
+<td>readr (tidyverse)</td>
+<td><code>read_delim("file.txt", delim = "\t")</code></td>
+</tr>
+<tr class="even">
+<td>Excel</td>
+<td>readxl</td>
+<td><code>read_excel("file.xlsx", sheet = "Sheet1")</code></td>
+</tr>
+<tr class="odd">
+<td>SPSS</td>
+<td>haven</td>
+<td><code>read_sav("file.sav")</code></td>
+</tr>
+<tr class="even">
+<td>Stata</td>
+<td>haven</td>
+<td><code>read_dta("file.dta")</code></td>
+</tr>
+<tr class="odd">
+<td>Qualtrics survey export</td>
+<td>qualtRics</td>
+<td><code>read_survey("file.csv")</code> — see the group project appendix</td>
+</tr>
+</tbody>
+</table>
+<p>Files stored on your computer are read by their path relative to your RStudio Project — e.g., <code>read_excel("data/survey.xlsx")</code> if the file is in the project’s <code>data</code> folder. Writing data works analogously: <code>write_csv(music_data, "data/music_clean.csv")</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: data from the web">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Under the hood: data from the web
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Data do not always come as files. Two further sources are common in marketing analytics:</p>
+<ul>
+<li><strong>Web scraping</strong> reads information directly from web pages. The <code>rvest</code> package reads a page with <code>read_html()</code> and extracts tables with <code>html_table()</code>. Scraped data almost always need cleaning (numbers stored as text with thousands separators, footnote markers, etc.) — and before scraping, check the website’s terms of use.</li>
+<li><strong>APIs</strong> (application programming interfaces) are interfaces through which web services deliver data in a structured format, usually JSON. The <code>jsonlite</code> package reads JSON with <code>fromJSON()</code>; for many services (e.g., Google Trends via <code>gtrendsR</code>), dedicated R packages wrap the API in convenient functions.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Population of Austria from the World Bank API</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://api.worldbank.org/v2/countries/AT/indicators/SP.POP.TOTL?date=2000:2020&amp;format=json"</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>population <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(url)[[<span class="dv">2</span>]]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(population[, <span class="fu">c</span>(<span class="st">"date"</span>, <span class="st">"value"</span>)])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="what-is-a-row-tidy-data-and-the-unit-of-observation" class="level3" data-number="2.2.4">
+<h3 data-number="2.2.4" class="anchored" data-anchor-id="what-is-a-row-tidy-data-and-the-unit-of-observation"><span class="header-section-number">2.2.4</span> What is a row? Tidy data and the unit of observation</h3>
+<p>Before any analysis, answer one question explicitly: <strong>what does one row represent?</strong> This is the <strong>unit of observation</strong> — the data counterpart of the unit of analysis in the research-design template of <a href="01-foundations.html#sec-design" class="quarto-xref"><span>Section 1.8</span></a>. Here, the answer seems obvious: one row is one track. Data organized this way are called <strong>tidy</strong> <span class="citation" data-cites="wickham2014">(<a href="01-foundations.html#ref-wickham2014" role="doc-biblioref"><strong>wickham2014?</strong></a>)</span>:</p>
+<ol type="1">
+<li>Each <strong>variable</strong> is a column.</li>
+<li>Each <strong>observation</strong> is a row.</li>
+<li>Each <strong>value</strong> is a cell.</li>
+</ol>
+<p>Data that violate these rules — e.g., a spreadsheet with one column per month of sales, or several values packed into one cell — can be analyzed, but must usually be reshaped first. Whether “one row = one track” really holds in our data is a question we will check in <a href="#sec-desc-trust" class="quarto-xref"><span>Section 2.5</span></a>.</p>
+</section>
+</section>
+<section id="sec-desc-measurement" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="sec-desc-measurement"><span class="header-section-number">2.3</span> Variables and levels of measurement</h2>
+<section id="four-levels-of-measurement" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="four-levels-of-measurement"><span class="header-section-number">2.3.1</span> Four levels of measurement</h3>
+<p>Not every number is a quantity. The music data contain a variable <code>artist_id</code> that is stored as a number — but the mean artist ID is as meaningless as the mean telephone number. What you can sensibly do with a variable depends on its <strong>level of measurement</strong> (<a href="#tbl-levels" class="quarto-xref">Table&nbsp;<span>2.3</span></a>).</p>
+<div id="tbl-levels" class="striped quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-levels-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.3: Levels of measurement
+</figcaption>
+<div aria-describedby="tbl-levels-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Level</th>
+<th>What the values express</th>
+<th>Example in the music data</th>
+<th>Meaningful operations</th>
+<th>Typical summary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Nominal</strong></td>
+<td>Categories without order</td>
+<td><code>genre</code>, <code>label</code>, <code>artist_id</code></td>
+<td>Count, equal / not equal</td>
+<td>Frequencies, mode</td>
+</tr>
+<tr class="even">
+<td><strong>Ordinal</strong></td>
+<td>Ordered categories; distances unknown</td>
+<td><code>expert_rating</code> (poor &lt; fair &lt; … &lt; masterpiece)</td>
+<td>+ order: greater / less</td>
+<td>Frequencies, median, quantiles</td>
+</tr>
+<tr class="odd">
+<td><strong>Interval</strong></td>
+<td>Equal distances, arbitrary zero point</td>
+<td>Temperature in °C; release <em>year</em></td>
+<td>+ differences</td>
+<td>Mean, standard deviation</td>
+</tr>
+<tr class="even">
+<td><strong>Ratio</strong></td>
+<td>Equal distances, natural zero point</td>
+<td><code>streams</code>, <code>song_length</code>, prices</td>
+<td>+ ratios (“twice as many”)</td>
+<td>Mean, standard deviation, coefficient of variation</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Nominal and ordinal variables are called <strong>categorical</strong>; interval and ratio variables are <strong>continuous</strong> (or metric). Each level inherits the operations of the levels above it. The distinction matters for everything that follows: it determines which summary statistics are meaningful, which charts fit, and — from Module 4 onward — which statistical tests apply.</p>
+<p>Two cases require judgment. <strong>Rating scales</strong> (e.g., “How much do you like this song? 1–7”) are strictly ordinal — nobody guarantees that the step from 1 to 2 equals the step from 6 to 7 — but are in practice often treated as interval scales when they have enough points. And <strong>binary variables</strong> coded 0/1 (like <code>explicit</code>) are nominal, but have a convenient property: their mean is the share of 1s.</p>
+</section>
+<section id="from-levels-of-measurement-to-r-types" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="from-levels-of-measurement-to-r-types"><span class="header-section-number">2.3.2</span> From levels of measurement to R types</h3>
+<p>R does not know the level of measurement of a variable — you have to tell it, by choosing the right <strong>type</strong> (see the <a href="./r-onboarding.html">R onboarding</a>):</p>
+<table class="table-striped caption-top table">
+<caption>Levels of measurement and R types</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Level</th>
+<th>R type</th>
+<th>How to create it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nominal</td>
+<td><code>factor</code></td>
+<td><code>factor(x)</code> or <code>as.factor(x)</code></td>
+</tr>
+<tr class="even">
+<td>Ordinal</td>
+<td>ordered <code>factor</code></td>
+<td><code>factor(x, levels = c(...), ordered = TRUE)</code></td>
+</tr>
+<tr class="odd">
+<td>Interval / ratio</td>
+<td><code>numeric</code></td>
+<td><code>as.numeric(x)</code></td>
+</tr>
+</tbody>
+</table>
+<p>At the moment, <code>genre</code>, <code>label</code>, and <code>expert_rating</code> are stored as text (<code>&lt;chr&gt;</code>), and <code>explicit</code>, <code>top10</code>, and <code>artist_id</code> as numbers. Let us fix this:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="ot">&lt;-</span> music_data <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">genre    =</span> <span class="fu">as.factor</span>(genre),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">label    =</span> <span class="fu">as.factor</span>(label),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">explicit =</span> <span class="fu">factor</span>(explicit, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"not explicit"</span>, <span class="st">"explicit"</span>)),</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">top10    =</span> <span class="fu">factor</span>(top10, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>)),</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">artist_id =</span> <span class="fu">as.character</span>(artist_id),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">expert_rating =</span> <span class="fu">factor</span>(expert_rating,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                           <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"poor"</span>, <span class="st">"fair"</span>, <span class="st">"good"</span>, <span class="st">"excellent"</span>, <span class="st">"masterpiece"</span>),</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>                           <span class="at">ordered =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>(The <code>mutate()</code> function and the pipe <code>|&gt;</code> are introduced in <a href="#sec-desc-handling" class="quarto-xref"><span>Section 2.4</span></a>; for now, read the code as “take <code>music_data</code>, then change these columns”.) Why does this matter? As text, R would sort the categories alphabetically — excellent, fair, good, masterpiece, poor. As an ordered factor, they appear in their meaningful order:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(music_data<span class="sc">$</span>expert_rating)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+       poor        fair        good   excellent masterpiece 
+       5356       13418       23243       23376        1403 </code></pre>
+</div>
+</div>
+<p>And because the factor is ordered, R now knows that “good” lies between “fair” and “excellent”. This allows a meaningful median of an ordinal variable — the category of the middle observation:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>median_position <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(<span class="fu">nrow</span>(music_data) <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(music_data<span class="sc">$</span>expert_rating)[median_position]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] good
+Levels: poor &lt; fair &lt; good &lt; excellent &lt; masterpiece</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-desc-handling" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="sec-desc-handling"><span class="header-section-number">2.4</span> Data handling</h2>
+<p>Raw data rarely come in exactly the form an analysis needs. <strong>Data handling</strong> (or <em>data wrangling</em>) comprises the operations that get them there. The <code>dplyr</code> package (part of the tidyverse) provides one function — a “verb” — for each of the core operations (<a href="#tbl-verbs" class="quarto-xref">Table&nbsp;<span>2.4</span></a>).</p>
+<div id="tbl-verbs" class="striped quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-verbs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.4: The core verbs of data handling
+</figcaption>
+<div aria-describedby="tbl-verbs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Verb</th>
+<th>What it does</th>
+<th>Example question</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>filter()</code></td>
+<td>Keeps the <strong>rows</strong> that meet a condition</td>
+<td>Which tracks are pop tracks with more than 10 million streams?</td>
+</tr>
+<tr class="even">
+<td><code>select()</code></td>
+<td>Keeps (or drops) <strong>columns</strong></td>
+<td>Show only artist, title, and streams</td>
+</tr>
+<tr class="odd">
+<td><code>arrange()</code></td>
+<td><strong>Sorts</strong> rows</td>
+<td>Which are the most-streamed tracks?</td>
+</tr>
+<tr class="even">
+<td><code>mutate()</code></td>
+<td>Creates or changes <strong>columns</strong></td>
+<td>Streams in millions? Release year?</td>
+</tr>
+<tr class="odd">
+<td><code>rename()</code></td>
+<td>Renames columns</td>
+<td><code>artistName</code> → <code>artist</code></td>
+</tr>
+<tr class="even">
+<td><code>summarise()</code></td>
+<td>Condenses many rows into <strong>one summary row</strong></td>
+<td>What is the median number of streams?</td>
+</tr>
+<tr class="odd">
+<td><code>group_by()</code></td>
+<td>Makes all following operations work <strong>per group</strong></td>
+<td>… per genre? per label?</td>
+</tr>
+<tr class="even">
+<td><code>count()</code></td>
+<td>Counts rows (per group)</td>
+<td>How many tracks per genre?</td>
+</tr>
+<tr class="odd">
+<td><code>left_join()</code></td>
+<td><strong>Combines</strong> two tables via a shared key</td>
+<td>Add information about the labels</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>All verbs share the same logic: the first argument is a data frame, the following arguments describe what to do (using the column names directly, without quotation marks), and the result is again a data frame.</p>
+<section id="choosing-rows-and-columns" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="choosing-rows-and-columns"><span class="header-section-number">2.4.1</span> Choosing rows and columns</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rows: pop tracks with more than 10 million streams</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>big_pop <span class="ot">&lt;-</span> <span class="fu">filter</span>(music_data, genre <span class="sc">==</span> <span class="st">"Pop"</span>, streams <span class="sc">&gt;</span> <span class="dv">10000000</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(big_pop)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2562</code></pre>
+</div>
+</div>
+<p>Conditions use <code>==</code> (equal — note the <em>double</em> equals sign), <code>!=</code> (not equal), <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, and <code>%in%</code> (is one of): <code>filter(music_data, label %in% c("Sony Music", "Warner Music"))</code>. Several conditions separated by commas must all hold; <code>|</code> means “or”.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Columns: keep only a few</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(big_pop, artistName, trackName, streams) <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  artistName                trackName             streams
+  &lt;chr&gt;                     &lt;chr&gt;                   &lt;dbl&gt;
+1 Einár feat. Dizzy         Härifrån             10351676
+2 Morgan Sulele feat. OnklP Helt Ærlig           12999650
+3 Aitana feat. Morat        Más De Lo Que Aposté 19250374</code></pre>
+</div>
+</div>
+</section>
+<section id="the-pipe-chaining-steps" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="the-pipe-chaining-steps"><span class="header-section-number">2.4.2</span> The pipe: chaining steps</h3>
+<p>Analyses usually consist of several steps in sequence. The <strong>pipe</strong> <code>|&gt;</code> passes the result of one step on as the first argument of the next, so code can be read from top to bottom as a sequence of “and then”:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span>                                  <span class="co"># take the music data, then</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(genre <span class="sc">==</span> <span class="st">"Pop"</span>) <span class="sc">|&gt;</span>                    <span class="co"># keep the pop tracks, then</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(streams)) <span class="sc">|&gt;</span>                    <span class="co"># sort by streams (descending), then</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(artistName, trackName, streams) <span class="sc">|&gt;</span>    <span class="co"># keep three columns, then</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>)                                      <span class="co"># show the first five rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  artistName                                        trackName            streams
+  &lt;chr&gt;                                             &lt;chr&gt;                  &lt;dbl&gt;
+1 Ed Sheeran                                        Shape of You      2165692479
+2 Shawn Mendes feat. Camila Cabello                 Señorita          1156206588
+3 XXXTENTACION                                      SAD!              1103693478
+4 Ed Sheeran                                        Perfect           1045189446
+5 Luis Fonsi feat. Daddy Yankee feat. Justin Bieber Despacito - Remix  956567836</code></pre>
+</div>
+</div>
+<p>You will also see the older pipe <code>%&gt;%</code> from the magrittr package in tutorials and AI-generated code; for our purposes, the two are interchangeable.</p>
+</section>
+<section id="creating-and-changing-variables" class="level3" data-number="2.4.3">
+<h3 data-number="2.4.3" class="anchored" data-anchor-id="creating-and-changing-variables"><span class="header-section-number">2.4.3</span> Creating and changing variables</h3>
+<p><code>mutate()</code> adds new columns (or overwrites existing ones), computed from existing ones:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="ot">&lt;-</span> music_data <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">streams_mio  =</span> streams <span class="sc">/</span> <span class="fl">1e6</span>,                          <span class="co"># streams in millions</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">release_year =</span> <span class="fu">as.integer</span>(<span class="fu">format</span>(release_date, <span class="st">"%Y"</span>)), <span class="co"># year from the date</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_streams  =</span> <span class="fu">log10</span>(streams)                          <span class="co"># log scale (see below)</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">artist =</span> artistName, <span class="at">track =</span> trackName)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Categorical variables often need recoding — e.g., merging rare categories. The <code>forcats</code> package (part of the tidyverse) helps: <code>fct_lump_n(genre, n = 5)</code> keeps the five most frequent genres and merges all others into “Other”.</p>
+</section>
+<section id="summaries-by-group" class="level3" data-number="2.4.4">
+<h3 data-number="2.4.4" class="anchored" data-anchor-id="summaries-by-group"><span class="header-section-number">2.4.4</span> Summaries by group</h3>
+<p>The combination of <code>group_by()</code> and <code>summarise()</code> is the workhorse of descriptive analysis — it answers every question of the form “… per …”:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(label) <span class="sc">|&gt;</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_tracks       =</span> <span class="fu">n</span>(),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">median_streams =</span> <span class="fu">median</span>(streams),</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">share_top10    =</span> <span class="fu">mean</span>(top10 <span class="sc">==</span> <span class="st">"yes"</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 4
+  label           n_tracks median_streams share_top10
+  &lt;fct&gt;              &lt;int&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+1 Independent        22570        238884       0.0793
+2 Sony Music         12390        355898.      0.113 
+3 Universal Music    21632        434943       0.113 
+4 Warner Music       10204        347152.      0.102 </code></pre>
+</div>
+</div>
+<p><code>count()</code> is a shortcut for the most frequent case — counting rows per group:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span> <span class="fu">count</span>(genre, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  genre             n
+  &lt;fct&gt;         &lt;int&gt;
+1 Pop           30069
+2 HipHop/Rap    21131
+3 other          5228
+4 Rock           4214
+5 Electro/Dance  2703</code></pre>
+</div>
+</div>
+</section>
+<section id="combining-tables" class="level3" data-number="2.4.5">
+<h3 data-number="2.4.5" class="anchored" data-anchor-id="combining-tables"><span class="header-section-number">2.4.5</span> Combining tables</h3>
+<p>Information often sits in several tables that share a <strong>key</strong> — e.g., a customer ID in the transaction data and in the CRM data. <code>left_join()</code> adds the columns of a second table to the first, matching rows by the key. Suppose a colleague maintains a small table that classifies the labels:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>label_info <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">label      =</span> <span class="fu">c</span>(<span class="st">"Universal Music"</span>, <span class="st">"Sony Music"</span>, <span class="st">"Warner Music"</span>, <span class="st">"Independent"</span>),</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">label_type =</span> <span class="fu">c</span>(<span class="st">"Major"</span>, <span class="st">"Major"</span>, <span class="st">"Major"</span>, <span class="st">"Independent"</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>music_data <span class="ot">&lt;-</span> music_data <span class="sc">|&gt;</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(label_info, <span class="at">by =</span> <span class="st">"label"</span>)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span> <span class="fu">count</span>(label_type)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  label_type      n
+  &lt;chr&gt;       &lt;int&gt;
+1 Independent 22570
+2 Major       44226</code></pre>
+</div>
+</div>
+<p>“Left” means: all rows of the left table (<code>music_data</code>) are kept; rows without a match in the right table get missing values (<code>NA</code>) in the new columns. Always check the number of rows after a join — if the key is not unique in the right table, rows can be duplicated without any warning.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: the same operations in base R">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Under the hood: the same operations in base R
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The verbs above come from the tidyverse. Many tutorials — and many AI-generated answers — use <strong>base R</strong> instead, i.e., the functions built into R without additional packages. You should be able to <em>read</em> both:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>tidyverse</th>
+<th>base R</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>filter(df, streams &gt; 1e6)</code></td>
+<td><code>df[df$streams &gt; 1e6, ]</code> or <code>subset(df, streams &gt; 1e6)</code></td>
+</tr>
+<tr class="even">
+<td><code>select(df, artist, streams)</code></td>
+<td><code>df[, c("artist", "streams")]</code></td>
+</tr>
+<tr class="odd">
+<td><code>arrange(df, desc(streams))</code></td>
+<td><code>df[order(-df$streams), ]</code></td>
+</tr>
+<tr class="even">
+<td><code>mutate(df, streams_mio = streams / 1e6)</code></td>
+<td><code>df$streams_mio &lt;- df$streams / 1e6</code></td>
+</tr>
+<tr class="odd">
+<td><code>df \|&gt; group_by(genre) \|&gt; summarise(m = median(streams))</code></td>
+<td><code>aggregate(streams ~ genre, data = df, FUN = median)</code></td>
+</tr>
+<tr class="even">
+<td><code>left_join(df1, df2, by = "key")</code></td>
+<td><code>merge(df1, df2, by = "key", all.x = TRUE)</code></td>
+</tr>
+</tbody>
+</table>
+<p>In square-bracket notation, <code>df[rows, columns]</code> selects rows before the comma and columns after it; an empty position means “all”. A third dialect, <code>data.table</code>, is popular for very large data sets. In this course, we use the tidyverse throughout.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-desc-trust" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="sec-desc-trust"><span class="header-section-number">2.5</span> Not trusting your data too early</h2>
+<p>Data sets are produced by people and machines, and both make mistakes. Before you compute anything you intend to report, check the data systematically. The following five checks catch most problems.</p>
+<section id="check-1-did-the-import-work" class="level3" data-number="2.5.1">
+<h3 data-number="2.5.1" class="anchored" data-anchor-id="check-1-did-the-import-work"><span class="header-section-number">2.5.1</span> Check 1: Did the import work?</h3>
+<p>We did this in <a href="#sec-desc-import" class="quarto-xref"><span>Section 2.2</span></a>: are the number of rows and columns plausible, and does every column have the type you expect? Pay special attention to numbers that were read as text — a sign of thousands separators, units in the cells (“12 min”), or codes for missing values such as <code>"n/a"</code>.</p>
+</section>
+<section id="check-2-missing-values-and-zeros-that-mean-unknown" class="level3" data-number="2.5.2">
+<h3 data-number="2.5.2" class="anchored" data-anchor-id="check-2-missing-values-and-zeros-that-mean-unknown"><span class="header-section-number">2.5.2</span> Check 2: Missing values — and zeros that mean “unknown”</h3>
+<p>Missing values are coded as <code>NA</code> in R. Count them per column:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(music_data))[<span class="fu">colSums</span>(<span class="fu">is.na</span>(music_data)) <span class="sc">&gt;</span> <span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>named numeric(0)</code></pre>
+</div>
+</div>
+<p>No missing values at all — which is suspicious rather than reassuring. Look at the YouTube views:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">share_zero_youtube =</span> <span class="fu">mean</span>(youtube_views <span class="sc">==</span> <span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  share_zero_youtube
+               &lt;dbl&gt;
+1              0.580</code></pre>
+</div>
+</div>
+<p>For 58% of the tracks — many of them charting hits — the data report <em>zero</em> YouTube views. It is implausible that these tracks were never watched on YouTube; far more likely, the zeros mean “no data available”. Such <strong>disguised missing values</strong> are common in marketing data (a revenue of 0 for a customer who was never contacted, an age of 0 in a CRM system). Treating them as real zeros would drag every average down. If you conclude that a zero means “unknown”, recode it: <code>mutate(youtube_views = na_if(youtube_views, 0))</code>. Functions such as <code>mean()</code> then need the argument <code>na.rm = TRUE</code> to ignore the missing values — and your report should state how many values are missing.</p>
+</section>
+<section id="check-3-impossible-values" class="level3" data-number="2.5.3">
+<h3 data-number="2.5.3" class="anchored" data-anchor-id="check-3-impossible-values"><span class="header-section-number">2.5.3</span> Check 3: Impossible values</h3>
+<p>Look at the range of every variable and ask whether each value is <em>possible</em>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">first_release =</span> <span class="fu">min</span>(release_date), <span class="at">last_release =</span> <span class="fu">max</span>(release_date),</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_length =</span> <span class="fu">min</span>(song_length), <span class="at">max_length =</span> <span class="fu">max</span>(song_length),</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_tempo  =</span> <span class="fu">min</span>(tempo)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 5
+  first_release last_release min_length max_length min_tempo
+  &lt;date&gt;        &lt;date&gt;            &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;
+1 1942-01-01    2029-04-06       0.0167       29.8         0</code></pre>
+</div>
+</div>
+<p>Some tracks were apparently released in 2029, one track lasts one second, and at least one has a tempo of zero beats per minute. The release dates are clearly errors; the extreme song lengths may be errors or unusual recordings (intros, sound effects, live medleys). Inspect such cases individually before deciding what to do:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span> <span class="fu">filter</span>(release_date <span class="sc">&gt;</span> <span class="fu">as.Date</span>(<span class="st">"2025-01-01"</span>)) <span class="sc">|&gt;</span> <span class="fu">select</span>(artist, track, release_date)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  artist track    release_date
+  &lt;chr&gt;  &lt;chr&gt;    &lt;date&gt;      
+1 Bazzi  Honest   2029-04-06  
+2 Hozier Sunlight 2029-04-06  </code></pre>
+</div>
+</div>
+</section>
+<section id="check-4-duplicates-what-is-a-row-really" class="level3" data-number="2.5.4">
+<h3 data-number="2.5.4" class="anchored" data-anchor-id="check-4-duplicates-what-is-a-row-really"><span class="header-section-number">2.5.4</span> Check 4: Duplicates — what is a row, really?</h3>
+<p>In <a href="#sec-desc-import" class="quarto-xref"><span>Section 2.2</span></a>, we assumed that one row is one track. The ISRC is supposed to identify a recording uniquely. Let us check:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n_rows =</span> <span class="fu">n</span>(), <span class="at">n_distinct_isrc =</span> <span class="fu">n_distinct</span>(isrc))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  n_rows n_distinct_isrc
+   &lt;int&gt;           &lt;int&gt;
+1  66796           56945</code></pre>
+</div>
+</div>
+<p>The data contain 9,851 more rows than distinct ISRCs. The rows that share an ISRC are not identical copies, but differ in streams, chart weeks, and sometimes even in title. Without documentation of how the data were compiled, we cannot tell whether these are different versions of a recording, chart entries in different periods, or data errors. What we <em>can</em> tell is that “one row = one unique recording” does not hold — and that any statement of the form “<em>x</em> different tracks” needs care. Checking whether the supposed identifier is really unique is one of the most valuable five-second checks in data analysis.</p>
+</section>
+<section id="check-5-extreme-values-errors-or-information" class="level3" data-number="2.5.5">
+<h3 data-number="2.5.5" class="anchored" data-anchor-id="check-5-extreme-values-errors-or-information"><span class="header-section-number">2.5.5</span> Check 5: Extreme values — errors or information?</h3>
+<p>The most-streamed tracks have more than a billion streams, while the median track has a few hundred thousand. Such <strong>outliers</strong> are not errors: in markets for creative products, a few hits account for a large share of all consumption. Extreme values must be checked, but not automatically removed — here, they are the most important part of the story. We will see in <a href="#sec-desc-summarizing" class="quarto-xref"><span>Section 2.6</span></a> how to describe such data without letting a few hits dominate every number.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Document, don't silently delete">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>In preparation
+<span class="screen-reader-only">Important</span>Document, don’t silently delete
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This chapter is a placeholder from the course revision. Structure and section headings reflect the planned contents; the text follows.</p>
+<p>When you correct or exclude data, do it <strong>in code</strong> (so that it is reproducible), <strong>explicitly</strong> (e.g., create a flag variable <code>valid_date</code> rather than overwriting values), and <strong>transparently</strong> (report what you changed and how many observations were affected). Silently dropping inconvenient observations is one of the easiest ways to produce a misleading analysis — and one of the hardest to detect afterwards.</p>
 </div>
 </div>
-<!-- ::: {.callout-note appearance="simple"}
-📽 [Slides for this chapter](slides/chapterXX_slides.html){target="_blank" rel="noopener"} · [PDF handout](slides/chapterXX_slides_handout.pdf){target="_blank" rel="noopener"}
-::: -->
-<p><em>Driving question: <strong>What is going on?</strong></em></p>
-<section id="a-first-conversation-with-your-data" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="a-first-conversation-with-your-data"><span class="header-section-number">2.1</span> A first conversation with your data</h2>
-<p><em>Why every analysis starts descriptively; the case for looking before modeling.</em></p>
-<section id="getting-data-into-r" class="level3" data-number="2.1.1">
-<h3 data-number="2.1.1" class="anchored" data-anchor-id="getting-data-into-r"><span class="header-section-number">2.1.1</span> Getting data into R</h3>
 </section>
-<section id="data-frames-variables-and-observations" class="level3" data-number="2.1.2">
-<h3 data-number="2.1.2" class="anchored" data-anchor-id="data-frames-variables-and-observations"><span class="header-section-number">2.1.2</span> Data frames, variables, and observations</h3>
+<section id="sec-desc-selection" class="level3" data-number="2.5.6">
+<h3 data-number="2.5.6" class="anchored" data-anchor-id="sec-desc-selection"><span class="header-section-number">2.5.6</span> How did the data come to be?</h3>
+<p>The five checks examine the data <em>as they are</em>. The most important question, however, is one you already know from <a href="01-foundations.html#sec-dgp" class="quarto-xref"><span>Section 1.4</span></a>: <strong>how did the data come to be?</strong> Our data set contains only tracks that made it into the charts. Every released track that never charted is absent. The data are therefore <strong>selected on the outcome</strong> — a form of the <em>selection into the sample</em> that we met in <a href="01-foundations.html#sec-cast" class="quarto-xref"><span>Section 1.5</span></a>.</p>
+<p>This has consequences that are easy to miss. Suppose a song’s chart success depends on two things: how catchy it is and how much promotion it receives, and that the two are completely unrelated among all released songs. <a href="#fig-selection" class="quarto-xref">Figure&nbsp;<span>2.2</span></a> simulates this situation. Among <em>all</em> songs (left), catchiness and promotion are uncorrelated. Among the songs that <em>made the charts</em> (right), they are clearly negatively correlated: a charting song with little promotion must have been very catchy to get there, and a charting song that is not very catchy must have had strong promotion.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-selection" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02-describing-data_files/figure-html/fig-selection-1.png" class="img-fluid figure-img" width="2000">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.2: Selection into the data set (simulated data). Catchiness and promotion are unrelated among all released songs, but negatively related among the songs that made the charts — a pattern created purely by the selection.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>An analyst who only sees chart data might conclude that “promotion is less important for catchy songs” or even that “promotion reduces catchiness” — although, by construction, there is no relationship at all. This pattern is known as <strong>Berkson’s paradox</strong> or <strong>survivorship bias</strong>: whenever data contain only the “survivors” of a selection process (successful products, customers who did not churn, companies that still exist, respondents who chose to answer a survey), relationships in the data can differ from those in the population you care about. The question “who is <em>not</em> in my data, and why?” belongs on every descriptive checklist.</p>
 </section>
-<section id="levels-of-measurement-and-why-they-matter" class="level3" data-number="2.1.3">
-<h3 data-number="2.1.3" class="anchored" data-anchor-id="levels-of-measurement-and-why-they-matter"><span class="header-section-number">2.1.3</span> Levels of measurement — and why they matter</h3>
+</section>
+<section id="sec-desc-summarizing" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="sec-desc-summarizing"><span class="header-section-number">2.6</span> Summarizing data</h2>
+<section id="categorical-variables-frequencies" class="level3" data-number="2.6.1">
+<h3 data-number="2.6.1" class="anchored" data-anchor-id="categorical-variables-frequencies"><span class="header-section-number">2.6.1</span> Categorical variables: frequencies</h3>
+<p>For categorical variables, the basic summary is the <strong>frequency distribution</strong>: how many observations fall into each category (absolute frequencies), and what share (relative frequencies)?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(genre, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">share =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">|&gt;</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">6</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  genre             n  share
+  &lt;fct&gt;         &lt;int&gt;  &lt;dbl&gt;
+1 Pop           30069 0.450 
+2 HipHop/Rap    21131 0.316 
+3 other          5228 0.0783
+4 Rock           4214 0.0631
+5 Electro/Dance  2703 0.0405
+6 R&amp;B            1881 0.0282</code></pre>
+</div>
+</div>
+<p>Pop and hip-hop together account for about three quarters of all tracks. Often, the more interesting question is a <strong>conditional</strong> one: how does the distribution of one variable differ across the categories of another? For instance, the share of top-10 hits per genre:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(genre) <span class="sc">|&gt;</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">share_top10 =</span> <span class="fu">mean</span>(top10 <span class="sc">==</span> <span class="st">"yes"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(share_top10))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 3
+   genre             n share_top10
+   &lt;fct&gt;         &lt;int&gt;       &lt;dbl&gt;
+ 1 Country         504      0.264 
+ 2 other          5228      0.194 
+ 3 R&amp;B            1881      0.172 
+ 4 Electro/Dance  2703      0.142 
+ 5 Soundtrack      326      0.138 
+ 6 Reggae          121      0.116 
+ 7 HipHop/Rap    21131      0.0974
+ 8 Pop           30069      0.0788
+ 9 Rock           4214      0.0743
+10 German Folk     539      0.0519
+11 Classics/Jazz    80      0.0125</code></pre>
+</div>
+</div>
+<p>Note the small categories at the bottom of the table (e.g., classical and jazz with only a few dozen tracks): shares computed from few observations are unreliable — a point we will make precise in Module 3. A cross-tabulation of two categorical variables is also available in base R: <code>table(music_data$genre, music_data$top10)</code> gives absolute frequencies, and <code>prop.table(..., margin = 1)</code> converts them into shares per row.</p>
+</section>
+<section id="continuous-variables-location-dispersion-shape" class="level3" data-number="2.6.2">
+<h3 data-number="2.6.2" class="anchored" data-anchor-id="continuous-variables-location-dispersion-shape"><span class="header-section-number">2.6.2</span> Continuous variables: location, dispersion, shape</h3>
+<p>For continuous variables, we summarize three aspects of the distribution:</p>
+<ul>
+<li><strong>Location</strong> — where is the center? The <strong>mean</strong> (the average) and the <strong>median</strong> (the value that splits the ordered data in half).</li>
+<li><strong>Dispersion</strong> — how spread out are the values? The <strong>standard deviation</strong> (the typical distance from the mean), the <strong>range</strong> (maximum minus minimum), and the <strong>interquartile range</strong> (IQR, the range of the middle 50% of the observations).</li>
+<li><strong>Shape</strong> — is the distribution symmetric or skewed?</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean   =</span> <span class="fu">mean</span>(streams),</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">median =</span> <span class="fu">median</span>(streams),</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd     =</span> <span class="fu">sd</span>(streams),</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">q25    =</span> <span class="fu">quantile</span>(streams, <span class="fl">0.25</span>),</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">q75    =</span> <span class="fu">quantile</span>(streams, <span class="fl">0.75</span>),</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">max    =</span> <span class="fu">max</span>(streams)</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 6
+      mean  median        sd   q25      q75        max
+     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+1 7314674. 333336. 39956264. 55760 2181086. 2165692479</code></pre>
+</div>
+</div>
+<p>The mean number of streams is about 7.3 million, the median about 333 thousand. Which one describes “the typical track”? The <strong>median</strong>. The mean is pulled upward by a small number of enormous hits: the distribution is strongly <strong>right-skewed</strong>. Whenever the mean lies far above the median, a few extreme values dominate the average — typical for sales, revenues, followers, and streams. Reporting “the average track has 7 million streams” would badly misrepresent what most tracks achieve.</p>
+<p>For comparing dispersion across variables measured in different units, the <strong>coefficient of variation</strong> (standard deviation divided by mean) is useful: it expresses the spread relative to the level.</p>
+<p><code>summary()</code> gives several of these statistics at once; the <code>describe()</code> function from the <code>psych</code> package adds standard deviation, skewness, and more for several variables at once:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(streams, danceability, energy, valence, song_length) <span class="sc">|&gt;</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">describe</span>() <span class="sc">|&gt;</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(n, mean, sd, median, min, max, skew)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 n       mean          sd    median     min           max  skew
+streams      66796 7314673.94 39956263.68 333335.50 1003.00 2165692479.00 16.74
+danceability 66796      66.32       14.71     68.00    0.00         98.30 -0.53
+energy       66796      64.37       17.52     66.10    0.00        100.00 -0.54
+valence      66796      50.42       22.26     50.00    0.00         99.00  0.08
+song_length  66796       3.43        0.86      3.34    0.02         29.78  3.36</code></pre>
+</div>
+</div>
+</section>
+<section id="summaries-by-group-1" class="level3" data-number="2.6.3">
+<h3 data-number="2.6.3" class="anchored" data-anchor-id="summaries-by-group-1"><span class="header-section-number">2.6.3</span> Summaries by group</h3>
+<p>Descriptive analysis becomes informative through <em>comparisons</em>. Summary statistics per group are computed with <code>group_by()</code> and <code>summarise()</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(label_type) <span class="sc">|&gt;</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">median_streams =</span> <span class="fu">median</span>(streams), <span class="at">mean_danceability =</span> <span class="fu">mean</span>(danceability))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 4
+  label_type      n median_streams mean_danceability
+  &lt;chr&gt;       &lt;int&gt;          &lt;dbl&gt;             &lt;dbl&gt;
+1 Independent 22570         238884              66.8
+2 Major       44226         392085              66.1</code></pre>
+</div>
+</div>
+</section>
+<section id="standardized-values-relative-position" class="level3" data-number="2.6.4">
+<h3 data-number="2.6.4" class="anchored" data-anchor-id="standardized-values-relative-position"><span class="header-section-number">2.6.4</span> Standardized values: relative position</h3>
+<p>Is a danceability of 80 high? That depends on the distribution of danceability. A <strong>z-score</strong> (standardized value) expresses each value as its distance from the mean in units of the standard deviation:</p>
+<p><span class="math display">\[
+z_i = \frac{x_i - \bar{x}}{s_x}
+\]</span></p>
+<p>A z-score of 1.5 means “1.5 standard deviations above the average track”; a z-score of −0.5 means “half a standard deviation below”. Because z-scores are unit-free, they make variables with different scales comparable.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="ot">&lt;-</span> music_data <span class="sc">|&gt;</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">danceability_z =</span> (danceability <span class="sc">-</span> <span class="fu">mean</span>(danceability)) <span class="sc">/</span> <span class="fu">sd</span>(danceability))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>What z-scores have to do with probabilities — and why they are central to statistical inference — is the subject of Module 3.</p>
 </section>
 </section>
-<section id="data-wrangling" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="data-wrangling"><span class="header-section-number">2.2</span> Data wrangling</h2>
-<p><em>Filtering, selecting, transforming, grouping, and joining data — the verbs of data handling.</em></p>
+<section id="sec-desc-visualizing" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="sec-desc-visualizing"><span class="header-section-number">2.7</span> Visualizing data</h2>
+<section id="the-grammar-of-graphics" class="level3" data-number="2.7.1">
+<h3 data-number="2.7.1" class="anchored" data-anchor-id="the-grammar-of-graphics"><span class="header-section-number">2.7.1</span> The grammar of graphics</h3>
+<p>We create charts with the <code>ggplot2</code> package (part of the tidyverse). It is based on the <strong>grammar of graphics</strong>: every chart is built from the same components, added layer by layer with <code>+</code>:</p>
+<ol type="1">
+<li><strong>Data</strong> — the data frame: <code>ggplot(music_data, …)</code></li>
+<li><strong>Aesthetic mappings</strong> — which variable goes where: <code>aes(x = genre, y = streams, color = label)</code></li>
+<li><strong>Geometric objects</strong> (“geoms”) — how the data are drawn: points (<code>geom_point()</code>), bars (<code>geom_col()</code>, <code>geom_bar()</code>), lines (<code>geom_line()</code>), boxes (<code>geom_boxplot()</code>), …</li>
+<li><strong>Labels, scales, and themes</strong> — axis titles, units, colors, overall look: <code>labs()</code>, <code>scale_…()</code>, <code>theme_…()</code></li>
+</ol>
+<p>Let us build a bar chart of the genre distribution step by step. First, the data to plot — the share of tracks per genre:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>genre_shares <span class="ot">&lt;-</span> music_data <span class="sc">|&gt;</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(genre) <span class="sc">|&gt;</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">share =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>A minimal chart needs data, a mapping, and a geom:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(genre_shares, <span class="fu">aes</span>(<span class="at">x =</span> genre, <span class="at">y =</span> share)) <span class="sc">+</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-describing-data_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="1600"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It works — but the chart is hard to read: the categories are in alphabetical order, the labels overlap, and the y-axis shows proportions without units. Each problem is fixed by one more layer:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(genre_shares, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_reorder</span>(genre, share), <span class="at">y =</span> share)) <span class="sc">+</span>   <span class="co"># order bars by size</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"#0f5da8"</span>) <span class="sc">+</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> scales<span class="sc">::</span><span class="fu">percent</span>(share, <span class="at">accuracy =</span> <span class="fl">0.1</span>)),        <span class="co"># value labels</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.15</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span>                                                         <span class="co"># horizontal bars: readable labels</span></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>)) <span class="sc">+</span>    <span class="co"># percent axis</span></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Share of tracks"</span>,</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Pop and hip-hop dominate the charts"</span>,</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Share of tracks per genre (n = 66,796)"</span>) <span class="sc">+</span></span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-describing-data_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="1600"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Notice the title: instead of describing <em>what</em> is shown (“Genre distribution”), it states <em>what the chart says</em>. A chart title that states the finding is one of the simplest ways to make a chart useful for decision-makers.</p>
 </section>
-<section id="summarizing-data" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="summarizing-data"><span class="header-section-number">2.3</span> Summarizing data</h2>
-<p><em>Measures of location and dispersion; summaries by group; tables that answer questions.</em></p>
+<section id="choosing-the-chart-that-fits-your-variables" class="level3" data-number="2.7.2">
+<h3 data-number="2.7.2" class="anchored" data-anchor-id="choosing-the-chart-that-fits-your-variables"><span class="header-section-number">2.7.2</span> Choosing the chart that fits your variables</h3>
+<p>Which chart type fits depends — once again — on the levels of measurement of the variables involved (<a href="#tbl-chart-choice" class="quarto-xref">Table&nbsp;<span>2.5</span></a>).</p>
+<div id="tbl-chart-choice" class="striped quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-chart-choice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.5: Choosing a chart by variable type
+</figcaption>
+<div aria-describedby="tbl-chart-choice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>What you want to show</th>
+<th>Variables</th>
+<th>Chart</th>
+<th>ggplot2 geom</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Distribution of one variable</td>
+<td>categorical</td>
+<td>Bar chart</td>
+<td><code>geom_bar()</code> / <code>geom_col()</code></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>continuous</td>
+<td>Histogram, density plot, boxplot</td>
+<td><code>geom_histogram()</code>, <code>geom_density()</code>, <code>geom_boxplot()</code></td>
+</tr>
+<tr class="odd">
+<td>Comparison of a continuous variable across groups</td>
+<td>categorical × continuous</td>
+<td>Boxplots, (jittered) points</td>
+<td><code>geom_boxplot()</code>, <code>geom_jitter()</code></td>
+</tr>
+<tr class="even">
+<td>Relationship between two variables</td>
+<td>continuous × continuous</td>
+<td>Scatter plot</td>
+<td><code>geom_point()</code></td>
+</tr>
+<tr class="odd">
+<td>Two categorical variables</td>
+<td>categorical × categorical</td>
+<td>Grouped or stacked bars (of shares)</td>
+<td><code>geom_col(position = "dodge")</code></td>
+</tr>
+<tr class="even">
+<td>Development over time</td>
+<td>time × continuous</td>
+<td>Line chart</td>
+<td><code>geom_line()</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>A third variable can be added through color (<code>aes(color = …)</code>) or by splitting the chart into small multiples with <code>facet_wrap(~ variable)</code>.</p>
 </section>
-<section id="visualizing-data" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="visualizing-data"><span class="header-section-number">2.4</span> Visualizing data</h2>
-<p><em>The grammar of graphics; choosing chart types that earn their place; common visualization mistakes.</em></p>
+<section id="distributions-histograms-and-the-log-scale" class="level3" data-number="2.7.3">
+<h3 data-number="2.7.3" class="anchored" data-anchor-id="distributions-histograms-and-the-log-scale"><span class="header-section-number">2.7.3</span> Distributions: histograms and the log scale</h3>
+<p>A <strong>histogram</strong> divides the range of a continuous variable into intervals (“bins”) and shows how many observations fall into each. For the streams, the result is sobering:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(music_data, <span class="fu">aes</span>(<span class="at">x =</span> streams)) <span class="sc">+</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">50</span>, <span class="at">fill =</span> <span class="st">"#0f5da8"</span>) <span class="sc">+</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Streams"</span>, <span class="at">y =</span> <span class="st">"Number of tracks"</span>) <span class="sc">+</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-describing-data_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="1600"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Almost all tracks are squeezed into the first bar, because the axis must extend to the largest hit. For strongly right-skewed variables, a <strong>logarithmic scale</strong> helps: on a log scale, each step on the axis represents a multiplication (1,000 → 10,000 → 100,000 …) rather than an addition.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(music_data, <span class="fu">aes</span>(<span class="at">x =</span> streams)) <span class="sc">+</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">50</span>, <span class="at">fill =</span> <span class="st">"#0f5da8"</span>) <span class="sc">+</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">scale_cut =</span> scales<span class="sc">::</span><span class="fu">cut_short_scale</span>())) <span class="sc">+</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Streams (log scale)"</span>, <span class="at">y =</span> <span class="st">"Number of tracks"</span>) <span class="sc">+</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-describing-data_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="1600"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now the shape of the distribution becomes visible: most tracks have between about ten thousand and a few million streams, and a thin tail extends to more than a billion. When you use a log scale, always say so in the axis label — readers otherwise misjudge the distances.</p>
 </section>
-<section id="from-description-to-insight" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="from-description-to-insight"><span class="header-section-number">2.5</span> From description to insight</h2>
-<p><em>A worked descriptive case (segments, funnel); what description can and cannot conclude.</em></p>
+<section id="comparing-groups-boxplots" class="level3" data-number="2.7.4">
+<h3 data-number="2.7.4" class="anchored" data-anchor-id="comparing-groups-boxplots"><span class="header-section-number">2.7.4</span> Comparing groups: boxplots</h3>
+<p>A <strong>boxplot</strong> summarizes a distribution in five numbers: the box spans the interquartile range (25th to 75th percentile), the line inside marks the median, the whiskers extend to the most extreme values within 1.5 IQR of the box, and points beyond are drawn individually. Boxplots are ideal for comparing distributions across groups:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">genre =</span> <span class="fu">fct_lump_n</span>(genre, <span class="at">n =</span> <span class="dv">6</span>, <span class="at">other_level =</span> <span class="st">"Remaining genres"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_reorder</span>(genre, streams, <span class="at">.fun =</span> median), <span class="at">y =</span> streams)) <span class="sc">+</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"#dbe7f3"</span>, <span class="at">outlier.alpha =</span> <span class="fl">0.15</span>) <span class="sc">+</span></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">scale_cut =</span> scales<span class="sc">::</span><span class="fu">cut_short_scale</span>())) <span class="sc">+</span></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Streams (log scale)"</span>,</span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Typical streams differ by genre - and the spread within each genre is huge"</span>) <span class="sc">+</span></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-describing-data_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="1600"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="learning-check" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="learning-check">Learning check</h2>
-<p><em>Case-based questions to follow.</em></p>
+<section id="relationships-scatter-plots" class="level3" data-number="2.7.5">
+<h3 data-number="2.7.5" class="anchored" data-anchor-id="relationships-scatter-plots"><span class="header-section-number">2.7.5</span> Relationships: scatter plots</h3>
+<p>A <strong>scatter plot</strong> shows the relationship between two continuous variables. With 67,000 points, overplotting becomes a problem — thousands of points on top of each other look like one black area. Transparency (<code>alpha</code>) helps:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(music_data, <span class="fu">aes</span>(<span class="at">x =</span> danceability, <span class="at">y =</span> streams)) <span class="sc">+</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.05</span>, <span class="at">color =</span> <span class="st">"#0f5da8"</span>) <span class="sc">+</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">scale_cut =</span> scales<span class="sc">::</span><span class="fu">cut_short_scale</span>())) <span class="sc">+</span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Danceability (0-100)"</span>, <span class="at">y =</span> <span class="st">"Streams (log scale)"</span>) <span class="sc">+</span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-describing-data_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="1400"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The cloud shows no strong relationship between danceability and streams. Remember from <a href="01-foundations.html#sec-dgp" class="quarto-xref"><span>Section 1.4</span></a> that even a strong pattern here would describe an association, not an effect — and from <a href="#sec-desc-selection" class="quarto-xref"><span>Section 2.5.6</span></a> that these are only the tracks that charted.</p>
+</section>
+<section id="development-over-time-line-charts" class="level3" data-number="2.7.6">
+<h3 data-number="2.7.6" class="anchored" data-anchor-id="development-over-time-line-charts"><span class="header-section-number">2.7.6</span> Development over time: line charts</h3>
+<p>Line charts show how a quantity develops over time. How many of the tracks in our data were released in each year?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(release_year) <span class="sc">|&gt;</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> release_year, <span class="at">y =</span> n)) <span class="sc">+</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"#0f5da8"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0f5da8"</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Release year"</span>, <span class="at">y =</span> <span class="st">"Number of tracks"</span>) <span class="sc">+</span></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-describing-data_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="1600"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The chart shows that the data are dominated by recent releases. It also shows two things a table would easily hide. First, the x-axis extends to 2029 — because of the impossible release dates found in <a href="#sec-desc-trust" class="quarto-xref"><span>Section 2.5</span></a>. Second, the sharp drop in 2021 does not mean that fewer tracks were released: the most recent plausible release date in the data is in July 2021, so the last year is incomplete. The final period of a time series is often incomplete — a classic source of false alarms (“sales collapsed this month!”). Charts are data-quality tools, too.</p>
+</section>
+<section id="honest-visualization" class="level3" data-number="2.7.7">
+<h3 data-number="2.7.7" class="anchored" data-anchor-id="honest-visualization"><span class="header-section-number">2.7.7</span> Honest visualization</h3>
+<p>Charts persuade — which is why they can mislead. Three rules prevent the most common distortions.</p>
+<p><strong>1. Bars start at zero.</strong> The length of a bar encodes its value; if the axis is truncated, the lengths lie. In <a href="#fig-truncated" class="quarto-xref">Figure&nbsp;<span>2.3</span></a>, the same two market shares look dramatically different on a truncated axis (left) and nearly equal on an honest one (right).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-truncated" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-truncated-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02-describing-data_files/figure-html/fig-truncated-1.png" class="img-fluid figure-img" width="1800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-truncated-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.3: The same data, two impressions: a truncated axis exaggerates a 2-percentage-point difference (stylized data).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>(Line charts and scatter plots, which encode values by <em>position</em> rather than length, need not start at zero — but a truncated axis should always be clearly labeled.)</p>
+<p><strong>2. Be careful with dual axes.</strong> Two y-axes with independently chosen ranges allow you to make almost any two series look related — as the Internet Explorer chart in <a href="01-foundations.html#fig-spurious-ie" class="quarto-xref">Figure&nbsp;<span>1.4</span></a> demonstrated. If you must compare two series with different units, consider indexing both to a common starting value (e.g., 100 in the first year) or placing two charts side by side.</p>
+<p><strong>3. Let the data, not the decoration, carry the message.</strong> Avoid 3D effects (they distort the perception of size), pie charts with many slices (angles are hard to compare — use a sorted bar chart), and colors without meaning. Sort categories by value unless they have a natural order. Label axes with units.</p>
+</section>
+<section id="saving-charts" class="level3" data-number="2.7.8">
+<h3 data-number="2.7.8" class="anchored" data-anchor-id="saving-charts"><span class="header-section-number">2.7.8</span> Saving charts</h3>
+<p>To use a chart in a presentation or report, save it with <code>ggsave()</code>, which saves the most recent plot (or a plot object you pass to it) in your project folder:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"genre_shares.png"</span>, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="fl">4.5</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="sec-desc-insight" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="sec-desc-insight"><span class="header-section-number">2.8</span> From description to insight</h2>
+<p>Let us close with a worked example that brings the chapter together — and shows where description ends. The label’s head of A&amp;R asks: <em>“Do tracks with explicit lyrics perform worse?”</em></p>
+<p>A first comparison:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(explicit) <span class="sc">|&gt;</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">median_streams =</span> <span class="fu">median</span>(streams))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  explicit         n median_streams
+  &lt;fct&gt;        &lt;int&gt;          &lt;dbl&gt;
+1 not explicit 58603         385290
+2 explicit      8193          93600</code></pre>
+</div>
+</div>
+<p>Tracks with explicit lyrics have markedly fewer streams (at the median). Before writing this into a report, apply what you know. Is this comparison <em>fair</em>? Explicit lyrics are not evenly spread across genres and labels — and genre and label are themselves related to streams. Let us compare within genres:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">genre =</span> <span class="fu">fct_lump_n</span>(genre, <span class="at">n =</span> <span class="dv">5</span>, <span class="at">other_level =</span> <span class="st">"Remaining genres"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(genre) <span class="sc">|&gt;</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">share_explicit      =</span> <span class="fu">mean</span>(explicit <span class="sc">==</span> <span class="st">"explicit"</span>),</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">median_not_explicit =</span> <span class="fu">median</span>(streams[explicit <span class="sc">==</span> <span class="st">"not explicit"</span>]),</span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">median_explicit     =</span> <span class="fu">median</span>(streams[explicit <span class="sc">==</span> <span class="st">"explicit"</span>])</span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  genre            share_explicit median_not_explicit median_explicit
+  &lt;fct&gt;                     &lt;dbl&gt;               &lt;dbl&gt;           &lt;dbl&gt;
+1 Electro/Dance            0.340              494986.           72608
+2 HipHop/Rap               0.0515             618344.          226571
+3 other                    0.0779             704424           133351
+4 Pop                      0.155              236848.           87798
+5 Rock                     0.172              159262.           31128
+6 Remaining genres         0.112              536213           224444</code></pre>
+</div>
+</div>
+<p>Within each of the large genres, the gap persists, but its size varies considerably from genre to genre — and so does the share of explicit tracks — the overall comparison mixes the explicitness of a track with the genre it belongs to. And we already know two further reasons for caution: the label (independent labels release a larger share of explicit tracks in our data) and the selection into the charts (<a href="#sec-desc-selection" class="quarto-xref"><span>Section 2.5.6</span></a>).</p>
+<p>What <em>can</em> we write? A precise descriptive statement:</p>
+<blockquote class="blockquote">
+<p>“Among the tracks in our chart data, those with explicit lyrics have a lower median number of streams than those without. The gap is visible within each of the large genres, but varies in size across genres.”</p>
+</blockquote>
+<p>What we <em>cannot</em> write: “Explicit lyrics reduce streams.” That is a causal claim (<a href="01-foundations.html#sec-four-questions" class="quarto-xref"><span>Section 1.3</span></a>) — it would require comparing the same tracks with and without explicit lyrics, which the data do not allow. Genre, label, artist popularity, and the selection into the charts are all candidates for confounders (<a href="01-foundations.html#sec-cast" class="quarto-xref"><span>Section 1.5</span></a>).</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Writing descriptive findings">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Writing descriptive findings
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A good descriptive statement answers five questions:</p>
+<ol type="1">
+<li><strong>What</strong> was measured? (“median number of streams”)</li>
+<li><strong>How much?</strong> — with numbers, not adjectives (“about 385,000 vs.&nbsp;94,000”)</li>
+<li><strong>Compared to what?</strong> (“tracks without explicit lyrics”)</li>
+<li><strong>For whom?</strong> — the population the data represent (“tracks that appeared in the charts”)</li>
+<li><strong>With which caveat?</strong> (“the gap varies by genre; the comparison is descriptive”)</li>
+</ol>
+<p>And it uses descriptive verbs: <em>is higher, differs, is associated with, is more common among</em> — not <em>causes, drives, increases, leads to</em>.</p>
+</div>
+</div>
+<p>AI assistants are remarkably good at producing fluent descriptions of data — and remarkably willing to slip from “is associated with” to “drives”. When you use them to draft a description, check every sentence against the five questions above, and against the numbers in your own output.</p>
+</section>
+<section id="sec-lc-02" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="sec-lc-02">Learning check</h2>
+<p><strong>(LC2.1)</strong> A colleague sends you a CSV file exported from a German version of Excel. After <code>read_csv("file.csv")</code>, the data frame has only one column. What is the most likely reason, and which function should you use instead?</p>
+<p><strong>(LC2.2)</strong> Classify the level of measurement of each variable: (a) customer ID, (b) satisfaction (“very dissatisfied” … “very satisfied”), (c) price in euros, (d) payment method, (e) year of first purchase.</p>
+<p><strong>(LC2.3)</strong> The mean revenue per customer is €480, the median €95. What does this tell you about the distribution — and which number would you report as the “typical” customer’s revenue?</p>
+<p><strong>(LC2.4)</strong> What does the following code return?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(label_type <span class="sc">==</span> <span class="st">"Major"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(genre) <span class="sc">|&gt;</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">share_explicit =</span> <span class="fu">mean</span>(explicit <span class="sc">==</span> <span class="st">"explicit"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>(LC2.5)</strong> A loyalty-program data set contains only customers who are still active. An analyst finds that, among these customers, those who received few discounts buy particularly often. Why might this pattern be misleading?</p>
+<p><strong>(LC2.6)</strong> Which of the following statements are correct?</p>
+<ul class="task-list">
+<li><label><input type="checkbox">If <code>read_csv2()</code> runs without an error message, the data were imported correctly</label></li>
+<li><label><input type="checkbox">A variable stored as a number in R can be a nominal variable</label></li>
+<li><label><input type="checkbox">Outliers should always be removed before computing summary statistics</label></li>
+<li><label><input type="checkbox">For a strongly right-skewed variable, the median describes the typical observation better than the mean</label></li>
+<li><label><input type="checkbox">The y-axis of a bar chart should start at zero</label></li>
+<li><label><input type="checkbox">A value of zero in a data set always means that the quantity was zero</label></li>
+</ul>
 </section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>

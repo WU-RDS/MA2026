@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>R Onboarding – Marketing Analytics</title>
+<title>Appendix A — R onboarding – Marketing Analytics</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -25,6 +25,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -88,7 +123,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r-onboarding.html">Appendices</a></li><li class="breadcrumb-item"><a href="./r-onboarding.html">R Onboarding</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r-onboarding.html">Appendices</a></li><li class="breadcrumb-item"><a href="./r-onboarding.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">R onboarding</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -182,7 +217,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./r-onboarding.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">R Onboarding</span></a>
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">R onboarding</span></span></a>
   </div>
 </li>
       </ul>
@@ -197,21 +232,40 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#option-a-installing-r-and-rstudio" id="toc-option-a-installing-r-and-rstudio" class="nav-link active" data-scroll-target="#option-a-installing-r-and-rstudio">Option A: Installing R and RStudio</a></li>
-  <li><a href="#option-b-posit-cloud-no-installation" id="toc-option-b-posit-cloud-no-installation" class="nav-link" data-scroll-target="#option-b-posit-cloud-no-installation">Option B: Posit Cloud (no installation)</a></li>
-  <li><a href="#first-steps-in-rstudio" id="toc-first-steps-in-rstudio" class="nav-link" data-scroll-target="#first-steps-in-rstudio">First steps in RStudio</a></li>
-  <li><a href="#reproducible-reports" id="toc-reproducible-reports" class="nav-link" data-scroll-target="#reproducible-reports">Reproducible reports</a></li>
-  <li><a href="#using-ai-assistants-well" id="toc-using-ai-assistants-well" class="nav-link" data-scroll-target="#using-ai-assistants-well">Using AI assistants well</a></li>
-  <li><a href="#troubleshooting-faq" id="toc-troubleshooting-faq" class="nav-link" data-scroll-target="#troubleshooting-faq">Troubleshooting &amp; FAQ</a></li>
+  <li><a href="#sec-onb-why" id="toc-sec-onb-why" class="nav-link active" data-scroll-target="#sec-onb-why"><span class="header-section-number">A.1</span> Why R?</a></li>
+  <li><a href="#sec-onb-setup" id="toc-sec-onb-setup" class="nav-link" data-scroll-target="#sec-onb-setup"><span class="header-section-number">A.2</span> Setting up: two routes</a>
+  <ul class="collapse">
+  <li><a href="#sec-onb-local" id="toc-sec-onb-local" class="nav-link" data-scroll-target="#sec-onb-local"><span class="header-section-number">A.2.1</span> Route A: install R and RStudio</a></li>
+  <li><a href="#sec-onb-cloud" id="toc-sec-onb-cloud" class="nav-link" data-scroll-target="#sec-onb-cloud"><span class="header-section-number">A.2.2</span> Route B: Posit Cloud</a></li>
+  </ul></li>
+  <li><a href="#sec-onb-rstudio" id="toc-sec-onb-rstudio" class="nav-link" data-scroll-target="#sec-onb-rstudio"><span class="header-section-number">A.3</span> RStudio in ten minutes</a></li>
+  <li><a href="#sec-onb-project" id="toc-sec-onb-project" class="nav-link" data-scroll-target="#sec-onb-project"><span class="header-section-number">A.4</span> Work in an RStudio Project</a></li>
+  <li><a href="#sec-onb-first-steps" id="toc-sec-onb-first-steps" class="nav-link" data-scroll-target="#sec-onb-first-steps"><span class="header-section-number">A.5</span> First steps in R</a>
+  <ul class="collapse">
+  <li><a href="#objects-and-assignment" id="toc-objects-and-assignment" class="nav-link" data-scroll-target="#objects-and-assignment"><span class="header-section-number">A.5.1</span> Objects and assignment</a></li>
+  <li><a href="#functions-and-arguments" id="toc-functions-and-arguments" class="nav-link" data-scroll-target="#functions-and-arguments"><span class="header-section-number">A.5.2</span> Functions and arguments</a></li>
+  <li><a href="#vectors-and-data-types" id="toc-vectors-and-data-types" class="nav-link" data-scroll-target="#vectors-and-data-types"><span class="header-section-number">A.5.3</span> Vectors and data types</a></li>
+  <li><a href="#data-frames" id="toc-data-frames" class="nav-link" data-scroll-target="#data-frames"><span class="header-section-number">A.5.4</span> Data frames</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages"><span class="header-section-number">A.5.5</span> Packages</a></li>
+  </ul></li>
+  <li><a href="#sec-onb-data" id="toc-sec-onb-data" class="nav-link" data-scroll-target="#sec-onb-data"><span class="header-section-number">A.6</span> Loading the course data</a></li>
+  <li><a href="#sec-onb-report" id="toc-sec-onb-report" class="nav-link" data-scroll-target="#sec-onb-report"><span class="header-section-number">A.7</span> Your first reproducible report</a></li>
+  <li><a href="#sec-onb-help" id="toc-sec-onb-help" class="nav-link" data-scroll-target="#sec-onb-help"><span class="header-section-number">A.8</span> Getting help — and working with AI assistants</a>
+  <ul class="collapse">
+  <li><a href="#reading-error-messages" id="toc-reading-error-messages" class="nav-link" data-scroll-target="#reading-error-messages"><span class="header-section-number">A.8.1</span> Reading error messages</a></li>
+  <li><a href="#asking-an-ai-assistant-well" id="toc-asking-an-ai-assistant-well" class="nav-link" data-scroll-target="#asking-an-ai-assistant-well"><span class="header-section-number">A.8.2</span> Asking an AI assistant — well</a></li>
+  <li><a href="#other-sources-of-help" id="toc-other-sources-of-help" class="nav-link" data-scroll-target="#other-sources-of-help"><span class="header-section-number">A.8.3</span> Other sources of help</a></li>
+  </ul></li>
+  <li><a href="#sec-onb-checkpoint" id="toc-sec-onb-checkpoint" class="nav-link" data-scroll-target="#sec-onb-checkpoint"><span class="header-section-number">A.9</span> Checkpoint</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r-onboarding.html">Appendices</a></li><li class="breadcrumb-item"><a href="./r-onboarding.html">R Onboarding</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./r-onboarding.html">Appendices</a></li><li class="breadcrumb-item"><a href="./r-onboarding.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">R onboarding</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-onboarding" class="quarto-section-identifier">R Onboarding</span></h1>
+<h1 class="title"><span id="sec-onboarding" class="quarto-section-identifier">Appendix A — R onboarding</span></h1>
 </div>
 
 
@@ -228,42 +282,446 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="callout callout-style-default callout-warning callout-titled" title="In preparation">
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Self-paced · about 2–3 hours · complete before the second session.</strong> Work through this module at your own pace. If you get stuck, ask your AI assistant of choice (see <a href="#sec-onb-help" class="quarto-xref"><span>Section A.8</span></a> for how to ask well) or post in the forum on Canvas. A short setup clinic at the start of the second session catches whatever is left.</p>
+</div>
+</div>
+</div>
+<p>In this course, we analyze data with the statistical software <strong>R</strong>. This module gets you from zero to a working setup — and to the point where you can run a script, load a data set, and turn your analysis into a reproducible report. It deliberately covers only the <em>mechanics</em>; everything conceptual (what to compute, and why) is the job of the chapters.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="What you will have at the end of this module">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>In preparation
+<span class="screen-reader-only">Tip</span>What you will have at the end of this module
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Complete this self-paced module <strong>before the second session</strong>. The sections below are placeholders from the course revision.</p>
+<ul class="task-list">
+<li><label><input type="checkbox">R and RStudio running on your computer — or a working Posit Cloud account</label></li>
+<li><label><input type="checkbox">A course folder set up as an <strong>RStudio Project</strong></label></li>
+<li><label><input type="checkbox">A script that loads the course data and runs without errors</label></li>
+<li><label><input type="checkbox">A short report rendered from R Markdown to <strong>HTML</strong> — the format in which you will submit your assignments</label></li>
+</ul>
+<p>The <strong>checkpoint</strong> in <a href="#sec-onb-checkpoint" class="quarto-xref"><span>Section A.9</span></a> lets you verify all four points in ten minutes.</p>
 </div>
 </div>
-<section id="option-a-installing-r-and-rstudio" class="level2">
-<h2 class="anchored" data-anchor-id="option-a-installing-r-and-rstudio">Option A: Installing R and RStudio</h2>
-<p><em>Step-by-step installation for Windows and macOS; verifying the setup.</em></p>
+<section id="sec-onb-why" class="level2" data-number="A.1">
+<h2 data-number="A.1" class="anchored" data-anchor-id="sec-onb-why"><span class="header-section-number">A.1</span> Why R?</h2>
+<p>R is free, runs on every operating system, and is one of the standard tools of data analysis in research and industry. Its real advantage for this course, however, is <strong>reproducibility</strong>: an analysis written as code can be re-run, checked, corrected, and shared — by you next month, by a colleague, or by your instructors. A sequence of mouse clicks in a spreadsheet cannot.</p>
+<p>There is a second, more recent reason. AI assistants now write R code quickly and cheaply. This does not make R skills obsolete — it shifts them: the scarce skill is no longer <em>typing</em> code, but <em>reading and checking</em> it. You need to recognize what a piece of code does, whether it does what you intended, and where it silently goes wrong. That is exactly what this module and the following chapters train.</p>
 </section>
-<section id="option-b-posit-cloud-no-installation" class="level2">
-<h2 class="anchored" data-anchor-id="option-b-posit-cloud-no-installation">Option B: Posit Cloud (no installation)</h2>
-<p><em>Working in the browser; copying the pre-configured course project.</em></p>
+<section id="sec-onb-setup" class="level2" data-number="A.2">
+<h2 data-number="A.2" class="anchored" data-anchor-id="sec-onb-setup"><span class="header-section-number">A.2</span> Setting up: two routes</h2>
+<p>You can work with R in two ways. <strong>Route A</strong> (local installation) is recommended: it works offline, has no usage limits, and is what you will use after the course. <strong>Route B</strong> (Posit Cloud) runs in the browser and requires no installation — a good fallback if the installation fails or your computer is managed by an employer.</p>
+<section id="sec-onb-local" class="level3" data-number="A.2.1">
+<h3 data-number="A.2.1" class="anchored" data-anchor-id="sec-onb-local"><span class="header-section-number">A.2.1</span> Route A: install R and RStudio</h3>
+<p>You need two programs, installed <strong>in this order</strong>:</p>
+<ol type="1">
+<li><strong>R</strong> — the language itself. Download it from CRAN, the official R archive: <a href="https://cran.r-project.org" class="uri">https://cran.r-project.org</a>. Choose your operating system and install the latest release with the default settings.</li>
+<li><strong>RStudio Desktop</strong> — the program you actually work in. It is built on top of R: you can use R without RStudio, but not RStudio without R. Download it from <a href="https://posit.co/download/rstudio-desktop/" class="uri">https://posit.co/download/rstudio-desktop/</a> and install it with the default settings.</li>
+</ol>
+<div style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 2em; text-align: center; color: #58585a; margin: 1em 0;">
+<p><em>Screenshot placeholder: CRAN download page with the links for Windows / macOS highlighted</em><br>
+<code>img/onboarding/cran_download.png</code></p>
+</div>
+<!-- Replace placeholder with: -->
+<!-- ![The CRAN download page.](img/onboarding/cran_download.png){width=80%} -->
+<div class="callout callout-style-default callout-warning callout-titled" title="Known pitfalls — check these before you ask for help">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Known pitfalls — check these before you ask for help
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Folders synced with OneDrive, iCloud, or Dropbox</strong> can cause strange errors when R installs packages or writes files. Keep your course folder in a normal local folder (e.g., <code>Documents/marketing-analytics</code>).</li>
+<li><strong>Special characters in paths</strong> (umlauts, spaces, non-Latin characters in your user name) occasionally break package installation on Windows. If you see errors mentioning a path with such characters, create the course folder directly under <code>C:/</code> (e.g., <code>C:/marketing-analytics</code>).</li>
+<li><strong>macOS:</strong> some packages need Apple’s <em>command line developer tools</em>. If an installation error mentions <code>xcrun</code> or a missing compiler, open the Terminal app and run <code>xcode-select --install</code>.</li>
+<li><strong>Old versions:</strong> if you installed R years ago, update it. Many current packages require a recent R version.</li>
+</ul>
+</div>
+</div>
 </section>
-<section id="first-steps-in-rstudio" class="level2">
-<h2 class="anchored" data-anchor-id="first-steps-in-rstudio">First steps in RStudio</h2>
-<p><em>Console vs.&nbsp;scripts; running code; installing and loading packages; getting help.</em></p>
+<section id="sec-onb-cloud" class="level3" data-number="A.2.2">
+<h3 data-number="A.2.2" class="anchored" data-anchor-id="sec-onb-cloud"><span class="header-section-number">A.2.2</span> Route B: Posit Cloud</h3>
+<p>Posit Cloud (<a href="https://posit.cloud" class="uri">https://posit.cloud</a>) offers RStudio in your web browser. Create a free account, click <em>New Project → New RStudio Project</em>, and you are ready to go — the interface is the same as in the desktop version, so everything below applies. Note that free accounts come with usage limits; check the current conditions on the Posit Cloud website.</p>
 </section>
-<section id="reproducible-reports" class="level2">
-<h2 class="anchored" data-anchor-id="reproducible-reports">Reproducible reports</h2>
-<p><em>Creating and rendering documents; the assignment submission format.</em></p>
 </section>
-<section id="using-ai-assistants-well" class="level2">
-<h2 class="anchored" data-anchor-id="using-ai-assistants-well">Using AI assistants well</h2>
-<p><em>Endorsed uses (error messages, code drafts, concept questions); how to prompt productively; where reliance backfires.</em></p>
+<section id="sec-onb-rstudio" class="level2" data-number="A.3">
+<h2 data-number="A.3" class="anchored" data-anchor-id="sec-onb-rstudio"><span class="header-section-number">A.3</span> RStudio in ten minutes</h2>
+<p>When you open RStudio, you see four panes:</p>
+<div style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 2em; text-align: center; color: #58585a; margin: 1em 0;">
+<p><em>Screenshot placeholder: RStudio with the four panes labeled (1) Script editor, (2) Console, (3) Environment, (4) Files / Plots / Packages / Help</em><br>
+<code>img/onboarding/rstudio_panes.png</code></p>
+</div>
+<!-- ![The four panes of RStudio.](img/onboarding/rstudio_panes.png){width=90%} -->
+<table class="table-striped caption-top table">
+<caption>The four panes of RStudio</caption>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pane</th>
+<th>What it is for</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Script editor</strong> (top left)</td>
+<td>Where you <em>write</em> your code and keep it. A script is a plain text file ending in <code>.R</code>.</td>
+</tr>
+<tr class="even">
+<td><strong>Console</strong> (bottom left)</td>
+<td>Where R <em>executes</em> code and prints results. You can type here directly, but nothing is saved.</td>
+</tr>
+<tr class="odd">
+<td><strong>Environment</strong> (top right)</td>
+<td>Lists the objects (data sets, values) that currently exist in your session.</td>
+</tr>
+<tr class="even">
+<td><strong>Files / Plots / Help</strong> (bottom right)</td>
+<td>Browse files, view plots, read help pages.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Always write your code in a script, not in the console.</strong> To run a line of the script, put the cursor in it and press <strong>Ctrl + Enter</strong> (Windows) or <strong>Cmd + Enter</strong> (Mac). To run several lines, select them first. The result appears in the console.</p>
 </section>
-<section id="troubleshooting-faq" class="level2">
-<h2 class="anchored" data-anchor-id="troubleshooting-faq">Troubleshooting &amp; FAQ</h2>
-<p><em>Common installation problems and their fixes.</em></p>
+<section id="sec-onb-project" class="level2" data-number="A.4">
+<h2 data-number="A.4" class="anchored" data-anchor-id="sec-onb-project"><span class="header-section-number">A.4</span> Work in an RStudio Project</h2>
+<p>An <strong>RStudio Project</strong> is a folder that RStudio treats as the home of one piece of work. Its main benefit: when you open the project, R automatically looks for files <em>in that folder</em>. This saves you from the most common beginner problem of all — R not finding your files.</p>
+<ol type="1">
+<li><em>File → New Project → New Directory → New Project</em></li>
+<li>Name it (e.g., <code>marketing-analytics</code>) and choose a normal local folder as its location (see the pitfalls above).</li>
+<li>Inside the project, create subfolders <code>data</code> (for data files) and <code>code</code> (for scripts) — via the <em>New Folder</em> button in the Files pane.</li>
+</ol>
+<p>From now on, start every work session by opening the project (double-click the <code>.Rproj</code> file, or <em>File → Open Project</em>).</p>
+<div class="callout callout-style-default callout-important callout-titled" title="One setting to change right now">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>One setting to change right now
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>By default, RStudio offers to save your <em>workspace</em> (all objects in memory) when you quit, and restores it at the next start. This sounds convenient but causes hard-to-find errors: yesterday’s objects silently leak into today’s analysis. Your script is the record of your work — not the workspace.</p>
+<p><em>Tools → Global Options → General</em>: set <strong>“Save workspace to .RData on exit”</strong> to <strong>Never</strong>, and untick <strong>“Restore .RData into workspace at startup”</strong>.</p>
+</div>
+</div>
+<div style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 2em; text-align: center; color: #58585a; margin: 1em 0;">
+<p><em>Screenshot placeholder: Tools → Global Options → General, with the two workspace settings highlighted</em><br>
+<code>img/onboarding/global_options_workspace.png</code></p>
+</div>
+<!-- ![Recommended workspace settings.](img/onboarding/global_options_workspace.png){width=70%} -->
+<p>You may still come across <code>setwd("C:/Users/…")</code> in older tutorials — a command that sets the folder R works in by hard-coding a path. With RStudio Projects, you do not need it; and scripts containing such paths break as soon as they run on another computer.</p>
+</section>
+<section id="sec-onb-first-steps" class="level2" data-number="A.5">
+<h2 data-number="A.5" class="anchored" data-anchor-id="sec-onb-first-steps"><span class="header-section-number">A.5</span> First steps in R</h2>
+<p>Create a new script (<em>File → New File → R Script</em>), save it as <code>code/first-steps.R</code>, and type along. Run each line and look at the result in the console.</p>
+<section id="objects-and-assignment" class="level3" data-number="A.5.1">
+<h3 data-number="A.5.1" class="anchored" data-anchor-id="objects-and-assignment"><span class="header-section-number">A.5.1</span> Objects and assignment</h3>
+<p>Anything you create in R is an <strong>object</strong>. You create objects with the assignment operator <code>&lt;-</code> (shortcut: <strong>Alt + -</strong>):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>streams <span class="ot">&lt;-</span> <span class="dv">163608</span>          <span class="co"># assign a number to the object 'streams'</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>streams                    <span class="co"># typing the name prints the value</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 163608</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>streams <span class="sc">*</span> <span class="dv">2</span>                <span class="co"># objects can be used in calculations</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 327216</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>artist <span class="ot">&lt;-</span> <span class="st">"Imagine Dragons"</span>  <span class="co"># text must be put in quotation marks</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Everything after a <code>#</code> is a <strong>comment</strong>: R ignores it, but your future self will thank you for it. R is <strong>case-sensitive</strong> — <code>streams</code> and <code>Streams</code> are two different objects. Object names may contain letters, numbers, <code>_</code> and <code>.</code>, and must start with a letter. In this course, we use lower-case words separated by underscores (<code>top_tracks</code>, <code>mean_streams</code>); whichever convention you choose, be consistent.</p>
+<p>If the console shows a <code>+</code> instead of the usual <code>&gt;</code>, R is waiting for you to finish a command — usually because of a missing closing bracket or quotation mark. Complete the command, or press <strong>Esc</strong> to abort.</p>
+</section>
+<section id="functions-and-arguments" class="level3" data-number="A.5.2">
+<h3 data-number="A.5.2" class="anchored" data-anchor-id="functions-and-arguments"><span class="header-section-number">A.5.2</span> Functions and arguments</h3>
+<p>Most of what you do in R, you do by calling <strong>functions</strong>. A function takes inputs (<em>arguments</em>) and returns a result:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">1</span>, <span class="at">to =</span> <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">3</span>)   <span class="co"># arguments named explicitly</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  1  4  7 10</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">3</span>)                     <span class="co"># same result, arguments in default order</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  1  4  7 10</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fl">3.14159</span>, <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.14</code></pre>
+</div>
+</div>
+<p>If you name the arguments, their order does not matter; if you do not, you must follow the order the function expects. To find out which arguments a function takes, open its help page with <code>?seq</code> (or press <strong>F1</strong> with the cursor on the function name). When typing a function name, RStudio suggests completions — press <strong>Tab</strong> to see them.</p>
+</section>
+<section id="vectors-and-data-types" class="level3" data-number="A.5.3">
+<h3 data-number="A.5.3" class="anchored" data-anchor-id="vectors-and-data-types"><span class="header-section-number">A.5.3</span> Vectors and data types</h3>
+<p>A <strong>vector</strong> is a sequence of values of the same type, created with <code>c()</code> (“combine”):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>top_streams <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">163608</span>, <span class="dv">126687</span>, <span class="dv">120480</span>, <span class="dv">110022</span>, <span class="dv">108630</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>top_genres  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Dance"</span>, <span class="st">"Alternative"</span>, <span class="st">"Latino"</span>, <span class="st">"Dance"</span>, <span class="st">"Dance"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>top_explicit <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(top_streams)   <span class="co"># many functions work on whole vectors</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 125885.4</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(top_genres)   <span class="co"># class() tells you the type of an object</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "character"</code></pre>
+</div>
+</div>
+<p>The most important data types are:</p>
+<table class="table-striped caption-top table">
+<caption>The most important data types in R</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Example</th>
+<th>Typical use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>numeric</strong></td>
+<td><code>163608</code>, <code>3.14</code></td>
+<td>Quantities: streams, prices, ratings on a numeric scale</td>
+</tr>
+<tr class="even">
+<td><strong>character</strong></td>
+<td><code>"Dance"</code></td>
+<td>Text: names, titles, free-text answers</td>
+</tr>
+<tr class="odd">
+<td><strong>factor</strong></td>
+<td><code>factor(c("Pop", "Rock"))</code></td>
+<td>Categories with a fixed set of values: genres, conditions of an experiment</td>
+</tr>
+<tr class="even">
+<td><strong>logical</strong></td>
+<td><code>TRUE</code>, <code>FALSE</code></td>
+<td>Yes/no information; results of comparisons</td>
+</tr>
+<tr class="odd">
+<td><strong>Date</strong></td>
+<td><code>as.Date("2026-10-12")</code></td>
+<td>Calendar dates</td>
+</tr>
+</tbody>
+</table>
+<p>Types can be converted with <code>as.numeric()</code>, <code>as.character()</code>, <code>as.factor()</code>, <code>as.Date()</code>, etc. Why the type matters — and why a number is not always a quantity — is a topic of <a href="02-describing-data.html" class="quarto-xref"><span>Chapter 2</span></a>.</p>
+</section>
+<section id="data-frames" class="level3" data-number="A.5.4">
+<h3 data-number="A.5.4" class="anchored" data-anchor-id="data-frames"><span class="header-section-number">A.5.4</span> Data frames</h3>
+<p>A <strong>data frame</strong> is R’s version of a table: each <strong>column</strong> is a variable (a vector), each <strong>row</strong> an observation. All columns have the same length but may have different types. Almost all data you will analyze in this course comes as a data frame.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>top_tracks <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">artist   =</span> <span class="fu">c</span>(<span class="st">"Axwell /</span><span class="sc">\\</span><span class="st"> Ingrosso"</span>, <span class="st">"Imagine Dragons"</span>, <span class="st">"J. Balvin"</span>),</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">streams  =</span> <span class="fu">c</span>(<span class="dv">163608</span>, <span class="dv">126687</span>, <span class="dv">120480</span>),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">explicit =</span> <span class="fu">c</span>(<span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>top_tracks            <span class="co"># print the whole data frame</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               artist streams explicit
+1 Axwell /\\ Ingrosso  163608    FALSE
+2     Imagine Dragons  126687    FALSE
+3           J. Balvin  120480    FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>top_tracks<span class="sc">$</span>streams    <span class="co"># $ extracts one column as a vector</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 163608 126687 120480</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(top_tracks)       <span class="co"># structure: number of rows, and type of each column</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   3 obs. of  3 variables:
+ $ artist  : chr  "Axwell /\\ Ingrosso" "Imagine Dragons" "J. Balvin"
+ $ streams : num  163608 126687 120480
+ $ explicit: logi  FALSE FALSE FALSE</code></pre>
+</div>
+</div>
+<p>Use <code>View(top_tracks)</code> (capital V) to open a data frame in a spreadsheet-like viewer.</p>
+</section>
+<section id="packages" class="level3" data-number="A.5.5">
+<h3 data-number="A.5.5" class="anchored" data-anchor-id="packages"><span class="header-section-number">A.5.5</span> Packages</h3>
+<p>R’s functionality comes in <strong>packages</strong>. A few are included with R; thousands more can be installed from CRAN. The distinction to remember:</p>
+<ul>
+<li><code>install.packages("tidyverse")</code> downloads and installs a package. You do this <strong>once per computer</strong>.</li>
+<li><code>library(tidyverse)</code> loads an installed package so you can use its functions. You do this <strong>in every session</strong> — put it at the top of every script.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run once (then comment out or delete the line):</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"tidyverse"</span>, <span class="st">"psych"</span>, <span class="st">"readxl"</span>, <span class="st">"haven"</span>, <span class="st">"rmarkdown"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)   <span class="co"># loads dplyr, ggplot2, readr and more</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The <strong>tidyverse</strong> is a collection of packages for data handling and visualization that we use throughout the course. If R reports <code>could not find function "…"</code>, you have most likely forgotten to load the package that contains the function. You can also call a function without loading its package by writing <code>package::function()</code> — e.g., <code>dplyr::filter()</code>.</p>
+</section>
+</section>
+<section id="sec-onb-data" class="level2" data-number="A.6">
+<h2 data-number="A.6" class="anchored" data-anchor-id="sec-onb-data"><span class="header-section-number">A.6</span> Loading the course data</h2>
+<p>The main data set of the next chapter contains streaming chart data for about 67,000 tracks. Load it directly from the course repository:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>music_url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/WU-RDS/MA2025/main/data/music_data_fin.csv"</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>music_data <span class="ot">&lt;-</span> <span class="fu">read_csv2</span>(music_url)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(music_data)   <span class="co"># number of rows and columns</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 66796    31</code></pre>
+</div>
+</div>
+<p>Don’t worry about the details yet — why the function is <code>read_csv2()</code> and not <code>read_csv()</code> is one of the first lessons of <a href="02-describing-data.html" class="quarto-xref"><span>Chapter 2</span></a>. If the command fails, check your internet connection and that you have loaded the tidyverse.</p>
+</section>
+<section id="sec-onb-report" class="level2" data-number="A.7">
+<h2 data-number="A.7" class="anchored" data-anchor-id="sec-onb-report"><span class="header-section-number">A.7</span> Your first reproducible report</h2>
+<p>Your assignments are submitted as <strong>reproducible reports</strong>: documents that combine text, R code, and the code’s output, created with <strong>R Markdown</strong>. When you <em>knit</em> (render) an R Markdown file, R runs all code from top to bottom in a fresh session and assembles the result into an HTML file. A report that knits without errors is therefore proof that the analysis works — which is exactly why we ask for it.</p>
+<ol type="1">
+<li><em>File → New File → R Markdown…</em> → give it a title, choose <strong>HTML</strong> as the output format → <em>OK</em>. (If RStudio asks to install packages, confirm.)</li>
+<li>Save the file as <code>code/first-report.Rmd</code>.</li>
+<li>Click the <strong>Knit</strong> button. After a few seconds, an HTML document opens.</li>
+</ol>
+<div style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 2em; text-align: center; color: #58585a; margin: 1em 0;">
+<p><em>Screenshot placeholder: an R Markdown file in RStudio (YAML header, text, code chunk) next to the knitted HTML output</em><br>
+<code>img/onboarding/rmarkdown_knit.png</code></p>
+</div>
+<!-- ![An R Markdown file and its knitted output.](img/onboarding/rmarkdown_knit.png){width=95%} -->
+<p>An R Markdown file has three ingredients:</p>
+<ul>
+<li>The <strong>header</strong> between the two <code>---</code> lines at the top: title, author, output format.</li>
+<li><strong>Text</strong>, formatted with simple Markdown: <code>**bold**</code>, <code>*italic*</code>, <code># Heading</code>, <code>- bullet point</code>.</li>
+<li><strong>Code chunks</strong>, which start with <code>```{r}</code> and end with <code>```</code>. Insert a new chunk with <strong>Ctrl + Alt + I</strong> (Mac: <strong>Cmd + Option + I</strong>) and run it with the green arrow.</li>
+</ul>
+<p>Replace the template’s example content with your own. A minimal report looks like this:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "First report"</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Your name"</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="an">output:</span><span class="co"> html_document</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading the data</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>::: {.cell}</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="in">```{.r .cell-code}</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>music_url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/WU-RDS/MA2025/main/data/music_data_fin.csv"</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>music_data <span class="ot">&lt;-</span> <span class="fu">read_csv2</span>(music_url)</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>The data set contains <span class="in">`r nrow(music_data)`</span> tracks.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The last line shows <strong>inline code</strong>: <code>`r `</code> followed by an expression inserts its result directly into the text — so the number in your report is always the number in your data.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="The golden rule of reports">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>The golden rule of reports
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A report knits in a <em>fresh</em> R session. Everything the report needs — <code>library()</code> calls, loading the data, every intermediate step — must therefore be <em>in the report</em>. If your code works in the console but the report fails to knit, you are almost certainly relying on something that exists only in your current session.</p>
+</div>
+</div>
+</section>
+<section id="sec-onb-help" class="level2" data-number="A.8">
+<h2 data-number="A.8" class="anchored" data-anchor-id="sec-onb-help"><span class="header-section-number">A.8</span> Getting help — and working with AI assistants</h2>
+<p>Errors are part of working with R — for beginners and experts alike. They are not a sign that you are doing something wrong, but R’s way of telling you where to look.</p>
+<section id="reading-error-messages" class="level3" data-number="A.8.1">
+<h3 data-number="A.8.1" class="anchored" data-anchor-id="reading-error-messages"><span class="header-section-number">A.8.1</span> Reading error messages</h3>
+<p>Read the message <em>before</em> you do anything else: it usually names the problem. The most common ones:</p>
+<table class="table-striped caption-top table">
+<caption>Common error messages and what they mean</caption>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Message</th>
+<th>What it usually means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>could not find function "…"</code></td>
+<td>The package containing the function is not loaded — add <code>library(…)</code> — or the function name is misspelled.</td>
+</tr>
+<tr class="even">
+<td><code>object '…' not found</code></td>
+<td>The object does not exist (yet): a typo, a wrong capitalization, or the line that creates it has not been run.</td>
+</tr>
+<tr class="odd">
+<td><code>cannot open file '…': No such file or directory</code></td>
+<td>R looks for the file in the wrong place, or the file name is misspelled. Are you working in your RStudio Project?</td>
+</tr>
+<tr class="even">
+<td><code>unexpected symbol</code> / <code>unexpected ')'</code></td>
+<td>A syntax error: a missing comma, bracket, or quotation mark.</td>
+</tr>
+<tr class="odd">
+<td><code>there is no package called '…'</code></td>
+<td>The package is not installed yet — run <code>install.packages("…")</code> once.</td>
+</tr>
+<tr class="even">
+<td><code>$ operator is invalid for atomic vectors</code></td>
+<td>You used <code>$</code> on something that is not a data frame.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="asking-an-ai-assistant-well" class="level3" data-number="A.8.2">
+<h3 data-number="A.8.2" class="anchored" data-anchor-id="asking-an-ai-assistant-well"><span class="header-section-number">A.8.2</span> Asking an AI assistant — well</h3>
+<p>AI assistants are an endorsed study aid in this course (see the AI policy in the <a href="./00-introduction.html">Introduction</a>) and they are genuinely good at explaining error messages and suggesting code. How good the answer is depends on how good the question is:</p>
+<ul>
+<li><strong>Give context.</strong> Paste the code, the complete error message, and the output of <code>str(your_data)</code> — the assistant cannot see your data.</li>
+<li><strong>Ask for an explanation, not just a fix.</strong> “Why does this error occur, and what does the corrected line do differently?” teaches you something; “fix this” does not.</li>
+<li><strong>Verify.</strong> Run the suggested code and check that the result makes sense. AI assistants produce plausible-looking code that is sometimes subtly wrong — e.g., using a function from a package you have not loaded, or silently dropping missing values.</li>
+<li><strong>Build understanding step by step.</strong> Start with small requests and add complexity gradually. If you could not explain the resulting code to someone else, you are not done yet.</li>
+</ul>
+</section>
+<section id="other-sources-of-help" class="level3" data-number="A.8.3">
+<h3 data-number="A.8.3" class="anchored" data-anchor-id="other-sources-of-help"><span class="header-section-number">A.8.3</span> Other sources of help</h3>
+<ul>
+<li><strong>Help pages:</strong> <code>?function_name</code> explains a function’s arguments and shows examples at the bottom of the page.</li>
+<li><strong>The forum on Canvas:</strong> choose the relevant chapter, check whether your question has been asked before, and include your code <em>and</em> the error message (as text or screenshot). If you have the question, so do five others.</li>
+<li><strong>Cheat sheets:</strong> one-page summaries of the most important packages, available via <em>Help → Cheat Sheets</em> in RStudio.</li>
+<li><strong>R for Data Science</strong> (<a href="https://r4ds.hadley.nz" class="uri">https://r4ds.hadley.nz</a>) — the free standard introduction to the tidyverse.</li>
+</ul>
+</section>
+</section>
+<section id="sec-onb-checkpoint" class="level2" data-number="A.9">
+<h2 data-number="A.9" class="anchored" data-anchor-id="sec-onb-checkpoint"><span class="header-section-number">A.9</span> Checkpoint</h2>
+<p>You are ready for the second session if you can do the following in about ten minutes:</p>
+<ol type="1">
+<li>Open your RStudio Project (or Posit Cloud project).</li>
+<li>Create a new R Markdown file, delete the template content below the header, and insert one code chunk that loads the tidyverse and the course data (see <a href="#sec-onb-data" class="quarto-xref"><span>Section A.6</span></a>).</li>
+<li>Below the chunk, write one sentence that reports the number of tracks using inline code.</li>
+<li>Add a second chunk with <code>str(music_data)</code>.</li>
+<li>Knit the file to HTML.</li>
+</ol>
+<p>If the HTML opens and shows the structure of the data, your setup works. If not, work through <a href="#sec-onb-help" class="quarto-xref"><span>Section A.8</span></a> — and bring the problem to the setup clinic at the start of the second session.</p>
 
 
 </section>
