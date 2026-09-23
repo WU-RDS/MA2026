@@ -198,7 +198,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#course-structure" id="toc-course-structure" class="nav-link active" data-scroll-target="#course-structure">Course structure</a>
+  <li><a href="#course-goals" id="toc-course-goals" class="nav-link active" data-scroll-target="#course-goals">Course goals</a></li>
+  <li><a href="#course-structure" id="toc-course-structure" class="nav-link" data-scroll-target="#course-structure">Course structure</a>
   <ul class="collapse">
   <li><a href="#schedule" id="toc-schedule" class="nav-link" data-scroll-target="#schedule">Schedule</a></li>
   <li><a href="#grading" id="toc-grading" class="nav-link" data-scroll-target="#grading">Grading</a></li>
@@ -237,19 +238,20 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled" title="Still to be announced">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Still to be announced
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Two items will be finalized during the semester and announced here and on Canvas: the January dates for the <strong>video presentation submission</strong> and the <strong>peer review window</strong>, and the <strong>contact for assignment questions</strong>.</p>
-</div>
-</div>
+<section id="course-goals" class="level2">
+<h2 class="anchored" data-anchor-id="course-goals">Course goals</h2>
+<p>After taking this course, you should…</p>
+<ul>
+<li>…know why analytical skills have become <strong>career-defining</strong> for marketers — and which skills stay scarce when AI does the mechanics</li>
+<li>…know <strong>what data can and cannot tell you</strong> — and recognize which question you are actually asking: <em>describe, predict, explain, decide</em></li>
+<li>…know <strong>when to use which method</strong> — and which assumptions the answer rests on</li>
+<li>…be able to <strong>implement the methods in R</strong> — with AI assistants as accelerators, not replacements</li>
+<li>…be able to <strong>judge analyses made by others</strong> — a colleague’s slide deck, a platform dashboard, an AI-generated report</li>
+<li>…be able to <strong>conduct your own research project</strong> — from question to data to recommendation</li>
+<li>…no longer be <strong>afraid of numbers &amp; statistics</strong> (in case you were)</li>
+<li>…feel the <strong>desire to learn more</strong> about analytics</li>
+</ul>
+</section>
 <section id="course-structure" class="level2">
 <h2 class="anchored" data-anchor-id="course-structure">Course structure</h2>
 <p>This course combines weekly in-person sessions with self-study elements on this website. The syllabus consists of three main parts:</p>
@@ -259,16 +261,24 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>Group project</strong>: you will design and conduct your own market research project — including a real randomized experiment — and present the results in a pre-recorded video presentation.</li>
 </ol>
 <p><strong>Before the second session</strong>, complete the self-paced <a href="./r-onboarding.html">R onboarding module</a>, which walks you through installing R and RStudio (or working in Posit Cloud as a zero-install alternative). AI assistants are an endorsed study aid for setup problems.</p>
-<p>If questions come up, please use the <strong>forum on Canvas</strong> first — if you have the question, so do five others. Beyond that, we are available in the weekly sessions and the coaching sessions.</p>
+<p>If questions come up, please use the <strong>forum on Canvas</strong> and your <strong>AI assistant</strong> first — if you have the question, so do five others. Beyond that, we are available in the weekly sessions and the coaching sessions.</p>
 <section id="schedule" class="level3">
 <h3 class="anchored" data-anchor-id="schedule">Schedule</h3>
-<section id="lectures" class="level4">
-<h4 class="anchored" data-anchor-id="lectures">Lectures</h4>
+<section id="sessions" class="level4">
+<h4 class="anchored" data-anchor-id="sessions">Sessions</h4>
 <p><strong>Group A (Mondays)</strong></p>
 <table class="table-striped caption-top table">
-<caption>Lecture dates — Group A.</caption>
+<caption>Session dates — Group A.</caption>
+<colgroup>
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 40%">
+</colgroup>
 <thead>
 <tr class="header">
+<th style="text-align: center;">#</th>
 <th>Date</th>
 <th>Time</th>
 <th>Room</th>
@@ -277,60 +287,76 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td>Mo 05.10.</td>
+<td style="text-align: center;">1</td>
+<td>Mon, Oct 5</td>
 <td>13:00–16:00</td>
 <td>TC.4.03</td>
 <td>Questions, decisions &amp; data</td>
 </tr>
 <tr class="even">
-<td>Mo 12.10.</td>
+<td style="text-align: center;">2</td>
+<td>Mon, Oct 12</td>
 <td>13:00–17:00</td>
 <td>D3.0.233</td>
 <td>Describing data</td>
 </tr>
 <tr class="odd">
-<td>Mo 19.10.</td>
+<td style="text-align: center;">3</td>
+<td>Mon, Oct 19</td>
 <td>13:00–17:00</td>
 <td>D3.0.233</td>
-<td>Uncertainty &amp; first comparisons</td>
+<td>Uncertainty &amp; Experiments I</td>
 </tr>
 <tr class="even">
-<td>Di 27.10.</td>
+<td style="text-align: center;">4</td>
+<td>Tue, Oct 27</td>
 <td>13:00–16:00</td>
 <td>TC.5.05</td>
-<td>Experiments I</td>
-</tr>
-<tr class="odd">
-<td>Mo 02.11.</td>
-<td>13:00–16:00</td>
-<td>TC.4.03</td>
 <td>Experiments II</td>
 </tr>
-<tr class="even">
-<td>Mo 09.11.</td>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td>Mon, Nov 2</td>
 <td>13:00–16:00</td>
 <td>TC.4.03</td>
 <td>Observational data I</td>
 </tr>
-<tr class="odd">
-<td>Mo 16.11.</td>
+<tr class="even">
+<td style="text-align: center;">6</td>
+<td>Mon, Nov 9</td>
 <td>13:00–16:00</td>
 <td>TC.4.03</td>
 <td>Observational data II</td>
 </tr>
-<tr class="even">
-<td>Mo 23.11.</td>
+<tr class="odd">
+<td style="text-align: center;">7</td>
+<td>Mon, Nov 16</td>
 <td>13:00–16:00</td>
 <td>TC.4.03</td>
-<td>Observational data III</td>
+<td>Mechanisms &amp; heterogeneity</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">8</td>
+<td>Mon, Nov 23</td>
+<td>13:00–16:00</td>
+<td>TC.4.03</td>
+<td>Survey design</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Group B (Thursdays)</strong></p>
 <table class="table-striped caption-top table">
-<caption>Lecture dates — Group B.</caption>
+<caption>Session dates — Group B.</caption>
+<colgroup>
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 40%">
+</colgroup>
 <thead>
 <tr class="header">
+<th style="text-align: center;">#</th>
 <th>Date</th>
 <th>Time</th>
 <th>Room</th>
@@ -339,108 +365,117 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td>Do 08.10.</td>
+<td style="text-align: center;">1</td>
+<td>Thu, Oct 8</td>
 <td>13:00–16:00</td>
 <td>TC.5.03</td>
 <td>Questions, decisions &amp; data</td>
 </tr>
 <tr class="even">
-<td>Do 15.10.</td>
+<td style="text-align: center;">2</td>
+<td>Thu, Oct 15</td>
 <td>13:30–17:30</td>
 <td>TC.3.03</td>
 <td>Describing data</td>
 </tr>
 <tr class="odd">
-<td>Do 22.10.</td>
+<td style="text-align: center;">3</td>
+<td>Thu, Oct 22</td>
 <td>13:00–17:00</td>
 <td>TC.5.15</td>
-<td>Uncertainty &amp; first comparisons</td>
+<td>Uncertainty &amp; Experiments I</td>
 </tr>
 <tr class="even">
-<td>Do 29.10.</td>
-<td>13:00–16:00</td>
-<td>TC.5.03</td>
-<td>Experiments I</td>
-</tr>
-<tr class="odd">
-<td>Do 05.11.</td>
+<td style="text-align: center;">4</td>
+<td>Thu, Oct 29</td>
 <td>13:00–16:00</td>
 <td>TC.5.03</td>
 <td>Experiments II</td>
 </tr>
-<tr class="even">
-<td>Do 12.11.</td>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td>Thu, Nov 5</td>
 <td>13:00–16:00</td>
 <td>TC.5.03</td>
 <td>Observational data I</td>
 </tr>
-<tr class="odd">
-<td>Do 19.11.</td>
+<tr class="even">
+<td style="text-align: center;">6</td>
+<td>Thu, Nov 12</td>
 <td>13:00–16:00</td>
 <td>TC.5.03</td>
 <td>Observational data II</td>
 </tr>
+<tr class="odd">
+<td style="text-align: center;">7</td>
+<td>Thu, Nov 19</td>
+<td>13:00–16:00</td>
+<td>TC.5.03</td>
+<td>Mechanisms &amp; heterogeneity</td>
+</tr>
 <tr class="even">
-<td>Do 26.11.</td>
+<td style="text-align: center;">8</td>
+<td>Thu, Nov 26</td>
 <td>13:30–16:30</td>
 <td>TC.3.03</td>
-<td>Observational data III</td>
+<td>Survey design</td>
 </tr>
 </tbody>
 </table>
+<p><strong>Attendance:</strong> to pass the course, you need to be present for at least <strong>80%</strong> of the in-class time.</p>
 </section>
 <section id="group-project-milestones" class="level4">
 <h4 class="anchored" data-anchor-id="group-project-milestones">Group project milestones</h4>
 <table class="table-striped caption-top table">
 <caption>Group project milestones for both groups.</caption>
 <colgroup>
-<col style="width: 23%">
-<col style="width: 23%">
-<col style="width: 53%">
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Date</th>
-<th>Time</th>
 <th>Milestone</th>
+<th>Group A (Mondays)</th>
+<th>Group B (Thursdays)</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Mo 30.11. (A) / Do 03.12. (B)</td>
-<td>13:00–17:00 / 14:00–18:00</td>
 <td>Coaching I — questionnaire design <em>(online)</em></td>
+<td>Mon, Nov 30, 13:00–17:00</td>
+<td>Thu, Dec 3, 14:00–18:00</td>
 </tr>
 <tr class="even">
-<td>December</td>
-<td>—</td>
 <td>Field your survey</td>
+<td>December</td>
+<td>December</td>
 </tr>
 <tr class="odd">
-<td>Do 07.01. (A) / Fr 08.01. (B)</td>
-<td>13:00–17:00 / 14:00–18:00</td>
 <td>Coaching II — data analysis <em>(online)</em></td>
+<td>Thu, Jan 7, 13:00–17:00</td>
+<td>Fri, Jan 8, 14:00–18:00</td>
 </tr>
 <tr class="even">
-<td>January <em>(tbc)</em></td>
-<td>—</td>
-<td>Video presentation: submission</td>
+<td>Submission: video presentation</td>
+<td>Wed, Jan 20</td>
+<td>Wed, Jan 20</td>
 </tr>
 <tr class="odd">
-<td>January <em>(tbc)</em></td>
-<td>—</td>
-<td>Peer review of two videos</td>
+<td>Submission: peer review of two videos</td>
+<td>Mon, Jan 25</td>
+<td>Mon, Jan 25</td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="final-exam" class="level4">
 <h4 class="anchored" data-anchor-id="final-exam">Final exam</h4>
-<p>The <strong>final exam</strong> takes place on <strong>Tuesday, December 15, 10:00–12:00, in D5.0.001</strong> (both groups) — <strong>paper &amp; pencil, in person, open book</strong> (course slides may be used). The exam covers the concepts and methods of the course (no coding). An example exam will be provided on this site before the exam.</p>
+<p>The <strong>final exam</strong> takes place on <strong>Tuesday, December 15, 10:00–12:00, in D5.0.001</strong> (both groups) — <strong>paper &amp; pencil, in person, open book</strong> (course slides may be used). The exam covers the concepts and methods of the course (no coding). Example exams will be provided on Canvas before the exam.</p>
 </section>
 <section id="individual-assignments" class="level4">
 <h4 class="anchored" data-anchor-id="individual-assignments">Individual assignments</h4>
-<p>There are <strong>three individual assignments</strong>. Each is handed out in class, submitted as a <strong>reproducible report</strong> (.Rmd → HTML) via Canvas, and followed by a short <strong>in-class debrief</strong> — three short paper questions about <em>your</em> results at the start of the next session. <strong>Every student receives an individual dataset</strong>, so results and conclusions differ by design.</p>
+<p>There are <strong>three individual assignments</strong>. Each is handed out in class, submitted as a <strong>reproducible report</strong> (.Rmd → HTML) via Canvas, and followed by a short <strong>in-class debrief</strong> — three short paper questions about <em>your</em> results at the start of the next session. The <strong>submission deadline is always the day before the debrief session</strong>. <strong>Every student receives an individual dataset</strong>, so results and conclusions differ by design.</p>
 <p><strong>Group A (Mondays)</strong></p>
 <table class="table-striped caption-top table">
 <caption>Assignment schedule — Group A.</caption>
@@ -464,23 +499,23 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td>A1</td>
 <td>Data handling &amp; description in R</td>
-<td>Mo 12.10.</td>
-<td>Fr 23.10.</td>
-<td>Di 27.10.</td>
+<td>Mon, Oct 12</td>
+<td>Mon, Oct 26</td>
+<td>Tue, Oct 27</td>
 </tr>
 <tr class="even">
 <td>A2</td>
 <td>Analyzing experiments</td>
-<td>Mo 02.11.</td>
-<td>Fr 13.11.</td>
-<td>Mo 16.11.</td>
+<td>Tue, Oct 27</td>
+<td>Sun, Nov 8</td>
+<td>Mon, Nov 9</td>
 </tr>
 <tr class="odd">
 <td>A3</td>
-<td>Regression: from correlation to causal claims</td>
-<td>Mo 16.11.</td>
-<td>Fr 27.11.</td>
-<td>Mo 30.11.</td>
+<td>Analyzing observational data</td>
+<td>Mon, Nov 9</td>
+<td>Sun, Nov 22</td>
+<td>Mon, Nov 23</td>
 </tr>
 </tbody>
 </table>
@@ -507,23 +542,23 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td>A1</td>
 <td>Data handling &amp; description in R</td>
-<td>Do 15.10.</td>
-<td>Mo 26.10.</td>
-<td>Do 29.10.</td>
+<td>Thu, Oct 15</td>
+<td>Wed, Oct 28</td>
+<td>Thu, Oct 29</td>
 </tr>
 <tr class="even">
 <td>A2</td>
 <td>Analyzing experiments</td>
-<td>Do 05.11.</td>
-<td>Mo 16.11.</td>
-<td>Do 19.11.</td>
+<td>Thu, Oct 29</td>
+<td>Wed, Nov 11</td>
+<td>Thu, Nov 12</td>
 </tr>
 <tr class="odd">
 <td>A3</td>
-<td>Regression: from correlation to causal claims</td>
-<td>Do 19.11.</td>
-<td>Mo 30.11.</td>
-<td>Do 03.12.</td>
+<td>Analyzing observational data</td>
+<td>Thu, Nov 12</td>
+<td>Wed, Nov 25</td>
+<td>Thu, Nov 26</td>
 </tr>
 </tbody>
 </table>
@@ -541,14 +576,25 @@ ul.task-list li input[type="checkbox"] {
 <p><em>“How much AI is allowed?” — As much as you like, provided you can explain what was done and why.</em></p>
 </div>
 </div>
+<p><strong>Use it — but don’t let it study for you.</strong> Why is the policy designed this way? Recent evidence shows that the outcomes of AI use depend on <em>how</em> students use it. In a 30-month panel of 26,811 Chinese students, AI adoption increased homework scores by 18% and reduced homework time by 30% — but lowered exam scores by 20%, and entrance exam scores by 18–24% after two years. These losses were driven by the roughly 80% of students who <em>outsourced</em> their homework; students who used AI but spent the same amount of time on their homework showed no learning loss (Strömberg, Lei &amp; Wu, 2026; see also Autor et al., 2026, NBER Working Paper 35720; Bastani et al., 2025, <em>PNAS</em>; Kestin et al., 2025). The course design mirrors this evidence: the assignments are your homework, with AI allowed; the debriefs and the exam are the layer where you show what <em>you</em> have learned.</p>
 </section>
 <section id="group-project" class="level4">
 <h4 class="anchored" data-anchor-id="group-project">Group project</h4>
 <p>The group project consists of two parts:</p>
 <ol type="1">
-<li><strong>Questionnaire design &amp; data collection</strong>: your group picks one of the proposed topics (or suggests its own) and designs a questionnaire of <strong>≈ 30 questions</strong> (~5 per member) in <strong>Qualtrics</strong> (free account provided). The design contains a <strong>real experiment</strong> with random assignment of participants to conditions. You present your draft in <strong>Coaching I</strong> (research problem, design, measurement, planned analyses), receive feedback, and revise. Each member then recruits <strong>≈ 20 respondents</strong>, i.e.&nbsp;<strong>≈ 120 responses</strong> per group.</li>
-<li><strong>Data analysis &amp; presentation</strong>: you import and clean your Qualtrics data in R and analyze it — descriptives, your experimental comparison, and heterogeneity. <strong>Coaching II</strong> (online) is dedicated to working through your analysis. You submit a .zip containing the <strong>pre-recorded video presentation</strong>, the data, the reproducible R code, and your slides. Afterwards, each student <strong>peer reviews two other groups’ videos</strong> (counts toward participation).</li>
+<li><strong>Questionnaire design &amp; data collection</strong>: your group picks one of <strong>14 proposed topics</strong> (with starter literature) or suggests its own, and designs a questionnaire of <strong>≈ 30 questions</strong> (~5 per member) in <strong>Qualtrics</strong> (free account provided). The design contains a <strong>real experiment</strong> with random assignment of participants to conditions. You present your draft in <strong>Coaching I</strong> (research problem, design, measurement, planned analyses), receive feedback, and revise. Each member then recruits <strong>≈ 20 respondents</strong>, i.e.&nbsp;<strong>≈ 120 responses</strong> per group.</li>
+<li><strong>Data analysis &amp; presentation</strong>: you import and clean your Qualtrics data in R and analyze it — descriptives, your experimental comparison, and heterogeneity (for whom does it work?). <strong>Coaching II</strong> (online) is dedicated to working through your analysis. You submit a .zip containing the <strong>pre-recorded video presentation</strong>, the data, the reproducible R code, and your slides. Afterwards, each student <strong>peer reviews two other groups’ videos</strong> (counts toward participation).</li>
 </ol>
+<p>What makes a good project?</p>
+<ul>
+<li>A <strong>precise research question</strong> with managerial relevance — and hypotheses stated <em>before</em> data collection</li>
+<li>A clean <strong>experimental manipulation</strong>: everything constant except the treatment; randomizer placed correctly</li>
+<li><strong>Keep it simple</strong>: two conditions are sufficient (your sample size will be limited)</li>
+<li><strong>Deliberate measurement</strong>: a dependent variable with real variation (e.g., willingness to pay)</li>
+<li><strong>Moderators</strong> to analyze heterogeneous treatment responses, and <strong>mediators</strong> to understand the process</li>
+<li>Analyses <strong>matched to the design</strong> — justified test choice, honest uncertainty, assumptions checked</li>
+<li>A presentation that <strong>tells the decision-maker what to do</strong> — not a parade of charts</li>
+</ul>
 <p><strong>Individual grades</strong>: a peer assessment among group members and a short <strong>contribution &amp; AI-use statement</strong> enter the individual grade, and <strong>every member presents a substantive part on camera</strong>.</p>
 <p>Detailed guidelines, the topic list, and Qualtrics how-tos: see the appendices on <a href="questionnaire-design.qmd">questionnaire design</a> and the <a href="group-project.qmd">group project</a>.</p>
 </section>
@@ -574,11 +620,11 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="even">
 <td style="text-align: left;">Individual <strong>take-home assignments</strong> (3 × reproducible report + <strong>in-class debrief</strong>)</td>
-<td style="text-align: center;">20%</td>
+<td style="text-align: center;">30%</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><strong>Final exam</strong> (concepts &amp; methods — no coding · <strong>course slides may be used</strong>, paper &amp; pencil, in person)</td>
-<td style="text-align: center;">40%</td>
+<td style="text-align: center;">30%</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><strong>Class participation</strong> (weekly quizzes · debriefs · video peer review · in class &amp; forum)</td>
@@ -588,6 +634,7 @@ ul.task-list li input[type="checkbox"] {
 </table>
 <ul>
 <li>To pass, your <strong>weighted final grade must reach at least 60%</strong> — across all components combined; there is no minimum per component.</li>
+<li>In addition, you need to be <strong>present for at least 80%</strong> of the in-class time.</li>
 <li>Participation is <strong>more than showing up</strong>: the quizzes, debriefs, and the video peer review form the documented base — the rest comes from <strong>active contributions</strong> in class and in the forum (quality over quantity).</li>
 </ul>
 <table class="table-striped caption-top table">
@@ -664,7 +711,12 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="contact" class="level3">
 <h3 class="anchored" data-anchor-id="contact">Contact</h3>
-<p>We are happy to answer your questions, so feel free to send a short email — the contact for the individual assignments will be announced here, and you can reach me (<a href="mailto:nils.wloemert@wu.ac.at" class="email">nils.wloemert@wu.ac.at</a>) for the lectures and the group project. We will be available during the weekly sessions to clarify your questions. <strong>However, please note that before you contact us, you should try to solve problems on your own first</strong> (e.g., by using this website, your AI assistant of choice, the online forum, or discussion with your classmates).</p>
+<p>We are happy to answer your questions, so feel free to send a short email:</p>
+<ul>
+<li><strong>Lectures &amp; group project:</strong> Univ.Prof. Dr.&nbsp;Nils Wlömert (<a href="mailto:nils.wloemert@wu.ac.at" class="email">nils.wloemert@wu.ac.at</a>)</li>
+<li><strong>Individual assignments:</strong> Anna Di Donato (<a href="mailto:anna.di.donato@wu.ac.at" class="email">anna.di.donato@wu.ac.at</a>)</li>
+</ul>
+<p>We will be available during the weekly sessions to clarify your questions. <strong>However, please note that before you contact us, you should try to solve problems on your own first</strong> — by using this website, your AI assistant of choice, the forum on Canvas, or by asking in class.</p>
 </section>
 <section id="acknowledgements" class="level3">
 <h3 class="anchored" data-anchor-id="acknowledgements">Acknowledgements</h3>

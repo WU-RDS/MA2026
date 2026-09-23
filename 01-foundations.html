@@ -132,6 +132,35 @@ div.csl-indent {
 <script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
 <link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="book-style.css">
 </head>
@@ -259,9 +288,11 @@ div.csl-indent {
   <li><a href="#sec-four-questions" id="toc-sec-four-questions" class="nav-link" data-scroll-target="#sec-four-questions"><span class="header-section-number">1.3</span> Four kinds of questions</a></li>
   <li><a href="#sec-dgp" id="toc-sec-dgp" class="nav-link" data-scroll-target="#sec-dgp"><span class="header-section-number">1.4</span> Correlation, causation, and what data can show</a>
   <ul class="collapse">
-  <li><a href="#two-pictures-of-x-relates-to-y" id="toc-two-pictures-of-x-relates-to-y" class="nav-link" data-scroll-target="#two-pictures-of-x-relates-to-y"><span class="header-section-number">1.4.1</span> Two pictures of “X relates to Y”</a></li>
-  <li><a href="#three-ways-to-get-the-same-scatter-plot" id="toc-three-ways-to-get-the-same-scatter-plot" class="nav-link" data-scroll-target="#three-ways-to-get-the-same-scatter-plot"><span class="header-section-number">1.4.2</span> Three ways to get the same scatter plot</a></li>
-  <li><a href="#reverse-causality" id="toc-reverse-causality" class="nav-link" data-scroll-target="#reverse-causality"><span class="header-section-number">1.4.3</span> Reverse causality</a></li>
+  <li><a href="#did-internet-explorer-prevent-murders" id="toc-did-internet-explorer-prevent-murders" class="nav-link" data-scroll-target="#did-internet-explorer-prevent-murders"><span class="header-section-number">1.4.1</span> Did Internet Explorer prevent murders?</a></li>
+  <li><a href="#two-pictures-of-x-relates-to-y" id="toc-two-pictures-of-x-relates-to-y" class="nav-link" data-scroll-target="#two-pictures-of-x-relates-to-y"><span class="header-section-number">1.4.2</span> Two pictures of “X relates to Y”</a></li>
+  <li><a href="#four-ways-to-get-the-same-scatter-plot" id="toc-four-ways-to-get-the-same-scatter-plot" class="nav-link" data-scroll-target="#four-ways-to-get-the-same-scatter-plot"><span class="header-section-number">1.4.3</span> Four ways to get the same scatter plot</a></li>
+  <li><a href="#reverse-causality" id="toc-reverse-causality" class="nav-link" data-scroll-target="#reverse-causality"><span class="header-section-number">1.4.4</span> Reverse causality</a></li>
+  <li><a href="#the-classical-conditions-for-causality" id="toc-the-classical-conditions-for-causality" class="nav-link" data-scroll-target="#the-classical-conditions-for-causality"><span class="header-section-number">1.4.5</span> The classical conditions for causality</a></li>
   </ul></li>
   <li><a href="#sec-cast" id="toc-sec-cast" class="nav-link" data-scroll-target="#sec-cast"><span class="header-section-number">1.5</span> The cast of variables</a>
   <ul class="collapse">
@@ -275,9 +306,18 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#randomization-cuts-every-arrow-into-the-treatment" id="toc-randomization-cuts-every-arrow-into-the-treatment" class="nav-link" data-scroll-target="#randomization-cuts-every-arrow-into-the-treatment"><span class="header-section-number">1.6.1</span> Randomization cuts every arrow into the treatment</a></li>
   <li><a href="#seeing-it-balanced-even-on-the-unmeasured" id="toc-seeing-it-balanced-even-on-the-unmeasured" class="nav-link" data-scroll-target="#seeing-it-balanced-even-on-the-unmeasured"><span class="header-section-number">1.6.2</span> Seeing it: balanced even on the unmeasured</a></li>
-  <li><a href="#the-price-of-observational-data" id="toc-the-price-of-observational-data" class="nav-link" data-scroll-target="#the-price-of-observational-data"><span class="header-section-number">1.6.3</span> The price of observational data</a></li>
+  <li><a href="#two-ways-to-randomize-between-vs.-within-subjects" id="toc-two-ways-to-randomize-between-vs.-within-subjects" class="nav-link" data-scroll-target="#two-ways-to-randomize-between-vs.-within-subjects"><span class="header-section-number">1.6.3</span> Two ways to randomize: between vs.&nbsp;within subjects</a></li>
+  <li><a href="#why-the-industry-runs-on-experiments" id="toc-why-the-industry-runs-on-experiments" class="nav-link" data-scroll-target="#why-the-industry-runs-on-experiments"><span class="header-section-number">1.6.4</span> Why the industry runs on experiments</a></li>
+  <li><a href="#running-field-experiments-well" id="toc-running-field-experiments-well" class="nav-link" data-scroll-target="#running-field-experiments-well"><span class="header-section-number">1.6.5</span> Running field experiments well</a></li>
+  <li><a href="#the-price-of-observational-data" id="toc-the-price-of-observational-data" class="nav-link" data-scroll-target="#the-price-of-observational-data"><span class="header-section-number">1.6.6</span> The price of observational data</a></li>
+  <li><a href="#when-the-algorithm-does-the-selecting" id="toc-when-the-algorithm-does-the-selecting" class="nav-link" data-scroll-target="#when-the-algorithm-does-the-selecting"><span class="header-section-number">1.6.7</span> When the algorithm does the selecting</a></li>
   </ul></li>
-  <li><a href="#sec-quasi" id="toc-sec-quasi" class="nav-link" data-scroll-target="#sec-quasi"><span class="header-section-number">1.7</span> Between the poles: quasi-experiments</a></li>
+  <li><a href="#sec-quasi" id="toc-sec-quasi" class="nav-link" data-scroll-target="#sec-quasi"><span class="header-section-number">1.7</span> Between the poles: quasi-experiments</a>
+  <ul class="collapse">
+  <li><a href="#example-does-streaming-cannibalize-music-sales" id="toc-example-does-streaming-cannibalize-music-sales" class="nav-link" data-scroll-target="#example-does-streaming-cannibalize-music-sales"><span class="header-section-number">1.7.1</span> Example: does streaming cannibalize music sales?</a></li>
+  <li><a href="#difference-in-differences-the-logic" id="toc-difference-in-differences-the-logic" class="nav-link" data-scroll-target="#difference-in-differences-the-logic"><span class="header-section-number">1.7.2</span> Difference-in-differences: the logic</a></li>
+  <li><a href="#did-in-action-the-spotify-example" id="toc-did-in-action-the-spotify-example" class="nav-link" data-scroll-target="#did-in-action-the-spotify-example"><span class="header-section-number">1.7.3</span> DiD in action: the Spotify example</a></li>
+  </ul></li>
   <li><a href="#sec-design" id="toc-sec-design" class="nav-link" data-scroll-target="#sec-design"><span class="header-section-number">1.8</span> From business problem to research design</a></li>
   <li><a href="#sec-ai" id="toc-sec-ai" class="nav-link" data-scroll-target="#sec-ai"><span class="header-section-number">1.9</span> The analytics workflow — and AI assistants</a></li>
   <li><a href="#sec-course-map" id="toc-sec-course-map" class="nav-link" data-scroll-target="#sec-course-map"><span class="header-section-number">1.10</span> The course at a glance</a></li>
@@ -318,15 +358,16 @@ div.csl-indent {
 </div>
 </div>
 </div>
-<p>This chapter lays the foundation for everything that follows in this course. Its goal is <em>not</em> to teach you a statistical method — no formulas, no R output, no tests will appear on the following pages. Instead, this chapter will equip you with a way of thinking about data that separates good analysts from dangerous ones: the ability to recognize <strong>which question you are actually asking</strong>, <strong>what your data can and cannot tell you</strong>, and <strong>why two analyses that look identical can support completely different conclusions</strong>. After working through this chapter you will be able to:</p>
+<p>This chapter lays the foundation for everything that follows in this course. Its goal is <em>not</em> to teach you a statistical method — no R output and no tests will appear on the following pages, and the only formula is a simple difference of differences. Instead, this chapter will equip you with a way of thinking about data that separates good analysts from dangerous ones: the ability to recognize <strong>which question you are actually asking</strong>, <strong>what your data can and cannot tell you</strong>, and <strong>why two analyses that look identical can support completely different conclusions</strong>. After working through this chapter you will be able to:</p>
 <ul>
 <li>Distinguish the four types of questions that analytics can answer — descriptive, predictive, causal, and prescriptive — and explain why most managerial decisions ultimately depend on the causal one</li>
 <li>Explain what a counterfactual is and why causal claims are always claims about counterfactuals</li>
-<li>Recognize the roles that variables can play in an analysis: outcome, treatment, confounder, mediator, and moderator</li>
+<li>Recognize the roles that variables can play in an analysis: outcome, treatment, confounder, mediator, and moderator — and recognize selection bias when you see it</li>
 <li>Explain why randomization licenses causal conclusions — and what must be <em>assumed</em> when we work with data that were not randomized</li>
+<li>Explain the logic of quasi-experiments and of the difference-in-differences comparison</li>
 <li>Translate a vague management problem into a precise, answerable research question</li>
 </ul>
-<p>Everything else in this course — summary statistics, standard errors, tests, regression, panel data methods — exists to serve the ideas in this chapter.</p>
+<p>Everything else in this course — summary statistics, standard errors, tests, regression, mediation and moderation analysis — exists to serve the ideas in this chapter.</p>
 <section id="sec-why-data" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="sec-why-data"><span class="header-section-number">1.1</span> Why marketing runs on data</h2>
 <p>The task of allocating marketing budgets effectively has always been plagued by uncertainty. As the nineteenth-century Philadelphia retailer John Wanamaker supposedly said:</p>
@@ -334,13 +375,35 @@ div.csl-indent {
 <p>“Half the money I spend on advertising is wasted; the trouble is I don’t know which half.”</p>
 <p>— John Wanamaker</p>
 </blockquote>
-<p>More than a century later, the underlying problem is unchanged — but the environment has been transformed. Every purchase, click, swipe, share, and like leaves a trace, and most firms today sit on far more behavioral data than they are able to use. Surveys among marketing executives consistently rank data and analytics competence among the most important changes to the marketing profession, and the ability to make data-driven decisions has become a baseline expectation for marketing careers rather than a specialist skill.</p>
-<p>This has an important implication for what you should take away from this course. The bottleneck in modern marketing organizations is rarely the <em>production</em> of numbers — dashboards, tracking tools, and, increasingly, AI assistants produce numbers in abundance and at almost no cost. The bottleneck is <strong>judgment</strong>: knowing which analysis answers which question, what a given number does and does not license you to conclude, and where an analysis can silently go wrong. That judgment is what this course trains. The story in the next section shows what happens when it is missing — even at a company with world-class data and world-class analysts.</p>
+<p>More than a century later, the underlying problem is unchanged — but the environment has been transformed. Every purchase, click, swipe, share, and like leaves a trace, and most firms today sit on far more behavioral data than they are able to use. Three developments make analytical skills more important for marketers today than ever before.</p>
+<p><strong>First, marketing is reorganizing around AI and data.</strong> According to the 35th edition of The CMO Survey <span class="citation" data-cites="cmosurvey2026">(<a href="01-foundations.html#ref-cmosurvey2026" role="doc-biblioref">Moorman 2026</a>)</span>, a survey of 308 U.S. marketing leaders, AI and machine learning already perform about a quarter of all marketing activities — nearly twice the share of two years earlier (<a href="#fig-ai-adoption" class="quarto-xref">Figure&nbsp;<span>1.1</span></a>). Generative AI alone grew from 7.0% to 22.4% of marketing activities over the same period (+220%). And marketing leaders expect <strong>more than half</strong> of all marketing work to be performed by AI within three years. The activities that lead the adoption list — content creation, personalization, data analysis and reporting, targeting — are the mechanical layer of marketing work.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-ai-adoption" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ai-adoption-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-ai-adoption-1.png" class="img-fluid figure-img" width="1400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ai-adoption-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: Share of marketing activities performed by AI/ML, as reported by U.S. marketing leaders (The CMO Survey, 2026).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Second, budgets are flat — so every euro must justify itself.</strong> Total marketing spending grew by only 1.7%, the weakest growth since 2021, while 15.3% of marketing budgets now go to AI initiatives <span class="citation" data-cites="cmosurvey2026 gartner2026">(<a href="01-foundations.html#ref-cmosurvey2026" role="doc-biblioref">Moorman 2026</a>; <a href="01-foundations.html#ref-gartner2026" role="doc-biblioref">Gartner 2026</a>)</span>. Asked why their organizations invest in marketing capabilities, 78.2% of marketing leaders name the goal of achieving a higher return per marketing dollar as the most important reason <span class="citation" data-cites="cmosurvey2026">(<a href="01-foundations.html#ref-cmosurvey2026" role="doc-biblioref">Moorman 2026</a>)</span>. Gartner’s 2026 CMO Spend Survey of 401 CMOs in North America and Europe sums up the situation:</p>
+<blockquote class="blockquote">
+<p>“CMOs are being asked to deliver growth, efficiency and transformation without meaningful budget expansion. Those who succeed will make deliberate, data-driven trade-offs.”</p>
+<p>— Gartner CMO Spend Survey (2026)</p>
+</blockquote>
+<p>Flat budgets combined with rising expectations are exactly the environment in which measurement wins arguments: analytics is how a marketer defends a budget.</p>
+<p><strong>Third, the scarce skill is judgment.</strong> 70% of CMOs consider becoming an AI leader a critical goal — but only 30% say their organization is ready to scale AI capabilities <span class="citation" data-cites="gartner2026">(<a href="01-foundations.html#ref-gartner2026" role="doc-biblioref">Gartner 2026</a>)</span>. The labor market data point in the same direction: in the World Economic Forum’s <em>Future of Jobs Report 2025</em>, analytical thinking is the most important core skill (seven out of ten employers consider it essential), and AI and big data are the fastest-growing skills for 2025–2030 <span class="citation" data-cites="wef2025">(<a href="01-foundations.html#ref-wef2025" role="doc-biblioref">World Economic Forum 2025</a>)</span>.</p>
+<p>This has an important implication for what you should take away from this course. The bottleneck in modern marketing organizations is rarely the <em>production</em> of numbers — dashboards, tracking tools, and, increasingly, AI assistants produce numbers in abundance and at almost no cost. <strong>The mechanical layer of marketing is being automated; what remains scarce is judgment</strong>: knowing which analysis answers which managerial question, what a given number does and does not license you to conclude, and where an analysis can silently go wrong. That judgment is what this course trains. The story in the next section shows what happens when it is missing — even at a company with world-class data and world-class analysts.</p>
 </section>
 <section id="sec-ebay" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="sec-ebay"><span class="header-section-number">1.2</span> A $50 million question</h2>
-<p>In the early 2010s, eBay was spending roughly $50 million <em>per year</em> on paid search advertising — the sponsored links that appear above the results on Google, Bing, and Yahoo when users search for terms like “ebay shoes” or simply “ebay”. Was that money well spent?</p>
-<p>The data seemed to leave little doubt. Users who were exposed to eBay’s search ads purchased far more than users who were not — <a href="#fig-ebay-naive" class="quarto-xref">Figure&nbsp;<span>1.1</span></a> shows a stylized version of this comparison, with each dot representing one user. Measured this way, the return on advertising looked spectacular — the kind of number that makes a budget discussion very short. (Aggregate patterns told the same story: weeks with more advertising were weeks with more sales — a correlation with problems of its own, to which we return in <a href="#sec-dgp" class="quarto-xref"><span>Section 1.4</span></a>.)</p>
+<p>Around 2012, eBay was spending roughly $50 million <em>per year</em> on paid search advertising — the sponsored links that appear above the results on Google, Bing, and Yahoo! when users search for terms like “used gibson les paul” or simply “ebay”. Was that money well spent?</p>
+<p>The data seemed to leave little doubt. Users who were exposed to eBay’s search ads purchased far more than users who were not — <a href="#fig-ebay-naive" class="quarto-xref">Figure&nbsp;<span>1.2</span></a> shows a stylized version of this comparison, with each dot representing one user. Measured this way, the return on advertising looked spectacular — the kind of number that makes a budget discussion very short. (Aggregate patterns told the same story: weeks with more advertising were weeks with more sales — a correlation with problems of its own, to which we return in <a href="#sec-dgp" class="quarto-xref"><span>Section 1.4</span></a>.)</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Under the hood: where the naive numbers came from">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -365,16 +428,71 @@ div.csl-indent {
 <img src="01-foundations_files/figure-html/fig-ebay-naive-1.png" class="img-fluid figure-img" width="1400">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ebay-naive-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.1: A stylized version of the evidence for eBay’s search advertising: users exposed to the ads purchased far more, on average, than unexposed users. The groups are self-selected — in this simulation, purchases are driven entirely by (unobserved) intent, and the true effect of ad exposure is exactly zero.
+Figure&nbsp;1.2: A stylized version of the evidence for eBay’s search advertising: users exposed to the ads purchased far more, on average, than unexposed users. The groups are self-selected — in this simulation, purchases are driven entirely by (unobserved) intent, and the true effect of ad exposure is exactly zero.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Before reading on, pause for a moment and ask yourself: would you keep spending the $50 million? And is there anything that could be wrong with the conclusion that the ads are working?</p>
-<p>Here is what happened next. A team of economists working inside eBay ran a series of large-scale field experiments <span class="citation" data-cites="blake2015">(<a href="01-foundations.html#ref-blake2015" role="doc-biblioref">Blake et al. 2015</a>)</span>. First, eBay <strong>halted all brand-keyword ads</strong> (queries containing “ebay”) on Yahoo! and Microsoft’s search engines, while keeping them running on Google as a comparison. If the ads were driving the attributed sales, traffic and sales should have collapsed on the affected platforms.</p>
-<p>They barely moved: about <strong>99.5% of the paid click traffic simply returned through the free organic link</strong> sitting directly below where the ad had been. The users who had clicked the ad for “ebay” were people who had <em>searched</em> for eBay — on their way to the site anyway. Second, for non-brand keywords (“used guitar”, “cheap shoes”), eBay <strong>suspended all search advertising in a randomly selected ~30% of US regions for 60 days</strong> and compared the change in sales against the unaffected regions. The ads turned out to influence only new and infrequent users, while the frequent shoppers who generate most clicks (and most ad cost) were unmoved — making the average returns on the spending <em>negative</em>.</p>
-<p>Take a moment to appreciate what went wrong here — because it was not a lack of data, computing power, or intelligence. The naive analysis compared people <strong>with purchase intent</strong> (those who searched and saw the ad) to people <strong>without purchase intent</strong> (those who never searched) and credited the entire difference to the advertising. The comparison was flawed, and no amount of additional data would have fixed it. More data would only have made the wrong answer more precise.</p>
+<p>Before reading on, pause for a moment and ask yourself: as eBay’s CMO, would you sign off on next year’s $50 million based on this evidence? And if not — how would you measure the payoff instead?</p>
+<p>Here is what happened next. A team of economists working inside eBay ran a series of large-scale field experiments <span class="citation" data-cites="blake2015">(<a href="01-foundations.html#ref-blake2015" role="doc-biblioref">Blake et al. 2015</a>)</span>. First, eBay <strong>halted all brand-keyword ads</strong> (queries containing “ebay”) — in March 2012 on Microsoft’s search engine, with Google serving as a comparison, and in summer 2012 on Google itself. If the ads were driving the attributed sales, traffic and sales should have collapsed.</p>
+<p>They barely moved: paid clicks fell to zero, but about <strong>99.5% of that traffic instantly reappeared through the free organic link</strong> sitting directly below where the ad had been; total visits to eBay were essentially unchanged. The users who had clicked the ad for “ebay” were people who had <em>searched</em> for eBay — on their way to the site anyway. The attributed revenue had been almost entirely <em>re-labeled</em>, not <em>created</em>. Second, for non-brand keywords (“used guitar”, “cheap shoes”), eBay <strong>suspended all search advertising in a randomly selected ~30% of US regions for 60 days</strong> and compared the change in <em>total</em> sales against the remaining regions — a real comparison group, created by design. The ads turned out to influence only new and infrequent users, while the frequent shoppers who generate most clicks (and most ad cost) were unmoved. The customers most likely to click were the customers least influenced — and averaged over everyone, the returns on the spending were <em>negative</em>.</p>
+<p>Take a moment to appreciate what went wrong here — because it was not a lack of data, computing power, or intelligence. The naive analysis compared people <strong>with purchase intent</strong> (those who searched and saw the ad) to people <strong>without purchase intent</strong> (those who never searched) and credited the entire difference to the advertising. <a href="#fig-ebay-dag" class="quarto-xref">Figure&nbsp;<span>1.3</span></a> makes this structure explicit: purchase intent drives both who sees the ads <em>and</em> who buys. The dashboard’s correlation mixes the ad effect with the intent difference — and in this case, intent was nearly the whole story. The problem was not the math; it was the comparison. And no amount of additional data would have fixed it: more data would only have made the wrong answer more precise.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-ebay-dag" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ebay-dag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-ebay-dag-1.png" class="img-fluid figure-img" width="1400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ebay-dag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.3: Why the dashboard and the experiment disagree: unobserved purchase intent drives both ad exposure and sales. The dashed arrow is the effect in question — for brand keywords, it turned out to be close to zero.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The comparison eBay actually needed is summarized in <a href="#tbl-ebay-comparison" class="quarto-xref">Table&nbsp;<span>1.1</span></a>.</p>
+<div id="tbl-ebay-comparison" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ebay-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.1: The comparison that matters
+</figcaption>
+<div aria-describedby="tbl-ebay-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">What eBay <strong>observed</strong></th>
+<th style="text-align: left;">What the decision <strong>needs</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Group A</td>
+<td style="text-align: left;">Users arriving via <strong>paid search</strong></td>
+<td style="text-align: left;">The same users, <strong>with</strong> ads</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Group B</td>
+<td style="text-align: left;">Users arriving via <strong>other channels</strong></td>
+<td style="text-align: left;"><strong>The same users, without ads</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">The difference measures…</td>
+<td style="text-align: left;">Ad effect <strong>+ intent difference</strong></td>
+<td style="text-align: left;">The ad effect. <strong>Nothing else</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
 <div class="callout callout-style-default callout-important callout-titled" title="The counterfactual">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -385,10 +503,10 @@ Figure&nbsp;1.1: A stylized version of the evidence for eBay’s search advertis
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The question eBay actually needed to answer was: <em>what would our sales have been <strong>without</strong> the ads — everything else unchanged?</em> This hypothetical alternative world is called the <strong>counterfactual</strong>. A causal claim (“the ads increased sales by X”) is always a comparison between the world we observed and a counterfactual world we did not observe. Since we can never observe both worlds at once, all of causal inference is about constructing a credible <strong>stand-in</strong> for the counterfactual. The exposed and unexposed users in eBay’s data were <em>not</em> credible stand-ins for one another — they differed in exactly the characteristic that mattered most (intent). The experiment’s randomly switched-off regions <em>were</em> credible stand-ins. That single difference was worth about $50 million a year.</p>
+<p>The question eBay actually needed to answer was: <em>what would our sales have been <strong>without</strong> the ads — everything else unchanged?</em> This hypothetical alternative world is called the <strong>counterfactual</strong>. A causal claim (“the ads increased sales by X”) is always a comparison between the world we observed and a counterfactual world we did not observe. Since we can never observe both worlds at once, all of causal inference is about constructing a credible <strong>stand-in</strong> for the counterfactual — and how well such a stand-in can be constructed depends on <strong>how the data came into being</strong>. The exposed and unexposed users in eBay’s data were <em>not</em> credible stand-ins for one another — they differed in exactly the characteristic that mattered most (intent). The experiment’s randomly switched-off regions <em>were</em> credible stand-ins. That single difference was worth about $50 million a year.</p>
 </div>
 </div>
-<p>This story sets the agenda for the entire course. To avoid eBay’s mistake, you need to know which type of question you are asking (<a href="#sec-four-questions" class="quarto-xref"><span>Section 1.3</span></a>), how your data came into being (<a href="#sec-dgp" class="quarto-xref"><span>Section 1.4</span></a> is where we return to this), which variables are playing which roles (<a href="#sec-cast" class="quarto-xref"><span>Section 1.5</span></a>), and why randomization has the special status it has (<a href="#sec-randomization" class="quarto-xref"><span>Section 1.6</span></a>).</p>
+<p>This story sets the agenda for the entire course. To avoid eBay’s mistake, you need to know which type of question you are asking (<a href="#sec-four-questions" class="quarto-xref"><span>Section 1.3</span></a>), how your data came into being (<a href="#sec-dgp" class="quarto-xref"><span>Section 1.4</span></a>), which variables are playing which roles (<a href="#sec-cast" class="quarto-xref"><span>Section 1.5</span></a>), and why randomization has the special status it has (<a href="#sec-randomization" class="quarto-xref"><span>Section 1.6</span></a>).</p>
 </section>
 <section id="sec-four-questions" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="sec-four-questions"><span class="header-section-number">1.3</span> Four kinds of questions</h2>
@@ -396,7 +514,7 @@ Figure&nbsp;1.1: A stylized version of the evidence for eBay’s search advertis
 <div id="tbl-four-questions" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-four-questions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1.1: The four kinds of analytics questions
+Table&nbsp;1.2: The four kinds of analytics questions
 </figcaption>
 <div aria-describedby="tbl-four-questions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -445,9 +563,60 @@ Table&nbsp;1.1: The four kinds of analytics questions
 </figure>
 </div>
 <p><strong>Descriptive questions</strong> ask you to capture and compactly represent the structure of your data: summarizing, visualizing, segmenting. Descriptive analysis is where every project starts — you cannot model data you do not understand — and it is the subject of Module 2.</p>
-<p><strong>Predictive questions</strong> ask you to forecast an unknown outcome from known inputs. The defining feature of prediction is that you do <em>not</em> need to understand <em>why</em> the inputs relate to the outcome; you only need the relationship to be stable. If customers who read your newsletter churn less, then newsletter readership is a useful churn predictor — <em>even if the newsletter itself does absolutely nothing</em>, because readership may simply reveal engagement. For targeting purposes (“flag the non-readers as churn risks”), that is perfectly fine.</p>
+<p><strong>Predictive questions</strong> ask you to forecast an unknown outcome from known inputs. The defining feature of prediction is that you do <em>not</em> need to understand <em>why</em> the inputs relate to the outcome; you only need the relationship to be stable. If customers who read your newsletter churn 40% less, then newsletter readership is a useful churn predictor — <em>even if the newsletter itself does absolutely nothing</em>, because readership may simply reveal engagement. For targeting purposes (“flag the non-readers as churn risks”), that is perfectly fine.</p>
 <p><strong>Causal questions</strong> ask what an <em>intervention</em> would change: they compare the observed world to a counterfactual. This is a fundamentally harder question, because the counterfactual is unobservable. Note the contrast with prediction: the newsletter’s predictive value tells you <em>nothing</em> about whether sending more newsletters would reduce churn. That would only follow if readership <em>causes</em> retention — and engaged customers both read newsletters <em>and</em> stay, whether or not the newsletter does anything.</p>
 <p><strong>Prescriptive questions</strong> — what should we do? — are the questions managers are actually paid to answer. And here is the crucial link: <strong>prescription requires causation</strong>. To choose between actions, you must know what each action would <em>cause</em>; that is, you must compare counterfactuals. A prediction, however accurate, is not a basis for action on the predicted variable itself. Confusing question 2 with question 3 — using a predictive relationship as if it described the effect of an intervention — is precisely the eBay mistake, and it is the most common serious error in applied analytics.</p>
+<p><a href="#tbl-four-analytics" class="quarto-xref">Table&nbsp;<span>1.3</span></a> shows what each type of question demands from the data and which methods typically answer it — using the same online store in every column. Notice the second row: the four questions differ not only in their methods but in what the data must <em>contain</em>. For a causal question without an experiment, the data must contain the relevant confounders — the row in which the eBay case lived. And notice the last column: prescription <em>consumes</em> causal answers. You cannot optimize targeting on correlations; eBay’s dashboard was, implicitly, a prescriptive claim (“keep spending”) built on a broken causal one.</p>
+<div id="tbl-four-analytics" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-four-analytics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.3: Four types of questions, four kinds of analytics — based on <span class="citation" data-cites="hernan2019">Hernán et al. (<a href="01-foundations.html#ref-hernan2019" role="doc-biblioref">2019</a>)</span>, prescription column added
+</figcaption>
+<div aria-describedby="tbl-four-analytics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: left;">Prediction</th>
+<th style="text-align: left;">Causal inference</th>
+<th style="text-align: left;">Prescription</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Typical question</strong></td>
+<td style="text-align: left;">How can our customers be grouped into segments based on their characteristics?</td>
+<td style="text-align: left;">Which of last year’s visitors will purchase from our store next month?</td>
+<td style="text-align: left;">Does behavioral targeting <em>increase</em> the probability of purchase — and by how much?</td>
+<td style="text-align: left;">Which customers should we target, at what budget, to maximize profit?</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>What the data must contain</strong></td>
+<td style="text-align: left;"><em>Features:</em> user characteristics (age, location, …), products viewed, …</td>
+<td style="text-align: left;"><em>Inputs</em> (features) and the <em>output</em> to be predicted (purchase next month)</td>
+<td style="text-align: left;"><em>Outcome</em>, <em>treatment</em>, and — without an experiment — the relevant <em>confounders</em></td>
+<td style="text-align: left;">Causal effect estimates <em>plus</em> costs, margins, and constraints</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Typical analytics</strong></td>
+<td style="text-align: left;">Cluster analysis, descriptive statistics, visualization</td>
+<td style="text-align: left;">Regression, trees, random forests, neural networks</td>
+<td style="text-align: left;">Randomized experiments; regression, difference-in-differences, instrumental variables, regression discontinuity</td>
+<td style="text-align: left;">Targeting &amp; uplift models, optimization, simulation</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
 <div class="callout callout-style-default callout-note callout-titled" title="Why this course is structured the way it is">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -458,15 +627,48 @@ Table&nbsp;1.1: The four kinds of analytics questions
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Because most managerial questions are ultimately causal, this course devotes most of its time to the question of <em>when a comparison supports a causal conclusion</em>. Modules 2–3 build the descriptive and statistical foundations; Modules 4–6 then work through the three ways of earning a causal claim — experiments, adjusted observational comparisons, and quasi-experiments — and Module 7 returns to the prescriptive step: turning an estimate into a decision.</p>
+<p>Because most managerial questions are ultimately causal, this course devotes most of its time to the question of <em>when a comparison supports a causal conclusion</em>. Modules 2–3 build the descriptive and statistical foundations; Modules 4 and 5 then work through the two main ways of earning a causal claim — experiments and adjusted observational comparisons — and Module 6 asks <em>why</em> and <em>for whom</em> an effect occurs (mediation and moderation). Prescription is not a separate module: it runs through how we interpret results and through the group project, where every analysis ends in a recommendation. Prediction is acknowledged but not covered in depth — for an excellent introduction, see <a href="https://www.statlearning.com/">An Introduction to Statistical Learning</a>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Practice: classify these questions">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Practice: classify these questions
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Which type of question is being asked? (a) “Which ad creative will get the highest click-through rate?” (b) “How large is our Gen-Z segment?” (c) “Should we raise the price by 5%?”</p>
 </div>
 </div>
 </section>
 <section id="sec-dgp" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="sec-dgp"><span class="header-section-number">1.4</span> Correlation, causation, and what data can show</h2>
-<section id="two-pictures-of-x-relates-to-y" class="level3" data-number="1.4.1">
-<h3 data-number="1.4.1" class="anchored" data-anchor-id="two-pictures-of-x-relates-to-y"><span class="header-section-number">1.4.1</span> Two pictures of “X relates to Y”</h3>
-<p>Consider the two panels in <a href="#fig-two-pictures" class="quarto-xref">Figure&nbsp;<span>1.2</span></a>. Panel (a) shows the result of an experiment: customers were <em>randomly assigned</em> to receive a discount or not, and their subsequent purchases were recorded. Panel (b) shows observational data: for a sample of customers, we recorded how many of the firm’s newsletters they read and how much they purchased — without intervening in any way.</p>
+<section id="did-internet-explorer-prevent-murders" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="did-internet-explorer-prevent-murders"><span class="header-section-number">1.4.1</span> Did Internet Explorer prevent murders?</h3>
+<p>Consider <a href="#fig-spurious-ie" class="quarto-xref">Figure&nbsp;<span>1.4</span></a>. Between 2006 and 2011, the market share of Microsoft’s Internet Explorer and the number of murders in the US fell in almost perfect lockstep — the correlation between the two series is about 0.98. Did the decline of Internet Explorer prevent murders?</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-spurious-ie" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-spurious-ie-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-spurious-ie-1.png" class="img-fluid figure-img" width="1800">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spurious-ie-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.4: Internet Explorer market share vs.&nbsp;murders in the US, 2006–2011. Data: FBI Uniform Crime Reports; StatCounter (approximate values). Chart style after the internet classic.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Obviously not. This is a <strong>spurious correlation</strong>: two variables move together <strong>without any causal link</strong> — here simply because both <strong>trend in the same direction over time</strong>. Any two trending quantities correlate, and hundreds more examples of this kind can be found in the <a href="https://www.tylervigen.com/spurious-correlations">spurious correlations</a> collection. Correlation is cheap; causation is not.</p>
+<p>The chart teaches a second lesson, too. Look at the two y-axes: their ranges were chosen so that the two series overlap. With a dual axis, you can manufacture a picture like this for almost <em>any</em> two declining series — a small visualization crime, committed deliberately here, to which we return in Module 2 when we discuss honest visualization.</p>
+</section>
+<section id="two-pictures-of-x-relates-to-y" class="level3" data-number="1.4.2">
+<h3 data-number="1.4.2" class="anchored" data-anchor-id="two-pictures-of-x-relates-to-y"><span class="header-section-number">1.4.2</span> Two pictures of “X relates to Y”</h3>
+<p>The Internet Explorer example is easy to see through. Most real cases are not. Consider the two panels in <a href="#fig-two-pictures" class="quarto-xref">Figure&nbsp;<span>1.5</span></a>, which both concern the same newsletter. Panel (a) shows the result of an <strong>email holdout test</strong>: the firm <em>randomly</em> withholds the newsletter from part of its subscriber list and compares the subsequent purchases of those who received it with those who did not. This is the industry standard for measuring the incremental effect of email and CRM activities — and the same logic as eBay switching off its ads in random regions. Panel (b) shows what the analytics data warehouse gives you for free: the purchases of customers who receive the newsletter (because they subscribed) compared with those who do not (because they did not subscribe).</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-two-pictures" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -475,53 +677,104 @@ Table&nbsp;1.1: The four kinds of analytics questions
 <img src="01-foundations_files/figure-html/fig-two-pictures-1.png" class="img-fluid figure-img" width="2200">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-two-pictures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.2: Two pictures of a relationship between X and Y. Panel (a): experimental data — the discount was randomly assigned. Panel (b): observational data — customers chose for themselves how many newsletters to read. The plots are equally convincing to the eye; only one of them licenses a causal conclusion (simulated data).
+Figure&nbsp;1.5: Two pictures of the same newsletter. Panel (a): experimental data — newsletter delivery was randomized (holdout among subscribers). Panel (b): observational data — customers chose for themselves whether to subscribe. In both simulated worlds, the true effect of the newsletter is +3 (simulated data).
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Both pictures are “positive results”. Both would look good on a slide. And notice: panel (a) has exactly the visual form of the eBay comparison in <a href="#fig-ebay-naive" class="quarto-xref">Figure&nbsp;<span>1.1</span></a> — two groups, a gap in means. The plots are indistinguishable; their meaning is not. But they mean entirely different things. In panel (a), <em>we</em> changed X, and Y moved: because the discount was assigned by chance, the treated and untreated customers are alike in every other respect, and the difference in purchases can be attributed to the discount. In panel (b), X and Y merely <em>move together</em>, and the plot is silent about why. Perhaps newsletters drive purchases. Perhaps engaged customers both read more and buy more. Perhaps loyal customers subscribe to newsletters <em>because</em> they buy so much.</p>
-<p>The uncomfortable and important lesson: <strong>the difference between the two panels is invisible in the data</strong>. It lies in the <strong>data-generating process (DGP)</strong> — the real-world mechanism by which the numbers came into being. Two datasets with identical statistical properties can support completely different conclusions depending on how they were generated. This is why “let the data speak” is bad advice: data never speak about causation on their own. Throughout this course, the first question you should ask about any dataset is therefore not “what’s in it?” but “<strong>how did it come to be?</strong>”</p>
-</section>
-<section id="three-ways-to-get-the-same-scatter-plot" class="level3" data-number="1.4.2">
-<h3 data-number="1.4.2" class="anchored" data-anchor-id="three-ways-to-get-the-same-scatter-plot"><span class="header-section-number">1.4.2</span> Three ways to get the same scatter plot</h3>
-<p>To make this concrete, <a href="#fig-three-scatters" class="quarto-xref">Figure&nbsp;<span>1.3</span></a> shows three scatter plots with very similar positive correlations. All three are simulated — which is the honest way to teach this point, because for simulated data <em>we know the true mechanism with certainty</em>, since we wrote it.</p>
+<p>Both pictures are “positive results”. Both would look good on a slide. And notice: both have exactly the visual form of the eBay comparison in <a href="#fig-ebay-naive" class="quarto-xref">Figure&nbsp;<span>1.2</span></a> — two groups, a gap in means. Here is the twist: the data behind both panels were simulated with the <strong>same true effect of +3</strong>. Panel (a) recovers it. Panel (b) reports a difference of about <strong>+11</strong> — because customers who subscribe to a newsletter differ from those who do not <em>before</em> any newsletter arrives.</p>
+<p>The uncomfortable and important lesson: <strong>the difference between the two panels is invisible in the data</strong>. It lies in the <strong>data-generating process (DGP)</strong> — the real-world mechanism by which the numbers came into being. Two datasets that look alike can support completely different conclusions depending on how they were generated. This is why “let the data speak” is bad advice: data never speak about causation on their own. Throughout this course, the first question you should ask about any dataset is therefore not “what’s in it?” but “<strong>how did it come to be?</strong>”</p>
+<p><a href="#fig-newsletter-dag" class="quarto-xref">Figure&nbsp;<span>1.6</span></a> shows the DGP behind panel (b). The customer’s underlying <strong>brand interest</strong> makes people <em>subscribe</em> — and it also makes them <em>buy</em>. The observed difference of +11 is therefore a mixture of the true effect (+3) and a selection effect (about +8). Notice what is new compared with the eBay case: there, the direct arrow from ads to sales was essentially zero; here, the newsletter has a real effect. Confounding does not mean “no effect” — it means that the observed number <strong>mixes the effect with selection</strong>. And the figure already shows what randomization does: randomizing delivery — as in panel (a) — cuts the arrow from brand interest to newsletter delivery, and only the +3 remains (<a href="#sec-randomization" class="quarto-xref"><span>Section 1.6</span></a>).</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-three-scatters" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-newsletter-dag" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-three-scatters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="01-foundations_files/figure-html/fig-three-scatters-1.png" class="img-fluid figure-img" width="2200">
+<div aria-describedby="fig-newsletter-dag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-newsletter-dag-1.png" class="img-fluid figure-img" width="1400">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-three-scatters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.3: Three data-generating processes, one visual pattern. Panel 1: X truly causes Y. Panel 2: a third variable (customer segment, shown by color) drives both X and Y — within each segment, the relationship vanishes. Panel 3: two independently trending series correlate by construction (simulated data).
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-newsletter-dag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.6: The data-generating process behind panel (b): unobserved brand interest drives both newsletter subscription and purchases.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>In <strong>panel 1</strong>, X genuinely causes Y: intervening on X would move Y. In <strong>panel 2</strong>, a third variable — here a customer segment — drives both X and Y. The pooled cloud shows a clear positive relationship, but look at the colors: <em>within</em> each segment, X and Y are unrelated. If you intervened on X, nothing would happen to Y. In <strong>panel 3</strong>, X and Y are two completely independent series that both trend over time. Any two trending quantities correlate — time is, in this sense, the ultimate lurking variable, and this is the mechanism behind most of the absurd examples you may know from the <a href="https://www.tylervigen.com/spurious-correlations">spurious correlations</a> collection (US cheese consumption tracking deaths by bedsheet entanglement, and so on).</p>
-<p>The three panels are indistinguishable without knowledge of the DGP. This is the precise sense in which “correlation does not imply causation”: correlation is a property of the data; causation is a property of the process that generated them.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: the classical conditions for causality">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: the simulation behind the two panels">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Under the hood: the classical conditions for causality
+<span class="screen-reader-only">Note</span>Under the hood: the simulation behind the two panels
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The methodological literature <span class="citation" data-cites="field2012">(<a href="01-foundations.html#ref-field2012" role="doc-biblioref">Field et al. 2012</a>)</span> states three conditions that must hold for X to be accepted as a cause of Y: (1) <strong>concomitant variation</strong> — X and Y vary together as the hypothesis predicts; (2) <strong>temporal order</strong> — the cause precedes the effect; and (3) <strong>absence of other possible causal factors</strong> — no alternative explanation accounts for the association. Notice that data can directly establish only the first condition, and sometimes the second. The entire difficulty of causal inference lives in the third condition — and the tools of this course (randomization, adjustment, quasi-experimental designs) are all strategies for making it plausible.</p>
+<p>Because the data are simulated, we know the true mechanism with certainty — we wrote it. The variable <code>intent</code> plays the role of brand interest. The <em>only</em> difference between the two worlds is how newsletter delivery (<code>sub</code>) is determined: by a coin flip in (a), by <code>intent</code> in (b). The effect of the newsletter on purchases (<code>true_effect = 3</code>) is identical in both.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">120</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>true_effect <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># (a) EXPERIMENTAL data: delivery randomized (holdout among subscribers)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>d_exp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sub =</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>), <span class="at">intent =</span> <span class="fu">rnorm</span>(n))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>d_exp<span class="sc">$</span>purchases <span class="ot">&lt;-</span> <span class="fu">pmax</span>(<span class="dv">0</span>, <span class="dv">20</span> <span class="sc">+</span> true_effect <span class="sc">*</span> d_exp<span class="sc">$</span>sub <span class="sc">+</span> <span class="dv">8</span> <span class="sc">*</span> d_exp<span class="sc">$</span>intent <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">4</span>))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># (b) OBSERVATIONAL data: delivery self-selected (subscribing driven by intent)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>d_obs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">intent =</span> <span class="fu">rnorm</span>(n))</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>d_obs<span class="sc">$</span>sub <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fu">plogis</span>(<span class="fl">1.5</span> <span class="sc">*</span> d_obs<span class="sc">$</span>intent <span class="sc">-</span> <span class="fl">0.2</span>))</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>d_obs<span class="sc">$</span>purchases <span class="ot">&lt;-</span> <span class="fu">pmax</span>(<span class="dv">0</span>, <span class="dv">20</span> <span class="sc">+</span> true_effect <span class="sc">*</span> d_obs<span class="sc">$</span>sub <span class="sc">+</span> <span class="dv">8</span> <span class="sc">*</span> d_obs<span class="sc">$</span>intent <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">4</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 </div>
 </div>
 </div>
 </section>
-<section id="reverse-causality" class="level3" data-number="1.4.3">
-<h3 data-number="1.4.3" class="anchored" data-anchor-id="reverse-causality"><span class="header-section-number">1.4.3</span> Reverse causality</h3>
+<section id="four-ways-to-get-the-same-scatter-plot" class="level3" data-number="1.4.3">
+<h3 data-number="1.4.3" class="anchored" data-anchor-id="four-ways-to-get-the-same-scatter-plot"><span class="header-section-number">1.4.3</span> Four ways to get the same scatter plot</h3>
+<p>To make this more general, <a href="#fig-four-scatters" class="quarto-xref">Figure&nbsp;<span>1.7</span></a> shows four scatter plots with similar positive correlations. All four are simulated — which is the honest way to teach this point, because for simulated data <em>we know the true mechanism with certainty</em>. <a href="#fig-four-dgps" class="quarto-xref">Figure&nbsp;<span>1.8</span></a> shows the data-generating process behind each panel.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-four-scatters" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-four-scatters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-four-scatters-1.png" class="img-fluid figure-img" width="2560">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-four-scatters-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.7: Four data-generating processes, one visual pattern. Panel 1: X truly causes Y. Panel 2: a third variable (customer segment, shown by color) drives both X and Y — within each segment, the relationship vanishes. Panel 3: two independently trending series correlate by construction. Panel 4: Simpson’s paradox — within each product tier the relationship is negative, pooled it is positive (simulated data).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-four-dgps" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-four-dgps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-four-dgps-1.png" class="img-fluid figure-img" width="2560">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-four-dgps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.8: The data-generating processes behind the four panels of the previous figure.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>In <strong>panel 1</strong>, X genuinely causes Y: intervening on X would move Y.</li>
+<li>In <strong>panel 2</strong>, the relationship is <strong>confounded</strong>: a third variable — here a customer segment — drives both X and Y (loyal customers receive more newsletters <em>and</em> spend more). The pooled cloud shows a clear positive relationship, but look at the colors: <em>within</em> each segment, X and Y are unrelated. If you intervened on X, nothing would happen to Y.</li>
+<li>In <strong>panel 3</strong>, the relationship is <strong>spurious</strong>: X and Y are two completely independent series that both trend over time — the Internet Explorer chart in miniature. Notice that the DGPs of panels 2 and 3 have the <em>same shape</em>: time is, in this sense, the ultimate confounder.</li>
+<li>In <strong>panel 4</strong>, confounding operates at full strength and produces <strong>Simpson’s paradox</strong>. Think of X as price and Y as units sold across three product tiers: higher tiers have both higher prices and more units sold, so the pooled slope is positive — but <em>within every tier</em>, the slope is negative. Aggregation can <em>reverse</em> the truth, not just inflate it.</li>
+</ul>
+<p>A decision framing makes the point concrete. Suppose you increase X in each of the four worlds. In world 1, Y rises. In worlds 2 and 3, nothing happens. In world 4, Y <em>falls</em>. Four similar scatter plots, four different consequences of the same action. The plot shows the <strong>correlation</strong>; only the <strong>DGP</strong> says what X does to Y — and thus what happens if you <strong>act on X</strong>. This is the precise sense in which “correlation does not imply causation”: correlation is a property of the data; causation is a property of the process that generated them.</p>
+</section>
+<section id="reverse-causality" class="level3" data-number="1.4.4">
+<h3 data-number="1.4.4" class="anchored" data-anchor-id="reverse-causality"><span class="header-section-number">1.4.4</span> Reverse causality</h3>
 <p>There is one more way a correlation can mislead, and marketing data are unusually rich in it. Suppose you observe that regions with higher advertising spend have higher sales. The natural reading is that advertising drives sales. But many firms set advertising budgets <strong>as a percentage of (expected) sales</strong> — in which case sales drive advertising, and the correlation would appear even if advertising were completely ineffective. The same pattern of data supports two opposite stories:</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -531,13 +784,23 @@ Figure&nbsp;1.3: Three data-generating processes, one visual pattern. Panel 1: X
 <img src="01-foundations_files/figure-html/fig-reverse-1.png" class="img-fluid figure-img" width="1800">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-reverse-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.4: Two stories, one correlation: advertising drives sales (left) — or budget rules make sales drive advertising (right).
+Figure&nbsp;1.9: Two stories, one correlation: advertising drives sales (left) — or budget rules make sales drive advertising (right).
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>Because budgeting rules, targeting algorithms, and managerial reactions to performance are everywhere in marketing, <strong>reverse causality is a routine hazard in marketing data, not an exotic one</strong>. Whenever you see a correlation involving a variable that managers <em>set in response to something</em>, ask which way the arrow runs.</p>
+</section>
+<section id="the-classical-conditions-for-causality" class="level3" data-number="1.4.5">
+<h3 data-number="1.4.5" class="anchored" data-anchor-id="the-classical-conditions-for-causality"><span class="header-section-number">1.4.5</span> The classical conditions for causality</h3>
+<p>The methodological literature <span class="citation" data-cites="field2012">(<a href="01-foundations.html#ref-field2012" role="doc-biblioref">Field et al. 2012</a>)</span> states three conditions that must hold for X to be accepted as a cause of Y:</p>
+<ol type="1">
+<li><strong>Concomitant variation</strong> — X and Y vary together as the hypothesis predicts. The data establish this directly: all examples in this section satisfy it — eBay’s dashboard, the newsletter gap, Internet Explorer and murders, all four scatter panels. It is the cheap condition, and precisely for that reason it proves nothing on its own.</li>
+<li><strong>Temporal order</strong> — the cause precedes the effect. This is sometimes checkable in data, but the advertising-budget example shows how it can fail: sales also drive spending. (Note that the Internet Explorer chart satisfies conditions 1 <em>and</em> 2 and is still nonsense.)</li>
+<li><strong>Absence of other possible causal factors</strong> — no alternative explanation accounts for the association. No dataset can certify this on its own: intent, segments, time, tiers…</li>
+</ol>
+<p>The entire difficulty of causal inference lives in <strong>condition 3</strong> — and the tools of this course (randomization, adjustment, and the designs discussed in <a href="#sec-quasi" class="quarto-xref"><span>Section 1.7</span></a>) are all strategies for making it plausible. “Which condition does this analysis fail?” is a question worth practicing on every example in this chapter.</p>
 </section>
 </section>
 <section id="sec-cast" class="level2" data-number="1.5">
@@ -553,13 +816,15 @@ Figure&nbsp;1.4: Two stories, one correlation: advertising drives sales (left) �
 <img src="01-foundations_files/figure-html/fig-dv-iv-1.png" class="img-fluid figure-img" width="1300">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dv-iv-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.5: The two lead roles in every causal question.
+Figure&nbsp;1.10: The two lead roles in every causal question.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>The <strong>outcome</strong> (or <strong>dependent variable, DV</strong>) is the quantity the manager ultimately cares about: sales, churn, willingness-to-pay, clicks. The <strong>treatment</strong> (or <strong>independent variable, IV</strong>) is the lever under consideration: the discount, the campaign, the redesign, the price change. Defining these two <em>precisely</em> is half of research design, and vagueness here is a reliable early-warning sign of a doomed analysis. “Does advertising work?” is not a research question. “Does exposure to the retargeting campaign increase the probability that a website visitor purchases within 30 days?” is: it names the treatment, the outcome, the unit of analysis, and the time horizon.</p>
+<p>The <strong>dependent variable (DV)</strong> is the <em>outcome</em>: the quantity the manager ultimately cares about — purchases, churn, willingness to pay, clicks. The <strong>independent variable (IV)</strong> is the <em>presumed cause</em>: the variable whose influence we want to establish — a discount, ad exposure, a price change. In <strong>experiments</strong>, the independent variable under the researcher’s control is called the <strong>treatment</strong>; its values define the <em>experimental conditions</em> (e.g., treatment vs.&nbsp;control group).</p>
+<p>A note on terminology. IV and DV are the <em>general</em> terms — they apply to observational data too, where nobody manipulates anything. “Treatment” is the experiment-specific name for the IV, and strictly speaking it earns that name only when the researcher sets it: the newsletter holdout of <a href="#fig-two-pictures" class="quarto-xref">Figure&nbsp;<span>1.5</span></a> had a treatment; the self-selected comparison merely had an independent variable. (In econometrics, “IV” is also used as an abbreviation for <em>instrumental variable</em>; in this course, IV always means independent variable.)</p>
+<p>Defining these two <em>precisely</em> — <em>whose</em> purchases, over <em>what horizon</em>, <em>which</em> discount — is half of research design (<a href="#sec-design" class="quarto-xref"><span>Section 1.8</span></a>), and vagueness here is a reliable early-warning sign of a doomed analysis. “Does advertising work?” is not a research question. “Does exposure to the retargeting campaign increase the probability that a website visitor purchases within 30 days?” is: it names the treatment, the outcome, the unit of analysis, and the time horizon.</p>
 </section>
 <section id="the-villain-the-confounder" class="level3" data-number="1.5.2">
 <h3 data-number="1.5.2" class="anchored" data-anchor-id="the-villain-the-confounder"><span class="header-section-number">1.5.2</span> The villain: the confounder</h3>
@@ -571,13 +836,14 @@ Figure&nbsp;1.5: The two lead roles in every causal question.
 <img src="01-foundations_files/figure-html/fig-confounder-1.png" class="img-fluid figure-img" width="1200">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-confounder-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.6: The confounder: a variable that causes both the treatment and the outcome, creating an association between them that is not causal.
+Figure&nbsp;1.11: The confounder: a variable that causes both the treatment and the outcome, creating an association between them that is not causal.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>A <strong>confounder</strong> is a variable that causes <em>both</em> the treatment and the outcome. Confounders manufacture correlation without causation — panel 2 of <a href="#fig-three-scatters" class="quarto-xref">Figure&nbsp;<span>1.3</span></a> was exactly this structure, and so was the eBay case: <em>purchase intent</em> caused people to search for eBay (and thus see the ad) and <em>also</em> caused them to buy. The apparent effect of the ad was, to a first approximation, entirely the work of the confounder.</p>
+<p>A <strong>confounder</strong> is a variable that causes <em>both</em> the treatment and the outcome. Confounders manufacture correlation without causation — panel 2 of <a href="#fig-four-scatters" class="quarto-xref">Figure&nbsp;<span>1.7</span></a> was exactly this structure, and so was the eBay case: <em>purchase intent</em> caused people to search for eBay (and thus see the ad) and <em>also</em> caused them to buy. The apparent effect of the ad was, to a first approximation, entirely the work of the confounder.</p>
+<p>When the confounding arises because units <strong>choose their own exposure</strong> — customers pick the channel through which they arrive, subscribe to the newsletter, install the app, join the loyalty program — the resulting distortion is called <strong>selection bias</strong>. In marketing data, it is the default, not the exception: <em>almost everything customers do, they chose to do.</em> In this course’s usage, selection bias is confounding with a choice mechanism: the confounder is whatever drives the choice. (There is a second kind of selection problem — selection into the <em>sample</em>, i.e., who ends up in your data at all: survey non-response, churned customers missing from the database. It returns when you design your own survey in the group project — who answers a survey is itself a choice.)</p>
 <p>Confounders are the central villain of observational data analysis. They can be dealt with — if they are <em>observed</em>, they can be adjusted for, which is a large part of what regression is for (Module 5) — but as we will see in <a href="#sec-randomization" class="quarto-xref"><span>Section 1.6</span></a>, the ones you cannot see are the ones that should keep you up at night.</p>
 </section>
 <section id="the-mechanism-the-mediator" class="level3" data-number="1.5.3">
@@ -590,13 +856,13 @@ Figure&nbsp;1.6: The confounder: a variable that causes both the treatment and t
 <img src="01-foundations_files/figure-html/fig-mediator-1.png" class="img-fluid figure-img" width="1200">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mediator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.7: The mediator: the channel through which the treatment affects the outcome.
+Figure&nbsp;1.12: The mediator: the channel through which the treatment affects the outcome.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>A <strong>mediator</strong> lies <em>on the causal path</em> between treatment and outcome: it is the mechanism through which the effect operates. An advertising campaign may increase sales <em>by way of</em> increased brand awareness; a price cut may increase repurchase <em>by way of</em> higher perceived fairness. Why should a manager care about the mechanism, and not just the total effect? Because the mechanism tells you <strong>what to optimize</strong>: if the campaign works through awareness, then creative that builds awareness is the design goal, and awareness is worth tracking as an early indicator. Mediation analysis — decomposing a total effect into its direct and indirect (mediated) components — is part of Module 5.</p>
+<p>A <strong>mediator</strong> lies <em>on the causal path</em> between treatment and outcome: it is the mechanism — the <em>how</em> — through which the effect operates. An advertising campaign may increase sales <em>by way of</em> increased brand awareness; a price cut may increase repurchase <em>by way of</em> higher perceived fairness. Why should a manager care about the mechanism, and not just the total effect? Because the mechanism tells you <strong>what to optimize</strong>: if the campaign works through awareness, then creative that builds awareness is the design goal, and awareness is worth tracking as an early indicator. Mediation analysis — decomposing a total effect into its direct and indirect (mediated) components — is part of Module 6.</p>
 </section>
 <section id="the-qualifier-the-moderator" class="level3" data-number="1.5.4">
 <h3 data-number="1.5.4" class="anchored" data-anchor-id="the-qualifier-the-moderator"><span class="header-section-number">1.5.4</span> The qualifier: the moderator</h3>
@@ -608,17 +874,17 @@ Figure&nbsp;1.7: The mediator: the channel through which the treatment affects t
 <img src="01-foundations_files/figure-html/fig-moderator-1.png" class="img-fluid figure-img" width="1200">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-moderator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.8: The moderator: a variable that changes the strength (or direction) of the treatment effect — visually, it points at the arrow, not at a variable.
+Figure&nbsp;1.13: The moderator: a variable that changes the strength (or direction) of the treatment effect — visually, it points at the arrow, not at a variable.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>A <strong>moderator</strong> does not sit on the causal path — it changes the <em>strength</em> of the effect. “The discount increases purchases among new customers, but does nothing for loyal ones”: here, customer type moderates the discount effect. Notice the visual convention in the diagram: the moderator’s dashed arrow points <em>at the causal arrow itself</em>, not at a variable. Moderators answer the questions <em>for whom?</em> and <em>under what conditions?</em> — which is often exactly what a manager needs for targeting decisions. Statistically, moderation corresponds to an interaction effect, which you will estimate in Module 5.</p>
+<p>A <strong>moderator</strong> does not sit on the causal path — it changes the <em>strength</em> of the effect. “The discount increases purchases among new customers, but does nothing for loyal ones”: here, customer type moderates the discount effect. Notice the visual convention in the diagram: the moderator’s dashed arrow points <em>at the causal arrow itself</em>, not at a variable. Moderators answer the questions <em>for whom?</em> and <em>under what conditions?</em> — which is often exactly what a manager needs for targeting decisions. Statistically, moderation corresponds to an interaction effect, which you will estimate in Module 6.</p>
 </section>
 <section id="the-full-cast" class="level3" data-number="1.5.5">
 <h3 data-number="1.5.5" class="anchored" data-anchor-id="the-full-cast"><span class="header-section-number">1.5.5</span> The full cast</h3>
-<p><a href="#fig-full-cast" class="quarto-xref">Figure&nbsp;<span>1.9</span></a> assembles all roles around a single causal question. This figure will accompany us for the rest of the course — it reappears when we formalize these ideas in Module 5.</p>
+<p><a href="#fig-full-cast" class="quarto-xref">Figure&nbsp;<span>1.14</span></a> assembles all roles around a single causal question. This figure will accompany us for the rest of the course — it reappears when we formalize these ideas in Modules 5 and 6.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-full-cast" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -627,7 +893,7 @@ Figure&nbsp;1.8: The moderator: a variable that changes the strength (or directi
 <img src="01-foundations_files/figure-html/fig-full-cast-1.png" class="img-fluid figure-img" width="1800">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-full-cast-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.9: The full cast of variables around one causal question. Blue: the question itself. Red: threatens the causal interpretation. Green: explains the mechanism. Orange: qualifies the effect.
+Figure&nbsp;1.14: The full cast of variables around one causal question. Blue: the question itself. Red: threatens the causal interpretation. Green: explains the mechanism. Orange: qualifies the effect.
 </figcaption>
 </figure>
 </div>
@@ -643,7 +909,7 @@ Figure&nbsp;1.9: The full cast of variables around one causal question. Blue: th
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>You might think the safe strategy is to “control for everything you can measure”. It is not. Adjusting for a <strong>mediator</strong> removes part of the very effect you are trying to measure, and adjusting for certain other variables (so-called <em>colliders</em>) can <em>create</em> bias out of nothing. Which variables to adjust for is a question about the causal structure, not about data availability — one of the most practically important lessons of Module 5. For now, remember only: <strong>the roles matter, and “more controls” is not automatically better.</strong></p>
+<p>You might think the safe strategy is to “control for everything you can measure”. It is not. Adjusting for a <strong>mediator</strong> removes part of the very effect you are trying to measure, and adjusting for certain other variables (so-called <em>colliders</em>) can <em>create</em> bias out of nothing. Which variables to adjust for is a question about the causal structure, not about data availability — one of the most practically important lessons of Modules 5 and 6. For now, remember only: <strong>the roles matter, and “more controls” is not automatically better.</strong></p>
 </div>
 </div>
 </section>
@@ -665,18 +931,19 @@ Figure&nbsp;1.9: The full cast of variables around one causal question. Blue: th
 <img src="01-foundations_files/figure-html/fig-random-dag-1.png" class="img-fluid figure-img" width="1200">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-random-dag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.10: Randomization severs the arrow from the confounder into the treatment: exposure now depends only on the coin flip. Intent may still drive purchases — but it can no longer create a spurious association between exposure and purchases.
+Figure&nbsp;1.15: Randomization severs the arrow from the confounder into the treatment: exposure now depends only on the coin flip. Intent may still drive purchases — but it can no longer create a spurious association between exposure and purchases.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>When treatment is assigned by a coin flip (or its digital equivalent), assignment depends on <em>nothing else</em>: not on intent, not on engagement, not on income, not on the weather, not on anything a targeting algorithm might quietly use. In the language of <a href="#sec-cast" class="quarto-xref"><span>Section 1.5</span></a>: randomization <strong>cuts every arrow pointing into the treatment</strong>. Confounders may still affect the outcome — intent still drives purchases — but they can no longer differ systematically between the groups, and therefore can no longer masquerade as a treatment effect.</p>
+<p>When treatment is assigned by a coin flip (or its digital equivalent), assignment depends on <em>nothing else</em>: not on intent, not on engagement, not on income, not on mood, not on anything a targeting algorithm might quietly use. In the language of <a href="#sec-cast" class="quarto-xref"><span>Section 1.5</span></a>: randomization <strong>cuts every arrow pointing into the treatment</strong>. Confounders may still affect the outcome — intent still drives purchases — but they can no longer differ systematically between the groups, and therefore can no longer masquerade as a treatment effect.</p>
+<p>The classic texts describe this with two kinds of variation. <strong>Systematic variation</strong> is the difference in the outcome created <em>by the treatment</em> — this is what we want to measure. <strong>Unsystematic variation</strong> stems from everything else (age, mood, time of day, …) — and randomization spreads it <em>evenly</em> across the groups. The difference between the groups is therefore <strong>treatment effect + noise</strong>: no bias, and the noise can be quantified (Module 3). Randomization does <strong>not remove</strong> other influences on the outcome — it makes them <strong>unsystematic</strong>: noise instead of bias. Noise averages out as the sample grows; bias does not.</p>
 <p>The consequence is what makes experiments the gold standard: the control group becomes a valid stand-in for the counterfactual. The treated and untreated groups are, in expectation, alike in <em>every</em> respect — <strong>including characteristics nobody measured, and characteristics nobody even thought of</strong>. That last clause is the remarkable part, and it deserves to be seen rather than believed.</p>
 </section>
 <section id="seeing-it-balanced-even-on-the-unmeasured" class="level3" data-number="1.6.2">
 <h3 data-number="1.6.2" class="anchored" data-anchor-id="seeing-it-balanced-even-on-the-unmeasured"><span class="header-section-number">1.6.2</span> Seeing it: balanced even on the unmeasured</h3>
-<p><a href="#fig-balance" class="quarto-xref">Figure&nbsp;<span>1.11</span></a> shows a simulation of 2,000 customers with six characteristics, one of which — purchase intent — we will pretend is unobservable, as it realistically is. In the left panel, customers <em>self-select</em> into ad exposure (as they did at eBay): the exposed and unexposed groups differ substantially, and they differ most on the variable we cannot see. In the right panel, the <em>same customers</em> are split by a coin flip: every characteristic is balanced, including the unobserved one.</p>
+<p><a href="#fig-balance" class="quarto-xref">Figure&nbsp;<span>1.16</span></a> shows a simulation of 2,000 customers with six characteristics, one of which — purchase intent — we will pretend is unobservable, as it realistically is. In the left panel, customers <em>self-select</em> into ad exposure (as they did at eBay): the exposed and unexposed groups differ substantially, and they differ most on the variable we cannot see. In the right panel, the <em>same customers</em> are split by a coin flip: every characteristic is balanced, including the unobserved one.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-balance" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -685,13 +952,13 @@ Figure&nbsp;1.10: Randomization severs the arrow from the confounder into the tr
 <img src="01-foundations_files/figure-html/fig-balance-1.png" class="img-fluid figure-img" width="2000">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-balance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.11: Covariate balance under self-selection vs.&nbsp;randomization (simulation, n = 2,000). Randomization balances all characteristics at once — including ‘intent’, which we never measured. Self-selection produces groups that differ most on exactly the variable we cannot see.
+Figure&nbsp;1.16: Covariate balance under self-selection vs.&nbsp;randomization (simulation, n = 2,000). Randomization balances all characteristics at once — including ‘intent’, which we never measured. Self-selection produces groups that differ most on exactly the variable we cannot see.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Pause on the right panel: the coin flip balanced <em>intent</em> without knowing that intent existed. Randomization is the only design that protects you against the confounders you have not thought of. This is why <span class="citation" data-cites="angrist2009">Angrist and Pischke (<a href="01-foundations.html#ref-angrist2009" role="doc-biblioref">2009</a>)</span> write that “the most credible and influential research designs use random assignment” — and why online firms run thousands of randomized experiments (A/B tests) every day. The practical craft of running experiments well — units of randomization, spillovers, and the ways even platform A/B-testing tools can quietly break randomization — is the subject of Module 4.</p>
+<p>Pause on the right panel: the coin flip balanced <em>intent</em> without knowing that intent existed. Randomization is the only design that protects you against the confounders you have not thought of. This is why <span class="citation" data-cites="angrist2009">Angrist and Pischke (<a href="01-foundations.html#ref-angrist2009" role="doc-biblioref">2009</a>)</span> write that “the most credible and influential research designs use random assignment”.</p>
 <div class="callout callout-style-default callout-tip no-icon callout-titled" title="Try it: can more data fix a biased comparison?">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -705,7 +972,7 @@ Figure&nbsp;1.11: Covariate balance under self-selection vs.&nbsp;randomization 
 <div class="cell">
 <details class="code-fold hidden">
 <summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb1" data-startfrom="291" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 290;"><span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a>viewof n <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">200</span><span class="op">,</span> <span class="dv">50000</span>]<span class="op">,</span> {<span class="dt">step</span><span class="op">:</span> <span class="dv">200</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Sample size n"</span><span class="op">,</span> <span class="dt">transform</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">log</span><span class="op">,</span> <span class="dt">invert</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb2" data-startfrom="431" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 430;"><span id="cb2-431"><a href="#cb2-431" aria-hidden="true" tabindex="-1"></a>viewof n <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">200</span><span class="op">,</span> <span class="dv">50000</span>]<span class="op">,</span> {<span class="dt">step</span><span class="op">:</span> <span class="dv">200</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Sample size n"</span><span class="op">,</span> <span class="dt">transform</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">log</span><span class="op">,</span> <span class="dt">invert</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-1" data-nodetype="declaration">
@@ -716,7 +983,7 @@ Figure&nbsp;1.11: Covariate balance under self-selection vs.&nbsp;randomization 
 <div class="cell">
 <details class="code-fold hidden">
 <summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb2" data-startfrom="296" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 295;"><span id="cb2-296"><a href="#cb2-296" aria-hidden="true" tabindex="-1"></a>viewof sel <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span> {<span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="fl">1.2</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Selection strength (how much intent drives exposure)"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb3" data-startfrom="436" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 435;"><span id="cb3-436"><a href="#cb3-436" aria-hidden="true" tabindex="-1"></a>viewof sel <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span> {<span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="fl">1.2</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Selection strength (how much intent drives exposure)"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-2" data-nodetype="declaration">
@@ -727,7 +994,7 @@ Figure&nbsp;1.11: Covariate balance under self-selection vs.&nbsp;randomization 
 <div class="cell">
 <details class="code-fold hidden">
 <summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb3" data-startfrom="301" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 300;"><span id="cb3-301"><a href="#cb3-301" aria-hidden="true" tabindex="-1"></a>viewof redraw <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">button</span>(<span class="st">"Draw a new sample"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb4" data-startfrom="441" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 440;"><span id="cb4-441"><a href="#cb4-441" aria-hidden="true" tabindex="-1"></a>viewof redraw <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">button</span>(<span class="st">"Draw a new sample"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-3" data-nodetype="declaration">
@@ -738,25 +1005,25 @@ Figure&nbsp;1.11: Covariate balance under self-selection vs.&nbsp;randomization 
 <div class="cell">
 <details class="code-fold hidden">
 <summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb4" data-startfrom="306" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 305;"><span id="cb4-306"><a href="#cb4-306" aria-hidden="true" tabindex="-1"></a>sim <span class="op">=</span> {</span>
-<span id="cb4-307"><a href="#cb4-307" aria-hidden="true" tabindex="-1"></a>  redraw<span class="op">;</span></span>
-<span id="cb4-308"><a href="#cb4-308" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> N <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>(n)<span class="op">;</span></span>
-<span id="cb4-309"><a href="#cb4-309" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rnorm <span class="op">=</span> d3<span class="op">.</span><span class="fu">randomNormal</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
-<span id="cb4-310"><a href="#cb4-310" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> results <span class="op">=</span> []<span class="op">;</span></span>
-<span id="cb4-311"><a href="#cb4-311" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> intent <span class="op">=</span> <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>({<span class="dt">length</span><span class="op">:</span> N}<span class="op">,</span> rnorm)<span class="op">;</span></span>
-<span id="cb4-312"><a href="#cb4-312" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> purchases <span class="op">=</span> intent<span class="op">.</span><span class="fu">map</span>(v <span class="kw">=&gt;</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">max</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">20</span> <span class="op">+</span> <span class="dv">12</span> <span class="op">*</span> v <span class="op">+</span> d3<span class="op">.</span><span class="fu">randomNormal</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">6</span>)()))<span class="op">;</span></span>
-<span id="cb4-313"><a href="#cb4-313" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> expSel <span class="op">=</span> intent<span class="op">.</span><span class="fu">map</span>(v <span class="kw">=&gt;</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">&lt;</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>(<span class="op">-</span>(sel <span class="op">*</span> v <span class="op">-</span> <span class="fl">0.2</span>))) <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">0</span>)<span class="op">;</span></span>
-<span id="cb4-314"><a href="#cb4-314" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> expRct <span class="op">=</span> intent<span class="op">.</span><span class="fu">map</span>(() <span class="kw">=&gt;</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">&lt;</span> <span class="fl">0.5</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">0</span>)<span class="op">;</span></span>
-<span id="cb4-315"><a href="#cb4-315" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> [label<span class="op">,</span> exposure] <span class="kw">of</span> [[<span class="st">"Self-selected exposure"</span><span class="op">,</span> expSel]<span class="op">,</span> [<span class="st">"Randomized assignment"</span><span class="op">,</span> expRct]]) {</span>
-<span id="cb4-316"><a href="#cb4-316" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> g1 <span class="op">=</span> purchases<span class="op">.</span><span class="fu">filter</span>((_<span class="op">,</span> i) <span class="kw">=&gt;</span> exposure[i] <span class="op">===</span> <span class="dv">1</span>)<span class="op">;</span></span>
-<span id="cb4-317"><a href="#cb4-317" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> g0 <span class="op">=</span> purchases<span class="op">.</span><span class="fu">filter</span>((_<span class="op">,</span> i) <span class="kw">=&gt;</span> exposure[i] <span class="op">===</span> <span class="dv">0</span>)<span class="op">;</span></span>
-<span id="cb4-318"><a href="#cb4-318" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (g1<span class="op">.</span><span class="at">length</span> <span class="op">&lt;</span> <span class="dv">2</span> <span class="op">||</span> g0<span class="op">.</span><span class="at">length</span> <span class="op">&lt;</span> <span class="dv">2</span>) <span class="cf">continue</span><span class="op">;</span></span>
-<span id="cb4-319"><a href="#cb4-319" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> est <span class="op">=</span> d3<span class="op">.</span><span class="fu">mean</span>(g1) <span class="op">-</span> d3<span class="op">.</span><span class="fu">mean</span>(g0)<span class="op">;</span></span>
-<span id="cb4-320"><a href="#cb4-320" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> se <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(d3<span class="op">.</span><span class="fu">variance</span>(g1) <span class="op">/</span> g1<span class="op">.</span><span class="at">length</span> <span class="op">+</span> d3<span class="op">.</span><span class="fu">variance</span>(g0) <span class="op">/</span> g0<span class="op">.</span><span class="at">length</span>)<span class="op">;</span></span>
-<span id="cb4-321"><a href="#cb4-321" aria-hidden="true" tabindex="-1"></a>    results<span class="op">.</span><span class="fu">push</span>({<span class="dt">design</span><span class="op">:</span> label<span class="op">,</span> est<span class="op">,</span> <span class="dt">lo</span><span class="op">:</span> est <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> se<span class="op">,</span> <span class="dt">hi</span><span class="op">:</span> est <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> se})<span class="op">;</span></span>
-<span id="cb4-322"><a href="#cb4-322" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-323"><a href="#cb4-323" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> results<span class="op">;</span></span>
-<span id="cb4-324"><a href="#cb4-324" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb5" data-startfrom="446" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 445;"><span id="cb5-446"><a href="#cb5-446" aria-hidden="true" tabindex="-1"></a>sim <span class="op">=</span> {</span>
+<span id="cb5-447"><a href="#cb5-447" aria-hidden="true" tabindex="-1"></a>  redraw<span class="op">;</span></span>
+<span id="cb5-448"><a href="#cb5-448" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> N <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>(n)<span class="op">;</span></span>
+<span id="cb5-449"><a href="#cb5-449" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rnorm <span class="op">=</span> d3<span class="op">.</span><span class="fu">randomNormal</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb5-450"><a href="#cb5-450" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> results <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb5-451"><a href="#cb5-451" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> intent <span class="op">=</span> <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>({<span class="dt">length</span><span class="op">:</span> N}<span class="op">,</span> rnorm)<span class="op">;</span></span>
+<span id="cb5-452"><a href="#cb5-452" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> purchases <span class="op">=</span> intent<span class="op">.</span><span class="fu">map</span>(v <span class="kw">=&gt;</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">max</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">20</span> <span class="op">+</span> <span class="dv">12</span> <span class="op">*</span> v <span class="op">+</span> d3<span class="op">.</span><span class="fu">randomNormal</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">6</span>)()))<span class="op">;</span></span>
+<span id="cb5-453"><a href="#cb5-453" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> expSel <span class="op">=</span> intent<span class="op">.</span><span class="fu">map</span>(v <span class="kw">=&gt;</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">&lt;</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>(<span class="op">-</span>(sel <span class="op">*</span> v <span class="op">-</span> <span class="fl">0.2</span>))) <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb5-454"><a href="#cb5-454" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> expRct <span class="op">=</span> intent<span class="op">.</span><span class="fu">map</span>(() <span class="kw">=&gt;</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">random</span>() <span class="op">&lt;</span> <span class="fl">0.5</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb5-455"><a href="#cb5-455" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> [label<span class="op">,</span> exposure] <span class="kw">of</span> [[<span class="st">"Self-selected exposure"</span><span class="op">,</span> expSel]<span class="op">,</span> [<span class="st">"Randomized assignment"</span><span class="op">,</span> expRct]]) {</span>
+<span id="cb5-456"><a href="#cb5-456" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> g1 <span class="op">=</span> purchases<span class="op">.</span><span class="fu">filter</span>((_<span class="op">,</span> i) <span class="kw">=&gt;</span> exposure[i] <span class="op">===</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb5-457"><a href="#cb5-457" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> g0 <span class="op">=</span> purchases<span class="op">.</span><span class="fu">filter</span>((_<span class="op">,</span> i) <span class="kw">=&gt;</span> exposure[i] <span class="op">===</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb5-458"><a href="#cb5-458" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (g1<span class="op">.</span><span class="at">length</span> <span class="op">&lt;</span> <span class="dv">2</span> <span class="op">||</span> g0<span class="op">.</span><span class="at">length</span> <span class="op">&lt;</span> <span class="dv">2</span>) <span class="cf">continue</span><span class="op">;</span></span>
+<span id="cb5-459"><a href="#cb5-459" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> est <span class="op">=</span> d3<span class="op">.</span><span class="fu">mean</span>(g1) <span class="op">-</span> d3<span class="op">.</span><span class="fu">mean</span>(g0)<span class="op">;</span></span>
+<span id="cb5-460"><a href="#cb5-460" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> se <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(d3<span class="op">.</span><span class="fu">variance</span>(g1) <span class="op">/</span> g1<span class="op">.</span><span class="at">length</span> <span class="op">+</span> d3<span class="op">.</span><span class="fu">variance</span>(g0) <span class="op">/</span> g0<span class="op">.</span><span class="at">length</span>)<span class="op">;</span></span>
+<span id="cb5-461"><a href="#cb5-461" aria-hidden="true" tabindex="-1"></a>    results<span class="op">.</span><span class="fu">push</span>({<span class="dt">design</span><span class="op">:</span> label<span class="op">,</span> est<span class="op">,</span> <span class="dt">lo</span><span class="op">:</span> est <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> se<span class="op">,</span> <span class="dt">hi</span><span class="op">:</span> est <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> se})<span class="op">;</span></span>
+<span id="cb5-462"><a href="#cb5-462" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-463"><a href="#cb5-463" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> results<span class="op">;</span></span>
+<span id="cb5-464"><a href="#cb5-464" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-4" data-nodetype="declaration">
@@ -767,18 +1034,18 @@ Figure&nbsp;1.11: Covariate balance under self-selection vs.&nbsp;randomization 
 <div class="cell">
 <details class="code-fold hidden">
 <summary>Show the code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb5" data-startfrom="329" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 328;"><span id="cb5-329"><a href="#cb5-329" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb5-330"><a href="#cb5-330" aria-hidden="true" tabindex="-1"></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">170</span><span class="op">,</span></span>
-<span id="cb5-331"><a href="#cb5-331" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">190</span><span class="op">,</span></span>
-<span id="cb5-332"><a href="#cb5-332" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Estimated 'effect' of ad exposure on purchases (true effect = 0)"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">14</span>]}<span class="op">,</span></span>
-<span id="cb5-333"><a href="#cb5-333" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="kw">null</span>}<span class="op">,</span></span>
-<span id="cb5-334"><a href="#cb5-334" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
-<span id="cb5-335"><a href="#cb5-335" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleX</span>([<span class="dv">0</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#b03a2e"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})<span class="op">,</span></span>
-<span id="cb5-336"><a href="#cb5-336" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">text</span>([{<span class="dt">x</span><span class="op">:</span> <span class="fl">0.2</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"Self-selected exposure"</span><span class="op">,</span> <span class="dt">text</span><span class="op">:</span> <span class="st">"truth"</span>}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">text</span><span class="op">:</span> <span class="st">"text"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#b03a2e"</span><span class="op">,</span> <span class="dt">dy</span><span class="op">:</span> <span class="op">-</span><span class="dv">28</span><span class="op">,</span> <span class="dt">textAnchor</span><span class="op">:</span> <span class="st">"start"</span>})<span class="op">,</span></span>
-<span id="cb5-337"><a href="#cb5-337" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>(sim<span class="op">,</span> {<span class="dt">y</span><span class="op">:</span> <span class="st">"design"</span><span class="op">,</span> <span class="dt">x1</span><span class="op">:</span> <span class="st">"lo"</span><span class="op">,</span> <span class="dt">x2</span><span class="op">:</span> <span class="st">"hi"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#0f5da8"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span>})<span class="op">,</span></span>
-<span id="cb5-338"><a href="#cb5-338" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>(sim<span class="op">,</span> {<span class="dt">y</span><span class="op">:</span> <span class="st">"design"</span><span class="op">,</span> <span class="dt">x</span><span class="op">:</span> <span class="st">"est"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#0f5da8"</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="dv">5</span>})</span>
-<span id="cb5-339"><a href="#cb5-339" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb5-340"><a href="#cb5-340" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb6" data-startfrom="469" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 468;"><span id="cb6-469"><a href="#cb6-469" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb6-470"><a href="#cb6-470" aria-hidden="true" tabindex="-1"></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">170</span><span class="op">,</span></span>
+<span id="cb6-471"><a href="#cb6-471" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">190</span><span class="op">,</span></span>
+<span id="cb6-472"><a href="#cb6-472" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Estimated 'effect' of ad exposure on purchases (true effect = 0)"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">14</span>]}<span class="op">,</span></span>
+<span id="cb6-473"><a href="#cb6-473" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="kw">null</span>}<span class="op">,</span></span>
+<span id="cb6-474"><a href="#cb6-474" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb6-475"><a href="#cb6-475" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleX</span>([<span class="dv">0</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#b03a2e"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})<span class="op">,</span></span>
+<span id="cb6-476"><a href="#cb6-476" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">text</span>([{<span class="dt">x</span><span class="op">:</span> <span class="fl">0.2</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"Self-selected exposure"</span><span class="op">,</span> <span class="dt">text</span><span class="op">:</span> <span class="st">"truth"</span>}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">text</span><span class="op">:</span> <span class="st">"text"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#b03a2e"</span><span class="op">,</span> <span class="dt">dy</span><span class="op">:</span> <span class="op">-</span><span class="dv">28</span><span class="op">,</span> <span class="dt">textAnchor</span><span class="op">:</span> <span class="st">"start"</span>})<span class="op">,</span></span>
+<span id="cb6-477"><a href="#cb6-477" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>(sim<span class="op">,</span> {<span class="dt">y</span><span class="op">:</span> <span class="st">"design"</span><span class="op">,</span> <span class="dt">x1</span><span class="op">:</span> <span class="st">"lo"</span><span class="op">,</span> <span class="dt">x2</span><span class="op">:</span> <span class="st">"hi"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#0f5da8"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span>})<span class="op">,</span></span>
+<span id="cb6-478"><a href="#cb6-478" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>(sim<span class="op">,</span> {<span class="dt">y</span><span class="op">:</span> <span class="st">"design"</span><span class="op">,</span> <span class="dt">x</span><span class="op">:</span> <span class="st">"est"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#0f5da8"</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="dv">5</span>})</span>
+<span id="cb6-479"><a href="#cb6-479" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb6-480"><a href="#cb6-480" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-5" data-nodetype="expression">
@@ -790,14 +1057,96 @@ Figure&nbsp;1.11: Covariate balance under self-selection vs.&nbsp;randomization 
 </div>
 </div>
 </section>
-<section id="the-price-of-observational-data" class="level3" data-number="1.6.3">
-<h3 data-number="1.6.3" class="anchored" data-anchor-id="the-price-of-observational-data"><span class="header-section-number">1.6.3</span> The price of observational data</h3>
+<section id="two-ways-to-randomize-between-vs.-within-subjects" class="level3" data-number="1.6.3">
+<h3 data-number="1.6.3" class="anchored" data-anchor-id="two-ways-to-randomize-between-vs.-within-subjects"><span class="header-section-number">1.6.3</span> Two ways to randomize: between vs.&nbsp;within subjects</h3>
+<p>Randomized experiments come in two basic forms, which differ in <em>what</em> is randomized (<a href="#tbl-between-within" class="quarto-xref">Table&nbsp;<span>1.4</span></a>).</p>
+<div id="tbl-between-within" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-between-within-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.4: Between-subjects vs.&nbsp;within-subjects designs
+</figcaption>
+<div aria-describedby="tbl-between-within-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Between-subjects</th>
+<th style="text-align: left;">Within-subjects</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Design</strong></td>
+<td style="text-align: left;">Each person sees <strong>one</strong> condition</td>
+<td style="text-align: left;">Each person sees <strong>all</strong> conditions (repeated measures)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Example</strong></td>
+<td style="text-align: left;">Group A sees a targeted ad, group B a generic ad</td>
+<td style="text-align: left;">Everyone rates ad no. 1, then ad no. 2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Comparison</strong></td>
+<td style="text-align: left;"><strong>Across people:</strong> mean(A) vs.&nbsp;mean(B)</td>
+<td style="text-align: left;"><strong>Within person:</strong> condition 1 vs.&nbsp;condition 2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Strength</strong></td>
+<td style="text-align: left;">No carryover between conditions</td>
+<td style="text-align: left;">Each person is their <strong>own control</strong> → far less noise, fewer participants needed</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Watch out</strong></td>
+<td style="text-align: left;">Needs more participants</td>
+<td style="text-align: left;"><strong>Order &amp; carryover effects</strong> → randomize the order (counterbalancing)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>In a between-subjects design, randomization decides <em>who gets which condition</em>; in a within-subjects design, it decides <em>the order of the conditions</em>. The within-subjects idea — each person serves as their own control — is the closest real design to the impossible “same users, without ads” comparison of <a href="#tbl-ebay-comparison" class="quarto-xref">Table&nbsp;<span>1.1</span></a>. Its weakness is that earlier conditions can influence later ones (think of taste tests or price judgments, where the first price anchors the second). The experiment in your <strong>group project</strong> will be a between-subjects design: the Qualtrics randomizer assigns each respondent to exactly one condition. The practical details follow in Module 4.</p>
+</section>
+<section id="why-the-industry-runs-on-experiments" class="level3" data-number="1.6.4">
+<h3 data-number="1.6.4" class="anchored" data-anchor-id="why-the-industry-runs-on-experiments"><span class="header-section-number">1.6.4</span> Why the industry runs on experiments</h3>
+<p>Causal inference is not academic hygiene — it is how the most valuable firms allocate their resources:</p>
+<blockquote class="blockquote">
+<p>“Our success at Amazon is a function of how many experiments we do per year, per month, per week, per day.”</p>
+<p>— Jeff Bezos</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>“At any given point in time, there isn’t just one version of Facebook running, there are probably 10,000.”</p>
+<p>— Mark Zuckerberg</p>
+</blockquote>
+<p>The <strong>A/B test</strong> is the industry name for a between-subjects randomized experiment, run continuously and at scale. The vocabulary of this section — treatment, control, between-subjects — is the daily operating language of these companies. (The same industry that produced eBay’s misleading dashboard also built the experimentation culture: the lesson of 2012 has been learned at scale.)</p>
+</section>
+<section id="running-field-experiments-well" class="level3" data-number="1.6.5">
+<h3 data-number="1.6.5" class="anchored" data-anchor-id="running-field-experiments-well"><span class="header-section-number">1.6.5</span> Running field experiments well</h3>
+<p>Three guidelines help to design field experiments that deliver what they promise (see, e.g., Lambrecht &amp; Tucker, 2016):</p>
+<ol type="1">
+<li><strong>Choose the unit of randomization.</strong> Finer units (users rather than regions) provide more statistical power — but this has to be weighed against logistics and spillovers. In digital environments, user-level A/B tests make fine granularity cheap. eBay randomized <em>regions</em>, not users: search-ad exposure cannot easily be switched off for individual users, and regional switching sidesteps the problem.</li>
+<li><strong>Watch for spillovers and crossover.</strong> <em>Spillovers</em> occur when treated units affect untreated ones: product adoption spreads to friends; a tipping prompt in a ride-hailing app changes driver behavior for <em>all</em> riders (Chandar, Gneezy, List &amp; Muir, 2019). If spillovers loom, randomize at a <strong>higher level</strong> (households, cities). <em>Crossover</em> occurs when a unit meant for the control group gets treated anyway (multiple devices, shared accounts).</li>
+<li><strong>Complete vs.&nbsp;stratified randomization.</strong> Pure coin flips can leave small samples imbalanced by chance. <strong>Stratification</strong> — splitting units into homogeneous subgroups first and randomizing within each — is worth it when a covariate strongly predicts the outcome.</li>
+</ol>
+<p>These guidelines double as a checklist for the experiment you will design in the group project.</p>
+</section>
+<section id="the-price-of-observational-data" class="level3" data-number="1.6.6">
+<h3 data-number="1.6.6" class="anchored" data-anchor-id="the-price-of-observational-data"><span class="header-section-number">1.6.6</span> The price of observational data</h3>
 <p>If experiments are so powerful, why does most analysis use observational data anyway? The statistician Andrew Gelman gives the honest answer:</p>
 <blockquote class="blockquote">
 <p>“Given the manifest virtues of experiments, why do I almost always analyze observational data? The short answer is almost all data out there are observational.”</p>
 <p>— <span class="citation" data-cites="gelman2010">Gelman (<a href="01-foundations.html#ref-gelman2010" role="doc-biblioref">2010</a>)</span></p>
 </blockquote>
-<p>Experiments can be infeasible (you cannot randomize your brand’s reputation), unethical or commercially risky (customers resent randomized prices), too slow, or simply not what happened — the data you have are the data that exist. Working with observational data is therefore not a lapse of rigor; it is the normal condition of applied analytics. But it has a price, and the price should be stated in one precise sentence:</p>
+<p>Experiments can be infeasible (you cannot randomize your brand’s reputation), unethical or commercially risky (customers resent randomized prices), too slow, or simply not what happened — the data you have are the data that exist. Working with observational data is therefore not a lapse of rigor; it is the normal condition of applied analytics. But it has a price, which Judea Pearl states in one sentence:</p>
+<blockquote class="blockquote">
+<p>“Behind any causal conclusion there must be some causal assumption, untested in observational studies.”</p>
+<p>— <span class="citation" data-cites="pearl2009">Pearl (<a href="01-foundations.html#ref-pearl2009" role="doc-biblioref">2009</a>)</span></p>
+</blockquote>
 <div class="callout callout-style-default callout-important callout-titled" title="The key assumption — and its epistemic status">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -813,16 +1162,58 @@ Figure&nbsp;1.11: Covariate balance under self-selection vs.&nbsp;randomization 
 <p>This is the fundamental asymmetry of the course: <strong>experiments buy this assumption by design; observational studies must argue for it.</strong> Whenever you read (or write) a causal claim based on observational data, the first question is: <em>what is the argument that nothing unobserved drives both X and Y?</em></p>
 </div>
 </div>
-<p>If one sentence from this chapter survives into your professional life, it should be that boxed asymmetry. It is not a counsel of despair — Modules 5 and 6 are devoted to making the argument as credible as possible — but it draws the line between what your data can show and what you must assume.</p>
+<p>If one idea from this chapter survives into your professional life, it should be that boxed asymmetry — remember it whenever anyone says “we controlled for everything”. It is not a counsel of despair — Module 5 is devoted to making the argument as credible as possible — but it draws the line between what your data can show and what you must assume.</p>
+</section>
+<section id="when-the-algorithm-does-the-selecting" class="level3" data-number="1.6.7">
+<h3 data-number="1.6.7" class="anchored" data-anchor-id="when-the-algorithm-does-the-selecting"><span class="header-section-number">1.6.7</span> When the algorithm does the selecting</h3>
+<p>Digital advertising offers a particularly instructive case of these problems. Before reading on, read the article by <span class="citation" data-cites="delanghe2021">Langhe and Puntoni (<a href="01-foundations.html#ref-delanghe2021" role="doc-biblioref">2021</a>)</span> in the <em>Harvard Business Review</em> (<a href="https://hbr.org/2021/12/are-personalized-ads-a-waste-of-money" target="_blank" rel="noopener">link</a>; about 10 minutes).</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Reading questions: does personalization pay?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Reading questions: does personalization pay?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>According to its <strong>objective</strong>, what type of research question (<a href="#tbl-four-questions" class="quarto-xref">Table&nbsp;<span>1.2</span></a>) is being asked here — descriptive, predictive, causal, or prescriptive?</li>
+<li>What exactly makes it <strong>difficult to measure</strong> the effect of personalized ads on sales?</li>
+</ol>
+</div>
+</div>
+<p>The objective is causal: do personalized ads <em>change</em> sales? But what advertising platforms’ dashboards deliver is descriptive and predictive — who clicked, who converted. <a href="#fig-targeting-dag" class="quarto-xref">Figure&nbsp;<span>1.17</span></a> shows why this gap matters. The targeting algorithm shows the ad <em>to people already interested in the product category</em>: the platform <strong>optimizes</strong> for finding exactly the users who would buy anyway. This is <strong>selection bias, machine-made</strong>: nobody chose anything — the selection happened inside the algorithm. Note the uncomfortable inversion: the <em>better</em> the targeting, the <em>more severe</em> the selection, and the more the reported lift overstates the causal effect.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-targeting-dag" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-targeting-dag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-targeting-dag-1.png" class="img-fluid figure-img" width="1400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-targeting-dag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.17: Who sees a personalized ad? The targeting algorithm selects users with high (unobserved) category interest — who are more likely to purchase anyway.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Surely, you might think, the platforms’ built-in A/B testing tools solve this problem? Not necessarily. <span class="citation" data-cites="braun2025">Braun and Schwartz (<a href="01-foundations.html#ref-braun2025" role="doc-biblioref">2025</a>)</span> show that ad platforms’ algorithms deliver different ads to <strong>systematically different mixes of users — even during A/B tests</strong>. You randomize users into “sees ad A” and “sees ad B”, but the platform’s delivery algorithm then decides <em>who within each arm</em> actually gets an impression — and since it optimizes delivery separately for each ad, ad A reaches one audience mix and ad B another. This <strong>divergent delivery</strong> confounds the effect of the ad <em>content</em> with <em>targeting</em> effects; the resulting imbalance can distort both the <strong>magnitude and the sign</strong> of the estimated difference between the ads. Platform A/B tools are therefore useful for picking the better-performing ad <em>within the same platform</em> — but they cannot reveal the causal effect of ad content <em>across</em> contexts, platforms, or audiences.</p>
+<p>For your group project, this problem does not arise: in a Qualtrics survey experiment, there is no delivery algorithm between the randomizer and the respondent. That contrast is one reason why survey experiments remain a clean setting for learning experimental analysis.</p>
 </section>
 </section>
 <section id="sec-quasi" class="level2" data-number="1.7">
 <h2 data-number="1.7" class="anchored" data-anchor-id="sec-quasi"><span class="header-section-number">1.7</span> Between the poles: quasi-experiments</h2>
-<p>Experiments and observational studies are not a binary; there is fertile ground between them. Sometimes the world assigns treatment in a way that is <em>almost</em> as good as random — through a policy change, a staggered product rollout, a regulatory boundary, or a platform entering some markets before others. Such settings are called <strong>quasi-experiments</strong> (or <em>natural experiments</em>): the researcher did not randomize, but treatment variation came from <em>outside</em> the units being studied, rather than from their own choices.</p>
+<p>Experiments and observational studies are not a binary; there is fertile ground between them:</p>
+<blockquote class="blockquote">
+<p>“Quasi-experimental tools mimic the random assignment that is inherent in lab experiments and that is often referred to as the ‘gold standard’ for identifying causal relationships.”</p>
+<p>— <span class="citation" data-cites="goldfarb2014">Goldfarb and Tucker (<a href="01-foundations.html#ref-goldfarb2014" role="doc-biblioref">2014</a>)</span></p>
+</blockquote>
+<p>In a <strong>quasi-experiment</strong> (or <em>natural experiment</em>), the “randomization” comes from an <strong>exogenous shock</strong> that is not controlled by the researcher — a market entry, a policy change, a staggered product rollout, a regulatory boundary. The units may still <strong>self-select</strong> into treatment and control, so the challenge is to argue that the shock <strong>credibly proxies for random assignment</strong>. In exchange, quasi-experiments often raise <strong>fewer external-validity concerns</strong> than lab experiments: they study real people, in real markets, spending real money. <a href="#tbl-spectrum" class="quarto-xref">Table&nbsp;<span>1.5</span></a> places them on the spectrum of research designs.</p>
 <div id="tbl-spectrum" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-spectrum-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1.2: The spectrum of research designs
+Table&nbsp;1.5: The spectrum of research designs
 </figcaption>
 <div aria-describedby="tbl-spectrum-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -850,13 +1241,13 @@ Table&nbsp;1.2: The spectrum of research designs
 <tr class="even">
 <td>Marketing example</td>
 <td>A/B test of a discount</td>
-<td>Streaming service launches in some markets first</td>
+<td>A platform launches in some countries first</td>
 <td>Newsletter readers vs.&nbsp;non-readers</td>
 </tr>
 <tr class="odd">
 <td>Key requirement</td>
 <td>Correct execution</td>
-<td>Assignment “as good as random”; comparable trends</td>
+<td>Assignment “as good as random” timing/rule</td>
 <td><strong>No unobserved confounders</strong></td>
 </tr>
 </tbody>
@@ -864,9 +1255,180 @@ Table&nbsp;1.2: The spectrum of research designs
 </div>
 </figure>
 </div>
-<p>An example from research conducted at our institute: when Spotify entered the market, <span class="citation" data-cites="wloemert2016">Wlömert and Papies (<a href="01-foundations.html#ref-wloemert2016" role="doc-biblioref">2016</a>)</span> tracked a panel of music consumers over time — observing their spending on CDs and downloads <em>before and after</em> some of them adopted the streaming service. Adopters and non-adopters clearly self-selected (music enthusiasts adopt first!), so a simple comparison at one point in time would be confounded. But because the <em>same individuals</em> are observed over time, one can compare <em>changes</em>: how did the adopters’ spending change relative to the change among non-adopters over the same period? This logic — the <strong>difference-in-differences</strong> design — is the workhorse of quasi-experimental analysis and one of the most widely used causal tools in industry and research alike.</p>
-<p>In fact, you have already met a quasi-experimental design in this chapter: eBay’s non-brand experiment suspended advertising in a random set of <em>regions</em> and compared the <em>change</em> in sales against the remaining regions — a geographic difference-in-differences. The method you will learn in Module 6 is literally how the chapter’s opening case was analyzed.</p>
-<p>We flag quasi-experiments here for two reasons. First, so that the spectrum in <a href="#tbl-spectrum" class="quarto-xref">Table&nbsp;<span>1.2</span></a> completes your mental map from day one: <em>experiment / quasi-experiment / observational study</em>, ordered by how hard you must work to defend a causal claim. Second, as a preview: Module 6 is dedicated to panel data — data that follow the same units over time — and to difference-in-differences analysis, where you will estimate designs like the Spotify study yourself.</p>
+<section id="example-does-streaming-cannibalize-music-sales" class="level3" data-number="1.7.1">
+<h3 data-number="1.7.1" class="anchored" data-anchor-id="example-does-streaming-cannibalize-music-sales"><span class="header-section-number">1.7.1</span> Example: does streaming cannibalize music sales?</h3>
+<p>An example from research conducted at our institute: <span class="citation" data-cites="wloemert2016">Wlömert and Papies (<a href="01-foundations.html#ref-wloemert2016" role="doc-biblioref">2016</a>)</span> analyze the effect of music streaming services on (1) the demand for music in <em>other</em> distribution channels (downloads, CDs) and (2) total music industry revenues — a typical <strong>multi-channel distribution</strong> problem in marketing, in which Spotify’s market entry serves as a quasi-experiment.</p>
+<p>A first look at the data seems encouraging for the industry: Spotify users spend <em>more</em> on music in other channels than non-users (<a href="#fig-spotify-cross" class="quarto-xref">Figure&nbsp;<span>1.18</span></a>). Comparisons of exactly this kind (“users of X spend more on Y”) are routinely used by industry and journalists to argue that a new channel does <em>not</em> cannibalize existing ones — Netflix and movie theaters, Spotify and downloads. Is this evidence of a causal effect? Would you conclude that streaming <em>boosts</em> CD and download sales?</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-spotify-cross" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-spotify-cross-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-spotify-cross-1.png" class="img-fluid figure-img" width="1000">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spotify-cross-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.18: Monthly spending on CDs and downloads of Spotify users and non-users, observed at one point in time (stylized figures after Wlömert &amp; Papies, 2016).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>You now have the vocabulary to answer: who adopts Spotify first? Music enthusiasts — who already spent more on music before Spotify existed. The triangle of <a href="#fig-confounder" class="quarto-xref">Figure&nbsp;<span>1.11</span></a> appears again, with <em>music enthusiasm</em> as the confounder. A comparison at one point in time — a <strong>cross-sectional design</strong> — cannot separate the enthusiasts’ high spending from an effect of Spotify.</p>
+<p>What helps is a <strong>longitudinal (panel) design</strong>, which observes the <strong>same units</strong> repeatedly (<a href="#fig-design-timeline" class="quarto-xref">Figure&nbsp;<span>1.19</span></a>). The Wlömert &amp; Papies study surveyed the same consumers before and after some of them adopted Spotify. The enthusiasts’ high spending is a <em>stable</em> trait; by following people over time, we can see how each group’s spending <strong>changes</strong> — not just where it stands.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-design-timeline" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-design-timeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-design-timeline-1.png" class="img-fluid figure-img" width="2200">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-design-timeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.19: Cross-sectional vs.&nbsp;longitudinal design: a snapshot at one point in time vs.&nbsp;the same sample observed repeatedly.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="difference-in-differences-the-logic" class="level3" data-number="1.7.2">
+<h3 data-number="1.7.2" class="anchored" data-anchor-id="difference-in-differences-the-logic"><span class="header-section-number">1.7.2</span> Difference-in-differences: the logic</h3>
+<p>The <strong>difference-in-differences (DiD)</strong> comparison is the workhorse of quasi-experimental analysis and one of the most widely used causal tools in industry and research <span class="citation" data-cites="varian2016">(<a href="01-foundations.html#ref-varian2016" role="doc-biblioref">Varian 2016</a>)</span>. <a href="#fig-did-stylized" class="quarto-xref">Figure&nbsp;<span>1.20</span></a> shows its logic. The treated and control groups start at different <em>levels</em> — that is the selection problem, and DiD tolerates it. The key idea is to borrow the control group’s <em>change</em> over time: it tells us what would have happened to the treated group without the treatment. Adding this change to the treated group’s starting level yields the <strong>counterfactual</strong> (dashed line), and the treatment effect <strong>Δ</strong> is the gap between what happened and what would have happened.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-did-stylized" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-did-stylized-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-did-stylized-1.png" class="img-fluid figure-img" width="1320">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-did-stylized-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.20: The logic of difference-in-differences (stylized, after Varian, 2016). Here the treatment effect is negative: the treated group ends up below its counterfactual.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="tbl-did" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-did-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.6: The difference-in-differences table
+</figcaption>
+<div aria-describedby="tbl-did-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Period</th>
+<th>Treated</th>
+<th>Control</th>
+<th>Counterfactual</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Before</td>
+<td><span class="math inline">\(Y_{t,\text{pre}}\)</span></td>
+<td><span class="math inline">\(Y_{c,\text{pre}}\)</span></td>
+<td><span class="math inline">\(Y_{t,\text{pre}}\)</span></td>
+</tr>
+<tr class="even">
+<td>After</td>
+<td><span class="math inline">\(Y_{t,\text{post}}\)</span></td>
+<td><span class="math inline">\(Y_{c,\text{post}}\)</span></td>
+<td><span class="math inline">\(Y_{t,\text{pre}} + (Y_{c,\text{post}} - Y_{c,\text{pre}})\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The effect of the treatment on the treated is therefore:</p>
+<p><span class="math display">\[
+\Delta = (Y_{t,\text{post}} - Y_{t,\text{pre}}) - (Y_{c,\text{post}} - Y_{c,\text{pre}})
+\]</span></p>
+<p>The name describes the computation: two differences over time, and the difference between them. The first difference removes stable differences between the groups (the enthusiasts’ higher spending); the second removes changes over time that affect everyone (the whole market moving).</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Key assumption: parallel trends">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Key assumption: parallel trends
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Without the treatment, the treated group would have changed <strong>by the same amount</strong> as the control group. Differences in <em>levels</em> between the groups are fine; different <em>trends</em> are not. This is the assumption DiD needs <em>instead of</em> “no unobserved confounders” — weaker, but still an assumption that must be argued for.</p>
+</div>
+</div>
+</section>
+<section id="did-in-action-the-spotify-example" class="level3" data-number="1.7.3">
+<h3 data-number="1.7.3" class="anchored" data-anchor-id="did-in-action-the-spotify-example"><span class="header-section-number">1.7.3</span> DiD in action: the Spotify example</h3>
+<p><a href="#fig-spotify-did" class="quarto-xref">Figure&nbsp;<span>1.21</span></a> and <a href="#tbl-spotify-did" class="quarto-xref">Table&nbsp;<span>1.7</span></a> apply this logic to stylized figures from the Spotify study.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-spotify-did" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-spotify-did-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01-foundations_files/figure-html/fig-spotify-did-1.png" class="img-fluid figure-img" width="1280">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spotify-did-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.21: Monthly spending on CDs and downloads of the same consumers before (T1) and after (T2) Spotify adoption (stylized figures after Wlömert &amp; Papies, 2016).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="tbl-spotify-did" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-spotify-did-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.7: Difference-in-differences for the Spotify example (stylized figures)
+</figcaption>
+<div aria-describedby="tbl-spotify-did-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Period</th>
+<th>Treated (Spotify users)</th>
+<th>Control (non-users)</th>
+<th>Counterfactual</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Before</td>
+<td>10.40€</td>
+<td>4.60€</td>
+<td>10.40€</td>
+</tr>
+<tr class="even">
+<td>After</td>
+<td>7.90€</td>
+<td>4.60€</td>
+<td>10.40€ + (4.60€ − 4.60€) = 10.40€</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p><span class="math display">\[
+\Delta = (7.90€ - 10.40€) - (4.60€ - 4.60€) = -2.50€
+\]</span></p>
+<p><strong>Same data, opposite conclusion.</strong> The snapshot says that Spotify users spend 3.30€ <em>more</em> per month than non-users (7.90€ vs.&nbsp;4.60€); following the same people over time says that adopting Spotify <em>reduced</em> their spending on CDs and downloads by 2.50€ per month. Adopters were already heavy spenders before adopting (10.40€ vs.&nbsp;4.60€) — that gap is selection. After adoption, their spending fell by 24%, while non-adopters’ spending remained flat. The snapshot measured <em>who adopts</em>, not <em>what adoption does</em>. The press comparisons mentioned above answered a descriptive question and claimed a causal one — the confusion of <a href="#sec-four-questions" class="quarto-xref"><span>Section 1.3</span></a> once more.</p>
+<p>The −2.50€ rests on the parallel-trends assumption: would the enthusiasts’ spending on CDs and downloads have stayed as flat as the non-users’ without Spotify, at a time when these channels were declining in general? The control group’s flat line is what licenses the claim — and it is the part of the analysis a critical reader should probe first.</p>
+<p>Incidentally, the eBay regional experiment of <a href="#sec-ebay" class="quarto-xref"><span>Section 1.2</span></a> was analyzed with the same logic — comparing the <em>change</em> in sales in the switched-off regions with the change in the remaining regions. There, however, the regions had been <em>randomized</em>: randomization made the parallel-trends assumption hold by design.</p>
+<p>We introduce quasi-experiments for two reasons. First, so that the spectrum in <a href="#tbl-spectrum" class="quarto-xref">Table&nbsp;<span>1.5</span></a> completes your mental map from day one: <em>experiment / quasi-experiment / observational study</em>, ordered by how hard you must work to defend a causal claim. Second, because DiD-style arguments are everywhere in business practice (“sales rose in the test market by more than elsewhere…”), and you should be able to recognize — and question — them. The estimation of DiD models with panel data is beyond the scope of this course; if you want to go further, <span class="citation" data-cites="angrist2009">Angrist and Pischke (<a href="01-foundations.html#ref-angrist2009" role="doc-biblioref">2009</a>)</span> is an excellent starting point.</p>
+</section>
 </section>
 <section id="sec-design" class="level2" data-number="1.8">
 <h2 data-number="1.8" class="anchored" data-anchor-id="sec-design"><span class="header-section-number">1.8</span> From business problem to research design</h2>
@@ -875,7 +1437,7 @@ Table&nbsp;1.2: The spectrum of research designs
 <div id="tbl-translation" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-translation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1.3: From management problem to research design
+Table&nbsp;1.8: From management problem to research design
 </figcaption>
 <div aria-describedby="tbl-translation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -911,7 +1473,7 @@ Table&nbsp;1.3: From management problem to research design
 <td>Purchase frequency and engagement <em>before</em> joining (heavy buyers join loyalty programs!)</td>
 </tr>
 <tr class="even">
-<td><strong>Candidate designs</strong></td>
+<td><strong>Feasible designs</strong></td>
 <td>Randomize <em>invitations</em> to the program; staggered rollout across regions (quasi-experiment); observational comparison with adjustment (weakest)</td>
 </tr>
 </tbody>
@@ -919,7 +1481,7 @@ Table&nbsp;1.3: From management problem to research design
 </div>
 </figure>
 </div>
-<p>Three habits are worth building from the start. First, <strong>state the hypothesis as a precise, falsifiable claim</strong> — “program membership increases 12-month contribution margin” — rather than a vague aspiration (“the program creates value”). Precision dictates what data you need and what analysis applies. Second, <strong>name the likely confounders before you see any data</strong>; if you cannot name them, you are not ready to interpret an observational comparison. Third, <strong>rank the feasible designs</strong> by the spectrum of <a href="#tbl-spectrum" class="quarto-xref">Table&nbsp;<span>1.2</span></a> and ask what stands in the way of the stronger ones — often, a partial experiment (randomizing <em>invitations</em>, a pilot region) is feasible where a full one is not.</p>
+<p>Three habits are worth building from the start. First, <strong>state the hypothesis as a precise, falsifiable claim</strong> — “program membership increases 12-month contribution margin” — rather than a vague aspiration (“the program creates value”). Precision dictates what data you need, which design is appropriate, and what analysis applies. Second, <strong>name the likely confounders before you see any data</strong>; if you cannot name them, you are not ready to interpret an observational comparison. Third, <strong>rank the feasible designs</strong> by the spectrum of <a href="#tbl-spectrum" class="quarto-xref">Table&nbsp;<span>1.5</span></a> and ask what stands in the way of the stronger ones — often, a partial experiment (randomizing <em>invitations</em>, a pilot region) is feasible where a full one is not.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Practice">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -930,7 +1492,7 @@ Table&nbsp;1.3: From management problem to research design
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Translate the following requests into the template above — outcome, treatment, unit, question type, two plausible confounders, best feasible design: (1) “Should we invest more in influencer marketing?” (2) “Is our app driving retention, or do loyal customers just download the app?” (3) “Did last spring’s rebranding damage our sales in Germany?” We will discuss these in the session; note that (2) is reverse causality on a silver platter, and (3) permits no experiment at all — the event already happened, and happened everywhere at once. What could a credible comparison look like anyway?</p>
+<p>Translate the following requests into the template above — outcome (DV), treatment (IV), unit, question type, two plausible confounders, and the best feasible design (experiment / quasi-experiment / observational): (1) “Should we invest more in influencer marketing?” (2) “Is our app driving retention, or do loyal customers just download the app?” (3) “Did last spring’s rebranding damage our sales in Germany?” We will discuss these in the session; note that (2) is reverse causality on a silver platter, and (3) permits no experiment at all — the event already happened, and happened everywhere at once. What could a credible comparison look like anyway?</p>
 </div>
 </div>
 </section>
@@ -941,7 +1503,7 @@ Table&nbsp;1.3: From management problem to research design
 <div id="tbl-ai" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ai-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1.4: Where AI helps — and where the work is yours
+Table&nbsp;1.9: Where AI helps — and where the work is yours
 </figcaption>
 <div aria-describedby="tbl-ai-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -994,22 +1556,24 @@ Table&nbsp;1.4: Where AI helps — and where the work is yours
 </section>
 <section id="sec-course-map" class="level2" data-number="1.10">
 <h2 data-number="1.10" class="anchored" data-anchor-id="sec-course-map"><span class="header-section-number">1.10</span> The course at a glance</h2>
-<p>You now hold the complete map of the course in your head; here it is on paper. Each module answers one of the four questions of <a href="#sec-four-questions" class="quarto-xref"><span>Section 1.3</span></a>, and the causal modules are ordered along the spectrum of <a href="#tbl-spectrum" class="quarto-xref">Table&nbsp;<span>1.2</span></a>.</p>
+<p>You now hold the complete map of the course in your head; here it is on paper (<a href="#tbl-course-map" class="quarto-xref">Table&nbsp;<span>1.10</span></a>). Each module answers one of the driving questions of <a href="#sec-four-questions" class="quarto-xref"><span>Section 1.3</span></a>. The dates of all sessions are listed in the <a href="./00-introduction.html">Introduction</a>.</p>
 <div id="tbl-course-map" class="striped quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-course-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1.5: The course map
+Table&nbsp;1.10: The course map
 </figcaption>
 <div aria-describedby="tbl-course-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped caption-top table">
 <colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Module</th>
+<th>Session(s)</th>
 <th>Driving question</th>
 <th>Contents</th>
 </tr>
@@ -1017,52 +1581,65 @@ Table&nbsp;1.5: The course map
 <tbody>
 <tr class="odd">
 <td>1 · Questions, decisions &amp; data</td>
+<td>1</td>
 <td>Which question am I really asking?</td>
 <td>This chapter</td>
 </tr>
 <tr class="even">
 <td>2 · Describing data</td>
+<td>2</td>
 <td>What is going on?</td>
 <td>Data handling, summary statistics, visualization</td>
 </tr>
 <tr class="odd">
 <td>3 · Uncertainty</td>
+<td>3</td>
 <td>How sure can I be?</td>
 <td>Sampling variation, standard errors, confidence intervals</td>
 </tr>
 <tr class="even">
 <td>4 · Learning from experiments</td>
+<td>3–4</td>
 <td>Did it work?</td>
 <td>Comparing groups; tests; running experiments well</td>
 </tr>
 <tr class="odd">
 <td>5 · Learning from observational data</td>
+<td>5–6</td>
 <td>What if we cannot randomize?</td>
-<td>Regression, adjustment, mediation &amp; moderation</td>
+<td>Confounding, regression as adjustment, categorical predictors, logistic regression</td>
 </tr>
 <tr class="even">
-<td>6 · Panel data &amp; quasi-experiments</td>
-<td>What if the world randomizes for us?</td>
-<td>Fixed effects, difference-in-differences</td>
+<td>6 · Mechanisms &amp; heterogeneity</td>
+<td>7</td>
+<td>Why — and for whom — does it work?</td>
+<td>Moderation (interactions) and mediation — in experiments and observational data</td>
 </tr>
 <tr class="odd">
-<td>7 · From estimate to decision</td>
-<td>What should we do?</td>
-<td>Effect sizes in euros; communicating analyses</td>
+<td>Survey design</td>
+<td>8</td>
+<td>How do I build a study that can answer my question?</td>
+<td>Questionnaire design, measurement, embedding a randomized experiment</td>
+</tr>
+<tr class="even">
+<td>Group project coaching</td>
+<td>2 online sessions</td>
+<td>Your own experiment, end to end</td>
+<td>Questionnaire feedback (Coaching I); data analysis (Coaching II)</td>
 </tr>
 </tbody>
 </table>
 </div>
 </figure>
 </div>
-<p>In the <strong>group project</strong>, you will put the full arc into practice: designing a survey that <em>contains a genuine randomized experiment</em>, fielding it, and analyzing the resulting data. Everything in this chapter — counterfactuals, randomization, confounders, precise hypotheses — will turn from something you recognize into something you build.</p>
+<p>In the <strong>group project</strong>, you will put the full arc into practice: designing a survey that <em>contains a genuine randomized experiment</em>, fielding it, and analyzing the resulting data. Everything in this chapter — counterfactuals, randomization, confounders, mediators and moderators, precise hypotheses — will turn from something you recognize into something you build.</p>
 </section>
 <section id="sec-lc-01" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="sec-lc-01">Learning check</h2>
-<p><strong>(LC1.1)</strong> An analyst reports: <em>“Customers who use our app have twice the lifetime value of non-users — the app clearly pays off.”</em> Which type of question (per <a href="#tbl-four-questions" class="quarto-xref">Table&nbsp;<span>1.1</span></a>) does the comparison actually answer, and which type does the conclusion claim? Name the most plausible confounder.</p>
+<p><strong>(LC1.1)</strong> An analyst reports: <em>“Customers who use our app have twice the lifetime value of non-users — the app clearly pays off.”</em> Which type of question (per <a href="#tbl-four-questions" class="quarto-xref">Table&nbsp;<span>1.2</span></a>) does the comparison actually answer, and which type does the conclusion claim? Name the most plausible confounder.</p>
 <p><strong>(LC1.2)</strong> A social media platform’s advertising dashboard compares the purchases of users who clicked your ad with the purchases of users who saw it but did not click. Is this comparison an experiment? What role (in the sense of <a href="#sec-cast" class="quarto-xref"><span>Section 1.5</span></a>) does “interest in the product” play here?</p>
-<p><strong>(LC1.3)</strong> Your CMO wants to know whether to extend a price promotion nationally after a pilot in Vienna. What design feature would make the pilot informative for a causal conclusion — and what, precisely, is the counterfactual being estimated?</p>
-<p><strong>(LC1.4)</strong> Classify the role of the third variable in each statement — confounder, mediator, or moderator: (a) “The newsletter increases purchases <em>because it increases site visits</em>.” (b) “The discount works much better <em>for students</em>.” (c) “Households with more children buy more of both our cereal and our toys.”</p>
+<p><strong>(LC1.3)</strong> Your CMO ran a 4-week price promotion <strong>in Vienna only</strong>. Weekly sales in Vienna rose from 200k€ to 230k€; in Graz (no promotion), they rose from 150k€ to 160k€ over the same weeks. What is the difference-in-differences estimate of the promotion effect? What must you assume for this estimate to be causal — and why might Vienna be a questionable choice for the pilot?</p>
+<p><strong>(LC1.4)</strong> Classify the role of the third variable in each statement — confounder, mediator, or moderator: (a) “The newsletter increases purchases <em>because it increases site visits</em>.” (b) “The discount works much better <em>for students</em>.” (c) “Customers who buy our cereal also buy more of our toys — <em>households with more children</em> buy more of both.”</p>
 <p><strong>(LC1.5)</strong> Which of the following statements are correct?</p>
 <ul class="task-list">
 <li><label><input type="checkbox">A sufficiently large dataset removes the need for the no-unobserved-confounders assumption</label></li>
@@ -1070,11 +1647,14 @@ Table&nbsp;1.5: The course map
 <li><label><input type="checkbox">A variable can be an excellent predictor of an outcome without having any causal effect on it</label></li>
 <li><label><input type="checkbox">The no-unobserved-confounders assumption can be verified with a statistical test if all observed covariates are balanced</label></li>
 <li><label><input type="checkbox">Adjusting for more variables always brings an observational estimate closer to the causal effect</label></li>
+<li><label><input type="checkbox">Two time series that both trend upward will be correlated — even if they are completely unrelated</label></li>
 </ul>
-<p><strong>(LC1.6)</strong> True or false? In a quasi-experiment, the treatment variation originates from the units’ own choices.</p>
+<p><strong>(LC1.6)</strong> Which of the following statements are correct?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">True</label></li>
-<li><label><input type="checkbox">False</label></li>
+<li><label><input type="checkbox">In a quasi-experiment, the researcher controls who receives the treatment</label></li>
+<li><label><input type="checkbox">If Spotify users spent more on music than non-users <em>before</em> adopting Spotify, difference-in-differences cannot be used</label></li>
+<li><label><input type="checkbox">Difference-in-differences requires that, without the treatment, the treated and control groups would have followed parallel trends</label></li>
+<li><label><input type="checkbox">In a platform A/B test, randomizing users into ad A vs.&nbsp;ad B guarantees that both ads reach comparable audiences</label></li>
 </ul>
 </section>
 <section id="references" class="level2 unnumbered">
@@ -1094,25 +1674,61 @@ Experiment.”</span> <em>Econometrica</em> 83 (1): 155–74.
 Box, George E. P., William G. Hunter, and J. Stuart Hunter. 1978.
 <em>Statistics for Experimenters</em>. John Wiley &amp; Sons.
 </div>
+<div id="ref-braun2025" class="csl-entry" role="listitem">
+Braun, Michael, and Eric M. Schwartz. 2025. <span>“Where
+<span>A/B</span> Testing Goes Wrong: How Divergent Delivery Affects What
+Online Experiments Cannot (and Can) Tell You about How Customers Respond
+to Advertising.”</span> <em>Journal of Marketing</em>.
+</div>
 <div id="ref-field2012" class="csl-entry" role="listitem">
 Field, Andy, Jeremy Miles, and Zoë Field. 2012. <em>Discovering
 Statistics Using r</em>. Sage Publications.
+</div>
+<div id="ref-gartner2026" class="csl-entry" role="listitem">
+Gartner. 2026. <em>Gartner CMO Spend Survey 2026</em>. <a href="https://www.gartner.com" class="uri">Https://www.gartner.com</a>.
 </div>
 <div id="ref-gelman2010" class="csl-entry" role="listitem">
 Gelman, Andrew. 2010. <span>“Experimental Reasoning in Social
 Science.”</span> In <em>Field Experiments and Their Critics</em>. Yale
 University Press.
 </div>
+<div id="ref-goldfarb2014" class="csl-entry" role="listitem">
+Goldfarb, Avi, and Catherine Tucker. 2014. <em>Conducting Research with
+Quasi-Experiments: A Guide for Marketers</em>. Working Paper. Rotman
+School of Management.
+</div>
 <div id="ref-hernan2019" class="csl-entry" role="listitem">
 Hernán, Miguel A., John Hsu, and Brian Healy. 2019. <span>“A Second
 Chance to Get Causal Inference Right: A Classification of Data Science
 Tasks.”</span> <em>CHANCE</em> 32 (1): 42–49.
+</div>
+<div id="ref-delanghe2021" class="csl-entry" role="listitem">
+Langhe, Bart de, and Stefano Puntoni. 2021. <span>“Does Personalized
+Advertising Work as Well as Tech Companies Claim?”</span> <em>Harvard
+Business Review</em>.
+</div>
+<div id="ref-cmosurvey2026" class="csl-entry" role="listitem">
+Moorman, Christine. 2026. <em>The CMO Survey: Highlights and Insights
+Report, Spring 2026 (35th Edition)</em>. <a href="https://cmosurvey.org" class="uri">Https://cmosurvey.org</a>.
+</div>
+<div id="ref-pearl2009" class="csl-entry" role="listitem">
+Pearl, Judea. 2009. <span>“Causal Inference in Statistics: An
+Overview.”</span> <em>Statistics Surveys</em> 3: 96–146.
+</div>
+<div id="ref-varian2016" class="csl-entry" role="listitem">
+Varian, Hal R. 2016. <span>“Causal Inference in Economics and
+Marketing.”</span> <em>Proceedings of the National Academy of
+Sciences</em> 113 (27): 7310–15.
 </div>
 <div id="ref-wloemert2016" class="csl-entry" role="listitem">
 Wlömert, Nils, and Dominik Papies. 2016. <span>“On-Demand Streaming
 Services and Music Industry Revenues — Insights from Spotify’s Market
 Entry.”</span> <em>International Journal of Research in Marketing</em>
 33 (2): 314–27.
+</div>
+<div id="ref-wef2025" class="csl-entry" role="listitem">
+World Economic Forum. 2025. <em>The Future of Jobs Report 2025</em>.
+World Economic Forum.
 </div>
 </div>
 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4em;">
