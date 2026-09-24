@@ -297,7 +297,8 @@ window.Quarto = {
   <li><a href="#sec-desc-measurement" id="toc-sec-desc-measurement" class="nav-link" data-scroll-target="#sec-desc-measurement"><span class="header-section-number">2.3</span> Variables and levels of measurement</a>
   <ul class="collapse">
   <li><a href="#four-levels-of-measurement" id="toc-four-levels-of-measurement" class="nav-link" data-scroll-target="#four-levels-of-measurement"><span class="header-section-number">2.3.1</span> Four levels of measurement</a></li>
-  <li><a href="#from-levels-of-measurement-to-r-types" id="toc-from-levels-of-measurement-to-r-types" class="nav-link" data-scroll-target="#from-levels-of-measurement-to-r-types"><span class="header-section-number">2.3.2</span> From levels of measurement to R types</a></li>
+  <li><a href="#one-race-four-scales" id="toc-one-race-four-scales" class="nav-link" data-scroll-target="#one-race-four-scales"><span class="header-section-number">2.3.2</span> One race, four scales</a></li>
+  <li><a href="#from-levels-of-measurement-to-r-types" id="toc-from-levels-of-measurement-to-r-types" class="nav-link" data-scroll-target="#from-levels-of-measurement-to-r-types"><span class="header-section-number">2.3.3</span> From levels of measurement to R types</a></li>
   </ul></li>
   <li><a href="#sec-desc-handling" id="toc-sec-desc-handling" class="nav-link" data-scroll-target="#sec-desc-handling"><span class="header-section-number">2.4</span> Data handling</a>
   <ul class="collapse">
@@ -787,10 +788,113 @@ Table&nbsp;2.3: Levels of measurement
 </figure>
 </div>
 <p>Nominal and ordinal variables are called <strong>categorical</strong>; interval and ratio variables are <strong>continuous</strong> (or metric). Each level inherits the operations of the levels above it. The distinction matters for everything that follows: it determines which summary statistics are meaningful, which charts fit, and — from Module 4 onward — which statistical tests apply.</p>
+</section>
+<section id="one-race-four-scales" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="one-race-four-scales"><span class="header-section-number">2.3.2</span> One race, four scales</h3>
+<p>The levels of measurement are easiest to understand with an example in which the <em>same objects</em> are measured in four different ways. Consider three boats in a boat race (<a href="#tbl-race" class="quarto-xref">Table&nbsp;<span>2.4</span></a>).</p>
+<div id="fig-race" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-race-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/boat_1.png" class="img-fluid figure-img"></p>
+<figcaption>Boat A</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/boat_2.png" class="img-fluid figure-img"></p>
+<figcaption>Boat B</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/boat_3.png" class="img-fluid figure-img"></p>
+<figcaption>Boat C</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-race-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.2: Three boats in a boat race — measured in four different ways in <a href="#tbl-race" class="quarto-xref">Table&nbsp;<span>2.4</span></a>.
+</figcaption>
+</figure>
+</div>
+<div id="tbl-race" class="striped quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-race-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.4: One race, four levels of measurement
+</figcaption>
+<div aria-describedby="tbl-race-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: center;">Boat A</th>
+<th style="text-align: center;">Boat B</th>
+<th style="text-align: center;">Boat C</th>
+<th>Level</th>
+<th>What the numbers allow</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Starting number</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">11</td>
+<td style="text-align: center;">7</td>
+<td>Nominal</td>
+<td>Only identification: boat 11 is not “more” than boat 3</td>
+</tr>
+<tr class="even">
+<td>Finishing position</td>
+<td style="text-align: center;">1st</td>
+<td style="text-align: center;">2nd</td>
+<td style="text-align: center;">3rd</td>
+<td>Ordinal</td>
+<td>Order: A was faster than B — but not by how much</td>
+</tr>
+<tr class="odd">
+<td>Finishing clock time (start: 14:00)</td>
+<td style="text-align: center;">14:07:06</td>
+<td style="text-align: center;">14:14:12</td>
+<td style="text-align: center;">14:15:12</td>
+<td>Interval</td>
+<td>Differences: A finished 7 minutes before B — but 14:14 is not “twice” 14:07, because midnight is an arbitrary zero point</td>
+</tr>
+<tr class="even">
+<td>Time to finish (minutes)</td>
+<td style="text-align: center;">7.1</td>
+<td style="text-align: center;">14.2</td>
+<td style="text-align: center;">15.2</td>
+<td>Ratio</td>
+<td>Ratios: A was <em>twice as fast</em> as B</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Two lessons follow. First, the level of measurement is a property of the <strong>measurement</strong>, not of the object: the same boat is “3”, “1st”, “14:07:06”, and “7.1 minutes”. The last two carry exactly the same information — the difference is only the zero point: subtracting the start time replaces the arbitrary zero (midnight) with a natural one (no time elapsed), and turns an interval scale into a ratio scale. Second, the numbers themselves do not tell you which operations are meaningful. R will happily compute the mean starting number (7) or the mean finishing position (2) — it is your job to know that the first is meaningless, and that for the second, the median is the appropriate summary.</p>
 <p>Two cases require judgment. <strong>Rating scales</strong> (e.g., “How much do you like this song? 1–7”) are strictly ordinal — nobody guarantees that the step from 1 to 2 equals the step from 6 to 7 — but are in practice often treated as interval scales when they have enough points. And <strong>binary variables</strong> coded 0/1 (like <code>explicit</code>) are nominal, but have a convenient property: their mean is the share of 1s.</p>
 </section>
-<section id="from-levels-of-measurement-to-r-types" class="level3" data-number="2.3.2">
-<h3 data-number="2.3.2" class="anchored" data-anchor-id="from-levels-of-measurement-to-r-types"><span class="header-section-number">2.3.2</span> From levels of measurement to R types</h3>
+<section id="from-levels-of-measurement-to-r-types" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="from-levels-of-measurement-to-r-types"><span class="header-section-number">2.3.3</span> From levels of measurement to R types</h3>
 <p>R does not know the level of measurement of a variable — you have to tell it, by choosing the right <strong>type</strong> (see the <a href="./r-onboarding.html">R onboarding</a>):</p>
 <table class="table-striped caption-top table">
 <caption>Levels of measurement and R types</caption>
@@ -860,11 +964,11 @@ Levels: poor &lt; fair &lt; good &lt; excellent &lt; masterpiece</code></pre>
 </section>
 <section id="sec-desc-handling" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="sec-desc-handling"><span class="header-section-number">2.4</span> Data handling</h2>
-<p>Raw data rarely come in exactly the form an analysis needs. <strong>Data handling</strong> (or <em>data wrangling</em>) comprises the operations that get them there. The <code>dplyr</code> package (part of the tidyverse) provides one function — a “verb” — for each of the core operations (<a href="#tbl-verbs" class="quarto-xref">Table&nbsp;<span>2.4</span></a>).</p>
+<p>Raw data rarely come in exactly the form an analysis needs. <strong>Data handling</strong> (or <em>data wrangling</em>) comprises the operations that get them there. The <code>dplyr</code> package (part of the tidyverse) provides one function — a “verb” — for each of the core operations (<a href="#tbl-verbs" class="quarto-xref">Table&nbsp;<span>2.5</span></a>).</p>
 <div id="tbl-verbs" class="striped quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-verbs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2.4: The core verbs of data handling
+Table&nbsp;2.5: The core verbs of data handling
 </figcaption>
 <div aria-describedby="tbl-verbs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped caption-top table">
@@ -1199,7 +1303,7 @@ Table&nbsp;2.4: The core verbs of data handling
 <section id="sec-desc-selection" class="level3" data-number="2.5.6">
 <h3 data-number="2.5.6" class="anchored" data-anchor-id="sec-desc-selection"><span class="header-section-number">2.5.6</span> How did the data come to be?</h3>
 <p>The five checks examine the data <em>as they are</em>. The most important question, however, is one you already know from <a href="01-foundations.html#sec-dgp" class="quarto-xref"><span>Section 1.4</span></a>: <strong>how did the data come to be?</strong> Our data set contains only tracks that made it into the charts. Every released track that never charted is absent. The data are therefore <strong>selected on the outcome</strong> — a form of the <em>selection into the sample</em> that we met in <a href="01-foundations.html#sec-cast" class="quarto-xref"><span>Section 1.5</span></a>.</p>
-<p>This has consequences that are easy to miss. Suppose a song’s chart success depends on two things: how catchy it is and how much promotion it receives, and that the two are completely unrelated among all released songs. <a href="#fig-selection" class="quarto-xref">Figure&nbsp;<span>2.2</span></a> simulates this situation. Among <em>all</em> songs (left), catchiness and promotion are uncorrelated. Among the songs that <em>made the charts</em> (right), they are clearly negatively correlated: a charting song with little promotion must have been very catchy to get there, and a charting song that is not very catchy must have had strong promotion.</p>
+<p>This has consequences that are easy to miss. Suppose a song’s chart success depends on two things: how catchy it is and how much promotion it receives, and that the two are completely unrelated among all released songs. <a href="#fig-selection" class="quarto-xref">Figure&nbsp;<span>2.3</span></a> simulates this situation. Among <em>all</em> songs (left), catchiness and promotion are uncorrelated. Among the songs that <em>made the charts</em> (right), they are clearly negatively correlated: a charting song with little promotion must have been very catchy to get there, and a charting song that is not very catchy must have had strong promotion.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-selection" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1208,7 +1312,7 @@ Table&nbsp;2.4: The core verbs of data handling
 <img src="02-describing-data_files/figure-html/fig-selection-1.png" class="img-fluid figure-img" width="2000">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-selection-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.2: Selection into the data set (simulated data). Catchiness and promotion are unrelated among all released songs, but negatively related among the songs that made the charts — a pattern created purely by the selection.
+Figure&nbsp;2.3: Selection into the data set (simulated data). Catchiness and promotion are unrelated among all released songs, but negatively related among the songs that made the charts — a pattern created purely by the selection.
 </figcaption>
 </figure>
 </div>
@@ -1391,11 +1495,11 @@ z_i = \frac{x_i - \bar{x}}{s_x}
 </section>
 <section id="choosing-the-chart-that-fits-your-variables" class="level3" data-number="2.7.2">
 <h3 data-number="2.7.2" class="anchored" data-anchor-id="choosing-the-chart-that-fits-your-variables"><span class="header-section-number">2.7.2</span> Choosing the chart that fits your variables</h3>
-<p>Which chart type fits depends — once again — on the levels of measurement of the variables involved (<a href="#tbl-chart-choice" class="quarto-xref">Table&nbsp;<span>2.5</span></a>).</p>
+<p>Which chart type fits depends — once again — on the levels of measurement of the variables involved (<a href="#tbl-chart-choice" class="quarto-xref">Table&nbsp;<span>2.6</span></a>).</p>
 <div id="tbl-chart-choice" class="striped quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-chart-choice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2.5: Choosing a chart by variable type
+Table&nbsp;2.6: Choosing a chart by variable type
 </figcaption>
 <div aria-describedby="tbl-chart-choice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped caption-top table">
@@ -1555,7 +1659,7 @@ Table&nbsp;2.5: Choosing a chart by variable type
 <section id="honest-visualization" class="level3" data-number="2.7.7">
 <h3 data-number="2.7.7" class="anchored" data-anchor-id="honest-visualization"><span class="header-section-number">2.7.7</span> Honest visualization</h3>
 <p>Charts persuade — which is why they can mislead. Three rules prevent the most common distortions.</p>
-<p><strong>1. Bars start at zero.</strong> The length of a bar encodes its value; if the axis is truncated, the lengths lie. In <a href="#fig-truncated" class="quarto-xref">Figure&nbsp;<span>2.3</span></a>, the same two market shares look dramatically different on a truncated axis (left) and nearly equal on an honest one (right).</p>
+<p><strong>1. Bars start at zero.</strong> The length of a bar encodes its value; if the axis is truncated, the lengths lie. In <a href="#fig-truncated" class="quarto-xref">Figure&nbsp;<span>2.4</span></a>, the same two market shares look dramatically different on a truncated axis (left) and nearly equal on an honest one (right).</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-truncated" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1564,7 +1668,7 @@ Table&nbsp;2.5: Choosing a chart by variable type
 <img src="02-describing-data_files/figure-html/fig-truncated-1.png" class="img-fluid figure-img" width="1800">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-truncated-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2.3: The same data, two impressions: a truncated axis exaggerates a 2-percentage-point difference (stylized data).
+Figure&nbsp;2.4: The same data, two impressions: a truncated axis exaggerates a 2-percentage-point difference (stylized data).
 </figcaption>
 </figure>
 </div>
