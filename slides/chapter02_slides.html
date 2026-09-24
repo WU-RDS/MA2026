@@ -1439,7 +1439,7 @@ display:block!important;
 <p>Files in your project folder are read by their <strong>relative path</strong>: <code>read_excel(&quot;data/survey.xlsx&quot;)</code> — no <code>setwd()</code> needed inside an RStudio Project.</p>
 </div>
 </section>
-<section id="what-is-a-row" class="slide level2 midsize">
+<section id="what-is-a-row" class="slide level2 smaller">
 <h2>What is a row?</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -1451,13 +1451,89 @@ display:block!important;
 </ol>
 </div><div class="column" style="width:50%;">
 <div class="keybox">
-<p>Before any analysis, answer explicitly: <strong>what does one row represent?</strong> — the <strong>unit of observation</strong> (cf. “unit of analysis” in §1.8).</p>
-<p>Here: one row = one track. <em>Does that really hold?</em> → §2.5</p>
+<p>Before any analysis, answer explicitly: <strong>what does one row represent?</strong> — the <strong>unit of observation</strong> (cf. “unit of analysis” in §1.8). Here: one row = one track. <em>Does that really hold?</em> → §2.5</p>
 </div>
 </div></div>
-<div style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 1.2em; text-align: center; color: #58585a; margin-top: 0.8em;">
-<p><em>Image placeholder: small example of an untidy table (one column per month) vs. its tidy version</em><br>
-<code>img/ch02/tidy_vs_untidy.png</code></p>
+<div style="font-size: 0.85em;">
+<div class="columns">
+<div class="column" style="width:45%;">
+<p><strong>Untidy:</strong> one column per month — “month” is hidden in the column names</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">track</th>
+<th style="text-align: right;">Jan</th>
+<th style="text-align: right;">Feb</th>
+<th style="text-align: right;">Mar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Track A</td>
+<td style="text-align: right;">120</td>
+<td style="text-align: right;">135</td>
+<td style="text-align: right;">150</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Track B</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">65</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><div class="column" style="width:55%;">
+<p><strong>Tidy:</strong> one row per track and month</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">track</th>
+<th style="text-align: left;">month</th>
+<th style="text-align: right;">streams</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Track A</td>
+<td style="text-align: left;">Jan</td>
+<td style="text-align: right;">120</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Track A</td>
+<td style="text-align: left;">Feb</td>
+<td style="text-align: right;">135</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Track A</td>
+<td style="text-align: left;">Mar</td>
+<td style="text-align: right;">150</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Track B</td>
+<td style="text-align: left;">Jan</td>
+<td style="text-align: right;">80</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Track B</td>
+<td style="text-align: left;">Feb</td>
+<td style="text-align: right;">70</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Track B</td>
+<td style="text-align: left;">Mar</td>
+<td style="text-align: right;">65</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div></div>
 </div>
 </section></section>
 <section>
@@ -2269,20 +2345,12 @@ display:block!important;
 </section>
 <section id="assignment-1-data-handling-description" class="slide level2 midsize">
 <h2>Assignment 1: data handling &amp; description</h2>
-<div class="columns">
-<div class="column" style="width:55%;">
 <ul>
 <li><strong>Your own data set</strong> (individual) — import, check, handle, summarize, visualize</li>
 <li>Submit as a <strong>reproducible report</strong> (.Rmd → HTML) via Canvas</li>
 <li><strong>Deadline:</strong> Group A: Mon, Oct 26 · Group B: Wed, Oct 28</li>
 <li><strong>Debrief:</strong> 3 short paper questions about <em>your</em> results at the start of session 4</li>
 </ul>
-</div><div class="column" style="width:45%;">
-<div style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 2em; text-align: center; color: #58585a;">
-<p><em>Image placeholder: screenshot of the Assignment 1 page on Canvas</em><br>
-<code>img/ch02/assignment1.png</code></p>
-</div>
-</div></div>
 <div class="keybox">
 <p>Everything you need is in <strong>this chapter</strong>. AI assistants welcome — you must be able to <strong>explain every line</strong> you submit.</p>
 </div>
