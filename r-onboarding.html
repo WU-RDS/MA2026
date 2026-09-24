@@ -469,16 +469,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="A.4.1" class="anchored" data-anchor-id="sec-onb-folders"><span class="header-section-number">A.4.1</span> A tidy folder structure</h3>
 <p>A project quickly accumulates files: scripts, data sets, charts, reports. Keeping them in separate subfolders from the start makes it easy to find things — and makes file paths predictable. We recommend this structure:</p>
 <pre><code>marketing-analytics/            &lt;- the project folder
-├── marketing-analytics.Rproj   &lt;- double-click to open the project
-├── code/                       &lt;- R scripts (.R) and R Markdown reports (.Rmd)
-├── data/                       &lt;- data files (.csv, .xlsx, .sav, ...)
+├── marketing-analytics.Rproj   &lt;- double-click to open project
+├── code/                       &lt;- .R and .Rmd files
+├── data/                       &lt;- data files (.csv, .xlsx, ...)
 └── graphics/                   &lt;- saved charts (.png, .pdf)</code></pre>
 <p>Create the subfolders with the <em>New Folder</em> button in the Files pane. Inside the project, you then refer to files by their <strong>relative path</strong> — relative to the project folder — e.g., <code>read_csv2("data/music_data_fin.csv")</code> or <code>ggsave("graphics/genre_shares.png")</code>. Relative paths work on every computer that has a copy of the project; absolute paths such as <code>C:/Users/anna/Desktop/…</code> work only on yours.</p>
-<div style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 2em; text-align: center; color: #58585a; margin: 1em 0;">
-<p><em>Screenshot placeholder: the Files pane of RStudio showing the project folder with the subfolders code, data, and graphics</em><br>
-<code>img/rstudio_project_folders.png</code></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/folder_structure.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>The project folder in the Files pane.</figcaption>
+</figure>
 </div>
-<!-- ![The project folder in the Files pane.](img/rstudio_project_folders.png){width=70%} -->
 <p>Two rules help to keep things clean: <strong>never modify raw data files by hand</strong> (all changes happen in code, so they can be reproduced), and <strong>use file names without spaces or special characters</strong> — <code>assignment-1.Rmd</code> rather than <code>Assignment 1 (final).Rmd</code>. Spaces and brackets in file names cause errors in several R tools.</p>
 </section>
 </section>
@@ -778,11 +779,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>By default, the pipe shortcut inserts the older <code>%&gt;%</code>. To make it insert the native pipe <code>|&gt;</code> used in this course, go to <em>Tools → Global Options → Code → Editing</em> and tick <strong>“Use native pipe operator, |&gt;”</strong>. All shortcuts can be changed under <em>Tools → Modify Keyboard Shortcuts…</em> — search for a command by name and click into the <em>Shortcut</em> column to assign a new key combination.</p>
 </div>
 </div>
-<div style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 2em; text-align: center; color: #58585a; margin: 1em 0;">
-<p><em>Screenshot placeholder: Tools → Global Options → Code → Editing, with “Use native pipe operator, |&gt;” highlighted</em><br>
-<code>img/rstudio_native_pipe.png</code></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/native_pipe.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>Activating the native pipe operator.</figcaption>
+</figure>
 </div>
-<!-- ![Activating the native pipe operator.](img/rstudio_native_pipe.png){width=70%} -->
 </section>
 </section>
 <section id="sec-onb-data" class="level2" data-number="A.6">
@@ -933,11 +935,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Chat assistants</strong> such as ChatGPT, Claude, Gemini, or Perplexity, which you use in the browser. You describe what you need, paste code or error messages, and get code and explanations back.</li>
 <li><strong>Assistants inside RStudio.</strong> <strong>GitHub Copilot</strong> suggests code directly in the script editor as you type — it completes lines and turns comments into code. To activate it, go to <em>Tools → Global Options → Copilot</em> and sign in with a GitHub account. Verified students can get free access to Copilot through GitHub Education; check the current conditions on the GitHub website. R packages such as <code>gptstudio</code> connect RStudio to chat assistants as well.</li>
 </ul>
-<div style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 2em; text-align: center; color: #58585a; margin: 1em 0;">
-<p><em>Screenshot placeholder: GitHub Copilot in RStudio — a comment (“# Create new variable as the log of the number of streams”) followed by Copilot’s grey code suggestion</em><br>
-<code>img/copilot_rstudio.png</code></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/copilot.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>GitHub Copilot suggests code from a comment.</figcaption>
+</figure>
 </div>
-<!-- ![GitHub Copilot suggests code from a comment.](img/copilot_rstudio.png){width=90%} -->
 <p>In our experience, AI assistants are <strong>good at</strong>:</p>
 <ul>
 <li><strong>Generating standard code</strong>: data handling, loops, charts, simple models — especially boilerplate code you would otherwise look up.</li>
@@ -969,10 +972,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>and danceability with pink hollow circles and a red regression line, and</span>
 <span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>label the regression line with the linear regression coefficient.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 2em; text-align: center; color: #58585a; margin: 1em 0;">
-<p><em>Screenshot placeholder: the answer of the chat assistant — the generated ggplot2 code next to the resulting scatter plot with the red regression line and the label “β = 0.531”</em><br>
-<code>img/ai_scatterplot_example.png</code></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/gpt_out.png" class="img-fluid figure-img" style="width:95.0%"></p>
+<figcaption>Code and chart generated by a chat assistant.</figcaption>
+</figure>
 </div>
-<!-- ![Code and chart generated by a chat assistant.](img/ai_scatterplot_example.png){width=95%} -->
+</div>
 <p>Assistants are just as useful when something goes wrong. Suppose you run the generated code after making a small change, and R reports:</p>
 <pre><code>Error in geom_pont(color = "pink", shape = 1, size = 2, alpha = 0.6) :
   could not find function "geom_pont"</code></pre>
@@ -990,11 +996,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>The median is <strong>2</strong>, not 2.5. Only when the user asked where the 2.5 came from did the assistant acknowledge “a small typo”. Note what saved the day: not a better prompt, but <em>running the code and checking the result</em>.</p>
-<div style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 2em; text-align: center; color: #58585a; margin: 1em 0;">
-<p><em>Screenshot placeholder: the chat excerpt — the assistant’s explanation with the wrong value 2.5, the follow-up question, and the correction (“the 50% quantile is 2.0, not 2.5”)</em><br>
-<code>img/ai_quantile_error.png</code></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/gpt_mistake.png" class="img-fluid figure-img" style="width:95.0%"></p>
+<figcaption>An assistant’s confident mistake — and its correction.</figcaption>
+</figure>
 </div>
-<!-- ![An assistant's confident mistake — and its correction.](img/ai_quantile_error.png){width=95%} -->
 <div class="callout callout-style-default callout-important callout-titled" title="Using AI assistants mindfully">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
