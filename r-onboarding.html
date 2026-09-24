@@ -71,7 +71,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./07-decisions.html" rel="prev">
+<link href="./06-panel-data.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -197,12 +197,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="./06-panel-data.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Panel Data &amp; Quasi-Experiments</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./07-decisions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">From Estimate to Decision</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -802,7 +796,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="sec-onb-data" class="level2" data-number="A.6">
 <h2 data-number="A.6" class="anchored" data-anchor-id="sec-onb-data"><span class="header-section-number">A.6</span> Loading the course data</h2>
 <p>The main data set of the next chapter contains streaming chart data for about 67,000 tracks. You can load it in two ways.</p>
-<p><strong>Directly from the course website</strong> — convenient, but requires an internet connection every time:</p>
+<p><strong>Directly from the course repository on GitHub</strong> — convenient, but requires an internet connection every time:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>music_url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/wu-rds/MA2026/main/data/music_data_fin.csv"</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>music_data <span class="ot">&lt;-</span> <span class="fu">read_csv2</span>(music_url)</span>
@@ -811,7 +805,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1] 66796    31</code></pre>
 </div>
 </div>
-<p><strong>From your project folder</strong> — download the file once (<a href="https://raw.githubusercontent.com/wu-rds/MA2026/main/data/music_data_fin.csv" download="music_data_fin.csv">music_data_fin.csv</a>), save it in your project’s <code>data</code> folder, and read it by its relative path:</p>
+<p><strong>From your project folder</strong> — download the file once (<a href="https://raw.githubusercontent.com/wu-rds/MA2026/main/data/music_data_fin.csv" download="music_data_fin.csv">music_data_fin.csv</a>), (right-click → <em>Save link as…</em>), save it in your project’s <code>data</code> folder, and read it by its relative path:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="ot">&lt;-</span> <span class="fu">read_csv2</span>(<span class="st">"data/music_data_fin.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1480,8 +1474,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./07-decisions.html" class="pagination-link" aria-label="From Estimate to Decision">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">From Estimate to Decision</span></span>
+      <a href="./06-panel-data.html" class="pagination-link" aria-label="Panel Data &amp; Quasi-Experiments">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Panel Data &amp; Quasi-Experiments</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

@@ -91,7 +91,7 @@ as.numeric("3.14")      # text -> number
 # A data frame is R's table: each column is a variable, each row an
 # observation. All columns have the same length.
 top_tracks <- data.frame(
-  artist   = c("Axwell /\\ Ingrosso", "Imagine Dragons", "J. Balvin"),
+  artist   = c("Ed Sheeran", "Imagine Dragons", "J. Balvin"),
   streams  = c(163608, 126687, 120480),
   explicit = c(FALSE, FALSE, FALSE)
 )
@@ -123,7 +123,7 @@ library(tidyverse)
 
 # The main data set of Chapter 2: streaming chart data for ~67,000 tracks.
 # Why read_csv2() and not read_csv()? -> see Chapter 2, section "Getting data into R".
-music_url  <- "https://raw.githubusercontent.com/WU-RDS/MA2025/main/data/music_data_fin.csv"
+music_url  <- "https://raw.githubusercontent.com/wu-rds/MA2026/main/data/music_data_fin.csv"
 music_data <- read_csv2(music_url)
 
 dim(music_data)       # number of rows and columns
@@ -146,7 +146,7 @@ str(music_data)       # structure of the data
 #
 # ```{r}
 # library(tidyverse)
-# music_url <- "https://raw.githubusercontent.com/WU-RDS/MA2025/main/data/music_data_fin.csv"
+# music_url <- "https://raw.githubusercontent.com/wu-rds/MA2026/main/data/music_data_fin.csv"
 # music_data <- read_csv2(music_url)
 # ```
 #

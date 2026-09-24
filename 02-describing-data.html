@@ -248,12 +248,6 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Panel Data &amp; Quasi-Experiments</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./07-decisions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">From Estimate to Decision</span></span></a>
-  </div>
-</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
@@ -555,7 +549,7 @@ Table&nbsp;2.2: Variables in the music data set
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>music_url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/WU-RDS/MA2025/main/data/music_data_fin.csv"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>music_url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/wu-rds/MA2026/main/data/music_data_fin.csv"</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>music_data <span class="ot">&lt;-</span> <span class="fu">read_csv2</span>(music_url)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Why <code>read_csv2()</code> and not <code>read_csv()</code>? Because “comma-separated” is a misnomer in much of Europe. In German-speaking countries, the comma is the <em>decimal</em> separator (3,14), so it cannot also separate the columns — European software therefore writes files with <strong>semicolons</strong> between the values and <strong>commas</strong> as decimal marks. <code>read_csv()</code> expects the international convention (commas between values, points as decimal marks); <code>read_csv2()</code> expects the European one. Look at what happens with the wrong function:</p>
@@ -875,7 +869,7 @@ Table&nbsp;2.4: One race, four levels of measurement
 <td style="text-align: center;">14:14:12</td>
 <td style="text-align: center;">14:15:12</td>
 <td>Interval</td>
-<td>Differences: A finished 7 minutes before B — but 14:14 is not “twice” 14:07, because midnight is an arbitrary zero point</td>
+<td>Differences: A finished about 7 minutes before B — but 14:14 is not “twice” 14:07, because midnight is an arbitrary zero point</td>
 </tr>
 <tr class="even">
 <td>Time to finish (minutes)</td>
@@ -1094,7 +1088,7 @@ Table&nbsp;2.5: The core verbs of data handling
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">artist =</span> artistName, <span class="at">track =</span> trackName)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Categorical variables often need recoding — e.g., merging rare categories. The <code>forcats</code> package (part of the tidyverse) helps: <code>fct_lump_n(genre, n = 5)</code> keeps the five most frequent genres and merges all others into “Other”.</p>
+<p>Categorical variables often need recoding — e.g., merging rare categories. The <code>forcats</code> package (part of the tidyverse) helps: <code>fct_lump_n(genre, n = 5)</code> keeps the five most frequent genres and merges all others into “Other”. Since our data already contain a genre called “other”, it is clearer to name the merged category explicitly: <code>fct_lump_n(genre, n = 5, other_level = "Remaining genres")</code>.</p>
 </section>
 <section id="summaries-by-group" class="level3" data-number="2.4.4">
 <h3 data-number="2.4.4" class="anchored" data-anchor-id="summaries-by-group"><span class="header-section-number">2.4.4</span> Summaries by group</h3>
@@ -1682,7 +1676,7 @@ Figure&nbsp;2.4: The same data, two impressions: a truncated axis exaggerates a 
 <h3 data-number="2.7.8" class="anchored" data-anchor-id="saving-charts"><span class="header-section-number">2.7.8</span> Saving charts</h3>
 <p>To use a chart in a presentation or report, save it with <code>ggsave()</code>, which saves the most recent plot (or a plot object you pass to it) in your project folder:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"genre_shares.png"</span>, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="fl">4.5</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"graphics/genre_shares.png"</span>, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="fl">4.5</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </section>
@@ -1724,7 +1718,7 @@ Figure&nbsp;2.4: The same data, two impressions: a truncated axis exaggerates a 
 6 Remaining genres         0.112              536213           224444</code></pre>
 </div>
 </div>
-<p>Within each of the large genres, the gap persists, but its size varies considerably from genre to genre — and so does the share of explicit tracks — the overall comparison mixes the explicitness of a track with the genre it belongs to. And we already know two further reasons for caution: the label (independent labels release a larger share of explicit tracks in our data) and the selection into the charts (<a href="#sec-desc-selection" class="quarto-xref"><span>Section 2.5.6</span></a>).</p>
+<p>Within each of the large genres, the gap persists, but its size varies considerably from genre to genre, and so does the share of explicit tracks. The overall comparison therefore mixes the explicitness of a track with the genre it belongs to. And we already know two further reasons for caution: the label (independent labels release a larger share of explicit tracks in our data) and the selection into the charts (<a href="#sec-desc-selection" class="quarto-xref"><span>Section 2.5.6</span></a>).</p>
 <p>What <em>can</em> we write? A precise descriptive statement:</p>
 <blockquote class="blockquote">
 <p>“Among the tracks in our chart data, those with explicit lyrics have a lower median number of streams than those without. The gap is visible within each of the large genres, but varies in size across genres.”</p>

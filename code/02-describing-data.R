@@ -28,7 +28,7 @@ options(scipen = 999)  # print large numbers without scientific notation
 
 # The data are stored as a European-style CSV file: values separated by
 # semicolons, decimal commas -> read_csv2()
-music_url  <- "https://raw.githubusercontent.com/WU-RDS/MA2025/main/data/music_data_fin.csv"
+music_url  <- "https://raw.githubusercontent.com/wu-rds/MA2026/main/data/music_data_fin.csv"
 music_data <- read_csv2(music_url)
 
 # What happens with the wrong function? No error — but only ONE column.
@@ -290,7 +290,7 @@ music_data |>
   theme_minimal()
 
 # --- Saving the most recent plot ----------------------------------------
-# ggsave("genre_shares.png", width = 8, height = 4.5, dpi = 300)
+# ggsave("graphics/genre_shares.png", width = 8, height = 4.5, dpi = 300)
 
 
 # ======================================================================
