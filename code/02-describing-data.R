@@ -23,32 +23,6 @@ options(scipen = 999)  # print large numbers without scientific notation
 
 
 # ======================================================================
-# 2.1 Motivation: summary statistics are not enough
-# ======================================================================
-
-# Anscombe's quartet (built-in data set 'anscombe'): four data sets with
-# (almost) identical summary statistics — but very different pictures.
-anscombe_long <- tibble(
-  set = rep(paste("Data set", 1:4), each = nrow(anscombe)),
-  x   = c(anscombe$x1, anscombe$x2, anscombe$x3, anscombe$x4),
-  y   = c(anscombe$y1, anscombe$y2, anscombe$y3, anscombe$y4)
-)
-
-# Identical summaries ...
-anscombe_long |>
-  group_by(set) |>
-  summarise(mean_x = mean(x), mean_y = mean(y),
-            sd_x = sd(x), sd_y = sd(y),
-            correlation = cor(x, y))
-
-# ... completely different pictures
-ggplot(anscombe_long, aes(x, y)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  facet_wrap(~ set, nrow = 1)
-
-
-# ======================================================================
 # 2.2 Getting data into R
 # ======================================================================
 
@@ -197,16 +171,8 @@ music_data <- music_data |>
   mutate(valid_date = release_date <= as.Date("2021-12-31"))
 count(music_data, valid_date)
 
-# How did the data come to be? A small simulation of selection into the
-# data set (Berkson's paradox): catchiness and promotion are unrelated
-# among all songs, but negatively related among the songs that charted.
-set.seed(2026)
-songs <- tibble(catchiness = rnorm(4000), promotion = rnorm(4000)) |>
-  mutate(success = catchiness + promotion + rnorm(4000, 0, 0.5),
-         charted = success > quantile(success, 0.85))
-
-cor(songs$catchiness, songs$promotion)                                  # all songs
-with(filter(songs, charted), cor(catchiness, promotion))               # charted only
+# How did the data come to be? Our data contain only tracks that made the
+# charts -> see section 2.5 of the chapter on selection into the data set.
 
 
 # ======================================================================
