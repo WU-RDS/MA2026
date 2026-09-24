@@ -374,19 +374,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 </div>
 </div>
-<div class="callout callout-style-default callout-important callout-titled" title="macOS: &quot;Operation not permitted&quot;">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>macOS: “Operation not permitted”
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>If you see <strong>“Operation not permitted”</strong> when knitting or reading files, RStudio lacks permission to access the folder. Open <em>System Settings → Privacy &amp; Security → Files &amp; Folders</em> (or <em>Full Disk Access</em>), allow RStudio access, and restart RStudio — or keep your course folder directly in your home folder (e.g., <code>~/marketing-analytics</code>).</p>
-</div>
-</div>
 </section>
 <section id="sec-onb-cloud" class="level3" data-number="A.2.2">
 <h3 data-number="A.2.2" class="anchored" data-anchor-id="sec-onb-cloud"><span class="header-section-number">A.2.2</span> Route B: Posit Cloud</h3>
@@ -520,7 +507,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>artist <span class="ot">&lt;-</span> <span class="st">"Imagine Dragons"</span>  <span class="co"># text must be put in quotation marks</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Everything after a <code>#</code> is a <strong>comment</strong>: R ignores it, but your future self will thank you for it. R is <strong>case-sensitive</strong> — <code>streams</code> and <code>Streams</code> are two different objects. Object names may contain letters, numbers, <code>_</code> and <code>.</code>, and must start with a letter. In this course, we use lower-case words separated by underscores (<code>top_tracks</code>, <code>mean_streams</code>); whichever convention you choose, be consistent.</p>
+<p>Everything after a <code>#</code> is a <strong>comment</strong>: R ignores it, but your future self will thank you for it. R is <strong>case-sensitive</strong> — <code>streams</code> and <code>Streams</code> are two different objects. Object names may contain letters, numbers, <code>_</code> and <code>.</code>, and must start with a letter.</p>
+<p><strong>Naming conventions.</strong> There are several common styles for names that consist of more than one word:</p>
+<table class="table-striped caption-top table">
+<caption>Common naming styles</caption>
+<thead>
+<tr class="header">
+<th>Style</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>snake_case (lower case, underscores)</td>
+<td><code>music_data</code>, <code>mean_streams</code></td>
+</tr>
+<tr class="even">
+<td>CamelCase</td>
+<td><code>MusicData</code>, <code>MeanStreams</code></td>
+</tr>
+<tr class="odd">
+<td>dot.case</td>
+<td><code>music.data</code>, <code>mean.streams</code></td>
+</tr>
+</tbody>
+</table>
+<p>All three work — what matters most is <strong>consistency</strong>: if one object is called <code>music_data</code> and the next <code>MeanStreams</code>, you will constantly mistype names (remember that R is case-sensitive), and your code becomes harder to read. In this course, we use <strong>snake_case</strong>, the convention of the tidyverse. Choose names that describe the content (<code>top_tracks</code> rather than <code>df2</code>), and avoid names of existing functions such as <code>mean</code> or <code>data</code>.</p>
 <div class="callout callout-style-default callout-important callout-titled" title="The console shows + instead of >">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -881,6 +893,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>A report looks for files relative to <em>its own</em> location. If your report is saved in <code>code/</code> and the data in <code>data/</code>, the path from the report to the data is <code>"../data/music_data_fin.csv"</code> (<code>..</code> means “one folder up”). Alternatively, save your reports directly in the project folder, or load the data from the course website.</p>
 </div>
 </div>
+<div class="callout callout-style-default callout-important callout-titled" title="macOS: &quot;Operation not permitted&quot;">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>macOS: “Operation not permitted”
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you see <strong>“Operation not permitted”</strong> when knitting or reading files, RStudio lacks permission to access the folder. Open <em>System Settings → Privacy &amp; Security → Files &amp; Folders</em> (or <em>Full Disk Access</em>), allow RStudio access, and restart RStudio — or keep your course folder directly in your home folder (e.g., <code>~/marketing-analytics</code>).</p>
+</div>
+</div>
 </section>
 <section id="sec-onb-help" class="level2" data-number="A.8">
 <h2 data-number="A.8" class="anchored" data-anchor-id="sec-onb-help"><span class="header-section-number">A.8</span> Getting help — and working with AI assistants</h2>
@@ -933,7 +958,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>AI assistants are an endorsed study aid in this course (see the AI policy in the <a href="./00-introduction.html">Introduction</a>). There are two ways to use them:</p>
 <ul>
 <li><strong>Chat assistants</strong> such as ChatGPT, Claude, Gemini, or Perplexity, which you use in the browser. You describe what you need, paste code or error messages, and get code and explanations back.</li>
-<li><strong>Assistants inside RStudio.</strong> <strong>GitHub Copilot</strong> suggests code directly in the script editor as you type — it completes lines and turns comments into code. To activate it, go to <em>Tools → Global Options → Copilot</em> and sign in with a GitHub account. Verified students can get free access to Copilot through GitHub Education; check the current conditions on the GitHub website. R packages such as <code>gptstudio</code> connect RStudio to chat assistants as well.</li>
+<li><strong>Assistants inside RStudio.</strong> <strong>GitHub Copilot</strong> suggests code directly in the script editor as you type — it completes lines and turns comments into code. To activate it, go to <em>Tools → Global Options → Copilot</em> and sign in with a GitHub account; the <a href="https://docs.posit.co/ide/user/ide/guide/tools/copilot.html">RStudio documentation on GitHub Copilot</a> explains the setup step by step. Verified students can get free access to Copilot through GitHub Education; check the current conditions on the GitHub website. R packages such as <code>gptstudio</code> connect RStudio to chat assistants as well.</li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
