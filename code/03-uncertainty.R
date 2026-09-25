@@ -14,6 +14,35 @@ options(scipen = 999)
 
 
 # ======================================================================
+# 3.1 Motivation: an A/B test at a streaming service
+# ======================================================================
+
+# Simulated A/B test: 400 randomly selected users, randomly split into
+# two groups of 200. The treatment group sees the new "Smart Mix" feature.
+# Outcome: listening hours in the four weeks after the start of the test.
+set.seed(31)
+ab_test <- tibble(
+  group = factor(rep(c("Control", "Smart Mix"), each = 200), levels = c("Smart Mix", "Control")),
+  hours = c(rgamma(200, shape = 2, scale = 10), rgamma(200, shape = 2, scale = 11.5))
+)
+
+# Group means: Smart Mix users listened about 3 hours more
+ab_test |>
+  group_by(group) |>
+  summarise(n = n(), mean_hours = mean(hours), sd_hours = sd(hours))
+
+ggplot(ab_test, aes(x = group, y = hours)) +
+  geom_jitter(width = 0.18, height = 0, alpha = 0.35) +
+  stat_summary(fun = mean, geom = "point", color = "#0f5da8", size = 5) +
+  coord_flip() +
+  labs(x = NULL, y = "Listening hours in the four weeks after the start of the test") +
+  theme_minimal()
+
+# Real effect or noise? The t-test output is explained in Chapters 3 and 4
+t.test(hours ~ group, data = ab_test)
+
+
+# ======================================================================
 # 3.3 Sampling variation
 # ======================================================================
 
@@ -142,13 +171,9 @@ c(mean = xbar, se = se, lower = xbar - crit * se, upper = xbar + crit * se)
 # --- The same in one line --------------------------------------------------
 t.test(listening$hours)$conf.int
 
-# --- Confidence intervals for several groups ------------------------------
-# (the account type is simulated here, for illustration only)
-listening <- listening |>
-  mutate(account = sample(c("paid", "free"), size = n(), replace = TRUE, prob = c(0.4, 0.6)))
-
-listening |>
-  group_by(account) |>
+# --- Back to the A/B test: confidence intervals per group ----------------
+ab_test |>
+  group_by(group) |>
   summarise(
     n     = n(),
     mean  = mean(hours),
@@ -156,6 +181,10 @@ listening |>
     lower = mean - qt(0.975, n - 1) * se,
     upper = mean + qt(0.975, n - 1) * se
   )
+
+# The confidence interval for the DIFFERENCE between the groups
+# (computed by t.test(); explained in Chapter 4)
+t.test(hours ~ group, data = ab_test)$conf.int
 
 # --- Confidence interval for a share ----------------------------------------
 # Share of students who listen more than 30 hours per month
