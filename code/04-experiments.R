@@ -46,6 +46,10 @@ difference <- stats$mean[1] - stats$mean[2]
 se_diff    <- sqrt(stats$sd[1]^2 / stats$n[1] + stats$sd[2]^2 / stats$n[2])
 c(difference = difference, se = se_diff, t = difference / se_diff)
 
+# 95% confidence interval of the difference: estimate +/- t * SE
+df_approx <- sum(stats$n) - 2
+difference + c(-1, 1) * qt(0.975, df_approx) * se_diff
+
 # A world without any effect: 10,000 simulated A/B tests
 set.seed(1)
 null_diffs <- replicate(10000, mean(rgamma(200, 2, scale = 10.75)) - mean(rgamma(200, 2, scale = 10.75)))
@@ -73,9 +77,9 @@ t.test(hours ~ group, data = ab_test |> group_by(group) |> slice_head(n = 50))
 # Relative effect (in % of the control group)
 100 * difference / stats$mean[2]
 
-# Cohen's d: difference divided by the pooled standard deviation
-pooled_sd <- sqrt(mean(stats$sd^2))
-difference / pooled_sd
+# Cohen's d with the psych package (the sign reflects the order of the groups)
+library(psych)
+cohen.d(ab_test$hours, ab_test$group)$cohen.d
 
 
 # ======================================================================
@@ -83,6 +87,14 @@ difference / pooled_sd
 # ======================================================================
 
 # Premium trial offer: 131 of 2,000 vs. 104 of 2,000 users upgrade
+p1 <- 131 / 2000
+p2 <- 104 / 2000
+
+# Standard error and 95% confidence interval of the difference by hand
+se_p <- sqrt(p1 * (1 - p1) / 2000 + p2 * (1 - p2) / 2000)
+(p1 - p2) + c(-1, 1) * 1.96 * se_p
+
+# The same with prop.test() (slightly wider: continuity correction)
 prop.test(x = c(131, 104), n = c(2000, 2000))
 
 # The same as a chi-square test on the 2 x 2 table
@@ -99,10 +111,12 @@ prop.test(x = c(200, 100), n = c(300, 300))
 # 4.7 Errors, power, and sample size
 # ======================================================================
 
-# Power of the Smart Mix experiment (d = 0.22, 200 users per group)
+# Planning: power of an experiment with 200 users per group for an ASSUMED
+# effect of d = 0.22 (power analysis belongs before the experiment;
+# "post-hoc power" with the observed effect adds no information)
 power.t.test(n = 200, delta = 0.22, sd = 1)
 
-# Users per group needed for 80% power
+# Users per group needed for 80% power (e.g., for a follow-up experiment)
 power.t.test(delta = 0.22, sd = 1, sig.level = 0.05, power = 0.80)
 
 # Shares: from 5% to 6%
@@ -131,16 +145,30 @@ mix_test <- tibble(
   hours   = c(rgamma(150, 2, scale = 10), rgamma(150, 2, scale = 10.8), rgamma(150, 2, scale = 12))
 )
 
-mix_test |> group_by(version) |> summarise(n = n(), mean = mean(hours))
+mix_test |> group_by(version) |> summarise(n = n(), mean = mean(hours), sd = sd(hours))
 
-summary(aov(hours ~ version, data = mix_test))
-
-# Post-hoc tests: all pairs, corrected for multiple comparisons
-pairwise.t.test(mix_test$hours, mix_test$version, p.adjust.method = "bonferroni")
-
-# Why correct? Chance of at least one false alarm with k tests
+# Why not several t-tests? Family-wise error rate with k tests
 k <- c(1, 3, 10, 20)
 1 - 0.95^k
+
+# Step 1: is there any difference? (H0: all means equal)
+mix_aov <- aov(hours ~ version, data = mix_test)
+summary(mix_aov)
+
+# Effect size eta squared: share of the variation explained by the version
+ss <- summary(mix_aov)[[1]]$`Sum Sq`
+ss[1] / sum(ss)
+
+# Welch ANOVA (does not assume equal variances)
+oneway.test(hours ~ version, data = mix_test)
+
+# Step 2: which groups differ? Pairwise comparisons, corrected
+pairwise.t.test(mix_test$hours, mix_test$version, p.adjust.method = "bonferroni")
+pairwise.t.test(mix_test$hours, mix_test$version)   # default: Holm correction
+TukeyHSD(mix_aov)
+
+# The ANOVA as a regression: same F test (last line of the output)
+summary(lm(hours ~ version, data = mix_test))
 
 # --- Same people in both conditions: paired t-test ---------------------
 set.seed(4)
@@ -154,8 +182,17 @@ t.test(search_test$new_design, search_test$old_design, paired = TRUE)
 t.test(search_test$new_design, search_test$old_design)   # wrong test for this design
 
 # --- Non-parametric alternatives -----------------------------------------
-wilcox.test(hours ~ group, data = ab_test)          # two groups
-kruskal.test(hours ~ version, data = mix_test)      # three or more groups
+# Two independent groups: Wilcoxon rank-sum test (Mann-Whitney U test)
+wilcox.test(hours ~ group, data = ab_test)
+ab_test |> group_by(group) |> summarise(median = median(hours))
+
+# Same people, two conditions: Wilcoxon signed-rank test
+wilcox.test(search_test$new_design, search_test$old_design, paired = TRUE)
+median(search_test$new_design - search_test$old_design)
+
+# Three or more independent groups: Kruskal-Wallis test + corrected pairs
+kruskal.test(hours ~ version, data = mix_test)
+pairwise.wilcox.test(mix_test$hours, mix_test$version, p.adjust.method = "bonferroni")
 
 
 # ======================================================================

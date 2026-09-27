@@ -293,7 +293,10 @@ window.Quarto = {
   </ul></li>
   <li><a href="#sec-exp-effect" id="toc-sec-exp-effect" class="nav-link" data-scroll-target="#sec-exp-effect"><span class="header-section-number">4.4</span> How large is the effect?</a></li>
   <li><a href="#sec-exp-reporting" id="toc-sec-exp-reporting" class="nav-link" data-scroll-target="#sec-exp-reporting"><span class="header-section-number">4.5</span> Reporting the result</a></li>
-  <li><a href="#sec-exp-shares" id="toc-sec-exp-shares" class="nav-link" data-scroll-target="#sec-exp-shares"><span class="header-section-number">4.6</span> Comparing shares: conversion rates</a></li>
+  <li><a href="#sec-exp-shares" id="toc-sec-exp-shares" class="nav-link" data-scroll-target="#sec-exp-shares"><span class="header-section-number">4.6</span> The difference between two shares</a>
+  <ul class="collapse">
+  <li><a href="#conversion-rates" id="toc-conversion-rates" class="nav-link" data-scroll-target="#conversion-rates"><span class="header-section-number">4.6.1</span> Conversion rates</a></li>
+  </ul></li>
   <li><a href="#sec-exp-power" id="toc-sec-exp-power" class="nav-link" data-scroll-target="#sec-exp-power"><span class="header-section-number">4.7</span> Errors, power, and sample size</a>
   <ul class="collapse">
   <li><a href="#two-ways-to-be-wrong" id="toc-two-ways-to-be-wrong" class="nav-link" data-scroll-target="#two-ways-to-be-wrong"><span class="header-section-number">4.7.1</span> Two ways to be wrong</a></li>
@@ -303,9 +306,9 @@ window.Quarto = {
   </ul></li>
   <li><a href="#sec-exp-other" id="toc-sec-exp-other" class="nav-link" data-scroll-target="#sec-exp-other"><span class="header-section-number">4.8</span> Beyond two groups: other designs and tests</a>
   <ul class="collapse">
-  <li><a href="#more-than-two-groups" id="toc-more-than-two-groups" class="nav-link" data-scroll-target="#more-than-two-groups"><span class="header-section-number">4.8.1</span> More than two groups</a></li>
+  <li><a href="#more-than-two-groups-analysis-of-variance-anova" id="toc-more-than-two-groups-analysis-of-variance-anova" class="nav-link" data-scroll-target="#more-than-two-groups-analysis-of-variance-anova"><span class="header-section-number">4.8.1</span> More than two groups: analysis of variance (ANOVA)</a></li>
   <li><a href="#the-same-people-in-both-conditions" id="toc-the-same-people-in-both-conditions" class="nav-link" data-scroll-target="#the-same-people-in-both-conditions"><span class="header-section-number">4.8.2</span> The same people in both conditions</a></li>
-  <li><a href="#when-the-mean-is-not-the-right-summary" id="toc-when-the-mean-is-not-the-right-summary" class="nav-link" data-scroll-target="#when-the-mean-is-not-the-right-summary"><span class="header-section-number">4.8.3</span> When the mean is not the right summary</a></li>
+  <li><a href="#non-parametric-tests-when-the-mean-is-not-the-right-summary" id="toc-non-parametric-tests-when-the-mean-is-not-the-right-summary" class="nav-link" data-scroll-target="#non-parametric-tests-when-the-mean-is-not-the-right-summary"><span class="header-section-number">4.8.3</span> Non-parametric tests: when the mean is not the right summary</a></li>
   <li><a href="#choosing-a-test" id="toc-choosing-a-test" class="nav-link" data-scroll-target="#choosing-a-test"><span class="header-section-number">4.8.4</span> Choosing a test</a></li>
   </ul></li>
   <li><a href="#sec-exp-nhst" id="toc-sec-exp-nhst" class="nav-link" data-scroll-target="#sec-exp-nhst"><span class="header-section-number">4.9</span> Using p-values responsibly</a>
@@ -629,7 +632,11 @@ Figure&nbsp;4.3: The distribution of t values if the null hypothesis is true. Th
 </section>
 <section id="the-confidence-interval-of-the-difference" class="level3" data-number="4.3.4">
 <h3 data-number="4.3.4" class="anchored" data-anchor-id="the-confidence-interval-of-the-difference"><span class="header-section-number">4.3.4</span> The confidence interval of the difference</h3>
-<p>The test gives a yes/no answer; the <strong>confidence interval</strong> of the difference tells us more: the range of effects that are compatible with the data. For Smart Mix, the 95% interval runs from 0.29 to 6.20 hours (<a href="#fig-ci-diff" class="quarto-xref">Figure&nbsp;<span>4.4</span></a>).</p>
+<p>The test gives a yes/no answer; the <strong>confidence interval</strong> of the difference tells us more: the range of effects that are compatible with the data. It is built exactly like the confidence interval of a mean (<a href="03-uncertainty.html#sec-unc-ci" class="quarto-xref"><span>Section 3.6</span></a>) — estimate ± critical value × standard error:</p>
+<p><span class="math display">\[
+(\bar{x}_1 - \bar{x}_2) \pm t_{0.975} \times \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}
+\]</span></p>
+<p>For Smart Mix: 3.24 ± 1.97 × 1.50, i.e., from 0.29 to 6.20 hours (<a href="#fig-ci-diff" class="quarto-xref">Figure&nbsp;<span>4.4</span></a>).</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-ci-diff" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -700,8 +707,28 @@ Table&nbsp;4.1: How to read the output of <code>t.test()</code>
 </div>
 </figure>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: one-sided or two-sided?">
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: what are degrees of freedom?">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Under the hood: what are degrees of freedom?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Degrees of freedom</strong> are the number of values that are still <em>free to vary</em> once we have used the data to estimate something.</p>
+<p>An everyday example: you have a budget of 100 € for three presents and decide to spend it all. You can choose the price of the first present freely (say 30 €) and that of the second (50 €) — but then the third is fixed: it must cost 20 €. Three prices, one constraint, <strong>two degrees of freedom</strong>.</p>
+<p>Statistics works the same way. To compute the standard deviation of a sample, we first need its mean. Once the mean is fixed, only <span class="math inline">\(n - 1\)</span> of the <span class="math inline">\(n\)</span> deviations from the mean are free — the last one is determined by the others (they must add up to zero). This is why the sample standard deviation divides by <span class="math inline">\(n - 1\)</span> (<a href="03-uncertainty.html#sec-unc-se" class="quarto-xref"><span>Section 3.4</span></a>), and why a sample of <span class="math inline">\(n\)</span> observations has <span class="math inline">\(n - 1\)</span> degrees of freedom for estimating its variability.</p>
+<p>Why does this matter? The fewer degrees of freedom, the less information we have about the variability in the data, and the more uncertain our standard error is. The <em>t</em>-distribution accounts for this: with few degrees of freedom, it has fatter tails and larger critical values (<a href="03-uncertainty.html#tbl-t-values" class="quarto-xref">Table&nbsp;<span>3.3</span></a>); with many, it becomes the normal distribution. For two groups of 200 users, we have about 400 − 2 = 398 degrees of freedom — plenty. (The Welch test reports a non-integer value such as 386.96, because it combines the two groups’ variances with different weights; the idea is the same.)</p>
+<p>The same logic appears in the ANOVA (<a href="#sec-exp-other" class="quarto-xref"><span>Section 4.8</span></a>): with 3 groups, the group means have 3 − 1 = 2 degrees of freedom (once the overall mean is known, the third group mean is fixed), and the variation within the groups has <span class="math inline">\(N - 3\)</span> degrees of freedom (one mean estimated per group).</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: one-sided or two-sided?">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -710,14 +737,14 @@ Table&nbsp;4.1: How to read the output of <code>t.test()</code>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>A <strong>two-sided test</strong> asks whether the groups differ in <em>either</em> direction; a <strong>one-sided test</strong> only looks in one direction (e.g., “Smart Mix <em>increases</em> listening time”) and is therefore more likely to find an effect in that direction. The temptation is obvious — but a one-sided test ignores the possibility that the new feature makes things <em>worse</em>, and it must be decided <em>before</em> seeing the data. In business experiments, where a negative effect is exactly what you want to know about, the two-sided test is the right default. In R: <code>t.test(..., alternative = "greater")</code>.</p>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Under the hood: assumptions of the t-test">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -726,7 +753,7 @@ Table&nbsp;4.1: How to read the output of <code>t.test()</code>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The <em>t</em>-test for two independent groups relies on three assumptions:</p>
 <ul>
@@ -759,20 +786,21 @@ Table&nbsp;4.1: How to read the output of <code>t.test()</code>
 <ul>
 <li><strong>In the original unit:</strong> Smart Mix users listened 3.2 hours more in four weeks. This is the number a manager can relate to a business case: what are 3.2 extra listening hours per user worth in retention or advertising revenue?</li>
 <li><strong>Relative to the control group:</strong> 3.2 hours on a baseline of 20.0 hours is an increase of about <strong>16%</strong>.</li>
-<li><strong>Standardized:</strong> <strong>Cohen’s <em>d</em></strong> divides the difference by the (pooled) standard deviation of the outcome. It expresses the effect in units of “how much users differ anyway” and makes effects comparable across studies with different outcomes.</li>
+<li><strong>Standardized:</strong> <strong>Cohen’s <em>d</em></strong> divides the difference by the (pooled) standard deviation of the outcome:</li>
 </ul>
+<p><span class="math display">\[
+d = \frac{\bar{x}_1 - \bar{x}_2}{s_{\text{pooled}}}, \qquad s_{\text{pooled}} = \sqrt{\frac{(n_1 - 1)\, s_1^2 + (n_2 - 1)\, s_2^2}{n_1 + n_2 - 2}}
+\]</span></p>
+<p>It expresses the effect in units of “how much users differ anyway” and makes effects comparable across studies with different outcomes. In R, the function <code>cohen.d()</code> from the <code>psych</code> package (which you know from <a href="02-describing-data.html" class="quarto-xref"><span>Chapter 2</span></a>) computes it, together with a confidence interval:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>group_stats <span class="ot">&lt;-</span> ab_test <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(group) <span class="sc">|&gt;</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(hours), <span class="at">sd =</span> <span class="fu">sd</span>(hours))</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>pooled_sd <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(group_stats<span class="sc">$</span>sd<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>cohens_d  <span class="ot">&lt;-</span> <span class="fu">diff</span>(<span class="fu">rev</span>(group_stats<span class="sc">$</span>mean)) <span class="sc">/</span> pooled_sd</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>cohens_d</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cohen.d</span>(ab_test<span class="sc">$</span>hours, ab_test<span class="sc">$</span>group)<span class="sc">$</span>cohen.d</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.2161689</code></pre>
+<pre><code>          lower     effect       upper
+[1,] -0.4131497 -0.2167113 -0.02000216</code></pre>
 </div>
 </div>
+<p>The sign only reflects the order of the groups (here: the second group minus the first); what matters is the size, <span class="math inline">\(d \approx\)</span> 0.22, and the direction you know from the group means. Note the confidence interval: the standardized effect could be anywhere between almost zero and 0.41.</p>
 <p>As a rough convention, <span class="math inline">\(d\)</span> = 0.2 is considered a <em>small</em>, 0.5 a <em>medium</em>, and 0.8 a <em>large</em> effect <span class="citation" data-cites="cohen1992">(<a href="#ref-cohen1992" role="doc-biblioref">Cohen 1992</a>)</span>. The effect of Smart Mix (<span class="math inline">\(d\)</span> = 0.22) is small: the two groups overlap almost completely, as <a href="#fig-ab-recap" class="quarto-xref">Figure&nbsp;<span>4.1</span></a> showed. Yet a 16% increase in listening time can be very valuable for a streaming service with millions of users. <strong>Small in statistical terms is not the same as unimportant in business terms</strong> — and vice versa. The conventions are a starting point, not a verdict.</p>
 </section>
 <section id="sec-exp-reporting" class="level2" data-number="4.5">
@@ -784,7 +812,9 @@ Table&nbsp;4.1: How to read the output of <code>t.test()</code>
 <p>Note the order: effect first, uncertainty second, test last. And note the final sentence — the honest caveat that tells the reader how much the conclusion is worth.</p>
 </section>
 <section id="sec-exp-shares" class="level2" data-number="4.6">
-<h2 data-number="4.6" class="anchored" data-anchor-id="sec-exp-shares"><span class="header-section-number">4.6</span> Comparing shares: conversion rates</h2>
+<h2 data-number="4.6" class="anchored" data-anchor-id="sec-exp-shares"><span class="header-section-number">4.6</span> The difference between two shares</h2>
+<section id="conversion-rates" class="level3" data-number="4.6.1">
+<h3 data-number="4.6.1" class="anchored" data-anchor-id="conversion-rates"><span class="header-section-number">4.6.1</span> Conversion rates</h3>
 <p>Many experiments do not measure a continuous outcome but a <strong>yes/no outcome</strong>: did the user buy, click, sign up, upgrade? The result is a <strong>share</strong> (proportion) per group, often called the <em>conversion rate</em>.</p>
 <p>Suppose the streaming service tests a new page for its Premium subscription that offers a one-month free trial. 2,000 randomly selected free users see the new page; 2,000 see the standard page. Within two weeks, 131 users upgrade with the trial offer (6.55%) and 104 with the standard page (5.20%) (<a href="#fig-conversion" class="quarto-xref">Figure&nbsp;<span>4.5</span></a>).</p>
 <div class="cell">
@@ -801,7 +831,16 @@ Figure&nbsp;4.5: Upgrade rates in the (simulated) Premium test, with 95% confide
 </div>
 </div>
 </div>
-<p>The logic is the same as for means — only the test differs. <code>prop.test()</code> takes the number of “successes” and the number of users per group:</p>
+<p>The logic is exactly the same as for means. The standard error of the difference between two shares has the same structure as the one for two means (<a href="#sec-exp-difference" class="quarto-xref"><span>Section 4.2</span></a>):</p>
+<p><span class="math display">\[
+SE_{\hat{p}_1 - \hat{p}_2} = \sqrt{\frac{\hat{p}_1 (1 - \hat{p}_1)}{n_1} + \frac{\hat{p}_2 (1 - \hat{p}_2)}{n_2}}
+\]</span></p>
+<p>Compare it with the formula for means: <span class="math inline">\(\hat{p}(1 - \hat{p})\)</span> simply takes the place of the variance <span class="math inline">\(s^2\)</span>. For a yes/no variable, <span class="math inline">\(\hat{p}(1 - \hat{p})\)</span> <em>is</em> the variance — it is largest when the outcome is most uncertain (a 50/50 split) and small when almost everybody (or almost nobody) converts. So the intuition carries over one to one: <strong>the more the outcome varies within the groups and the smaller the groups, the more uncertain the difference.</strong></p>
+<p>The 95% confidence interval of the difference is again estimate ± critical value × standard error:</p>
+<p><span class="math display">\[
+(\hat{p}_1 - \hat{p}_2) \pm 1.96 \times SE_{\hat{p}_1 - \hat{p}_2}
+\]</span></p>
+<p>For the Premium test: <span class="math inline">\((0.0655 - 0.0520) \pm 1.96 \times 0.0074\)</span>, i.e., from −0.11 to +2.81 percentage points. (For shares, the normal distribution’s 1.96 is used instead of a <em>t</em> value, because the variance follows directly from the share itself.) In R, <code>prop.test()</code> does the work; it takes the number of “successes” and the number of users per group:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">131</span>, <span class="dv">104</span>), <span class="at">n =</span> <span class="fu">c</span>(<span class="dv">2000</span>, <span class="dv">2000</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -818,9 +857,9 @@ prop 1 prop 2
 0.0655 0.0520 </code></pre>
 </div>
 </div>
-<p>The trial offer increased the upgrade rate by 1.35 percentage points, or about 26% in relative terms. But the test is not significant (<em>p</em> = 0.08), and the 95% confidence interval for the difference runs from −0.16 to +2.86 percentage points: the data are compatible with no effect, but also with a substantial one. The correct conclusion is not “the trial offer does not work” but “<strong>this experiment was too small to tell</strong>” — with 2,000 users per group, a difference of about one percentage point is hard to distinguish from chance. How large the experiment would have needed to be is the subject of <a href="#sec-exp-power" class="quarto-xref"><span>Section 4.7</span></a>.</p>
+<p>The trial offer increased the upgrade rate by 1.35 percentage points, or about 26% in relative terms. But the test is not significant (<em>p</em> = 0.08), and the 95% confidence interval for the difference runs from −0.16 to +2.86 percentage points (slightly wider than our hand calculation, because <code>prop.test()</code> applies a small correction for the fact that counts are whole numbers): the data are compatible with no effect, but also with a substantial one. The correct conclusion is not “the trial offer does not work” but “<strong>this experiment was too small to tell</strong>” — with 2,000 users per group, a difference of about one percentage point is hard to distinguish from chance. How large the experiment would have needed to be is the subject of <a href="#sec-exp-power" class="quarto-xref"><span>Section 4.7</span></a>.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Under the hood: prop.test and the chi-square test">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -829,7 +868,7 @@ prop 1 prop 2
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><code>prop.test()</code> is a version of the <strong>chi-square test</strong> of independence for a 2 × 2 table (group × outcome). The chi-square test compares the observed counts in each cell with the counts we would expect if the outcome were independent of the group. It also works for more than two groups or more than two outcome categories: <code>chisq.test(table(data$group, data$outcome))</code>. For two groups and a yes/no outcome, <code>prop.test()</code> gives the same <em>p</em>-value and, in addition, the confidence interval of the difference.</p>
 </div>
@@ -848,6 +887,7 @@ prop 1 prop 2
 <p>Two sales agents, Jon and Mark, each talk to 300 customers. Jon gets 200 of them to buy, Mark 100. Is Jon’s conversion rate significantly higher? Use <code>prop.test()</code> and report the difference with its 95% confidence interval. Then: does this comparison tell you that Jon is the better salesperson? Think about how customers were assigned to the two agents. <em>(Example after McDonnell Feit &amp; McCullough’s</em> Business Experiments <em>course.)</em></p>
 </div>
 </div>
+</section>
 </section>
 <section id="sec-exp-power" class="level2" data-number="4.7">
 <h2 data-number="4.7" class="anchored" data-anchor-id="sec-exp-power"><span class="header-section-number">4.7</span> Errors, power, and sample size</h2>
@@ -889,6 +929,53 @@ Table&nbsp;4.2: Type I and type II errors
 </div>
 </figure>
 </div>
+<p>The same two kinds of mistakes appear in many everyday decisions (<a href="#tbl-error-examples" class="quarto-xref">Table&nbsp;<span>4.3</span></a>) — and in each case, the two errors have very different consequences.</p>
+<div id="tbl-error-examples" class="striped quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-error-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4.3: Type I and type II errors in everyday life
+</figcaption>
+<div aria-describedby="tbl-error-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Situation</th>
+<th>Type I error (false alarm)</th>
+<th>Type II error (missed effect)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Pregnancy test</td>
+<td>The test says “pregnant”, but the woman is not</td>
+<td>The test says “not pregnant”, but she is</td>
+</tr>
+<tr class="even">
+<td>Smoke detector</td>
+<td>The alarm goes off because of burnt toast</td>
+<td>A real fire, but the alarm stays silent</td>
+</tr>
+<tr class="odd">
+<td>Court trial (“innocent until proven guilty”)</td>
+<td>An innocent person is convicted</td>
+<td>A guilty person is acquitted</td>
+</tr>
+<tr class="even">
+<td>A/B test of a new feature</td>
+<td>A useless feature is rolled out — cost without benefit</td>
+<td>A valuable feature is dropped — a missed opportunity</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The court trial shows the logic of a test particularly well: the null hypothesis (“innocent”) is kept unless the evidence is strong; a verdict of “not guilty” does not prove innocence — just as a non-significant test does not prove that there is no effect.</p>
 <p>The significance level <span class="math inline">\(\alpha\)</span> controls the false alarms: with <span class="math inline">\(\alpha\)</span> = 5%, one in twenty experiments of an ineffective feature will nevertheless come out significant. The <strong>power</strong> of a test is the probability of detecting an effect that really exists. A common target is 80% power — accepting that one in five real effects of the assumed size will be missed. Lowering <span class="math inline">\(\alpha\)</span> (fewer false alarms) reduces the power (more missed effects); the only way to reduce both errors at once is a <strong>larger sample</strong>.</p>
 </section>
 <section id="what-determines-power" class="level3" data-number="4.7.2">
@@ -927,7 +1014,7 @@ Figure&nbsp;4.6: Power of the Smart Mix test for a true effect of 3 hours (SD = 
 <p>Choose the <strong>true effect</strong> of Smart Mix, the <strong>number of users per group</strong>, and the <strong>significance level</strong>. The grey curve shows the observed differences we would expect if there were no effect; the blue curve those we would expect with the chosen true effect (standard deviation of listening time: 15 hours). The green area is the power.</p>
 <div class="unc-widget">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb15" data-startfrom="392" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 391;"><span id="cb15-392"><a href="#cb15-392" aria-hidden="true" tabindex="-1"></a>viewof e2_delta <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">8</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"True effect (hours)"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb15" data-startfrom="443" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 442;"><span id="cb15-443"><a href="#cb15-443" aria-hidden="true" tabindex="-1"></a>viewof e2_delta <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">8</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"True effect (hours)"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-9" data-nodetype="declaration">
 
@@ -935,7 +1022,7 @@ Figure&nbsp;4.6: Power of the Smart Mix test for a true effect of 3 hours (SD = 
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb16" data-startfrom="397" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 396;"><span id="cb16-397"><a href="#cb16-397" aria-hidden="true" tabindex="-1"></a>viewof e2_n <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">20</span><span class="op">,</span> <span class="dv">2000</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">200</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Users per group"</span><span class="op">,</span> <span class="dt">transform</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">log</span><span class="op">,</span> <span class="dt">invert</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb16" data-startfrom="448" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 447;"><span id="cb16-448"><a href="#cb16-448" aria-hidden="true" tabindex="-1"></a>viewof e2_n <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">20</span><span class="op">,</span> <span class="dv">2000</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">200</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Users per group"</span><span class="op">,</span> <span class="dt">transform</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">log</span><span class="op">,</span> <span class="dt">invert</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-10" data-nodetype="declaration">
 
@@ -943,7 +1030,7 @@ Figure&nbsp;4.6: Power of the Smart Mix test for a true effect of 3 hours (SD = 
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb17" data-startfrom="402" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 401;"><span id="cb17-402"><a href="#cb17-402" aria-hidden="true" tabindex="-1"></a>viewof e2_alpha <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">radio</span>([<span class="fl">0.05</span><span class="op">,</span> <span class="fl">0.01</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.05</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Significance level α"</span><span class="op">,</span> <span class="dt">format</span><span class="op">:</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="fu">toString</span>()})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb17" data-startfrom="453" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 452;"><span id="cb17-453"><a href="#cb17-453" aria-hidden="true" tabindex="-1"></a>viewof e2_alpha <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">radio</span>([<span class="fl">0.05</span><span class="op">,</span> <span class="fl">0.01</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.05</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Significance level α"</span><span class="op">,</span> <span class="dt">format</span><span class="op">:</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="fu">toString</span>()})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-11" data-nodetype="declaration">
 
@@ -952,17 +1039,17 @@ Figure&nbsp;4.6: Power of the Smart Mix test for a true effect of 3 hours (SD = 
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb18" data-startfrom="408" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 407;"><span id="cb18-408"><a href="#cb18-408" aria-hidden="true" tabindex="-1"></a>e2 <span class="op">=</span> {</span>
-<span id="cb18-409"><a href="#cb18-409" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> sd <span class="op">=</span> <span class="dv">15</span><span class="op">,</span> n <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>(e2_n)<span class="op">,</span> se <span class="op">=</span> sd <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(<span class="dv">2</span> <span class="op">/</span> n)<span class="op">;</span></span>
-<span id="cb18-410"><a href="#cb18-410" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> zc <span class="op">=</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="op">-</span> e2_alpha <span class="op">/</span> <span class="dv">2</span>)<span class="op">,</span> crit <span class="op">=</span> zc <span class="op">*</span> se<span class="op">;</span></span>
-<span id="cb18-411"><a href="#cb18-411" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> power <span class="op">=</span> e2_delta <span class="op">===</span> <span class="dv">0</span> <span class="op">?</span> e2_alpha <span class="op">:</span> (<span class="dv">1</span> <span class="op">-</span> <span class="fu">pnorm</span>((crit <span class="op">-</span> e2_delta) <span class="op">/</span> se)) <span class="op">+</span> <span class="fu">pnorm</span>((<span class="op">-</span>crit <span class="op">-</span> e2_delta) <span class="op">/</span> se)<span class="op">;</span></span>
-<span id="cb18-412"><a href="#cb18-412" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> lo <span class="op">=</span> <span class="op">-</span><span class="dv">4</span> <span class="op">*</span> se<span class="op">,</span> hi <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">max</span>(e2_delta<span class="op">,</span> <span class="dv">0</span>) <span class="op">+</span> <span class="dv">4</span> <span class="op">*</span> se<span class="op">;</span></span>
-<span id="cb18-413"><a href="#cb18-413" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> xs <span class="op">=</span> d3<span class="op">.</span><span class="fu">range</span>(lo<span class="op">,</span> hi<span class="op">,</span> (hi <span class="op">-</span> lo) <span class="op">/</span> <span class="dv">400</span>)<span class="op">;</span></span>
-<span id="cb18-414"><a href="#cb18-414" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> dens <span class="op">=</span> (x<span class="op">,</span> m) <span class="kw">=&gt;</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> ((x <span class="op">-</span> m) <span class="op">/</span> se) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> (se <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(<span class="dv">2</span> <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="cn">PI</span>))<span class="op">;</span></span>
-<span id="cb18-415"><a href="#cb18-415" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> pts <span class="op">=</span> xs<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> ({x<span class="op">,</span> <span class="dt">h0</span><span class="op">:</span> <span class="fu">dens</span>(x<span class="op">,</span> <span class="dv">0</span>)<span class="op">,</span> <span class="dt">h1</span><span class="op">:</span> <span class="fu">dens</span>(x<span class="op">,</span> e2_delta)}))<span class="op">;</span></span>
-<span id="cb18-416"><a href="#cb18-416" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> need <span class="op">=</span> e2_delta <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">ceil</span>(<span class="dv">2</span> <span class="op">*</span> ((zc <span class="op">+</span> <span class="fu">qnorm</span>(<span class="fl">0.8</span>)) <span class="op">*</span> sd <span class="op">/</span> e2_delta) <span class="op">**</span> <span class="dv">2</span>) <span class="op">:</span> <span class="kw">Infinity</span><span class="op">;</span></span>
-<span id="cb18-417"><a href="#cb18-417" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {n<span class="op">,</span> se<span class="op">,</span> crit<span class="op">,</span> power<span class="op">,</span> pts<span class="op">,</span> lo<span class="op">,</span> hi<span class="op">,</span> need}<span class="op">;</span></span>
-<span id="cb18-418"><a href="#cb18-418" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb18" data-startfrom="459" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 458;"><span id="cb18-459"><a href="#cb18-459" aria-hidden="true" tabindex="-1"></a>e2 <span class="op">=</span> {</span>
+<span id="cb18-460"><a href="#cb18-460" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> sd <span class="op">=</span> <span class="dv">15</span><span class="op">,</span> n <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>(e2_n)<span class="op">,</span> se <span class="op">=</span> sd <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(<span class="dv">2</span> <span class="op">/</span> n)<span class="op">;</span></span>
+<span id="cb18-461"><a href="#cb18-461" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> zc <span class="op">=</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="op">-</span> e2_alpha <span class="op">/</span> <span class="dv">2</span>)<span class="op">,</span> crit <span class="op">=</span> zc <span class="op">*</span> se<span class="op">;</span></span>
+<span id="cb18-462"><a href="#cb18-462" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> power <span class="op">=</span> e2_delta <span class="op">===</span> <span class="dv">0</span> <span class="op">?</span> e2_alpha <span class="op">:</span> (<span class="dv">1</span> <span class="op">-</span> <span class="fu">pnorm</span>((crit <span class="op">-</span> e2_delta) <span class="op">/</span> se)) <span class="op">+</span> <span class="fu">pnorm</span>((<span class="op">-</span>crit <span class="op">-</span> e2_delta) <span class="op">/</span> se)<span class="op">;</span></span>
+<span id="cb18-463"><a href="#cb18-463" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> lo <span class="op">=</span> <span class="op">-</span><span class="dv">4</span> <span class="op">*</span> se<span class="op">,</span> hi <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">max</span>(e2_delta<span class="op">,</span> <span class="dv">0</span>) <span class="op">+</span> <span class="dv">4</span> <span class="op">*</span> se<span class="op">;</span></span>
+<span id="cb18-464"><a href="#cb18-464" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> xs <span class="op">=</span> d3<span class="op">.</span><span class="fu">range</span>(lo<span class="op">,</span> hi<span class="op">,</span> (hi <span class="op">-</span> lo) <span class="op">/</span> <span class="dv">400</span>)<span class="op">;</span></span>
+<span id="cb18-465"><a href="#cb18-465" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> dens <span class="op">=</span> (x<span class="op">,</span> m) <span class="kw">=&gt;</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> ((x <span class="op">-</span> m) <span class="op">/</span> se) <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> (se <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(<span class="dv">2</span> <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="cn">PI</span>))<span class="op">;</span></span>
+<span id="cb18-466"><a href="#cb18-466" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> pts <span class="op">=</span> xs<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> ({x<span class="op">,</span> <span class="dt">h0</span><span class="op">:</span> <span class="fu">dens</span>(x<span class="op">,</span> <span class="dv">0</span>)<span class="op">,</span> <span class="dt">h1</span><span class="op">:</span> <span class="fu">dens</span>(x<span class="op">,</span> e2_delta)}))<span class="op">;</span></span>
+<span id="cb18-467"><a href="#cb18-467" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> need <span class="op">=</span> e2_delta <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">ceil</span>(<span class="dv">2</span> <span class="op">*</span> ((zc <span class="op">+</span> <span class="fu">qnorm</span>(<span class="fl">0.8</span>)) <span class="op">*</span> sd <span class="op">/</span> e2_delta) <span class="op">**</span> <span class="dv">2</span>) <span class="op">:</span> <span class="kw">Infinity</span><span class="op">;</span></span>
+<span id="cb18-468"><a href="#cb18-468" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {n<span class="op">,</span> se<span class="op">,</span> crit<span class="op">,</span> power<span class="op">,</span> pts<span class="op">,</span> lo<span class="op">,</span> hi<span class="op">,</span> need}<span class="op">;</span></span>
+<span id="cb18-469"><a href="#cb18-469" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-12" data-nodetype="declaration">
 
@@ -970,18 +1057,18 @@ Figure&nbsp;4.6: Power of the Smart Mix test for a true effect of 3 hours (SD = 
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb19" data-startfrom="423" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 422;"><span id="cb19-423"><a href="#cb19-423" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb19-424"><a href="#cb19-424" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">760</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">280</span><span class="op">,</span> <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">20</span><span class="op">,</span></span>
-<span id="cb19-425"><a href="#cb19-425" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Observed difference in mean listening hours"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [e2<span class="op">.</span><span class="at">lo</span><span class="op">,</span> e2<span class="op">.</span><span class="at">hi</span>]}<span class="op">,</span></span>
-<span id="cb19-426"><a href="#cb19-426" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">axis</span><span class="op">:</span> <span class="kw">null</span>}<span class="op">,</span></span>
-<span id="cb19-427"><a href="#cb19-427" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
-<span id="cb19-428"><a href="#cb19-428" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">areaY</span>(e2<span class="op">.</span><span class="at">pts</span><span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">x</span> <span class="op">&gt;=</span> e2<span class="op">.</span><span class="at">crit</span> <span class="op">||</span> d<span class="op">.</span><span class="at">x</span> <span class="op">&lt;=</span> <span class="op">-</span>e2<span class="op">.</span><span class="at">crit</span>)<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"h1"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#1e8449"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span> <span class="fl">0.45</span><span class="op">,</span> <span class="dt">z</span><span class="op">:</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">x</span> <span class="op">&gt;=</span> e2<span class="op">.</span><span class="at">crit</span>})<span class="op">,</span></span>
-<span id="cb19-429"><a href="#cb19-429" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">areaY</span>(e2<span class="op">.</span><span class="at">pts</span><span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">x</span> <span class="op">&lt;</span> e2<span class="op">.</span><span class="at">crit</span> <span class="op">&amp;&amp;</span> d<span class="op">.</span><span class="at">x</span> <span class="op">&gt;</span> <span class="op">-</span>e2<span class="op">.</span><span class="at">crit</span>)<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"h1"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#b03a2e"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span> <span class="fl">0.2</span>})<span class="op">,</span></span>
-<span id="cb19-430"><a href="#cb19-430" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(e2<span class="op">.</span><span class="at">pts</span><span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"h0"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#58585a"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})<span class="op">,</span></span>
-<span id="cb19-431"><a href="#cb19-431" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(e2<span class="op">.</span><span class="at">pts</span><span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"h1"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#0f5da8"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})<span class="op">,</span></span>
-<span id="cb19-432"><a href="#cb19-432" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleX</span>([<span class="op">-</span>e2<span class="op">.</span><span class="at">crit</span><span class="op">,</span> e2<span class="op">.</span><span class="at">crit</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"black"</span><span class="op">,</span> <span class="dt">strokeDasharray</span><span class="op">:</span> <span class="st">"4,3"</span>})</span>
-<span id="cb19-433"><a href="#cb19-433" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb19-434"><a href="#cb19-434" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb19" data-startfrom="474" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 473;"><span id="cb19-474"><a href="#cb19-474" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb19-475"><a href="#cb19-475" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">760</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">280</span><span class="op">,</span> <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">20</span><span class="op">,</span></span>
+<span id="cb19-476"><a href="#cb19-476" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Observed difference in mean listening hours"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [e2<span class="op">.</span><span class="at">lo</span><span class="op">,</span> e2<span class="op">.</span><span class="at">hi</span>]}<span class="op">,</span></span>
+<span id="cb19-477"><a href="#cb19-477" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">axis</span><span class="op">:</span> <span class="kw">null</span>}<span class="op">,</span></span>
+<span id="cb19-478"><a href="#cb19-478" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb19-479"><a href="#cb19-479" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">areaY</span>(e2<span class="op">.</span><span class="at">pts</span><span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">x</span> <span class="op">&gt;=</span> e2<span class="op">.</span><span class="at">crit</span> <span class="op">||</span> d<span class="op">.</span><span class="at">x</span> <span class="op">&lt;=</span> <span class="op">-</span>e2<span class="op">.</span><span class="at">crit</span>)<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"h1"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#1e8449"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span> <span class="fl">0.45</span><span class="op">,</span> <span class="dt">z</span><span class="op">:</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">x</span> <span class="op">&gt;=</span> e2<span class="op">.</span><span class="at">crit</span>})<span class="op">,</span></span>
+<span id="cb19-480"><a href="#cb19-480" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">areaY</span>(e2<span class="op">.</span><span class="at">pts</span><span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">x</span> <span class="op">&lt;</span> e2<span class="op">.</span><span class="at">crit</span> <span class="op">&amp;&amp;</span> d<span class="op">.</span><span class="at">x</span> <span class="op">&gt;</span> <span class="op">-</span>e2<span class="op">.</span><span class="at">crit</span>)<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"h1"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#b03a2e"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span> <span class="fl">0.2</span>})<span class="op">,</span></span>
+<span id="cb19-481"><a href="#cb19-481" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(e2<span class="op">.</span><span class="at">pts</span><span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"h0"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#58585a"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})<span class="op">,</span></span>
+<span id="cb19-482"><a href="#cb19-482" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(e2<span class="op">.</span><span class="at">pts</span><span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"h1"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#0f5da8"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})<span class="op">,</span></span>
+<span id="cb19-483"><a href="#cb19-483" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleX</span>([<span class="op">-</span>e2<span class="op">.</span><span class="at">crit</span><span class="op">,</span> e2<span class="op">.</span><span class="at">crit</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"black"</span><span class="op">,</span> <span class="dt">strokeDasharray</span><span class="op">:</span> <span class="st">"4,3"</span>})</span>
+<span id="cb19-484"><a href="#cb19-484" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb19-485"><a href="#cb19-485" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-13" data-nodetype="expression">
 
@@ -989,10 +1076,10 @@ Figure&nbsp;4.6: Power of the Smart Mix test for a true effect of 3 hours (SD = 
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb20" data-startfrom="439" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 438;"><span id="cb20-439"><a href="#cb20-439" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div class="unc-stats"&gt;Standard error of the difference: &lt;b&gt;</span><span class="sc">${</span>e2<span class="op">.</span><span class="at">se</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt; hours ·</span></span>
-<span id="cb20-440"><a href="#cb20-440" aria-hidden="true" tabindex="-1"></a><span class="vs">differences beyond ±</span><span class="sc">${</span>e2<span class="op">.</span><span class="at">crit</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs"> hours are significant ·</span></span>
-<span id="cb20-441"><a href="#cb20-441" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;b&gt;power = </span><span class="sc">${</span>(<span class="dv">100</span> <span class="op">*</span> e2<span class="op">.</span><span class="at">power</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">0</span>)<span class="sc">}</span><span class="vs">%&lt;/b&gt;</span></span>
-<span id="cb20-442"><a href="#cb20-442" aria-hidden="true" tabindex="-1"></a><span class="sc">${</span><span class="pp">isFinite</span>(e2<span class="op">.</span><span class="at">need</span>) <span class="op">?</span> <span class="fu">html</span><span class="vs">` · for 80% power, you would need &lt;b&gt;</span><span class="sc">${</span>e2<span class="op">.</span><span class="at">need</span><span class="op">.</span><span class="fu">toLocaleString</span>(<span class="st">"en"</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt; users per group`</span> <span class="op">:</span> <span class="st">""</span><span class="sc">}</span><span class="vs">&lt;/div&gt;`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb20" data-startfrom="490" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 489;"><span id="cb20-490"><a href="#cb20-490" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div class="unc-stats"&gt;Standard error of the difference: &lt;b&gt;</span><span class="sc">${</span>e2<span class="op">.</span><span class="at">se</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt; hours ·</span></span>
+<span id="cb20-491"><a href="#cb20-491" aria-hidden="true" tabindex="-1"></a><span class="vs">differences beyond ±</span><span class="sc">${</span>e2<span class="op">.</span><span class="at">crit</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs"> hours are significant ·</span></span>
+<span id="cb20-492"><a href="#cb20-492" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;b&gt;power = </span><span class="sc">${</span>(<span class="dv">100</span> <span class="op">*</span> e2<span class="op">.</span><span class="at">power</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">0</span>)<span class="sc">}</span><span class="vs">%&lt;/b&gt;</span></span>
+<span id="cb20-493"><a href="#cb20-493" aria-hidden="true" tabindex="-1"></a><span class="sc">${</span><span class="pp">isFinite</span>(e2<span class="op">.</span><span class="at">need</span>) <span class="op">?</span> <span class="fu">html</span><span class="vs">` · for 80% power, you would need &lt;b&gt;</span><span class="sc">${</span>e2<span class="op">.</span><span class="at">need</span><span class="op">.</span><span class="fu">toLocaleString</span>(<span class="st">"en"</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt; users per group`</span> <span class="op">:</span> <span class="st">""</span><span class="sc">}</span><span class="vs">&lt;/div&gt;`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-14" data-nodetype="expression">
 
@@ -1000,6 +1087,24 @@ Figure&nbsp;4.6: Power of the Smart Mix test for a true effect of 3 hours (SD = 
 </div>
 </div>
 <p><strong>What to look for.</strong> Set the true effect to 0: the “power” is then just the false-alarm rate α. Increase the sample size: the two curves become narrower and separate — power rises. Halve the true effect: you need about four times as many users for the same power.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled" title="Where does the true effect come from?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Where does the true effect come from?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In the widget, you <em>set</em> the true effect — a luxury you never have in practice: if we knew the true effect, we would not need the experiment. A power analysis is therefore always based on an <strong>assumed</strong> effect size. There are two sensible ways to choose it:</p>
+<ul>
+<li><strong>The smallest effect that would still matter</strong> for the decision: e.g., “Smart Mix is worth rolling out if it increases listening time by at least 2 hours”. The experiment is then designed to detect effects of at least this size.</li>
+<li><strong>Evidence from earlier experiments</strong> or published studies of similar interventions — with caution, since published effects tend to be overestimated (<a href="#sec-exp-nhst" class="quarto-xref"><span>Section 4.9</span></a>).</li>
+</ul>
+<p>What you should <em>not</em> do is compute the power <strong>after</strong> the experiment using the effect you observed (“post-hoc power” or “observed power”). This number adds no information: it is a direct transformation of the <em>p</em>-value — a non-significant result always has low “observed power”. Power analysis belongs to the planning stage; after the experiment, the confidence interval tells you what the data can and cannot rule out.</p>
 </div>
 </div>
 </section>
@@ -1022,7 +1127,7 @@ Figure&nbsp;4.6: Power of the Smart Mix test for a true effect of 3 hours (SD = 
 NOTE: n is number in *each* group</code></pre>
 </div>
 </div>
-<p>About 330 users per group (<code>n</code> is per group) — rather than the 200 the team used. The same function answers the reverse question: with <code>n = 200</code> instead of <code>power = 0.80</code>, it returns the power of the experiment that was actually run.</p>
+<p>About 330 users per group (<code>n</code> is per group) — rather than the 200 the team used. Here we used the effect size observed in the first experiment as the assumption for planning a <em>follow-up</em> experiment; for a first experiment, you would start from the smallest effect that matters. The same function answers the reverse question for the planning stage: with <code>n = 200</code> instead of <code>power = 0.80</code>, it returns the power that an experiment with 200 users per group would have for the assumed effect.</p>
 <p>For <strong>shares</strong>, <code>power.prop.test()</code> works the same way. How many users would the Premium test have needed to reliably detect an increase from 5% to 6%?</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">power.prop.test</span>(<span class="at">p1 =</span> <span class="fl">0.05</span>, <span class="at">p2 =</span> <span class="fl">0.06</span>, <span class="at">sig.level =</span> <span class="fl">0.05</span>, <span class="at">power =</span> <span class="fl">0.80</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1059,7 +1164,7 @@ Figure&nbsp;4.7: Users needed per group to detect a relative lift with 80% power
 </div>
 </div>
 </div>
-<p>To detect a 10% lift in a click-through rate of 0.5% (from 0.50% to 0.55%), an experiment needs more than 300,000 users <em>per group</em>. In a study of 25 large field experiments on advertising effectiveness at major US firms, <span class="citation" data-cites="lewis2015">Lewis and Rao (<a href="#ref-lewis2015" role="doc-biblioref">2015</a>)</span> show that even experiments with millions of users are often too imprecise to tell whether a campaign pays off — the effect of advertising on an individual’s purchases is tiny compared with how much purchases vary anyway. Remember the eBay experiments from <a href="01-foundations.html#sec-ebay" class="quarto-xref"><span>Section 1.2</span></a>: they needed the entire US market to reach a clear answer.</p>
+<p>To detect a 10% lift in a click-through rate of 0.5% (from 0.50% to 0.55%), an experiment needs more than 300,000 users <em>per group</em>. In their paper <em>The Unfavorable Economics of Measuring the Returns to Advertising</em>, <span class="citation" data-cites="lewis2015">Lewis and Rao (<a href="#ref-lewis2015" role="doc-biblioref">2015</a>)</span> analyze 25 large field experiments on advertising effectiveness at major US firms and show that even experiments with millions of users are often too imprecise to tell whether a campaign pays off — the effect of advertising on an individual’s purchases is tiny compared with how much purchases vary anyway. Remember the eBay experiments from <a href="01-foundations.html#sec-ebay" class="quarto-xref"><span>Section 1.2</span></a>: they needed the entire US market to reach a clear answer.</p>
 <div class="callout callout-style-default callout-tip no-icon callout-titled" title="Try it: how many users does a conversion test need?">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1073,7 +1178,7 @@ Figure&nbsp;4.7: Users needed per group to detect a relative lift with 80% power
 <p>Set the <strong>baseline conversion rate</strong> (the rate without the change) and the <strong>relative lift</strong> you want to be able to detect. The widget computes the users needed per group for 80% power at α = 5%.</p>
 <div class="unc-widget">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb25" data-startfrom="488" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 487;"><span id="cb25-488"><a href="#cb25-488" aria-hidden="true" tabindex="-1"></a>viewof e4_base <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="fl">0.1</span><span class="op">,</span> <span class="dv">30</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Baseline rate (%)"</span><span class="op">,</span> <span class="dt">transform</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">log</span><span class="op">,</span> <span class="dt">invert</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb25" data-startfrom="548" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 547;"><span id="cb25-548"><a href="#cb25-548" aria-hidden="true" tabindex="-1"></a>viewof e4_base <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="fl">0.1</span><span class="op">,</span> <span class="dv">30</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Baseline rate (%)"</span><span class="op">,</span> <span class="dt">transform</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">log</span><span class="op">,</span> <span class="dt">invert</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-15" data-nodetype="declaration">
 
@@ -1081,7 +1186,7 @@ Figure&nbsp;4.7: Users needed per group to detect a relative lift with 80% power
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb26" data-startfrom="493" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 492;"><span id="cb26-493"><a href="#cb26-493" aria-hidden="true" tabindex="-1"></a>viewof e4_lift <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">1</span><span class="op">,</span> <span class="dv">50</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Relative lift to detect (%)"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb26" data-startfrom="553" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 552;"><span id="cb26-553"><a href="#cb26-553" aria-hidden="true" tabindex="-1"></a>viewof e4_lift <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">1</span><span class="op">,</span> <span class="dv">50</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Relative lift to detect (%)"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-16" data-nodetype="declaration">
 
@@ -1089,7 +1194,7 @@ Figure&nbsp;4.7: Users needed per group to detect a relative lift with 80% power
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb27" data-startfrom="498" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 497;"><span id="cb27-498"><a href="#cb27-498" aria-hidden="true" tabindex="-1"></a>viewof e4_traffic <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">100</span><span class="op">,</span> <span class="dv">1000000</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">10000</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">100</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Users per day (both groups)"</span><span class="op">,</span> <span class="dt">transform</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">log</span><span class="op">,</span> <span class="dt">invert</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb27" data-startfrom="558" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 557;"><span id="cb27-558"><a href="#cb27-558" aria-hidden="true" tabindex="-1"></a>viewof e4_traffic <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">100</span><span class="op">,</span> <span class="dv">1000000</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">10000</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">100</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Users per day (both groups)"</span><span class="op">,</span> <span class="dt">transform</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">log</span><span class="op">,</span> <span class="dt">invert</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-17" data-nodetype="declaration">
 
@@ -1098,18 +1203,18 @@ Figure&nbsp;4.7: Users needed per group to detect a relative lift with 80% power
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb28" data-startfrom="504" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 503;"><span id="cb28-504"><a href="#cb28-504" aria-hidden="true" tabindex="-1"></a>e4 <span class="op">=</span> {</span>
-<span id="cb28-505"><a href="#cb28-505" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> za <span class="op">=</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)<span class="op">,</span> zb <span class="op">=</span> <span class="fu">qnorm</span>(<span class="fl">0.8</span>)<span class="op">;</span></span>
-<span id="cb28-506"><a href="#cb28-506" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> nfun <span class="op">=</span> (p1<span class="op">,</span> lift) <span class="kw">=&gt;</span> {</span>
-<span id="cb28-507"><a href="#cb28-507" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> p2 <span class="op">=</span> p1 <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> lift)<span class="op">,</span> pb <span class="op">=</span> (p1 <span class="op">+</span> p2) <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span>
-<span id="cb28-508"><a href="#cb28-508" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">ceil</span>((za <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(<span class="dv">2</span> <span class="op">*</span> pb <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> pb)) <span class="op">+</span> zb <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(p1 <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> p1) <span class="op">+</span> p2 <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> p2))) <span class="op">**</span> <span class="dv">2</span> <span class="op">/</span> (p2 <span class="op">-</span> p1) <span class="op">**</span> <span class="dv">2</span>)<span class="op">;</span></span>
-<span id="cb28-509"><a href="#cb28-509" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
-<span id="cb28-510"><a href="#cb28-510" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> p1 <span class="op">=</span> e4_base <span class="op">/</span> <span class="dv">100</span><span class="op">,</span> lift <span class="op">=</span> e4_lift <span class="op">/</span> <span class="dv">100</span><span class="op">;</span></span>
-<span id="cb28-511"><a href="#cb28-511" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> n <span class="op">=</span> <span class="fu">nfun</span>(p1<span class="op">,</span> lift)<span class="op">;</span></span>
-<span id="cb28-512"><a href="#cb28-512" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> curve <span class="op">=</span> d3<span class="op">.</span><span class="fu">range</span>(<span class="dv">1</span><span class="op">,</span> <span class="dv">51</span>)<span class="op">.</span><span class="fu">map</span>(l <span class="kw">=&gt;</span> ({<span class="dt">lift</span><span class="op">:</span> l<span class="op">,</span> <span class="dt">n</span><span class="op">:</span> <span class="fu">nfun</span>(p1<span class="op">,</span> l <span class="op">/</span> <span class="dv">100</span>)}))<span class="op">;</span></span>
-<span id="cb28-513"><a href="#cb28-513" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> days <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">ceil</span>(<span class="dv">2</span> <span class="op">*</span> n <span class="op">/</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>(e4_traffic))<span class="op">;</span></span>
-<span id="cb28-514"><a href="#cb28-514" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {n<span class="op">,</span> curve<span class="op">,</span> days<span class="op">,</span> p1<span class="op">,</span> <span class="dt">p2</span><span class="op">:</span> p1 <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> lift)}<span class="op">;</span></span>
-<span id="cb28-515"><a href="#cb28-515" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb28" data-startfrom="564" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 563;"><span id="cb28-564"><a href="#cb28-564" aria-hidden="true" tabindex="-1"></a>e4 <span class="op">=</span> {</span>
+<span id="cb28-565"><a href="#cb28-565" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> za <span class="op">=</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)<span class="op">,</span> zb <span class="op">=</span> <span class="fu">qnorm</span>(<span class="fl">0.8</span>)<span class="op">;</span></span>
+<span id="cb28-566"><a href="#cb28-566" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> nfun <span class="op">=</span> (p1<span class="op">,</span> lift) <span class="kw">=&gt;</span> {</span>
+<span id="cb28-567"><a href="#cb28-567" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> p2 <span class="op">=</span> p1 <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> lift)<span class="op">,</span> pb <span class="op">=</span> (p1 <span class="op">+</span> p2) <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb28-568"><a href="#cb28-568" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">ceil</span>((za <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(<span class="dv">2</span> <span class="op">*</span> pb <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> pb)) <span class="op">+</span> zb <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(p1 <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> p1) <span class="op">+</span> p2 <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> p2))) <span class="op">**</span> <span class="dv">2</span> <span class="op">/</span> (p2 <span class="op">-</span> p1) <span class="op">**</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb28-569"><a href="#cb28-569" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb28-570"><a href="#cb28-570" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> p1 <span class="op">=</span> e4_base <span class="op">/</span> <span class="dv">100</span><span class="op">,</span> lift <span class="op">=</span> e4_lift <span class="op">/</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb28-571"><a href="#cb28-571" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> n <span class="op">=</span> <span class="fu">nfun</span>(p1<span class="op">,</span> lift)<span class="op">;</span></span>
+<span id="cb28-572"><a href="#cb28-572" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> curve <span class="op">=</span> d3<span class="op">.</span><span class="fu">range</span>(<span class="dv">1</span><span class="op">,</span> <span class="dv">51</span>)<span class="op">.</span><span class="fu">map</span>(l <span class="kw">=&gt;</span> ({<span class="dt">lift</span><span class="op">:</span> l<span class="op">,</span> <span class="dt">n</span><span class="op">:</span> <span class="fu">nfun</span>(p1<span class="op">,</span> l <span class="op">/</span> <span class="dv">100</span>)}))<span class="op">;</span></span>
+<span id="cb28-573"><a href="#cb28-573" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> days <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">ceil</span>(<span class="dv">2</span> <span class="op">*</span> n <span class="op">/</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>(e4_traffic))<span class="op">;</span></span>
+<span id="cb28-574"><a href="#cb28-574" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {n<span class="op">,</span> curve<span class="op">,</span> days<span class="op">,</span> p1<span class="op">,</span> <span class="dt">p2</span><span class="op">:</span> p1 <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> lift)}<span class="op">;</span></span>
+<span id="cb28-575"><a href="#cb28-575" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-18" data-nodetype="declaration">
 
@@ -1117,15 +1222,15 @@ Figure&nbsp;4.7: Users needed per group to detect a relative lift with 80% power
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb29" data-startfrom="520" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 519;"><span id="cb29-520"><a href="#cb29-520" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb29-521"><a href="#cb29-521" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">760</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">280</span><span class="op">,</span> <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">70</span><span class="op">,</span></span>
-<span id="cb29-522"><a href="#cb29-522" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Relative lift to detect (%)"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">50</span>]}<span class="op">,</span></span>
-<span id="cb29-523"><a href="#cb29-523" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Users per group"</span><span class="op">,</span> <span class="dt">type</span><span class="op">:</span> <span class="st">"log"</span><span class="op">,</span> <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span> <span class="dt">tickFormat</span><span class="op">:</span> <span class="st">"~s"</span>}<span class="op">,</span></span>
-<span id="cb29-524"><a href="#cb29-524" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
-<span id="cb29-525"><a href="#cb29-525" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(e4<span class="op">.</span><span class="at">curve</span><span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"lift"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"n"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#0f5da8"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})<span class="op">,</span></span>
-<span id="cb29-526"><a href="#cb29-526" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>([{<span class="dt">lift</span><span class="op">:</span> e4_lift<span class="op">,</span> <span class="dt">n</span><span class="op">:</span> e4<span class="op">.</span><span class="at">n</span>}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"lift"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"n"</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="dv">6</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#0a3d6e"</span>})</span>
-<span id="cb29-527"><a href="#cb29-527" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb29-528"><a href="#cb29-528" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb29" data-startfrom="580" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 579;"><span id="cb29-580"><a href="#cb29-580" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb29-581"><a href="#cb29-581" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">760</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">280</span><span class="op">,</span> <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">70</span><span class="op">,</span></span>
+<span id="cb29-582"><a href="#cb29-582" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Relative lift to detect (%)"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">50</span>]}<span class="op">,</span></span>
+<span id="cb29-583"><a href="#cb29-583" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Users per group"</span><span class="op">,</span> <span class="dt">type</span><span class="op">:</span> <span class="st">"log"</span><span class="op">,</span> <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span> <span class="dt">tickFormat</span><span class="op">:</span> <span class="st">"~s"</span>}<span class="op">,</span></span>
+<span id="cb29-584"><a href="#cb29-584" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb29-585"><a href="#cb29-585" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(e4<span class="op">.</span><span class="at">curve</span><span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"lift"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"n"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#0f5da8"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})<span class="op">,</span></span>
+<span id="cb29-586"><a href="#cb29-586" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>([{<span class="dt">lift</span><span class="op">:</span> e4_lift<span class="op">,</span> <span class="dt">n</span><span class="op">:</span> e4<span class="op">.</span><span class="at">n</span>}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"lift"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"n"</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="dv">6</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#0a3d6e"</span>})</span>
+<span id="cb29-587"><a href="#cb29-587" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb29-588"><a href="#cb29-588" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-19" data-nodetype="expression">
 
@@ -1133,9 +1238,9 @@ Figure&nbsp;4.7: Users needed per group to detect a relative lift with 80% power
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb30" data-startfrom="533" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 532;"><span id="cb30-533"><a href="#cb30-533" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div class="unc-stats"&gt;To detect an increase from &lt;b&gt;</span><span class="sc">${</span>(<span class="dv">100</span> <span class="op">*</span> e4<span class="op">.</span><span class="at">p1</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">%&lt;/b&gt; to &lt;b&gt;</span><span class="sc">${</span>(<span class="dv">100</span> <span class="op">*</span> e4<span class="op">.</span><span class="at">p2</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">%&lt;/b&gt;,</span></span>
-<span id="cb30-534"><a href="#cb30-534" aria-hidden="true" tabindex="-1"></a><span class="vs">you need about &lt;b&gt;</span><span class="sc">${</span>e4<span class="op">.</span><span class="at">n</span><span class="op">.</span><span class="fu">toLocaleString</span>(<span class="st">"en"</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt; users per group (</span><span class="sc">${</span>(<span class="dv">2</span> <span class="op">*</span> e4<span class="op">.</span><span class="at">n</span>)<span class="op">.</span><span class="fu">toLocaleString</span>(<span class="st">"en"</span>)<span class="sc">}</span><span class="vs"> in total) —</span></span>
-<span id="cb30-535"><a href="#cb30-535" aria-hidden="true" tabindex="-1"></a><span class="vs">at </span><span class="sc">${</span><span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>(e4_traffic)<span class="op">.</span><span class="fu">toLocaleString</span>(<span class="st">"en"</span>)<span class="sc">}</span><span class="vs"> users per day, the test runs about &lt;b&gt;</span><span class="sc">${</span>e4<span class="op">.</span><span class="at">days</span><span class="op">.</span><span class="fu">toLocaleString</span>(<span class="st">"en"</span>)<span class="sc">}</span><span class="vs"> days&lt;/b&gt;.&lt;/div&gt;`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb30" data-startfrom="593" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 592;"><span id="cb30-593"><a href="#cb30-593" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div class="unc-stats"&gt;To detect an increase from &lt;b&gt;</span><span class="sc">${</span>(<span class="dv">100</span> <span class="op">*</span> e4<span class="op">.</span><span class="at">p1</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">%&lt;/b&gt; to &lt;b&gt;</span><span class="sc">${</span>(<span class="dv">100</span> <span class="op">*</span> e4<span class="op">.</span><span class="at">p2</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">%&lt;/b&gt;,</span></span>
+<span id="cb30-594"><a href="#cb30-594" aria-hidden="true" tabindex="-1"></a><span class="vs">you need about &lt;b&gt;</span><span class="sc">${</span>e4<span class="op">.</span><span class="at">n</span><span class="op">.</span><span class="fu">toLocaleString</span>(<span class="st">"en"</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt; users per group (</span><span class="sc">${</span>(<span class="dv">2</span> <span class="op">*</span> e4<span class="op">.</span><span class="at">n</span>)<span class="op">.</span><span class="fu">toLocaleString</span>(<span class="st">"en"</span>)<span class="sc">}</span><span class="vs"> in total) —</span></span>
+<span id="cb30-595"><a href="#cb30-595" aria-hidden="true" tabindex="-1"></a><span class="vs">at </span><span class="sc">${</span><span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>(e4_traffic)<span class="op">.</span><span class="fu">toLocaleString</span>(<span class="st">"en"</span>)<span class="sc">}</span><span class="vs"> users per day, the test runs about &lt;b&gt;</span><span class="sc">${</span>e4<span class="op">.</span><span class="at">days</span><span class="op">.</span><span class="fu">toLocaleString</span>(<span class="st">"en"</span>)<span class="sc">}</span><span class="vs"> days&lt;/b&gt;.&lt;/div&gt;`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-20" data-nodetype="expression">
 
@@ -1175,8 +1280,8 @@ Figure&nbsp;4.7: Users needed per group to detect a relative lift with 80% power
 <section id="sec-exp-other" class="level2" data-number="4.8">
 <h2 data-number="4.8" class="anchored" data-anchor-id="sec-exp-other"><span class="header-section-number">4.8</span> Beyond two groups: other designs and tests</h2>
 <p>The two-group comparison is the workhorse of experimentation, but not every experiment fits it. This section gives a short tour of the most common variations — the logic stays the same, only the R function changes.</p>
-<section id="more-than-two-groups" class="level3" data-number="4.8.1">
-<h3 data-number="4.8.1" class="anchored" data-anchor-id="more-than-two-groups"><span class="header-section-number">4.8.1</span> More than two groups</h3>
+<section id="more-than-two-groups-analysis-of-variance-anova" class="level3" data-number="4.8.1">
+<h3 data-number="4.8.1" class="anchored" data-anchor-id="more-than-two-groups-analysis-of-variance-anova"><span class="header-section-number">4.8.1</span> More than two groups: analysis of variance (ANOVA)</h3>
 <p>Suppose the product team tests three versions: no mix, a mix updated weekly, and a mix updated daily — 150 users each (<a href="#fig-three-groups" class="quarto-xref">Figure&nbsp;<span>4.8</span></a>).</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -1200,19 +1305,34 @@ Figure&nbsp;4.8: Listening hours in a (simulated) experiment with three versions
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">hours   =</span> <span class="fu">c</span>(<span class="fu">rgamma</span>(<span class="dv">150</span>, <span class="dv">2</span>, <span class="at">scale =</span> <span class="dv">10</span>), <span class="fu">rgamma</span>(<span class="dv">150</span>, <span class="dv">2</span>, <span class="at">scale =</span> <span class="fl">10.8</span>), <span class="fu">rgamma</span>(<span class="dv">150</span>, <span class="dv">2</span>, <span class="at">scale =</span> <span class="dv">12</span>))</span>
 <span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>mix_test <span class="sc">|&gt;</span> <span class="fu">group_by</span>(version) <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">mean =</span> <span class="fu">mean</span>(hours))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>mix_test <span class="sc">|&gt;</span> <span class="fu">group_by</span>(version) <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">mean =</span> <span class="fu">mean</span>(hours), <span class="at">sd =</span> <span class="fu">sd</span>(hours))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 3
-  version        n  mean
-  &lt;fct&gt;      &lt;int&gt; &lt;dbl&gt;
-1 No mix       150  19.1
-2 Weekly mix   150  21.7
-3 Daily mix    150  25.7</code></pre>
+<pre><code># A tibble: 3 × 4
+  version        n  mean    sd
+  &lt;fct&gt;      &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 No mix       150  19.1  13.9
+2 Weekly mix   150  21.7  17.0
+3 Daily mix    150  25.7  20.0</code></pre>
 </div>
 </div>
-<p>Why not simply run three <em>t</em>-tests (no vs.&nbsp;weekly, no vs.&nbsp;daily, weekly vs.&nbsp;daily)? Because every test has a 5% chance of a false alarm, and the chances add up: with three tests, the probability of at least one false alarm is <span class="math inline">\(1 - 0.95^3\)</span> = 14%; with ten tests, 40%. This <strong>multiple comparisons</strong> problem is why several groups are first compared with a single test — the <strong>analysis of variance (ANOVA)</strong> — which asks whether the group means differ <em>at all</em>:</p>
+<p><strong>Why not simply run three <em>t</em>-tests?</strong> No mix vs.&nbsp;weekly, no mix vs.&nbsp;daily, weekly vs.&nbsp;daily — three comparisons, each with a 5% chance of a false alarm. The chances add up: the probability of <em>at least one</em> false alarm across a family of <span class="math inline">\(k\)</span> tests, the <strong>family-wise error rate</strong>, is</p>
+<p><span class="math display">\[
+\text{family-wise error rate} = 1 - (1 - \alpha)^k
+\]</span></p>
+<p>With three tests, it is <span class="math inline">\(1 - 0.95^3\)</span> = 14%; with ten tests (five groups), 40%. The more groups you compare pairwise, the more likely you are to “find” a difference that does not exist. The analysis of more than two groups therefore proceeds in <strong>two steps</strong>.</p>
+<p><strong>Step 1: Is there any difference at all?</strong> The <strong>analysis of variance (ANOVA)</strong> tests all groups at once, with a single test:</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: all group means are equal, <span class="math inline">\(\mu_1 = \mu_2 = \mu_3\)</span></li>
+<li><span class="math inline">\(H_1\)</span>: at least one group mean differs from the others</li>
+</ul>
+<p>The idea is once more signal divided by noise. The ANOVA splits the total variation of listening times into two parts: the variation <strong>between</strong> the groups (how far the group means are from the overall mean — the signal, explained by the version) and the variation <strong>within</strong> the groups (how much users differ within the same version — the noise). The <strong>F statistic</strong> is the ratio of the two, each averaged per degree of freedom:</p>
+<p><span class="math display">\[
+F = \frac{\text{variation between the groups per degree of freedom}}{\text{variation within the groups per degree of freedom}}
+\]</span></p>
+<p>If the versions make no difference, the group means differ only by chance, and <span class="math inline">\(F\)</span> is close to 1; the larger <span class="math inline">\(F\)</span>, the stronger the evidence that at least one version differs.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">aov</span>(hours <span class="sc">~</span> version, <span class="at">data =</span> mix_test))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>mix_aov <span class="ot">&lt;-</span> <span class="fu">aov</span>(hours <span class="sc">~</span> version, <span class="at">data =</span> mix_test)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mix_aov)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             Df Sum Sq Mean Sq F value  Pr(&gt;F)   
 version       2   3367  1683.4   5.711 0.00355 **
@@ -1221,9 +1341,18 @@ Residuals   447 131755   294.8
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
-<p>The <em>F</em> value compares the variation <em>between</em> the group means with the variation <em>within</em> the groups — once again, signal divided by noise. Here, <em>p</em> = 0.004: the versions differ. To find out <em>which</em> versions differ, <strong>post-hoc tests</strong> compare all pairs while correcting for the number of comparisons (here with the Bonferroni correction, which multiplies each <em>p</em>-value by the number of tests):</p>
+<p>The output shows both parts of the variation (<code>Sum Sq</code>), their degrees of freedom (<code>Df</code>: 3 − 1 = 2 between the groups; 450 − 3 = 447 within), the averaged variations (<code>Mean Sq</code>), the <em>F</em> value, and its <em>p</em>-value. The result: <span class="math inline">\(F(2, 447)\)</span> = 5.71, <em>p</em> = .004 — at least one version differs. The share of the total variation explained by the versions, <strong>eta squared</strong> (<span class="math inline">\(\eta^2\)</span>), is the ANOVA’s effect size:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.t.test</span>(mix_test<span class="sc">$</span>hours, mix_test<span class="sc">$</span>version, <span class="at">p.adjust.method =</span> <span class="st">"bonferroni"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>ss <span class="ot">&lt;-</span> <span class="fu">summary</span>(mix_aov)[[<span class="dv">1</span>]]<span class="sc">$</span><span class="st">`</span><span class="at">Sum Sq</span><span class="st">`</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>ss[<span class="dv">1</span>] <span class="sc">/</span> <span class="fu">sum</span>(ss)    <span class="co"># eta squared: share of variation explained by the version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02491698</code></pre>
+</div>
+</div>
+<p>The versions explain only 2.5% of the variation in listening times: users differ far more among themselves than the versions differ from each other — a small effect, even though it is significant.</p>
+<p><strong>Step 2: Which groups differ?</strong> The ANOVA tells us <em>that</em> the groups differ, not <em>which</em>. <strong>Post-hoc tests</strong> compare all pairs of groups, while correcting the <em>p</em>-values for the number of comparisons so that the family-wise error rate stays at 5%. The simplest correction, <strong>Bonferroni</strong>, multiplies each <em>p</em>-value by the number of comparisons (equivalently: it tests each comparison at <span class="math inline">\(\alpha / k\)</span>):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.t.test</span>(mix_test<span class="sc">$</span>hours, mix_test<span class="sc">$</span>version, <span class="at">p.adjust.method =</span> <span class="st">"bonferroni"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Pairwise comparisons using t tests with pooled SD 
@@ -1237,20 +1366,89 @@ Daily mix  0.0026 0.1247
 P value adjustment method: bonferroni </code></pre>
 </div>
 </div>
-<p>Only the daily mix differs clearly from no mix; the weekly mix lies in between and cannot be distinguished from either.</p>
+<p>Only the daily mix differs clearly from no mix (corrected <em>p</em> = .003); the weekly mix lies in between and cannot be distinguished from either. The Bonferroni correction is conservative — it errs on the side of missing effects. R’s default for <code>pairwise.t.test()</code>, the <strong>Holm</strong> correction, is slightly more powerful and equally safe; <strong>Tukey’s HSD</strong> test, <code>TukeyHSD(mix_aov)</code>, is a classic alternative designed specifically for all pairwise comparisons after an ANOVA and reports the differences with family-wise confidence intervals.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: assumptions of the ANOVA">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Under the hood: assumptions of the ANOVA
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The ANOVA shares the assumptions of the <em>t</em>-test: independent observations, an approximately normal sampling distribution of the group means (guaranteed by the central limit theorem for reasonably large groups), and a metric outcome. In addition, the classic ANOVA assumes <strong>similar variances in all groups</strong>. If the group standard deviations differ considerably, use the <strong>Welch ANOVA</strong>, which does not require this assumption — just as R’s default <em>t</em>-test does:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oneway.test</span>(hours <span class="sc">~</span> version, <span class="at">data =</span> mix_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One-way analysis of means (not assuming equal variances)
+
+data:  hours and version
+F = 5.5917, num df = 2.00, denom df = 291.59, p-value = 0.00414</code></pre>
+</div>
+</div>
+<p>For ordinal outcomes or strongly skewed data in small samples, the Kruskal–Wallis test is the non-parametric alternative (see below).</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: the ANOVA as a regression">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Under the hood: the ANOVA as a regression
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>An ANOVA can equivalently be written as a <strong>regression</strong> with the group variable as the predictor — the tool at the heart of the next module:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(hours <span class="sc">~</span> version, <span class="at">data =</span> mix_test))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = hours ~ version, data = mix_test)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-25.085 -11.903  -3.717   7.112 101.133 
+
+Coefficients:
+                  Estimate Std. Error t value             Pr(&gt;|t|)    
+(Intercept)         19.070      1.402  13.604 &lt; 0.0000000000000002 ***
+versionWeekly mix    2.596      1.982   1.309             0.191065    
+versionDaily mix     6.647      1.982   3.353             0.000867 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 17.17 on 447 degrees of freedom
+Multiple R-squared:  0.02492,   Adjusted R-squared:  0.02055 
+F-statistic: 5.711 on 2 and 447 DF,  p-value: 0.003555</code></pre>
+</div>
+</div>
+<p>The last line reports exactly the same <span class="math inline">\(F\)</span> test as the ANOVA (<span class="math inline">\(F\)</span> = 5.71 on 2 and 447 degrees of freedom). The coefficients have a direct interpretation: the intercept is the mean of the reference group (no mix, 19.07 hours), and each further coefficient is the difference between a group and the reference group (weekly: +2.60 hours; daily: +6.65 hours).</p>
+<p>What about multiple comparisons in a regression? The <strong>overall F test</strong> in the last line is a single test of all groups together, so it has no multiple-comparison problem — just like the ANOVA. The <strong>individual coefficient tests</strong>, however, are ordinary <em>t</em>-tests and are <strong>not</strong> corrected: each compares one group with the reference group at <span class="math inline">\(\alpha\)</span> = 5%. The degrees of freedom do not change this. Each group adds one coefficient and uses up one degree of freedom, which affects how precisely the noise (the residual variance) is estimated — but not the chance of a false alarm across several comparisons. Note also that the coefficients only compare each group with the reference group, not all pairs. If you interpret several group comparisons from a regression, the same corrections apply (e.g., <code>p.adjust(p_values, method = "holm")</code>).</p>
+</div>
+</div>
+</div>
 </section>
 <section id="the-same-people-in-both-conditions" class="level3" data-number="4.8.2">
 <h3 data-number="4.8.2" class="anchored" data-anchor-id="the-same-people-in-both-conditions"><span class="header-section-number">4.8.2</span> The same people in both conditions</h3>
 <p>In a <strong>within-subjects design</strong> (<a href="01-foundations.html#sec-randomization" class="quarto-xref"><span>Section 1.6</span></a>), every participant experiences both conditions — e.g., 60 users each search for songs with the old and with the new search design, in random order, and we measure how many seconds they need. Because each user serves as their own control, the large differences <em>between</em> users drop out of the comparison. The <strong>paired <em>t</em>-test</strong> analyzes the differences within each user:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4</span>)</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>skill <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">60</span>, <span class="dv">0</span>, <span class="dv">8</span>)                               <span class="co"># users differ a lot ...</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>search_test <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">old_design =</span> <span class="fu">round</span>(<span class="dv">40</span> <span class="sc">+</span> skill <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">60</span>, <span class="dv">0</span>, <span class="dv">3</span>), <span class="dv">1</span>),</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">new_design =</span> <span class="fu">round</span>(<span class="dv">38</span> <span class="sc">+</span> skill <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">60</span>, <span class="dv">0</span>, <span class="dv">3</span>), <span class="dv">1</span>)  <span class="co"># ... the designs only a little</span></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(search_test<span class="sc">$</span>new_design, search_test<span class="sc">$</span>old_design, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4</span>)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>skill <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">60</span>, <span class="dv">0</span>, <span class="dv">8</span>)                               <span class="co"># users differ a lot ...</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>search_test <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">old_design =</span> <span class="fu">round</span>(<span class="dv">40</span> <span class="sc">+</span> skill <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">60</span>, <span class="dv">0</span>, <span class="dv">3</span>), <span class="dv">1</span>),</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">new_design =</span> <span class="fu">round</span>(<span class="dv">38</span> <span class="sc">+</span> skill <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">60</span>, <span class="dv">0</span>, <span class="dv">3</span>), <span class="dv">1</span>)  <span class="co"># ... the designs only a little</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(search_test<span class="sc">$</span>new_design, search_test<span class="sc">$</span>old_design, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Paired t-test
@@ -1267,11 +1465,77 @@ mean difference
 </div>
 <p>The new design saves about two seconds per search (<em>p</em> &lt; .001). Analyzing the same data <em>as if</em> they came from two independent groups — <code>t.test(search_test$new_design, search_test$old_design)</code> — gives <em>p</em> = 0.14: the two seconds disappear in the noise of how differently fast users are. Using the right test for the design matters.</p>
 </section>
-<section id="when-the-mean-is-not-the-right-summary" class="level3" data-number="4.8.3">
-<h3 data-number="4.8.3" class="anchored" data-anchor-id="when-the-mean-is-not-the-right-summary"><span class="header-section-number">4.8.3</span> When the mean is not the right summary</h3>
-<p>The <em>t</em>-test compares <strong>means</strong>. For strongly skewed outcomes with extreme values, or for ordinal outcomes such as ratings on a scale from “poor” to “excellent” (<a href="02-describing-data.html#sec-desc-measurement" class="quarto-xref"><span>Section 2.3</span></a>), <strong>non-parametric tests</strong> based on ranks are an alternative: the <strong>Wilcoxon rank-sum test</strong> (also called Mann–Whitney U test) for two groups, <code>wilcox.test()</code>, and the <strong>Kruskal–Wallis test</strong> for more than two groups, <code>kruskal.test()</code>. They ask, roughly, whether values in one group tend to be higher than in the other — not whether the means differ.</p>
+<section id="non-parametric-tests-when-the-mean-is-not-the-right-summary" class="level3" data-number="4.8.3">
+<h3 data-number="4.8.3" class="anchored" data-anchor-id="non-parametric-tests-when-the-mean-is-not-the-right-summary"><span class="header-section-number">4.8.3</span> Non-parametric tests: when the mean is not the right summary</h3>
+<p>All tests so far compare <strong>means</strong> and rely on the central limit theorem. <strong>Non-parametric tests</strong> do not work with the values themselves, but with their <strong>ranks</strong>: all observations are sorted, the smallest gets rank 1, the next rank 2, and so on. The test then asks whether the ranks are systematically higher in one group than in another. Because a rank does not care <em>how much</em> larger a value is, a few extreme values cannot dominate the result. Non-parametric tests are useful when:</p>
+<ul>
+<li>the outcome is <strong>ordinal</strong>, so that means are not meaningful — e.g., ratings from “poor” to “excellent” (<a href="02-describing-data.html#sec-desc-measurement" class="quarto-xref"><span>Section 2.3</span></a>);</li>
+<li>the data are <strong>strongly skewed or contain extreme outliers</strong> and the samples are <strong>small</strong>, so that the central limit theorem cannot be relied on;</li>
+<li>you are interested in the <strong>typical</strong> observation rather than the average.</li>
+</ul>
+<p>Each test of this chapter has a non-parametric counterpart (<a href="#tbl-nonparametric" class="quarto-xref">Table&nbsp;<span>4.4</span></a>).</p>
+<div id="tbl-nonparametric" class="striped quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-nonparametric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4.4: Parametric tests and their non-parametric counterparts
+</figcaption>
+<div aria-describedby="tbl-nonparametric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Design</th>
+<th>Parametric test</th>
+<th>Non-parametric counterpart</th>
+<th>R function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Two independent groups</td>
+<td>Welch <em>t</em>-test</td>
+<td>Wilcoxon rank-sum test (Mann–Whitney U test)</td>
+<td><code>wilcox.test(y ~ group)</code></td>
+</tr>
+<tr class="even">
+<td>Two conditions, same people</td>
+<td>Paired <em>t</em>-test</td>
+<td>Wilcoxon signed-rank test</td>
+<td><code>wilcox.test(x1, x2, paired = TRUE)</code></td>
+</tr>
+<tr class="odd">
+<td>Three or more independent groups</td>
+<td>ANOVA</td>
+<td>Kruskal–Wallis test</td>
+<td><code>kruskal.test(y ~ group)</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Applied to Smart Mix, the Wilcoxon rank-sum test gives <em>p</em> = 0.07 — not significant at 5%, while the <em>t</em>-test was. The two tests answer different questions: the <em>t</em>-test is about the <strong>average</strong> listening time, which a few heavy listeners pull up; the Wilcoxon test is about whether Smart Mix users <strong>typically</strong> listen more. Which question matters depends on the business case: if revenue depends on <em>total</em> listening time, the mean is the relevant quantity. The price of the rank-based approach: because it ignores <em>how much</em> values differ, a non-parametric test is usually somewhat less powerful than its parametric counterpart when the latter’s assumptions hold.</p>
+<p>The boxes below show how to run each test in R — for reference, when you need them later (e.g., in your group project).</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: Wilcoxon rank-sum test (two independent groups)">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Under the hood: Wilcoxon rank-sum test (two independent groups)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Idea:</strong> rank all observations of both groups together. If the groups do not differ, high and low ranks are mixed evenly across the groups; if one group tends to have higher values, it collects the high ranks. <span class="math inline">\(H_0\)</span>: the values in both groups come from the same distribution (neither group tends to have higher values).</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(hours <span class="sc">~</span> group, <span class="at">data =</span> ab_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(hours <span class="sc">~</span> group, <span class="at">data =</span> ab_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Wilcoxon rank sum test with continuity correction
@@ -1281,15 +1545,88 @@ W = 22072, p-value = 0.07318
 alternative hypothesis: true location shift is not equal to 0</code></pre>
 </div>
 </div>
-<p>For Smart Mix, the Wilcoxon test gives <em>p</em> = 0.07 — not significant at 5%, while the <em>t</em>-test was. The two tests answer different questions: the <em>t</em>-test is about the average listening time, which heavy listeners pull up; the Wilcoxon test is about the typical user. Which question matters depends on the business case: if revenue depends on <em>total</em> listening time, the mean is the relevant quantity.</p>
+<p>The test statistic <code>W</code> is based on the sum of the ranks in the first group. Report it together with the medians of both groups, e.g.: “Users with Smart Mix did not listen significantly more than users without it (medians: 19.2 vs.&nbsp;16.4 hours; Wilcoxon rank-sum test: <em>W</em> = 22,072, <em>p</em> = .073).”</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: Wilcoxon signed-rank test (same people, two conditions)">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Under the hood: Wilcoxon signed-rank test (same people, two conditions)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Idea:</strong> compute the difference between the two conditions for each person, rank the <em>absolute</em> differences, and compare the sum of the ranks of positive differences with that of negative differences. If there is no effect, both sums should be similar. <span class="math inline">\(H_0\)</span>: the differences are distributed symmetrically around zero.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(search_test<span class="sc">$</span>new_design, search_test<span class="sc">$</span>old_design, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Wilcoxon signed rank test with continuity correction
+
+data:  search_test$new_design and search_test$old_design
+V = 473.5, p-value = 0.001167
+alternative hypothesis: true location shift is not equal to 0</code></pre>
+</div>
+</div>
+<p>Report it together with the median difference, e.g.: “Users found songs faster with the new design (median difference: -1.7 seconds; Wilcoxon signed-rank test: <em>V</em> = 473.5, <em>p</em> = .001).” Typical use: ratings of two products or designs by the same respondents on an ordinal scale.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: Kruskal–Wallis test (three or more independent groups)">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Under the hood: Kruskal–Wallis test (three or more independent groups)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Idea:</strong> the rank-based version of the ANOVA. Rank all observations together and compare the average ranks of the groups. <span class="math inline">\(H_0\)</span>: the values in all groups come from the same distribution.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kruskal.test</span>(hours <span class="sc">~</span> version, <span class="at">data =</span> mix_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Kruskal-Wallis rank sum test
+
+data:  hours by version
+Kruskal-Wallis chi-squared = 7.6637, df = 2, p-value = 0.02167</code></pre>
+</div>
+</div>
+<p>As with the ANOVA, a significant result says only that <em>some</em> groups differ. For pairwise comparisons, use Wilcoxon rank-sum tests with a correction for multiple comparisons:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.wilcox.test</span>(mix_test<span class="sc">$</span>hours, mix_test<span class="sc">$</span>version, <span class="at">p.adjust.method =</span> <span class="st">"bonferroni"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  mix_test$hours and mix_test$version 
+
+           No mix Weekly mix
+Weekly mix 1.000  -         
+Daily mix  0.021  0.169     
+
+P value adjustment method: bonferroni </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="choosing-a-test" class="level3" data-number="4.8.4">
 <h3 data-number="4.8.4" class="anchored" data-anchor-id="choosing-a-test"><span class="header-section-number">4.8.4</span> Choosing a test</h3>
-<p><a href="#tbl-test-choice" class="quarto-xref">Table&nbsp;<span>4.3</span></a> summarizes the tests of this chapter. In most business experiments, you will need the first two rows.</p>
+<p><a href="#tbl-test-choice" class="quarto-xref">Table&nbsp;<span>4.5</span></a> summarizes the tests of this chapter. In most business experiments, you will need the first two rows.</p>
 <div id="tbl-test-choice" class="striped quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-test-choice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;4.3: Choosing a test for an experiment
+Table&nbsp;4.5: Choosing a test for an experiment
 </figcaption>
 <div aria-describedby="tbl-test-choice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped caption-top table">
@@ -1335,7 +1672,7 @@ Table&nbsp;4.3: Choosing a test for an experiment
 <td>Metric</td>
 <td>3 or more</td>
 <td>Different people per group</td>
-<td>ANOVA + post-hoc tests</td>
+<td>ANOVA + corrected post-hoc tests</td>
 <td><code>aov()</code>, <code>pairwise.t.test()</code></td>
 </tr>
 <tr class="odd">
@@ -1346,6 +1683,13 @@ Table&nbsp;4.3: Choosing a test for an experiment
 <td><code>wilcox.test(y ~ group)</code></td>
 </tr>
 <tr class="even">
+<td>Ordinal, or metric with extreme skew and small samples</td>
+<td>2</td>
+<td>Same people in both conditions</td>
+<td>Wilcoxon signed-rank test</td>
+<td><code>wilcox.test(x1, x2, paired = TRUE)</code></td>
+</tr>
+<tr class="odd">
 <td>Ordinal, or metric with extreme skew and small samples</td>
 <td>3 or more</td>
 <td>Different people per group</td>
@@ -1394,11 +1738,11 @@ Table&nbsp;4.3: Choosing a test for an experiment
 <h3 data-number="4.9.2" class="anchored" data-anchor-id="significant-is-not-the-same-as-important-and-not-significant-is-not-the-same-as-no-effect"><span class="header-section-number">4.9.2</span> Significant is not the same as important — and not significant is not the same as no effect</h3>
 <p><strong>Statistical significance depends on the sample size.</strong> With enough users, even an effect of a few seconds of listening time becomes significant — large platforms with millions of users find “significant” differences almost everywhere. Whether an effect matters is a question for the effect size and the business case (<a href="#sec-exp-effect" class="quarto-xref"><span>Section 4.4</span></a>), not for the <em>p</em>-value.</p>
 <p>Conversely, <strong>a non-significant result does not show that there is no effect.</strong> The Premium test (<a href="#sec-exp-shares" class="quarto-xref"><span>Section 4.6</span></a>) was not significant, but its confidence interval included increases of almost three percentage points. “Absence of evidence is not evidence of absence”: with a small sample, even a real and relevant effect often goes undetected (<a href="#sec-exp-power" class="quarto-xref"><span>Section 4.7</span></a>).</p>
-<p>To get a feel for sample sizes, <a href="#tbl-simmons" class="quarto-xref">Table&nbsp;<span>4.4</span></a> shows how many respondents per group are needed to reliably detect some everyday differences in a survey.</p>
+<p>To get a feel for sample sizes, <a href="#tbl-simmons" class="quarto-xref">Table&nbsp;<span>4.6</span></a> shows how many respondents per group are needed to reliably detect some everyday differences in a survey.</p>
 <div id="tbl-simmons" class="striped quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-simmons-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;4.4: How many respondents are needed to detect everyday effects? Based on Simmons, Nelson &amp; Simonsohn (2013), survey of 697 US participants
+Table&nbsp;4.6: How many respondents are needed to detect everyday effects? Based on Simmons, Nelson &amp; Simonsohn (2013), survey of 697 US participants
 </figcaption>
 <div aria-describedby="tbl-simmons-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped caption-top table">
@@ -1444,7 +1788,7 @@ Table&nbsp;4.4: How many respondents are needed to detect everyday effects? Base
 </section>
 <section id="the-5-threshold-is-a-convention-not-a-law-of-nature" class="level3" data-number="4.9.3">
 <h3 data-number="4.9.3" class="anchored" data-anchor-id="the-5-threshold-is-a-convention-not-a-law-of-nature"><span class="header-section-number">4.9.3</span> The 5% threshold is a convention, not a law of nature</h3>
-<p>Nothing special happens at <em>p</em> = 0.05. A result with <em>p</em> = 0.049 is not meaningfully stronger evidence than one with <em>p</em> = 0.051 — yet the first is often reported as a success and the second as a failure. Treating 0.05 as a bright line encourages exactly the behavior that makes <em>p</em>-values meaningless. Good practice: <strong>report the exact <em>p</em>-value together with the effect size and its confidence interval</strong>, and base decisions on all three — plus the costs and benefits of acting.</p>
+<p>Nothing special happens at <em>p</em> = 0.05. A result with <em>p</em> = 0.049 is not meaningfully stronger evidence than one with <em>p</em> = 0.051 — yet the first is often reported as a success and the second as a failure. Treating 0.05 as a bright line encourages exactly the behavior that makes <em>p</em>-values meaningless. Good practice: <strong>report the exact <em>p</em>-value together with the effect size and its confidence interval</strong>, and base decisions on all three — plus the costs and benefits of acting. This is increasingly the norm in research as well: many journals — including leading marketing journals such as the <em>Journal of Marketing</em> and the <em>Journal of Marketing Research</em> — ask authors to report exact <em>p</em>-values, effect sizes, and confidence intervals instead of significance stars or statements such as “<em>p</em> &lt; .05”.</p>
 </section>
 <section id="peeking-why-the-sample-size-must-be-fixed-in-advance" class="level3" data-number="4.9.4">
 <h3 data-number="4.9.4" class="anchored" data-anchor-id="peeking-why-the-sample-size-must-be-fixed-in-advance"><span class="header-section-number">4.9.4</span> Peeking: why the sample size must be fixed in advance</h3>
@@ -1476,7 +1820,7 @@ Figure&nbsp;4.9: The p-values of 20 simulated A/B tests in which there is no eff
 <p>The widget simulates 200 A/B tests <strong>without any true effect</strong>. An impatient analyst checks the <em>p</em>-value after every batch of new users and stops as soon as <em>p</em> &lt; 0.05. Compare the share of tests that are significant at the planned end with the share that are significant <strong>at some look</strong>.</p>
 <div class="unc-widget">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb41" data-startfrom="699" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 698;"><span id="cb41-699"><a href="#cb41-699" aria-hidden="true" tabindex="-1"></a>viewof e3_max <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">100</span><span class="op">,</span> <span class="dv">2000</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Planned users per group"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb53" data-startfrom="857" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 856;"><span id="cb53-857"><a href="#cb53-857" aria-hidden="true" tabindex="-1"></a>viewof e3_max <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">100</span><span class="op">,</span> <span class="dv">2000</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Planned users per group"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-21" data-nodetype="declaration">
 
@@ -1484,7 +1828,7 @@ Figure&nbsp;4.9: The p-values of 20 simulated A/B tests in which there is no eff
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb42" data-startfrom="704" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 703;"><span id="cb42-704"><a href="#cb42-704" aria-hidden="true" tabindex="-1"></a>viewof e3_step <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">radio</span>([<span class="dv">10</span><span class="op">,</span> <span class="dv">50</span><span class="op">,</span> <span class="dv">100</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Check after every … users per group"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb54" data-startfrom="862" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 861;"><span id="cb54-862"><a href="#cb54-862" aria-hidden="true" tabindex="-1"></a>viewof e3_step <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">radio</span>([<span class="dv">10</span><span class="op">,</span> <span class="dv">50</span><span class="op">,</span> <span class="dv">100</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Check after every … users per group"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-22" data-nodetype="declaration">
 
@@ -1492,7 +1836,7 @@ Figure&nbsp;4.9: The p-values of 20 simulated A/B tests in which there is no eff
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb43" data-startfrom="709" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 708;"><span id="cb43-709"><a href="#cb43-709" aria-hidden="true" tabindex="-1"></a>viewof e3_batch <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">button</span>(<span class="st">"Simulate 200 new tests"</span><span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">reduce</span><span class="op">:</span> v <span class="kw">=&gt;</span> v <span class="op">+</span> <span class="dv">1</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb55" data-startfrom="867" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 866;"><span id="cb55-867"><a href="#cb55-867" aria-hidden="true" tabindex="-1"></a>viewof e3_batch <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">button</span>(<span class="st">"Simulate 200 new tests"</span><span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">reduce</span><span class="op">:</span> v <span class="kw">=&gt;</span> v <span class="op">+</span> <span class="dv">1</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-23" data-nodetype="declaration">
 
@@ -1501,30 +1845,30 @@ Figure&nbsp;4.9: The p-values of 20 simulated A/B tests in which there is no eff
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb44" data-startfrom="715" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 714;"><span id="cb44-715"><a href="#cb44-715" aria-hidden="true" tabindex="-1"></a>e3 <span class="op">=</span> {</span>
-<span id="cb44-716"><a href="#cb44-716" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rng <span class="op">=</span> d3<span class="op">.</span><span class="fu">randomLcg</span>(<span class="dv">500</span> <span class="op">+</span> e3_batch)<span class="op">;</span></span>
-<span id="cb44-717"><a href="#cb44-717" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rn <span class="op">=</span> d3<span class="op">.</span><span class="at">randomNormal</span><span class="op">.</span><span class="fu">source</span>(rng)(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
-<span id="cb44-718"><a href="#cb44-718" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> K <span class="op">=</span> <span class="dv">200</span><span class="op">,</span> maxN <span class="op">=</span> e3_max<span class="op">,</span> step <span class="op">=</span> e3_step<span class="op">;</span></span>
-<span id="cb44-719"><a href="#cb44-719" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> everSig <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> finalSig <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb44-720"><a href="#cb44-720" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> paths <span class="op">=</span> []<span class="op">;</span></span>
-<span id="cb44-721"><a href="#cb44-721" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">let</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> K<span class="op">;</span> k<span class="op">++</span>) {</span>
-<span id="cb44-722"><a href="#cb44-722" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> sa <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> sb <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> ever <span class="op">=</span> <span class="kw">false</span><span class="op">,</span> p <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb44-723"><a href="#cb44-723" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> path <span class="op">=</span> []<span class="op">;</span></span>
-<span id="cb44-724"><a href="#cb44-724" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">let</span> n <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> n <span class="op">&lt;=</span> maxN<span class="op">;</span> n<span class="op">++</span>) {</span>
-<span id="cb44-725"><a href="#cb44-725" aria-hidden="true" tabindex="-1"></a>      sa <span class="op">+=</span> <span class="fu">rn</span>()<span class="op">;</span> sb <span class="op">+=</span> <span class="fu">rn</span>()<span class="op">;</span></span>
-<span id="cb44-726"><a href="#cb44-726" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (n <span class="op">%</span> step <span class="op">===</span> <span class="dv">0</span>) {</span>
-<span id="cb44-727"><a href="#cb44-727" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> z <span class="op">=</span> (sa <span class="op">/</span> n <span class="op">-</span> sb <span class="op">/</span> n) <span class="op">/</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(<span class="dv">2</span> <span class="op">/</span> n)<span class="op">;</span></span>
-<span id="cb44-728"><a href="#cb44-728" aria-hidden="true" tabindex="-1"></a>        p <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> <span class="fu">pnorm</span>(<span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>(z)))<span class="op">;</span></span>
-<span id="cb44-729"><a href="#cb44-729" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (p <span class="op">&lt;</span> <span class="fl">0.05</span>) ever <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
-<span id="cb44-730"><a href="#cb44-730" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (k <span class="op">&lt;</span> <span class="dv">25</span>) path<span class="op">.</span><span class="fu">push</span>({<span class="dt">test</span><span class="op">:</span> k<span class="op">,</span> n<span class="op">,</span> p<span class="op">,</span> <span class="dt">ever</span><span class="op">:</span> <span class="kw">false</span>})<span class="op">;</span></span>
-<span id="cb44-731"><a href="#cb44-731" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb44-732"><a href="#cb44-732" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb44-733"><a href="#cb44-733" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (ever) everSig<span class="op">++;</span></span>
-<span id="cb44-734"><a href="#cb44-734" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (p <span class="op">&lt;</span> <span class="fl">0.05</span>) finalSig<span class="op">++;</span></span>
-<span id="cb44-735"><a href="#cb44-735" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (k <span class="op">&lt;</span> <span class="dv">25</span>) { <span class="kw">const</span> e <span class="op">=</span> path<span class="op">.</span><span class="fu">some</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">p</span> <span class="op">&lt;</span> <span class="fl">0.05</span>)<span class="op">;</span> path<span class="op">.</span><span class="fu">forEach</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">ever</span> <span class="op">=</span> e)<span class="op">;</span> paths<span class="op">.</span><span class="fu">push</span>(<span class="op">...</span>path)<span class="op">;</span> }</span>
-<span id="cb44-736"><a href="#cb44-736" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb44-737"><a href="#cb44-737" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {paths<span class="op">,</span> everSig<span class="op">,</span> finalSig<span class="op">,</span> K}<span class="op">;</span></span>
-<span id="cb44-738"><a href="#cb44-738" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb56" data-startfrom="873" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 872;"><span id="cb56-873"><a href="#cb56-873" aria-hidden="true" tabindex="-1"></a>e3 <span class="op">=</span> {</span>
+<span id="cb56-874"><a href="#cb56-874" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rng <span class="op">=</span> d3<span class="op">.</span><span class="fu">randomLcg</span>(<span class="dv">500</span> <span class="op">+</span> e3_batch)<span class="op">;</span></span>
+<span id="cb56-875"><a href="#cb56-875" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rn <span class="op">=</span> d3<span class="op">.</span><span class="at">randomNormal</span><span class="op">.</span><span class="fu">source</span>(rng)(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb56-876"><a href="#cb56-876" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> K <span class="op">=</span> <span class="dv">200</span><span class="op">,</span> maxN <span class="op">=</span> e3_max<span class="op">,</span> step <span class="op">=</span> e3_step<span class="op">;</span></span>
+<span id="cb56-877"><a href="#cb56-877" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> everSig <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> finalSig <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb56-878"><a href="#cb56-878" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> paths <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb56-879"><a href="#cb56-879" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">let</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> K<span class="op">;</span> k<span class="op">++</span>) {</span>
+<span id="cb56-880"><a href="#cb56-880" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> sa <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> sb <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> ever <span class="op">=</span> <span class="kw">false</span><span class="op">,</span> p <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb56-881"><a href="#cb56-881" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> path <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb56-882"><a href="#cb56-882" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">let</span> n <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> n <span class="op">&lt;=</span> maxN<span class="op">;</span> n<span class="op">++</span>) {</span>
+<span id="cb56-883"><a href="#cb56-883" aria-hidden="true" tabindex="-1"></a>      sa <span class="op">+=</span> <span class="fu">rn</span>()<span class="op">;</span> sb <span class="op">+=</span> <span class="fu">rn</span>()<span class="op">;</span></span>
+<span id="cb56-884"><a href="#cb56-884" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (n <span class="op">%</span> step <span class="op">===</span> <span class="dv">0</span>) {</span>
+<span id="cb56-885"><a href="#cb56-885" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> z <span class="op">=</span> (sa <span class="op">/</span> n <span class="op">-</span> sb <span class="op">/</span> n) <span class="op">/</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(<span class="dv">2</span> <span class="op">/</span> n)<span class="op">;</span></span>
+<span id="cb56-886"><a href="#cb56-886" aria-hidden="true" tabindex="-1"></a>        p <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> <span class="fu">pnorm</span>(<span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>(z)))<span class="op">;</span></span>
+<span id="cb56-887"><a href="#cb56-887" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (p <span class="op">&lt;</span> <span class="fl">0.05</span>) ever <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb56-888"><a href="#cb56-888" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (k <span class="op">&lt;</span> <span class="dv">25</span>) path<span class="op">.</span><span class="fu">push</span>({<span class="dt">test</span><span class="op">:</span> k<span class="op">,</span> n<span class="op">,</span> p<span class="op">,</span> <span class="dt">ever</span><span class="op">:</span> <span class="kw">false</span>})<span class="op">;</span></span>
+<span id="cb56-889"><a href="#cb56-889" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb56-890"><a href="#cb56-890" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb56-891"><a href="#cb56-891" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (ever) everSig<span class="op">++;</span></span>
+<span id="cb56-892"><a href="#cb56-892" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (p <span class="op">&lt;</span> <span class="fl">0.05</span>) finalSig<span class="op">++;</span></span>
+<span id="cb56-893"><a href="#cb56-893" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (k <span class="op">&lt;</span> <span class="dv">25</span>) { <span class="kw">const</span> e <span class="op">=</span> path<span class="op">.</span><span class="fu">some</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">p</span> <span class="op">&lt;</span> <span class="fl">0.05</span>)<span class="op">;</span> path<span class="op">.</span><span class="fu">forEach</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">ever</span> <span class="op">=</span> e)<span class="op">;</span> paths<span class="op">.</span><span class="fu">push</span>(<span class="op">...</span>path)<span class="op">;</span> }</span>
+<span id="cb56-894"><a href="#cb56-894" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb56-895"><a href="#cb56-895" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {paths<span class="op">,</span> everSig<span class="op">,</span> finalSig<span class="op">,</span> K}<span class="op">;</span></span>
+<span id="cb56-896"><a href="#cb56-896" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-24" data-nodetype="declaration">
 
@@ -1532,16 +1876,16 @@ Figure&nbsp;4.9: The p-values of 20 simulated A/B tests in which there is no eff
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb45" data-startfrom="743" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 742;"><span id="cb45-743"><a href="#cb45-743" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb45-744"><a href="#cb45-744" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">760</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">300</span><span class="op">,</span> <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span></span>
-<span id="cb45-745"><a href="#cb45-745" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Users per group so far"</span>}<span class="op">,</span></span>
-<span id="cb45-746"><a href="#cb45-746" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"p-value"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span> <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
-<span id="cb45-747"><a href="#cb45-747" aria-hidden="true" tabindex="-1"></a>  <span class="dt">color</span><span class="op">:</span> {<span class="dt">domain</span><span class="op">:</span> [<span class="kw">false</span><span class="op">,</span> <span class="kw">true</span>]<span class="op">,</span> <span class="dt">range</span><span class="op">:</span> [<span class="st">"#c8c8c8"</span><span class="op">,</span> <span class="st">"#d99a2b"</span>]}<span class="op">,</span></span>
-<span id="cb45-748"><a href="#cb45-748" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
-<span id="cb45-749"><a href="#cb45-749" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(e3<span class="op">.</span><span class="at">paths</span><span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"n"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"p"</span><span class="op">,</span> <span class="dt">z</span><span class="op">:</span> <span class="st">"test"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"ever"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="fl">1.2</span>})<span class="op">,</span></span>
-<span id="cb45-750"><a href="#cb45-750" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="fl">0.05</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#b03a2e"</span><span class="op">,</span> <span class="dt">strokeDasharray</span><span class="op">:</span> <span class="st">"4,3"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})</span>
-<span id="cb45-751"><a href="#cb45-751" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb45-752"><a href="#cb45-752" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb57" data-startfrom="901" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 900;"><span id="cb57-901"><a href="#cb57-901" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb57-902"><a href="#cb57-902" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">760</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">300</span><span class="op">,</span> <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span></span>
+<span id="cb57-903"><a href="#cb57-903" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Users per group so far"</span>}<span class="op">,</span></span>
+<span id="cb57-904"><a href="#cb57-904" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"p-value"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span> <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
+<span id="cb57-905"><a href="#cb57-905" aria-hidden="true" tabindex="-1"></a>  <span class="dt">color</span><span class="op">:</span> {<span class="dt">domain</span><span class="op">:</span> [<span class="kw">false</span><span class="op">,</span> <span class="kw">true</span>]<span class="op">,</span> <span class="dt">range</span><span class="op">:</span> [<span class="st">"#c8c8c8"</span><span class="op">,</span> <span class="st">"#d99a2b"</span>]}<span class="op">,</span></span>
+<span id="cb57-906"><a href="#cb57-906" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb57-907"><a href="#cb57-907" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(e3<span class="op">.</span><span class="at">paths</span><span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"n"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"p"</span><span class="op">,</span> <span class="dt">z</span><span class="op">:</span> <span class="st">"test"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"ever"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="fl">1.2</span>})<span class="op">,</span></span>
+<span id="cb57-908"><a href="#cb57-908" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="fl">0.05</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#b03a2e"</span><span class="op">,</span> <span class="dt">strokeDasharray</span><span class="op">:</span> <span class="st">"4,3"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})</span>
+<span id="cb57-909"><a href="#cb57-909" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb57-910"><a href="#cb57-910" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-25" data-nodetype="expression">
 
@@ -1549,9 +1893,9 @@ Figure&nbsp;4.9: The p-values of 20 simulated A/B tests in which there is no eff
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb46" data-startfrom="757" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 756;"><span id="cb46-757"><a href="#cb46-757" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div class="unc-stats"&gt;Significant at the planned end: &lt;b&gt;</span><span class="sc">${</span>(<span class="dv">100</span> <span class="op">*</span> e3<span class="op">.</span><span class="at">finalSig</span> <span class="op">/</span> e3<span class="op">.</span><span class="at">K</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">0</span>)<span class="sc">}</span><span class="vs">%&lt;/b&gt; of the tests (as it should be: about 5%) ·</span></span>
-<span id="cb46-758"><a href="#cb46-758" aria-hidden="true" tabindex="-1"></a><span class="vs">significant &lt;b&gt;at some look&lt;/b&gt;: &lt;b&gt;</span><span class="sc">${</span>(<span class="dv">100</span> <span class="op">*</span> e3<span class="op">.</span><span class="at">everSig</span> <span class="op">/</span> e3<span class="op">.</span><span class="at">K</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">0</span>)<span class="sc">}</span><span class="vs">%&lt;/b&gt; — the false-alarm rate of the impatient analyst.</span></span>
-<span id="cb46-759"><a href="#cb46-759" aria-hidden="true" tabindex="-1"></a><span class="vs">The chart shows the first 25 tests; orange ones cross the red line at some point.&lt;/div&gt;`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb58" data-startfrom="915" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 914;"><span id="cb58-915"><a href="#cb58-915" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div class="unc-stats"&gt;Significant at the planned end: &lt;b&gt;</span><span class="sc">${</span>(<span class="dv">100</span> <span class="op">*</span> e3<span class="op">.</span><span class="at">finalSig</span> <span class="op">/</span> e3<span class="op">.</span><span class="at">K</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">0</span>)<span class="sc">}</span><span class="vs">%&lt;/b&gt; of the tests (as it should be: about 5%) ·</span></span>
+<span id="cb58-916"><a href="#cb58-916" aria-hidden="true" tabindex="-1"></a><span class="vs">significant &lt;b&gt;at some look&lt;/b&gt;: &lt;b&gt;</span><span class="sc">${</span>(<span class="dv">100</span> <span class="op">*</span> e3<span class="op">.</span><span class="at">everSig</span> <span class="op">/</span> e3<span class="op">.</span><span class="at">K</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">0</span>)<span class="sc">}</span><span class="vs">%&lt;/b&gt; — the false-alarm rate of the impatient analyst.</span></span>
+<span id="cb58-917"><a href="#cb58-917" aria-hidden="true" tabindex="-1"></a><span class="vs">The chart shows the first 25 tests; orange ones cross the red line at some point.&lt;/div&gt;`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-26" data-nodetype="expression">
 
@@ -1564,7 +1908,8 @@ Figure&nbsp;4.9: The p-values of 20 simulated A/B tests in which there is no eff
 </section>
 <section id="many-metrics-many-segments-many-tests" class="level3" data-number="4.9.5">
 <h3 data-number="4.9.5" class="anchored" data-anchor-id="many-metrics-many-segments-many-tests"><span class="header-section-number">4.9.5</span> Many metrics, many segments, many tests</h3>
-<p>The same problem arises without peeking. An A/B-testing dashboard typically reports dozens of metrics — clicks, sessions, revenue, retention — for dozens of segments — new users, returning users, mobile, desktop, each country. With 20 comparisons and no true effect anywhere, the probability of at least one “significant” result is <span class="math inline">\(1 - 0.95^{20}\)</span> = 64%. Finding <em>something</em> significant is almost guaranteed; reporting only that finding is known as <strong>p-hacking</strong>. Combined with the tendency of journals, conferences, and management meetings to pay attention mainly to “successful” results (<strong>publication bias</strong>), it fills the world with effects that do not replicate.</p>
+<p>The same problem arises without peeking. An A/B-testing dashboard typically reports dozens of metrics — clicks, sessions, revenue, retention — for dozens of segments — new users, returning users, mobile, desktop, each country. With 20 comparisons and no true effect anywhere, the probability of at least one “significant” result — the family-wise error rate from <a href="#sec-exp-other" class="quarto-xref"><span>Section 4.8</span></a> — is <span class="math inline">\(1 - 0.95^{20}\)</span> = 64%. Finding <em>something</em> significant is almost guaranteed; reporting only that finding is known as <strong>p-hacking</strong>. Combined with the tendency of journals, conferences, and management meetings to pay attention mainly to “successful” results (<strong>publication bias</strong>), it fills the world with effects that do not replicate.</p>
+<p>The most effective remedy is <strong>pre-registration</strong>: before collecting any data, researchers publicly record their hypotheses, the outcome, the sample size, and the planned analysis — e.g., on platforms such as AsPredicted or the Open Science Framework. Afterwards, readers can see which analyses were planned and which were added after looking at the data. Pre-registration has become common practice in many fields of science, including consumer research and marketing, and some journals go further and review studies <em>before</em> the results are known (<em>registered reports</em>). The same discipline works in companies: write down the plan of an A/B test before it starts.</p>
 <div style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 2em; text-align: center; color: #58585a; margin: 1em 0;">
 <p><em>Image placeholder: illustration of publication bias (e.g., distribution of published test statistics with a spike just above the significance threshold)</em><br>
 <code>img/ch04/publication_bias.png</code></p>
@@ -1605,6 +1950,34 @@ Figure&nbsp;4.9: The p-values of 20 simulated A/B tests in which there is no eff
 <p><strong>(LC4.5)</strong> A colleague runs an A/B test, checks the results every morning, and stops the test on the day the <em>p</em>-value falls below 0.05. Explain what is wrong with this approach and how the test should have been planned.</p>
 <p><strong>(LC4.6)</strong> Which test would you use? (a) Conversion rates of three different newsletter versions. (b) Satisfaction ratings (1–7) of the same 40 customers for two product prototypes. (c) Average basket size of customers who saw a discount banner vs.&nbsp;customers who did not (randomized, 3,000 customers per group).</p>
 <p><strong>(LC4.7)</strong> Your group project experiment has two conditions with about 60 respondents each. What is the smallest standardized effect (<span class="math inline">\(d\)</span>) you can detect with 80% power — and what does this imply for the design of your manipulation?</p>
+<p><strong>(LC4.8)</strong> Which of the following statements about the analysis of variance are correct?</p>
+<ul class="task-list">
+<li><label><input type="checkbox">A significant ANOVA shows that all group means differ from each other</label></li>
+<li><label><input type="checkbox">Comparing five groups with all ten pairwise <em>t</em>-tests without correction leads to a family-wise error rate far above 5%</label></li>
+<li><label><input type="checkbox">Post-hoc tests such as Bonferroni or Tukey’s HSD keep the family-wise error rate at the chosen level</label></li>
+<li><label><input type="checkbox">An <em>F</em> value close to 1 indicates large differences between the group means</label></li>
+</ul>
+<p><strong>(LC4.9)</strong> A 95% confidence interval for the difference in average basket size between two versions of a product page is [−1.20 €; 4.50 €]. Which statements are correct?</p>
+<ul class="task-list">
+<li><label><input type="checkbox">The difference is significant at the 5% level</label></li>
+<li><label><input type="checkbox">The data are compatible with no difference between the versions</label></li>
+<li><label><input type="checkbox">The experiment proves that the two versions perform equally well</label></li>
+<li><label><input type="checkbox">The true difference could plausibly be as large as 4.50 €</label></li>
+</ul>
+<p><strong>(LC4.10)</strong> Which statements about power are correct?</p>
+<ul class="task-list">
+<li><label><input type="checkbox">Power is the probability of detecting an effect of a given size if it exists</label></li>
+<li><label><input type="checkbox">Increasing the sample size increases the power</label></li>
+<li><label><input type="checkbox">Lowering the significance level from 5% to 1% increases the power</label></li>
+<li><label><input type="checkbox">Computing the power after an experiment, using the observed effect, shows whether a non-significant result can be trusted</label></li>
+</ul>
+<p><strong>(LC4.11)</strong> Which statements about non-parametric tests are correct?</p>
+<ul class="task-list">
+<li><label><input type="checkbox">They are based on the ranks of the observations rather than on the values themselves</label></li>
+<li><label><input type="checkbox">The Wilcoxon signed-rank test is the non-parametric counterpart of the paired <em>t</em>-test</label></li>
+<li><label><input type="checkbox">They are always preferable to <em>t</em>-tests, because they need fewer assumptions</label></li>
+<li><label><input type="checkbox">They are suitable for ordinal outcomes such as ratings from “poor” to “excellent”</label></li>
+</ul>
 </section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
