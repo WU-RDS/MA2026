@@ -825,7 +825,7 @@ Figure&nbsp;1.6: The data-generating process behind panel (b): unobserved brand 
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Because the data are simulated, we know the true mechanism with certainty — we wrote it. The variable <code>intent</code> plays the role of brand interest. The <em>only</em> difference between the two worlds is how newsletter delivery (<code>sub</code>) is determined: by a coin flip in (a), by <code>intent</code> in (b). The effect of the newsletter on purchases (<code>true_effect = 3</code>) is identical in both.</p>
+<p>Because the data are simulated, we know the true mechanism with certainty — we wrote it. The variable <code>brand_interest</code> is the unobserved confounder of <a href="#fig-newsletter-dag" class="quarto-xref">Figure&nbsp;<span>1.6</span></a>. The <em>only</em> difference between the two worlds is how newsletter delivery (<code>sub</code>) is determined: by a coin flip in (a), by <code>brand_interest</code> in (b). The effect of the newsletter on purchases (<code>true_effect = 3</code>) is identical in both.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show the code</summary>
@@ -834,13 +834,13 @@ Figure&nbsp;1.6: The data-generating process behind panel (b): unobserved brand 
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>true_effect <span class="ot">&lt;-</span> <span class="dv">3</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># (a) EXPERIMENTAL data: delivery randomized (holdout among subscribers)</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>d_exp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sub =</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>), <span class="at">intent =</span> <span class="fu">rnorm</span>(n))</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>d_exp<span class="sc">$</span>purchases <span class="ot">&lt;-</span> <span class="fu">pmax</span>(<span class="dv">0</span>, <span class="dv">20</span> <span class="sc">+</span> true_effect <span class="sc">*</span> d_exp<span class="sc">$</span>sub <span class="sc">+</span> <span class="dv">8</span> <span class="sc">*</span> d_exp<span class="sc">$</span>intent <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">4</span>))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>d_exp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sub =</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>), <span class="at">brand_interest =</span> <span class="fu">rnorm</span>(n))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>d_exp<span class="sc">$</span>purchases <span class="ot">&lt;-</span> <span class="fu">pmax</span>(<span class="dv">0</span>, <span class="dv">20</span> <span class="sc">+</span> true_effect <span class="sc">*</span> d_exp<span class="sc">$</span>sub <span class="sc">+</span> <span class="dv">8</span> <span class="sc">*</span> d_exp<span class="sc">$</span>brand_interest <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">4</span>))</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># (b) OBSERVATIONAL data: delivery self-selected (subscribing driven by intent)</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>d_obs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">intent =</span> <span class="fu">rnorm</span>(n))</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>d_obs<span class="sc">$</span>sub <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fu">plogis</span>(<span class="fl">1.5</span> <span class="sc">*</span> d_obs<span class="sc">$</span>intent <span class="sc">-</span> <span class="fl">0.2</span>))</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>d_obs<span class="sc">$</span>purchases <span class="ot">&lt;-</span> <span class="fu">pmax</span>(<span class="dv">0</span>, <span class="dv">20</span> <span class="sc">+</span> true_effect <span class="sc">*</span> d_obs<span class="sc">$</span>sub <span class="sc">+</span> <span class="dv">8</span> <span class="sc">*</span> d_obs<span class="sc">$</span>intent <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">4</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># (b) OBSERVATIONAL data: delivery self-selected (subscribing driven by brand interest)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>d_obs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">brand_interest =</span> <span class="fu">rnorm</span>(n))</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>d_obs<span class="sc">$</span>sub <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fu">plogis</span>(<span class="fl">1.5</span> <span class="sc">*</span> d_obs<span class="sc">$</span>brand_interest <span class="sc">-</span> <span class="fl">0.2</span>))</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>d_obs<span class="sc">$</span>purchases <span class="ot">&lt;-</span> <span class="fu">pmax</span>(<span class="dv">0</span>, <span class="dv">20</span> <span class="sc">+</span> true_effect <span class="sc">*</span> d_obs<span class="sc">$</span>sub <span class="sc">+</span> <span class="dv">8</span> <span class="sc">*</span> d_obs<span class="sc">$</span>brand_interest <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">4</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </div>
@@ -907,7 +907,7 @@ Figure&nbsp;1.9: Two stories, one correlation: advertising drives sales (left) �
 </section>
 <section id="the-classical-conditions-for-causality" class="level3" data-number="1.4.6">
 <h3 data-number="1.4.6" class="anchored" data-anchor-id="the-classical-conditions-for-causality"><span class="header-section-number">1.4.6</span> The classical conditions for causality</h3>
-<p>The methodological literature <span class="citation" data-cites="field2012">(<a href="#ref-field2012" role="doc-biblioref">Field et al. 2012</a>)</span> states three conditions that must hold for X to be accepted as a cause of Y:</p>
+<p>Going back to the philosopher John Stuart Mill, the methodological literature states three conditions that must hold for X to be accepted as a cause of Y <span class="citation" data-cites="shadish2002">(<a href="#ref-shadish2002" role="doc-biblioref">Shadish et al. 2002</a>)</span>:</p>
 <ol type="1">
 <li><strong>Concomitant variation</strong> — X and Y vary together as the hypothesis predicts. The data establish this directly: all examples in this section satisfy it — eBay’s dashboard, the newsletter gap, Internet Explorer and murders, all four scatter panels. It is the cheap condition, and precisely for that reason it proves nothing on its own.</li>
 <li><strong>Temporal order</strong> — the cause precedes the effect. This is sometimes checkable in data, but the advertising-budget example shows how it can fail: sales also drive spending. (Note that the Internet Explorer chart satisfies conditions 1 <em>and</em> 2 and is still nonsense.)</li>
@@ -1432,6 +1432,7 @@ Figure&nbsp;1.17: Who sees a personalized ad? The targeting algorithm selects us
 <section id="even-ab-tests-can-break-divergent-delivery" class="level3" data-number="1.6.9">
 <h3 data-number="1.6.9" class="anchored" data-anchor-id="even-ab-tests-can-break-divergent-delivery"><span class="header-section-number">1.6.9</span> Even A/B tests can break: divergent delivery</h3>
 <p>Surely, you might think, the platforms’ built-in A/B testing tools solve this problem? Not necessarily. <span class="citation" data-cites="braun2025">Braun and Schwartz (<a href="#ref-braun2025" role="doc-biblioref">2025</a>)</span> show that ad platforms’ algorithms deliver different ads to <strong>systematically different mixes of users — even during A/B tests</strong>. You randomize users into “sees ad A” and “sees ad B”, but the platform’s delivery algorithm then decides <em>who within each arm</em> actually gets an impression — and since it optimizes delivery separately for each ad, ad A reaches one audience mix and ad B another. This <strong>divergent delivery</strong> confounds the effect of the ad <em>content</em> with <em>targeting</em> effects; the resulting imbalance can distort both the <strong>magnitude and the sign</strong> of the estimated difference between the ads. Platform A/B tools are therefore useful for picking the better-performing ad <em>within the same platform</em> — but they cannot reveal the causal effect of ad content <em>across</em> contexts, platforms, or audiences.</p>
+<p>A practical way around divergent delivery — and around the self-selection of ad exposure in general — is to randomize <strong>regions</strong> instead of individual users. In a <strong>geo experiment</strong>, a campaign (or a change to it, such as a new creative or a higher budget) runs in a randomly selected set of regions and not in the others, and the outcome is compared at the level of the regions — e.g., total sales per region. Because everybody in a region is treated alike, the delivery algorithm can no longer decide <em>who</em> ends up in which group: the comparison measures the total incremental effect of the campaign, including whatever targeting the platform does within the treated regions. This is exactly the logic of eBay’s regional experiment (<a href="#sec-ebay" class="quarto-xref"><span>Section 1.2</span></a>), and advertising platforms now offer tools for it — e.g., Google’s open-source GeoX methods, documented as part of its Meridian measurement framework (<a href="https://developers.google.com/meridian/geox">developers.google.com/meridian/geox</a>). The price: there are far fewer regions than users, and regions differ a lot from each other, so geo experiments need many regions, enough time, and careful stratification or matching of regions (see the guidelines for field experiments above).</p>
 <p>For your group project, this problem does not arise: in a Qualtrics survey experiment, there is no delivery algorithm between the randomizer and the respondent. That contrast is one reason why survey experiments remain a clean setting for learning experimental analysis.</p>
 </section>
 </section>
@@ -1504,7 +1505,7 @@ Table&nbsp;1.5: The spectrum of research designs
 <div id="fig-spotify-cross" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-spotify-cross-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="01-foundations_files/figure-html/fig-spotify-cross-1.png" class="img-fluid figure-img" width="800">
+<img src="01-foundations_files/figure-html/fig-spotify-cross-1.png" class="img-fluid figure-img" width="1000">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spotify-cross-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1.18: Monthly spending on CDs and downloads of Spotify users and non-users, observed at one point in time (stylized figures after Wlömert &amp; Papies, 2016).
@@ -1933,9 +1934,6 @@ Braun, Michael, and Eric M. Schwartz. 2025. <span>“Where <span>A/B</span> Test
 <div id="ref-delanghe2021" class="csl-entry" role="listitem">
 <span class="nocase">de Langhe, Bart, and Stefano Puntoni</span>. 2021. <span>“Does Personalized Advertising Work as Well as Tech Companies Claim?”</span> <em>Harvard Business Review</em>.
 </div>
-<div id="ref-field2012" class="csl-entry" role="listitem">
-Field, Andy, Jeremy Miles, and Zoë Field. 2012. <em>Discovering Statistics Using <span>R</span></em>. Sage Publications.
-</div>
 <div id="ref-gartner2026" class="csl-entry" role="listitem">
 Gartner. 2026. <em>Gartner CMO Spend Survey 2026</em>. <a href="https://www.gartner.com">https://www.gartner.com</a>.
 </div>
@@ -1953,6 +1951,9 @@ Moorman, Christine. 2026. <em>The CMO Survey: Highlights and Insights Report, Sp
 </div>
 <div id="ref-pearl2009" class="csl-entry" role="listitem">
 Pearl, Judea. 2009. <span>“Causal Inference in Statistics: An Overview.”</span> <em>Statistics Surveys</em> 3: 96–146.
+</div>
+<div id="ref-shadish2002" class="csl-entry" role="listitem">
+Shadish, William R., Thomas D. Cook, and Donald T. Campbell. 2002. <em>Experimental and Quasi-Experimental Designs for Generalized Causal Inference</em>. Houghton Mifflin.
 </div>
 <div id="ref-varian2016" class="csl-entry" role="listitem">
 Varian, Hal R. 2016. <span>“Causal Inference in Economics and Marketing.”</span> <em>Proceedings of the National Academy of Sciences</em> 113 (27): 7310–15.
