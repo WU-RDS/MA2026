@@ -5,10 +5,10 @@ h1, h2, h3 { color: #0a3d6e; }
 /* Space, a thin line, and a heading between the last chapter and "Assignments" */
 #quarto-sidebar li.sidebar-item:not(.sidebar-item-section) + li.sidebar-item-section::before {
   content: "Course resources";
-  display: block;
-  margin-top: 1.4em;
-  padding-top: 0.9em;
-  border-top: 1px solid #dee2e6;
+  display: block !important;
+  margin-top: 1.4em !important;
+  padding-top: 0.9em !important;
+  border-top: 1px solid #dee2e6 !important;
   margin-bottom: 0.4em;
   font-size: 0.75em;
   text-transform: uppercase;
