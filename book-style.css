@@ -1,3 +1,13 @@
 /* Minimal course styling – extend as needed */
 h1, h2, h3 { color: #0a3d6e; }
 .callout-important { border-left-color: #b03a2e; }
+
+#quarto-sidebar li.sidebar-item:not(.sidebar-item-section) + li.sidebar-item-section::before {
+  content: "Course resources";
+  display: block;
+  font-size: 0.75em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6c757d;
+  margin-bottom: 0.3em;
+}
