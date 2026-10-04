@@ -2,12 +2,16 @@
 h1, h2, h3 { color: #0a3d6e; }
 .callout-important { border-left-color: #b03a2e; }
 
+/* Space, a thin line, and a heading between the last chapter and "Assignments" */
 #quarto-sidebar li.sidebar-item:not(.sidebar-item-section) + li.sidebar-item-section::before {
   content: "Course resources";
   display: block;
+  margin-top: 1.4em;
+  padding-top: 0.9em;
+  border-top: 1px solid #dee2e6;
+  margin-bottom: 0.4em;
   font-size: 0.75em;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: #6c757d;
-  margin-bottom: 0.3em;
 }
