@@ -1286,7 +1286,42 @@ Figure&nbsp;1.16: Covariate balance under self-selection vs.&nbsp;randomization 
 </section>
 <section id="two-ways-to-randomize-between-vs.-within-subjects" class="level3" data-number="1.6.3">
 <h3 data-number="1.6.3" class="anchored" data-anchor-id="two-ways-to-randomize-between-vs.-within-subjects"><span class="header-section-number">1.6.3</span> Two ways to randomize: between vs.&nbsp;within subjects</h3>
-<p>Randomized experiments come in two basic forms, which differ in <em>what</em> is randomized (<a href="#tbl-between-within" class="quarto-xref">Table&nbsp;<span>1.4</span></a>).</p>
+<p>Randomized experiments come in two basic forms, which differ in <em>what</em> is randomized (<a href="#fig-between-within" class="quarto-xref">Figure&nbsp;<span>1.17</span></a>, <a href="#tbl-between-within" class="quarto-xref">Table&nbsp;<span>1.4</span></a>).</p>
+<div id="fig-between-within" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-between-within-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-between-within" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-between" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-between-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/between_subjects_abstract.png" class="img-fluid figure-img" data-ref-parent="fig-between-within">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-between-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Between-subjects: each person is randomly assigned to one condition.
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-between-within" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-within" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-within-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="img/within_subjects_abstract.png" class="img-fluid figure-img" data-ref-parent="fig-between-within">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-within-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Within-subjects: each person experiences all conditions, in random order.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-between-within-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.17: Two ways to randomize. In a between-subjects design (a), randomization decides who gets which condition; in a within-subjects design (b), it decides the order of the conditions.
+</figcaption>
+</figure>
+</div>
 <div id="tbl-between-within" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-between-within-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1323,21 +1358,29 @@ Table&nbsp;1.4: Between-subjects vs.&nbsp;within-subjects designs
 <td style="text-align: left;"><strong>Within person:</strong> condition 1 vs.&nbsp;condition 2</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><strong>Strength</strong></td>
-<td style="text-align: left;">No carryover between conditions</td>
-<td style="text-align: left;">Each person is their <strong>own control</strong> → far less noise, fewer participants needed</td>
+<td style="text-align: left;"><strong>Pros</strong></td>
+<td style="text-align: left;">No order or carryover effects; <strong>realistic:</strong> customers usually see only one version</td>
+<td style="text-align: left;">Each person is their <strong>own control</strong> — can require <strong>fewer participants</strong>, <em>if</em> responses are correlated within a person and carryover is limited</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><strong>Watch out</strong></td>
-<td style="text-align: left;">Needs more participants</td>
-<td style="text-align: left;"><strong>Order &amp; carryover effects</strong> → randomize the order (counterbalancing)</td>
+<td style="text-align: left;"><strong>Cons</strong></td>
+<td style="text-align: left;"><strong>More participants</strong> needed; groups differ by chance, which adds noise</td>
+<td style="text-align: left;"><strong>Carryover:</strong> the first condition can change the response to the second (learning, anchoring, a purchase already made) — counterbalancing the order helps, but cannot undo it</td>
 </tr>
 </tbody>
 </table>
 </div>
 </figure>
 </div>
-<p>In a between-subjects design, randomization decides <em>who gets which condition</em>; in a within-subjects design, it decides <em>the order of the conditions</em>. The within-subjects idea — each person serves as their own control — is the closest real design to the impossible “same users, without ads” comparison of <a href="#tbl-ebay-comparison" class="quarto-xref">Table&nbsp;<span>1.1</span></a>. Its weakness is that earlier conditions can influence later ones (think of taste tests or price judgments, where the first price anchors the second). The experiment in your <strong>group project</strong> will be a between-subjects design: the Qualtrics randomizer assigns each respondent to exactly one condition. The practical details follow in Module 4.</p>
+<p>In a between-subjects design, randomization decides <em>who gets which condition</em>; in a within-subjects design, it decides <em>the order of the conditions</em> (<a href="#fig-between-within" class="quarto-xref">Figure&nbsp;<span>1.17</span></a>). The within-subjects idea — each person serves as their own control — is the closest real design to the impossible “same users, without ads” comparison of <a href="#tbl-ebay-comparison" class="quarto-xref">Table&nbsp;<span>1.1</span></a>. But it rests on a strong assumption: that experiencing the first condition does not change how a person responds to the second. In many marketing settings, this assumption fails. Consider testing two checkout designs on the same users:</p>
+<ul>
+<li><strong>Learning:</strong> someone who has completed checkout A already knows the process when encountering B.</li>
+<li><strong>A changed situation:</strong> a user who bought the product under A no longer needs to buy it under B.</li>
+<li><strong>Missing second observations:</strong> many visitors never return, and comparing only those who do brings back selection — especially if version A itself affects who returns.</li>
+<li><strong>Switching is itself an experience:</strong> alternating between interfaces can confuse users — and the business usually wants to know what happens when customers <em>consistently</em> see A or B.</li>
+</ul>
+<p>Randomizing the order (<em>counterbalancing</em>: half see A first, half B first) balances which condition comes first, but it cannot make someone forget an ad, undo a purchase, or unlearn a process. This is why online A/B tests keep each user in the same condition throughout the experiment.</p>
+<p>A rule of thumb: <strong>within-subjects designs work well for judgments that do not change the person</strong> — rating several ads, tasting products, comparing package designs — provided order effects are acceptable. <strong>Between-subjects designs are the default whenever the outcome is a behavior or decision</strong> — purchases, clicks, sign-ups — or whenever the first exposure could change the response to the second. The experiment in your group project will be a between-subjects design: the Qualtrics randomizer assigns each respondent to exactly one condition. The practical details follow in Module 4.</p>
 </section>
 <section id="why-the-industry-runs-on-experiments" class="level3" data-number="1.6.4">
 <h3 data-number="1.6.4" class="anchored" data-anchor-id="why-the-industry-runs-on-experiments"><span class="header-section-number">1.6.4</span> Why the industry runs on experiments</h3>
@@ -1413,7 +1456,7 @@ Table&nbsp;1.4: Between-subjects vs.&nbsp;within-subjects designs
 </section>
 <section id="threats-to-causal-inference-who-sees-a-personalized-ad" class="level3" data-number="1.6.8">
 <h3 data-number="1.6.8" class="anchored" data-anchor-id="threats-to-causal-inference-who-sees-a-personalized-ad"><span class="header-section-number">1.6.8</span> Threats to causal inference: who sees a personalized ad?</h3>
-<p>The objective is causal: do personalized ads <em>change</em> sales? But what advertising platforms’ dashboards deliver is descriptive and predictive — who clicked, who converted. <a href="#fig-targeting-dag" class="quarto-xref">Figure&nbsp;<span>1.17</span></a> shows why this gap matters. The targeting algorithm shows the ad <em>to people already interested in the product category</em>: the platform <strong>optimizes</strong> for finding exactly the users who would buy anyway. This is <strong>selection bias, machine-made</strong>: nobody chose anything — the selection happened inside the algorithm. Note the uncomfortable inversion: the <em>better</em> the targeting, the <em>more severe</em> the selection, and the more the reported lift overstates the causal effect.</p>
+<p>The objective is causal: do personalized ads <em>change</em> sales? But what advertising platforms’ dashboards deliver is descriptive and predictive — who clicked, who converted. <a href="#fig-targeting-dag" class="quarto-xref">Figure&nbsp;<span>1.18</span></a> shows why this gap matters. The targeting algorithm shows the ad <em>to people already interested in the product category</em>: the platform <strong>optimizes</strong> for finding exactly the users who would buy anyway. This is <strong>selection bias, machine-made</strong>: nobody chose anything — the selection happened inside the algorithm. Note the uncomfortable inversion: the <em>better</em> the targeting, the <em>more severe</em> the selection, and the more the reported lift overstates the causal effect.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-targeting-dag" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1422,7 +1465,7 @@ Table&nbsp;1.4: Between-subjects vs.&nbsp;within-subjects designs
 <img src="01-foundations_files/figure-html/fig-targeting-dag-1.png" class="img-fluid figure-img" width="1400">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-targeting-dag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.17: Who sees a personalized ad? The targeting algorithm selects users with high (unobserved) category interest — who are more likely to purchase anyway.
+Figure&nbsp;1.18: Who sees a personalized ad? The targeting algorithm selects users with high (unobserved) category interest — who are more likely to purchase anyway.
 </figcaption>
 </figure>
 </div>
@@ -1440,7 +1483,7 @@ Figure&nbsp;1.17: Who sees a personalized ad? The targeting algorithm selects us
 </div>
 <div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>How can an experiment measure the effect of a targeted ad, if the algorithm decides who actually sees it? A simple holdout test randomly assigns users to a treatment group (eligible for the ad) and a control group (not eligible). But within the treatment group, only <em>some</em> users receive an impression — those the algorithm selects. Comparing all treatment users with all control users dilutes the effect with users who never saw the ad; comparing only the <em>exposed</em> treatment users with all control users brings back exactly the selection problem of <a href="#fig-targeting-dag" class="quarto-xref">Figure&nbsp;<span>1.17</span></a>.</p>
+<p>How can an experiment measure the effect of a targeted ad, if the algorithm decides who actually sees it? A simple holdout test randomly assigns users to a treatment group (eligible for the ad) and a control group (not eligible). But within the treatment group, only <em>some</em> users receive an impression — those the algorithm selects. Comparing all treatment users with all control users dilutes the effect with users who never saw the ad; comparing only the <em>exposed</em> treatment users with all control users brings back exactly the selection problem of <a href="#fig-targeting-dag" class="quarto-xref">Figure&nbsp;<span>1.18</span></a>.</p>
 <p><strong>Ghost ads</strong> solve this <span class="citation" data-cites="johnson2017">(<a href="#ref-johnson2017" role="doc-biblioref">Johnson et al. 2017</a>)</span>: in the control group, the platform runs the same ad auction and records when the ad <em>would have</em> been shown — a “ghost impression” — but displays something else instead. The analysis then compares users who actually saw the ad with control users who <em>would have</em> seen it: the same algorithm selected both groups, so they are comparable, and the difference measures the causal effect of the ad on the people it actually reaches. Google implemented the method for its display network and offers it in its conversion lift tests; other platforms, such as Meta and TikTok, offer randomized lift studies as well, but do not publicly document whether their control groups are built this way. Ghost ads require control over the ad auction itself, so only the platforms can run them — and only they can see the data..</p>
 </div>
 </div>
@@ -1516,7 +1559,7 @@ Table&nbsp;1.5: The spectrum of research designs
 <section id="example-does-streaming-cannibalize-music-sales" class="level3" data-number="1.7.3">
 <h3 data-number="1.7.3" class="anchored" data-anchor-id="example-does-streaming-cannibalize-music-sales"><span class="header-section-number">1.7.3</span> Example: does streaming cannibalize music sales?</h3>
 <p>An example from research conducted at our institute: <span class="citation" data-cites="wloemert2016">Wlömert and Papies (<a href="#ref-wloemert2016" role="doc-biblioref">2016</a>)</span> analyze the effect of music streaming services on (1) the demand for music in <em>other</em> distribution channels (downloads, CDs) and (2) total music industry revenues — a typical <strong>multi-channel distribution</strong> problem in marketing, in which Spotify’s market entry serves as a quasi-experiment.</p>
-<p>A first look at the data seems encouraging for the industry: Spotify users spend <em>more</em> on music in other channels than non-users (<a href="#fig-spotify-cross" class="quarto-xref">Figure&nbsp;<span>1.18</span></a>). Comparisons of exactly this kind (“users of X spend more on Y”) are routinely used by industry and journalists to argue that a new channel does <em>not</em> cannibalize existing ones — Netflix and movie theaters, Spotify and downloads. Is this evidence of a causal effect? Would you conclude that streaming <em>boosts</em> CD and download sales?</p>
+<p>A first look at the data seems encouraging for the industry: Spotify users spend <em>more</em> on music in other channels than non-users (<a href="#fig-spotify-cross" class="quarto-xref">Figure&nbsp;<span>1.19</span></a>). Comparisons of exactly this kind (“users of X spend more on Y”) are routinely used by industry and journalists to argue that a new channel does <em>not</em> cannibalize existing ones — Netflix and movie theaters, Spotify and downloads. Is this evidence of a causal effect? Would you conclude that streaming <em>boosts</em> CD and download sales?</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-spotify-cross" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1525,7 +1568,7 @@ Table&nbsp;1.5: The spectrum of research designs
 <img src="01-foundations_files/figure-html/fig-spotify-cross-1.png" class="img-fluid figure-img" width="1000">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spotify-cross-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.18: Monthly spending on CDs and downloads of Spotify users and non-users, observed at one point in time (stylized figures after Wlömert &amp; Papies, 2016).
+Figure&nbsp;1.19: Monthly spending on CDs and downloads of Spotify users and non-users, observed at one point in time (stylized figures after Wlömert &amp; Papies, 2016).
 </figcaption>
 </figure>
 </div>
@@ -1535,7 +1578,7 @@ Figure&nbsp;1.18: Monthly spending on CDs and downloads of Spotify users and non
 </section>
 <section id="snapshots-vs.-following-people-over-time" class="level3" data-number="1.7.4">
 <h3 data-number="1.7.4" class="anchored" data-anchor-id="snapshots-vs.-following-people-over-time"><span class="header-section-number">1.7.4</span> Snapshots vs.&nbsp;following people over time</h3>
-<p>What helps is a <strong>longitudinal (panel) design</strong>, which observes the <strong>same units</strong> repeatedly (<a href="#fig-design-timeline" class="quarto-xref">Figure&nbsp;<span>1.19</span></a>). The Wlömert &amp; Papies study surveyed the same consumers before and after some of them adopted Spotify. The enthusiasts’ high spending is a <em>stable</em> trait; by following people over time, we can see how each group’s spending <strong>changes</strong> — not just where it stands.</p>
+<p>What helps is a <strong>longitudinal (panel) design</strong>, which observes the <strong>same units</strong> repeatedly (<a href="#fig-design-timeline" class="quarto-xref">Figure&nbsp;<span>1.20</span></a>). The Wlömert &amp; Papies study surveyed the same consumers before and after some of them adopted Spotify. The enthusiasts’ high spending is a <em>stable</em> trait; by following people over time, we can see how each group’s spending <strong>changes</strong> — not just where it stands.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-design-timeline" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1544,7 +1587,7 @@ Figure&nbsp;1.18: Monthly spending on CDs and downloads of Spotify users and non
 <img src="01-foundations_files/figure-html/fig-design-timeline-1.png" class="img-fluid figure-img" width="2200">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-design-timeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.19: Cross-sectional vs.&nbsp;longitudinal design: a snapshot at one point in time vs.&nbsp;the same sample observed repeatedly.
+Figure&nbsp;1.20: Cross-sectional vs.&nbsp;longitudinal design: a snapshot at one point in time vs.&nbsp;the same sample observed repeatedly.
 </figcaption>
 </figure>
 </div>
@@ -1553,7 +1596,7 @@ Figure&nbsp;1.19: Cross-sectional vs.&nbsp;longitudinal design: a snapshot at on
 </section>
 <section id="difference-in-differences-the-logic" class="level3" data-number="1.7.5">
 <h3 data-number="1.7.5" class="anchored" data-anchor-id="difference-in-differences-the-logic"><span class="header-section-number">1.7.5</span> Difference-in-differences: the logic</h3>
-<p>The <strong>difference-in-differences (DiD)</strong> comparison is the workhorse of quasi-experimental analysis and one of the most widely used causal tools in industry and research <span class="citation" data-cites="varian2016">(<a href="#ref-varian2016" role="doc-biblioref">Varian 2016</a>)</span>. <a href="#fig-did-stylized" class="quarto-xref">Figure&nbsp;<span>1.20</span></a> shows its logic. The treated and control groups start at different <em>levels</em> — that is the selection problem, and DiD tolerates it. The key idea is to borrow the control group’s <em>change</em> over time: it tells us what would have happened to the treated group without the treatment. Adding this change to the treated group’s starting level yields the <strong>counterfactual</strong> (dashed line), and the treatment effect <strong>Δ</strong> is the gap between what happened and what would have happened.</p>
+<p>The <strong>difference-in-differences (DiD)</strong> comparison is the workhorse of quasi-experimental analysis and one of the most widely used causal tools in industry and research <span class="citation" data-cites="varian2016">(<a href="#ref-varian2016" role="doc-biblioref">Varian 2016</a>)</span>. <a href="#fig-did-stylized" class="quarto-xref">Figure&nbsp;<span>1.21</span></a> shows its logic. The treated and control groups start at different <em>levels</em> — that is the selection problem, and DiD tolerates it. The key idea is to borrow the control group’s <em>change</em> over time: it tells us what would have happened to the treated group without the treatment. Adding this change to the treated group’s starting level yields the <strong>counterfactual</strong> (dashed line), and the treatment effect <strong>Δ</strong> is the gap between what happened and what would have happened.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-did-stylized" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1562,7 +1605,7 @@ Figure&nbsp;1.19: Cross-sectional vs.&nbsp;longitudinal design: a snapshot at on
 <img src="01-foundations_files/figure-html/fig-did-stylized-1.png" class="img-fluid figure-img" width="1100">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-did-stylized-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.20: The logic of difference-in-differences (stylized, after Varian, 2016). Here the treatment effect is negative: the treated group ends up below its counterfactual.
+Figure&nbsp;1.21: The logic of difference-in-differences (stylized, after Varian, 2016). Here the treatment effect is negative: the treated group ends up below its counterfactual.
 </figcaption>
 </figure>
 </div>
@@ -1628,7 +1671,7 @@ Table&nbsp;1.6: The difference-in-differences table
 </section>
 <section id="did-in-action-the-spotify-example" class="level3" data-number="1.7.6">
 <h3 data-number="1.7.6" class="anchored" data-anchor-id="did-in-action-the-spotify-example"><span class="header-section-number">1.7.6</span> DiD in action: the Spotify example</h3>
-<p><a href="#fig-spotify-did" class="quarto-xref">Figure&nbsp;<span>1.21</span></a> and <a href="#tbl-spotify-did" class="quarto-xref">Table&nbsp;<span>1.7</span></a> apply this logic to stylized figures from the Spotify study.</p>
+<p><a href="#fig-spotify-did" class="quarto-xref">Figure&nbsp;<span>1.22</span></a> and <a href="#tbl-spotify-did" class="quarto-xref">Table&nbsp;<span>1.7</span></a> apply this logic to stylized figures from the Spotify study.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-spotify-did" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1637,7 +1680,7 @@ Table&nbsp;1.6: The difference-in-differences table
 <img src="01-foundations_files/figure-html/fig-spotify-did-1.png" class="img-fluid figure-img" width="1100">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-spotify-did-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.21: Monthly spending on CDs and downloads of the same consumers before (T1) and after (T2) Spotify adoption (stylized figures after Wlömert &amp; Papies, 2016).
+Figure&nbsp;1.22: Monthly spending on CDs and downloads of the same consumers before (T1) and after (T2) Spotify adoption (stylized figures after Wlömert &amp; Papies, 2016).
 </figcaption>
 </figure>
 </div>
