@@ -4,14 +4,12 @@
 # every step in detail; this script collects the code in one place.
 # ======================================================================
 
-
 # ----------------------------------------------------------------------
 # 0. Setup
 # ----------------------------------------------------------------------
 
 library(tidyverse)
 options(scipen = 999)
-
 
 # ======================================================================
 # 3.1 Motivation: an A/B test at a streaming service
@@ -198,7 +196,3 @@ prop.test(x = sum(listening$hours > 30), n = n)$conf.int
 # 1,000 respondents, share of about 50%
 qnorm(0.975) * sqrt(0.5 * 0.5 / 1000)     # 0.031 = 3.1 percentage points
 
-# --- Planning the sample size -----------------------------------------------
-# Respondents needed for a margin of error of +/- 5 percentage points
-me_target <- 0.05
-ceiling(qnorm(0.975)^2 * 0.5 * 0.5 / me_target^2)

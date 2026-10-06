@@ -1905,8 +1905,8 @@ attr(,&quot;conf.level&quot;)
 <p>The two intervals <strong>overlap</strong> — no effect? Not necessarily: the decision depends on the uncertainty of the <strong>difference</strong>, which has its own standard error. The interval <code>t.test()</code> reported (0.29 to 6.20 hours) is exactly that → <strong>Experiments I</strong>.</p>
 </div>
 </section>
-<section id="shares-and-sample-size-planning" class="slide level2 smaller">
-<h2>Shares and sample size planning</h2>
+<section id="a-confidence-interval-for-a-share" class="slide level2 smaller">
+<h2>A confidence interval for a share</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>Share of students listening &gt; 30 hours:</strong></p>
@@ -1922,16 +1922,17 @@ attr(,&quot;conf.level&quot;)
 </div>
 </div>
 </div><div class="column" style="width:50%;">
-<p><strong>Respondents needed for ± 5 points:</strong></p>
+<p><strong>The same with <code>prop.test()</code>:</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href aria-label="1"></a>me_target <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
-<span id="cb14-2"><a href aria-label="2"></a><span class="fu">ceiling</span>(<span class="fu">qnorm</span>(<span class="fl">0.975</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> <span class="fl">0.25</span> <span class="sc">/</span> me_target<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href aria-label="1"></a><span class="fu">prop.test</span>(<span class="at">x =</span> <span class="fu">sum</span>(listening<span class="sc">$</span>hours <span class="sc">&gt;</span> <span class="dv">30</span>), <span class="at">n =</span> n)<span class="sc">$</span>conf.int</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 385</code></pre>
+<pre><code>[1] 0.1458266 0.3161314
+attr(,&quot;conf.level&quot;)
+[1] 0.95</code></pre>
 </div>
 </div>
 <div class="keybox">
-<p><code>prop.test(x, n)$conf.int</code> gives a refined interval for shares directly.</p>
+<p><code>prop.test()</code> takes the number of “successes” and the sample size. Its interval is slightly wider — a small correction for whole-number counts. <strong>Sample size planning</strong> follows in Chapter 4.</p>
 </div>
 </div></div>
 </section></section>

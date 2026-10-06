@@ -386,7 +386,6 @@ window.Quarto = {
   <li><a href="#the-same-in-one-line" id="toc-the-same-in-one-line" class="nav-link" data-scroll-target="#the-same-in-one-line"><span class="header-section-number">3.8.2</span> The same in one line</a></li>
   <li><a href="#back-to-the-ab-test-confidence-intervals-per-group" id="toc-back-to-the-ab-test-confidence-intervals-per-group" class="nav-link" data-scroll-target="#back-to-the-ab-test-confidence-intervals-per-group"><span class="header-section-number">3.8.3</span> Back to the A/B test: confidence intervals per group</a></li>
   <li><a href="#a-confidence-interval-for-a-share" id="toc-a-confidence-interval-for-a-share" class="nav-link" data-scroll-target="#a-confidence-interval-for-a-share"><span class="header-section-number">3.8.4</span> A confidence interval for a share</a></li>
-  <li><a href="#planning-the-sample-size" id="toc-planning-the-sample-size" class="nav-link" data-scroll-target="#planning-the-sample-size"><span class="header-section-number">3.8.5</span> Planning the sample size</a></li>
   </ul></li>
   <li><a href="#sec-unc-limits" id="toc-sec-unc-limits" class="nav-link" data-scroll-target="#sec-unc-limits"><span class="header-section-number">3.9</span> What confidence intervals do not tell you</a></li>
   <li><a href="#sec-lc-03" id="toc-sec-lc-03" class="nav-link" data-scroll-target="#sec-lc-03">Learning check</a></li>
@@ -1682,42 +1681,6 @@ attr(,"conf.level")
 <pre><code>[1] 0.1458266 0.3161314
 attr(,"conf.level")
 [1] 0.95</code></pre>
-</div>
-</div>
-</section>
-<section id="planning-the-sample-size" class="level3" data-number="3.8.5">
-<h3 data-number="3.8.5" class="anchored" data-anchor-id="planning-the-sample-size"><span class="header-section-number">3.8.5</span> Planning the sample size</h3>
-<p>How many respondents do we need to estimate a share with a margin of error of ± 5 percentage points? Solving the margin-of-error formula for <em>n</em>, with the worst case of a 50% share:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>me_target <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ceiling</span>(<span class="fu">qnorm</span>(<span class="fl">0.975</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> <span class="fl">0.5</span> <span class="sc">*</span> <span class="fl">0.5</span> <span class="sc">/</span> me_target<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 385</code></pre>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: the bootstrap">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Under the hood: the bootstrap
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>The formulas above rely on the central limit theorem. A computer-based alternative that needs no formula is the <strong>bootstrap</strong>: treat your sample as a stand-in for the population, draw many samples <em>from your sample</em> (with replacement, each of the same size), and look at how much the statistic varies across them. The middle 95% of the bootstrap estimates form a confidence interval. The bootstrap works for almost any statistic — medians, ratios, differences — where no simple formula exists.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>boot_medians <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">5000</span>, <span class="fu">median</span>(<span class="fu">sample</span>(listening<span class="sc">$</span>hours, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(boot_medians, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))   <span class="co"># 95% bootstrap interval for the median</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>    2.5%    97.5% 
-11.55454 19.23654 </code></pre>
-</div>
-</div>
-</div>
 </div>
 </div>
 </section>
