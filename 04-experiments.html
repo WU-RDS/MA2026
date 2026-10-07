@@ -131,6 +131,9 @@ div.csl-indent {
 }</script>
 <script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
 <link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -1965,11 +1968,34 @@ Table&nbsp;4.5: Choosing a test for an experiment
 </div>
 </figure>
 </div>
-<div style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 2em; text-align: center; color: #58585a; margin: 1em 0;">
-<p><em>Image placeholder: decision tree for choosing a test (outcome type → number of groups → design)</em><br>
-<code>img/ch04/test_selection.png</code></p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-test-tree" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-test-tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-test-tree">flowchart TD
+  A["What is the outcome?"] --&gt;|"Metric (e.g., hours, revenue)"| B["How many groups?"]
+  A --&gt;|"Yes/no or categories (e.g., conversion)"| C["Test of proportions / chi-square test&lt;br/&gt;prop.test(), chisq.test()"]
+  A --&gt;|"Ordinal (e.g., ratings)"| N["How many groups?"]
+  B --&gt;|Two| D["Same people in both conditions?"]
+  B --&gt;|Three or more| E["ANOVA + corrected post-hoc tests&lt;br/&gt;aov(), pairwise.t.test()"]
+  D --&gt;|No| F["Welch t-test&lt;br/&gt;t.test(y ~ group)"]
+  D --&gt;|Yes| G["Paired t-test&lt;br/&gt;t.test(x1, x2, paired = TRUE)"]
+  N --&gt;|"Two, different people"| H["Wilcoxon rank-sum test&lt;br/&gt;wilcox.test(y ~ group)"]
+  N --&gt;|"Two, same people"| I["Wilcoxon signed-rank test&lt;br/&gt;wilcox.test(x1, x2, paired = TRUE)"]
+  N --&gt;|Three or more| J["Kruskal–Wallis test&lt;br/&gt;kruskal.test(y ~ group)"]
+</pre>
 </div>
-<!-- ![Choosing a test.](img/ch04/test_selection.png){width=90%} -->
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-test-tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.9: A decision tree for choosing a test for an experiment. It is a starting point, not a recipe — always check what your research question actually asks.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Two caveats. First, metric outcomes with extreme skew or outliers in <em>small</em> samples can be treated like ordinal ones (non-parametric tests); with larger samples, the central limit theorem usually makes the <em>t</em>-test and the ANOVA work well. Second, decision trees like this one are useful for orientation, but they invite a recipe-like use of statistics. <span class="citation" data-cites="mcelreath2020">McElreath (<a href="#ref-mcelreath2020" role="doc-biblioref">2020</a>)</span> opens his textbook with a much larger flowchart of this kind — as an example of how <em>not</em> to think about statistics: the right analysis follows from the research question and the design of the study, not from walking down a tree.</p>
 </section>
 </section>
 <section id="sec-exp-nhst" class="level2" data-number="4.9">
@@ -2056,7 +2082,7 @@ Table&nbsp;4.6: How many respondents are needed to detect everyday effects? Base
 </section>
 <section id="peeking-why-the-sample-size-must-be-fixed-in-advance" class="level3" data-number="4.9.4">
 <h3 data-number="4.9.4" class="anchored" data-anchor-id="peeking-why-the-sample-size-must-be-fixed-in-advance"><span class="header-section-number">4.9.4</span> Peeking: why the sample size must be fixed in advance</h3>
-<p>A particularly common problem in online experiments: A/B-testing dashboards show the <em>p</em>-value live while the test is running, and it is tempting to stop the test as soon as it turns significant. This practice — called <strong>optional stopping</strong> or <strong>peeking</strong> — destroys the meaning of the <em>p</em>-value. The <em>p</em>-value of an experiment without any effect wanders randomly between 0 and 1 as data come in; the more often you look, the more likely it is to dip below 0.05 at some point (<a href="#fig-optional-stopping" class="quarto-xref">Figure&nbsp;<span>4.9</span></a>).</p>
+<p>A particularly common problem in online experiments: A/B-testing dashboards show the <em>p</em>-value live while the test is running, and it is tempting to stop the test as soon as it turns significant. This practice — called <strong>optional stopping</strong> or <strong>peeking</strong> — destroys the meaning of the <em>p</em>-value. The <em>p</em>-value of an experiment without any effect wanders randomly between 0 and 1 as data come in; the more often you look, the more likely it is to dip below 0.05 at some point (<a href="#fig-optional-stopping" class="quarto-xref">Figure&nbsp;<span>4.10</span></a>).</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-optional-stopping" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -2065,7 +2091,7 @@ Table&nbsp;4.6: How many respondents are needed to detect everyday effects? Base
 <img src="04-experiments_files/figure-html/fig-optional-stopping-1.png" class="img-fluid figure-img" width="1800">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-optional-stopping-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.9: The p-values of 20 simulated A/B tests in which there is no effect, recomputed after every 20 users per group. Tests that cross the 5% line at some point are shown in orange.
+Figure&nbsp;4.10: The p-values of 20 simulated A/B tests in which there is no effect, recomputed after every 20 users per group. Tests that cross the 5% line at some point are shown in orange.
 </figcaption>
 </figure>
 </div>
@@ -2084,7 +2110,7 @@ Figure&nbsp;4.9: The p-values of 20 simulated A/B tests in which there is no eff
 <p>The widget simulates 200 A/B tests <strong>without any true effect</strong>. An impatient analyst checks the <em>p</em>-value after every batch of new users and stops as soon as <em>p</em> &lt; 0.05. Compare the share of tests that are significant at the planned end with the share that are significant <strong>at some look</strong>.</p>
 <div class="unc-widget">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb62" data-startfrom="1022" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1021;"><span id="cb62-1022"><a href="#cb62-1022" aria-hidden="true" tabindex="-1"></a>viewof e3_max <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">100</span><span class="op">,</span> <span class="dv">2000</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Planned users per group"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb62" data-startfrom="1033" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1032;"><span id="cb62-1033"><a href="#cb62-1033" aria-hidden="true" tabindex="-1"></a>viewof e3_max <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">100</span><span class="op">,</span> <span class="dv">2000</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Planned users per group"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-30" data-nodetype="declaration">
 
@@ -2092,7 +2118,7 @@ Figure&nbsp;4.9: The p-values of 20 simulated A/B tests in which there is no eff
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb63" data-startfrom="1027" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1026;"><span id="cb63-1027"><a href="#cb63-1027" aria-hidden="true" tabindex="-1"></a>viewof e3_step <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">radio</span>([<span class="dv">10</span><span class="op">,</span> <span class="dv">50</span><span class="op">,</span> <span class="dv">100</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Check after every … users per group"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb63" data-startfrom="1038" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1037;"><span id="cb63-1038"><a href="#cb63-1038" aria-hidden="true" tabindex="-1"></a>viewof e3_step <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">radio</span>([<span class="dv">10</span><span class="op">,</span> <span class="dv">50</span><span class="op">,</span> <span class="dv">100</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Check after every … users per group"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-31" data-nodetype="declaration">
 
@@ -2100,7 +2126,7 @@ Figure&nbsp;4.9: The p-values of 20 simulated A/B tests in which there is no eff
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb64" data-startfrom="1032" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1031;"><span id="cb64-1032"><a href="#cb64-1032" aria-hidden="true" tabindex="-1"></a>viewof e3_batch <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">button</span>(<span class="st">"Simulate 200 new tests"</span><span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">reduce</span><span class="op">:</span> v <span class="kw">=&gt;</span> v <span class="op">+</span> <span class="dv">1</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb64" data-startfrom="1043" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1042;"><span id="cb64-1043"><a href="#cb64-1043" aria-hidden="true" tabindex="-1"></a>viewof e3_batch <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">button</span>(<span class="st">"Simulate 200 new tests"</span><span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">reduce</span><span class="op">:</span> v <span class="kw">=&gt;</span> v <span class="op">+</span> <span class="dv">1</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-32" data-nodetype="declaration">
 
@@ -2109,30 +2135,30 @@ Figure&nbsp;4.9: The p-values of 20 simulated A/B tests in which there is no eff
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb65" data-startfrom="1038" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1037;"><span id="cb65-1038"><a href="#cb65-1038" aria-hidden="true" tabindex="-1"></a>e3 <span class="op">=</span> {</span>
-<span id="cb65-1039"><a href="#cb65-1039" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rng <span class="op">=</span> d3<span class="op">.</span><span class="fu">randomLcg</span>(<span class="dv">500</span> <span class="op">+</span> e3_batch)<span class="op">;</span></span>
-<span id="cb65-1040"><a href="#cb65-1040" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rn <span class="op">=</span> d3<span class="op">.</span><span class="at">randomNormal</span><span class="op">.</span><span class="fu">source</span>(rng)(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
-<span id="cb65-1041"><a href="#cb65-1041" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> K <span class="op">=</span> <span class="dv">200</span><span class="op">,</span> maxN <span class="op">=</span> e3_max<span class="op">,</span> step <span class="op">=</span> e3_step<span class="op">;</span></span>
-<span id="cb65-1042"><a href="#cb65-1042" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> everSig <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> finalSig <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb65-1043"><a href="#cb65-1043" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> paths <span class="op">=</span> []<span class="op">;</span></span>
-<span id="cb65-1044"><a href="#cb65-1044" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">let</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> K<span class="op">;</span> k<span class="op">++</span>) {</span>
-<span id="cb65-1045"><a href="#cb65-1045" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> sa <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> sb <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> ever <span class="op">=</span> <span class="kw">false</span><span class="op">,</span> p <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb65-1046"><a href="#cb65-1046" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> path <span class="op">=</span> []<span class="op">;</span></span>
-<span id="cb65-1047"><a href="#cb65-1047" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">let</span> n <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> n <span class="op">&lt;=</span> maxN<span class="op">;</span> n<span class="op">++</span>) {</span>
-<span id="cb65-1048"><a href="#cb65-1048" aria-hidden="true" tabindex="-1"></a>      sa <span class="op">+=</span> <span class="fu">rn</span>()<span class="op">;</span> sb <span class="op">+=</span> <span class="fu">rn</span>()<span class="op">;</span></span>
-<span id="cb65-1049"><a href="#cb65-1049" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (n <span class="op">%</span> step <span class="op">===</span> <span class="dv">0</span>) {</span>
-<span id="cb65-1050"><a href="#cb65-1050" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> z <span class="op">=</span> (sa <span class="op">/</span> n <span class="op">-</span> sb <span class="op">/</span> n) <span class="op">/</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(<span class="dv">2</span> <span class="op">/</span> n)<span class="op">;</span></span>
-<span id="cb65-1051"><a href="#cb65-1051" aria-hidden="true" tabindex="-1"></a>        p <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> <span class="fu">pnorm</span>(<span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>(z)))<span class="op">;</span></span>
-<span id="cb65-1052"><a href="#cb65-1052" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (p <span class="op">&lt;</span> <span class="fl">0.05</span>) ever <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
-<span id="cb65-1053"><a href="#cb65-1053" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (k <span class="op">&lt;</span> <span class="dv">25</span>) path<span class="op">.</span><span class="fu">push</span>({<span class="dt">test</span><span class="op">:</span> k<span class="op">,</span> n<span class="op">,</span> p<span class="op">,</span> <span class="dt">ever</span><span class="op">:</span> <span class="kw">false</span>})<span class="op">;</span></span>
-<span id="cb65-1054"><a href="#cb65-1054" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb65-1055"><a href="#cb65-1055" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb65-1056"><a href="#cb65-1056" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (ever) everSig<span class="op">++;</span></span>
-<span id="cb65-1057"><a href="#cb65-1057" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (p <span class="op">&lt;</span> <span class="fl">0.05</span>) finalSig<span class="op">++;</span></span>
-<span id="cb65-1058"><a href="#cb65-1058" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (k <span class="op">&lt;</span> <span class="dv">25</span>) { <span class="kw">const</span> e <span class="op">=</span> path<span class="op">.</span><span class="fu">some</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">p</span> <span class="op">&lt;</span> <span class="fl">0.05</span>)<span class="op">;</span> path<span class="op">.</span><span class="fu">forEach</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">ever</span> <span class="op">=</span> e)<span class="op">;</span> paths<span class="op">.</span><span class="fu">push</span>(<span class="op">...</span>path)<span class="op">;</span> }</span>
-<span id="cb65-1059"><a href="#cb65-1059" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb65-1060"><a href="#cb65-1060" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {paths<span class="op">,</span> everSig<span class="op">,</span> finalSig<span class="op">,</span> K}<span class="op">;</span></span>
-<span id="cb65-1061"><a href="#cb65-1061" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb65" data-startfrom="1049" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1048;"><span id="cb65-1049"><a href="#cb65-1049" aria-hidden="true" tabindex="-1"></a>e3 <span class="op">=</span> {</span>
+<span id="cb65-1050"><a href="#cb65-1050" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rng <span class="op">=</span> d3<span class="op">.</span><span class="fu">randomLcg</span>(<span class="dv">500</span> <span class="op">+</span> e3_batch)<span class="op">;</span></span>
+<span id="cb65-1051"><a href="#cb65-1051" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rn <span class="op">=</span> d3<span class="op">.</span><span class="at">randomNormal</span><span class="op">.</span><span class="fu">source</span>(rng)(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb65-1052"><a href="#cb65-1052" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> K <span class="op">=</span> <span class="dv">200</span><span class="op">,</span> maxN <span class="op">=</span> e3_max<span class="op">,</span> step <span class="op">=</span> e3_step<span class="op">;</span></span>
+<span id="cb65-1053"><a href="#cb65-1053" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> everSig <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> finalSig <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb65-1054"><a href="#cb65-1054" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> paths <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb65-1055"><a href="#cb65-1055" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">let</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> K<span class="op">;</span> k<span class="op">++</span>) {</span>
+<span id="cb65-1056"><a href="#cb65-1056" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> sa <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> sb <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> ever <span class="op">=</span> <span class="kw">false</span><span class="op">,</span> p <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb65-1057"><a href="#cb65-1057" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> path <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb65-1058"><a href="#cb65-1058" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">let</span> n <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> n <span class="op">&lt;=</span> maxN<span class="op">;</span> n<span class="op">++</span>) {</span>
+<span id="cb65-1059"><a href="#cb65-1059" aria-hidden="true" tabindex="-1"></a>      sa <span class="op">+=</span> <span class="fu">rn</span>()<span class="op">;</span> sb <span class="op">+=</span> <span class="fu">rn</span>()<span class="op">;</span></span>
+<span id="cb65-1060"><a href="#cb65-1060" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (n <span class="op">%</span> step <span class="op">===</span> <span class="dv">0</span>) {</span>
+<span id="cb65-1061"><a href="#cb65-1061" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> z <span class="op">=</span> (sa <span class="op">/</span> n <span class="op">-</span> sb <span class="op">/</span> n) <span class="op">/</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(<span class="dv">2</span> <span class="op">/</span> n)<span class="op">;</span></span>
+<span id="cb65-1062"><a href="#cb65-1062" aria-hidden="true" tabindex="-1"></a>        p <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> <span class="fu">pnorm</span>(<span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>(z)))<span class="op">;</span></span>
+<span id="cb65-1063"><a href="#cb65-1063" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (p <span class="op">&lt;</span> <span class="fl">0.05</span>) ever <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb65-1064"><a href="#cb65-1064" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (k <span class="op">&lt;</span> <span class="dv">25</span>) path<span class="op">.</span><span class="fu">push</span>({<span class="dt">test</span><span class="op">:</span> k<span class="op">,</span> n<span class="op">,</span> p<span class="op">,</span> <span class="dt">ever</span><span class="op">:</span> <span class="kw">false</span>})<span class="op">;</span></span>
+<span id="cb65-1065"><a href="#cb65-1065" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb65-1066"><a href="#cb65-1066" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb65-1067"><a href="#cb65-1067" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (ever) everSig<span class="op">++;</span></span>
+<span id="cb65-1068"><a href="#cb65-1068" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (p <span class="op">&lt;</span> <span class="fl">0.05</span>) finalSig<span class="op">++;</span></span>
+<span id="cb65-1069"><a href="#cb65-1069" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (k <span class="op">&lt;</span> <span class="dv">25</span>) { <span class="kw">const</span> e <span class="op">=</span> path<span class="op">.</span><span class="fu">some</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">p</span> <span class="op">&lt;</span> <span class="fl">0.05</span>)<span class="op">;</span> path<span class="op">.</span><span class="fu">forEach</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">ever</span> <span class="op">=</span> e)<span class="op">;</span> paths<span class="op">.</span><span class="fu">push</span>(<span class="op">...</span>path)<span class="op">;</span> }</span>
+<span id="cb65-1070"><a href="#cb65-1070" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb65-1071"><a href="#cb65-1071" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {paths<span class="op">,</span> everSig<span class="op">,</span> finalSig<span class="op">,</span> K}<span class="op">;</span></span>
+<span id="cb65-1072"><a href="#cb65-1072" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-33" data-nodetype="declaration">
 
@@ -2140,16 +2166,16 @@ Figure&nbsp;4.9: The p-values of 20 simulated A/B tests in which there is no eff
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb66" data-startfrom="1066" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1065;"><span id="cb66-1066"><a href="#cb66-1066" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb66-1067"><a href="#cb66-1067" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">760</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">300</span><span class="op">,</span> <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span></span>
-<span id="cb66-1068"><a href="#cb66-1068" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Users per group so far"</span>}<span class="op">,</span></span>
-<span id="cb66-1069"><a href="#cb66-1069" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"p-value"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span> <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
-<span id="cb66-1070"><a href="#cb66-1070" aria-hidden="true" tabindex="-1"></a>  <span class="dt">color</span><span class="op">:</span> {<span class="dt">domain</span><span class="op">:</span> [<span class="kw">false</span><span class="op">,</span> <span class="kw">true</span>]<span class="op">,</span> <span class="dt">range</span><span class="op">:</span> [<span class="st">"#c8c8c8"</span><span class="op">,</span> <span class="st">"#d99a2b"</span>]}<span class="op">,</span></span>
-<span id="cb66-1071"><a href="#cb66-1071" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
-<span id="cb66-1072"><a href="#cb66-1072" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(e3<span class="op">.</span><span class="at">paths</span><span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"n"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"p"</span><span class="op">,</span> <span class="dt">z</span><span class="op">:</span> <span class="st">"test"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"ever"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="fl">1.2</span>})<span class="op">,</span></span>
-<span id="cb66-1073"><a href="#cb66-1073" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="fl">0.05</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#b03a2e"</span><span class="op">,</span> <span class="dt">strokeDasharray</span><span class="op">:</span> <span class="st">"4,3"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})</span>
-<span id="cb66-1074"><a href="#cb66-1074" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb66-1075"><a href="#cb66-1075" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb66" data-startfrom="1077" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1076;"><span id="cb66-1077"><a href="#cb66-1077" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb66-1078"><a href="#cb66-1078" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">760</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">300</span><span class="op">,</span> <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span></span>
+<span id="cb66-1079"><a href="#cb66-1079" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Users per group so far"</span>}<span class="op">,</span></span>
+<span id="cb66-1080"><a href="#cb66-1080" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"p-value"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span> <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
+<span id="cb66-1081"><a href="#cb66-1081" aria-hidden="true" tabindex="-1"></a>  <span class="dt">color</span><span class="op">:</span> {<span class="dt">domain</span><span class="op">:</span> [<span class="kw">false</span><span class="op">,</span> <span class="kw">true</span>]<span class="op">,</span> <span class="dt">range</span><span class="op">:</span> [<span class="st">"#c8c8c8"</span><span class="op">,</span> <span class="st">"#d99a2b"</span>]}<span class="op">,</span></span>
+<span id="cb66-1082"><a href="#cb66-1082" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb66-1083"><a href="#cb66-1083" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(e3<span class="op">.</span><span class="at">paths</span><span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"n"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"p"</span><span class="op">,</span> <span class="dt">z</span><span class="op">:</span> <span class="st">"test"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"ever"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="fl">1.2</span>})<span class="op">,</span></span>
+<span id="cb66-1084"><a href="#cb66-1084" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="fl">0.05</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#b03a2e"</span><span class="op">,</span> <span class="dt">strokeDasharray</span><span class="op">:</span> <span class="st">"4,3"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})</span>
+<span id="cb66-1085"><a href="#cb66-1085" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb66-1086"><a href="#cb66-1086" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-34" data-nodetype="expression">
 
@@ -2157,9 +2183,9 @@ Figure&nbsp;4.9: The p-values of 20 simulated A/B tests in which there is no eff
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb67" data-startfrom="1080" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1079;"><span id="cb67-1080"><a href="#cb67-1080" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div class="unc-stats"&gt;Significant at the planned end: &lt;b&gt;</span><span class="sc">${</span>(<span class="dv">100</span> <span class="op">*</span> e3<span class="op">.</span><span class="at">finalSig</span> <span class="op">/</span> e3<span class="op">.</span><span class="at">K</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">0</span>)<span class="sc">}</span><span class="vs">%&lt;/b&gt; of the tests (as it should be: about 5%) ·</span></span>
-<span id="cb67-1081"><a href="#cb67-1081" aria-hidden="true" tabindex="-1"></a><span class="vs">significant &lt;b&gt;at some look&lt;/b&gt;: &lt;b&gt;</span><span class="sc">${</span>(<span class="dv">100</span> <span class="op">*</span> e3<span class="op">.</span><span class="at">everSig</span> <span class="op">/</span> e3<span class="op">.</span><span class="at">K</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">0</span>)<span class="sc">}</span><span class="vs">%&lt;/b&gt; — the false-alarm rate of the impatient analyst.</span></span>
-<span id="cb67-1082"><a href="#cb67-1082" aria-hidden="true" tabindex="-1"></a><span class="vs">The chart shows the first 25 tests; orange ones cross the red line at some point.&lt;/div&gt;`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb67" data-startfrom="1091" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1090;"><span id="cb67-1091"><a href="#cb67-1091" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div class="unc-stats"&gt;Significant at the planned end: &lt;b&gt;</span><span class="sc">${</span>(<span class="dv">100</span> <span class="op">*</span> e3<span class="op">.</span><span class="at">finalSig</span> <span class="op">/</span> e3<span class="op">.</span><span class="at">K</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">0</span>)<span class="sc">}</span><span class="vs">%&lt;/b&gt; of the tests (as it should be: about 5%) ·</span></span>
+<span id="cb67-1092"><a href="#cb67-1092" aria-hidden="true" tabindex="-1"></a><span class="vs">significant &lt;b&gt;at some look&lt;/b&gt;: &lt;b&gt;</span><span class="sc">${</span>(<span class="dv">100</span> <span class="op">*</span> e3<span class="op">.</span><span class="at">everSig</span> <span class="op">/</span> e3<span class="op">.</span><span class="at">K</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">0</span>)<span class="sc">}</span><span class="vs">%&lt;/b&gt; — the false-alarm rate of the impatient analyst.</span></span>
+<span id="cb67-1093"><a href="#cb67-1093" aria-hidden="true" tabindex="-1"></a><span class="vs">The chart shows the first 25 tests; orange ones cross the red line at some point.&lt;/div&gt;`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-35" data-nodetype="expression">
 
@@ -2253,6 +2279,9 @@ Cohen, Jacob. 1992. <span>“A Power Primer.”</span> <em>Psychological Bulleti
 </div>
 <div id="ref-lewis2015" class="csl-entry" role="listitem">
 Lewis, Randall A., and Justin M. Rao. 2015. <span>“The Unfavorable Economics of Measuring the Returns to Advertising.”</span> <em>The Quarterly Journal of Economics</em> 130 (4): 1941–73.
+</div>
+<div id="ref-mcelreath2020" class="csl-entry" role="listitem">
+McElreath, Richard. 2020. <em>Statistical Rethinking: A Bayesian Course with Examples in <span>R</span> and <span>Stan</span></em>. 2nd ed. CRC Press.
 </div>
 <div id="ref-wasserstein2016" class="csl-entry" role="listitem">
 Wasserstein, Ronald L., and Nicole A. Lazar. 2016. <span>“The <span>ASA</span> Statement on p-Values: Context, Process, and Purpose.”</span> <em>The American Statistician</em> 70 (2): 129–33.
