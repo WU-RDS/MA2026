@@ -1194,15 +1194,15 @@ display:block!important;
 <h2>Face 1: a treatment effect that differs between groups</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href aria-label="1"></a>model_plan <span class="ot">&lt;-</span> <span class="fu">lm</span>(hours <span class="sc">~</span> smart_mix <span class="sc">*</span> premium <span class="sc">+</span> prior_hours <span class="sc">+</span> tenure, <span class="at">data =</span> wave2)</span>
-<span id="cb1-2"><a href aria-label="2"></a><span class="fu">round</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(model_plan))[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>)], <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-2"><a href aria-label="2"></a><span class="fu">coef_table</span>(model_plan)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                  Estimate Std. Error Pr(&gt;|t|)
-(Intercept)          1.560      0.469    0.001
-smart_mix            4.999      0.378    0.000
-premium              2.685      0.431    0.000
-prior_hours          0.752      0.017    0.000
-tenure               0.028      0.009    0.001
-smart_mix:premium   -3.111      0.590    0.000</code></pre>
+<pre><code>                  Estimate Std. Error t value p-value
+(Intercept)          1.560      0.469    3.33 &lt; 0.001
+smart_mix            4.999      0.378   13.21 &lt; 0.001
+premium              2.685      0.431    6.22 &lt; 0.001
+prior_hours          0.752      0.017   43.97 &lt; 0.001
+tenure               0.028      0.009    3.26   0.001
+smart_mix:premium   -3.111      0.590   -5.27 &lt; 0.001</code></pre>
 </div>
 </div>
 <div class="columns">
@@ -1252,19 +1252,19 @@ smart_mix:premium   -3.111      0.590    0.000</code></pre>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href aria-label="1"></a>model_genre <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(streams) <span class="sc">~</span> <span class="fu">log</span>(spend) <span class="sc">*</span> genre <span class="sc">+</span> <span class="fu">log</span>(followers) <span class="sc">+</span> placements,</span>
 <span id="cb3-2"><a href aria-label="2"></a>                  <span class="at">data =</span> promo)</span>
-<span id="cb3-3"><a href aria-label="3"></a><span class="fu">round</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(model_genre))[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>)], <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-3"><a href aria-label="3"></a><span class="fu">coef_table</span>(model_genre)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                              Estimate Pr(&gt;|t|)
-(Intercept)                     -3.648    0.000
-log(spend)                       0.206    0.000
-genreHipHop/Rap                 -2.058    0.000
-genreRock                        0.356    0.587
-genreElectro/Dance               0.021    0.973
-log(followers)                   0.507    0.000
-placements                       0.122    0.000
-log(spend):genreHipHop/Rap       0.268    0.000
-log(spend):genreRock            -0.053    0.504
-log(spend):genreElectro/Dance    0.005    0.946</code></pre>
+<pre><code>                              Estimate Std. Error t value p-value
+(Intercept)                     -3.648      0.321  -11.36 &lt; 0.001
+log(spend)                       0.206      0.033    6.17 &lt; 0.001
+genreHipHop/Rap                 -2.058      0.430   -4.79 &lt; 0.001
+genreRock                        0.356      0.654    0.54   0.587
+genreElectro/Dance               0.021      0.616    0.03   0.973
+log(followers)                   0.507      0.015   33.46 &lt; 0.001
+placements                       0.122      0.011   11.42 &lt; 0.001
+log(spend):genreHipHop/Rap       0.268      0.052    5.18 &lt; 0.001
+log(spend):genreRock            -0.053      0.079   -0.67   0.504
+log(spend):genreElectro/Dance    0.005      0.076    0.07   0.946</code></pre>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
@@ -1288,15 +1288,15 @@ log(spend):genreElectro/Dance    0.005    0.946</code></pre>
 <div class="column" style="width:50%;">
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href aria-label="1"></a>model_prior <span class="ot">&lt;-</span> <span class="fu">lm</span>(hours <span class="sc">~</span> smart_mix <span class="sc">*</span> prior_hours <span class="sc">+</span> premium <span class="sc">+</span> tenure, <span class="at">data =</span> wave2)</span>
-<span id="cb5-2"><a href aria-label="2"></a><span class="fu">round</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(model_prior))[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>)], <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-2"><a href aria-label="2"></a><span class="fu">coef_table</span>(model_prior)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                      Estimate Pr(&gt;|t|)
-(Intercept)              1.446    0.007
-smart_mix                5.391    0.000
-prior_hours              0.797    0.000
-premium                  1.041    0.001
-tenure                   0.027    0.002
-smart_mix:prior_hours   -0.096    0.005</code></pre>
+<pre><code>                      Estimate Std. Error t value p-value
+(Intercept)              1.446      0.532    2.72   0.007
+smart_mix                5.391      0.660    8.16 &lt; 0.001
+prior_hours              0.797      0.023   34.43 &lt; 0.001
+premium                  1.041      0.301    3.46 &lt; 0.001
+tenure                   0.027      0.009    3.15   0.002
+smart_mix:prior_hours   -0.096      0.034   -2.82   0.005</code></pre>
 </div>
 </div>
 <p>Marginal effect of Smart Mix = 5.39 − 0.096 × prior hours:</p>
@@ -1324,7 +1324,7 @@ smart_mix:prior_hours   -0.096    0.005</code></pre>
 <div class="discussion">
 <p>Fit the interaction of Smart Mix with <strong>device</strong>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href aria-label="1"></a>model_device <span class="ot">&lt;-</span> <span class="fu">lm</span>(hours <span class="sc">~</span> smart_mix <span class="sc">*</span> device <span class="sc">+</span> prior_hours <span class="sc">+</span> premium <span class="sc">+</span> tenure, <span class="at">data =</span> wave2)</span>
-<span id="cb7-2"><a href aria-label="2"></a><span class="fu">coef</span>(<span class="fu">summary</span>(model_device))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-2"><a href aria-label="2"></a><span class="fu">coef_table</span>(model_device)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For which device is the effect of Smart Mix largest? Compute the effect for each device from the coefficients. Are the differences significant?</p>
 </div>
 <aside class="notes">
@@ -1354,11 +1354,11 @@ display:block!important;
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href aria-label="1"></a>m_cc <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(streams) <span class="sc">~</span> <span class="fu">log</span>(spend) <span class="sc">*</span> <span class="fu">log</span>(followers) <span class="sc">+</span></span>
 <span id="cb8-2"><a href aria-label="2"></a>             placements <span class="sc">+</span> genre, <span class="at">data =</span> promo)</span>
-<span id="cb8-3"><a href aria-label="3"></a><span class="fu">round</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(m_cc))[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>)], <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-3"><a href aria-label="3"></a><span class="fu">coef_table</span>(m_cc)[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>               Estimate Pr(&gt;|t|)
-log(spend)       -0.896    0.000
-log(followers)   -0.422    0.003</code></pre>
+<pre><code>               Estimate Std. Error t value p-value
+log(spend)       -0.896      0.183   -4.90 &lt; 0.001
+log(followers)   -0.422      0.143   -2.96   0.003</code></pre>
 </div>
 </div>
 <p>A <strong>negative</strong> spend elasticity? It is the elasticity for an artist with <strong>one follower</strong> (log = 0).</p>
@@ -1368,12 +1368,12 @@ log(followers)   -0.422    0.003</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href aria-label="1"></a>promo_c <span class="ot">&lt;-</span> promo <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">ls =</span> <span class="fu">log</span>(spend) <span class="sc">-</span> <span class="fu">mean</span>(<span class="fu">log</span>(spend)),</span>
 <span id="cb10-2"><a href aria-label="2"></a>                           <span class="at">lf =</span> <span class="fu">log</span>(followers) <span class="sc">-</span> <span class="fu">mean</span>(<span class="fu">log</span>(followers)))</span>
 <span id="cb10-3"><a href aria-label="3"></a>m_ccc <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(streams) <span class="sc">~</span> ls <span class="sc">*</span> lf <span class="sc">+</span> placements <span class="sc">+</span> genre, <span class="at">data =</span> promo_c)</span>
-<span id="cb10-4"><a href aria-label="4"></a><span class="fu">round</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(m_ccc))[<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">8</span>), <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>)], <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-4"><a href aria-label="4"></a><span class="fu">coef_table</span>(m_ccc)[<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">8</span>), ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>      Estimate Pr(&gt;|t|)
-ls       0.299        0
-lf       0.508        0
-ls:lf    0.113        0</code></pre>
+<pre><code>      Estimate Std. Error t value p-value
+ls       0.299      0.022   13.31 &lt; 0.001
+lf       0.508      0.015   33.87 &lt; 0.001
+ls:lf    0.113      0.017    6.53 &lt; 0.001</code></pre>
 </div>
 </div>
 <p>Now <code>ls</code> = elasticity for an <strong>average</strong> artist; the interaction is unchanged.</p>
@@ -1429,15 +1429,15 @@ display:block!important;
 <h2>The regression: six coefficients, six cell means</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href aria-label="1"></a>model_ads <span class="ot">&lt;-</span> <span class="fu">lm</span>(creativity <span class="sc">~</span> source <span class="sc">*</span> disclosure, <span class="at">data =</span> ads)</span>
-<span id="cb12-2"><a href aria-label="2"></a><span class="fu">round</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(model_ads))[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>)], <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-2"><a href aria-label="2"></a><span class="fu">coef_table</span>(model_ads)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                        Estimate Std. Error Pr(&gt;|t|)
-(Intercept)                                61.80       1.85        0
-sourceAI                                  -13.53       2.62        0
-sourceHuman + AI                          -18.25       2.62        0
-disclosureNot revealed                     -9.67       2.62        0
-sourceAI:disclosureNot revealed            22.23       3.71        0
-sourceHuman + AI:disclosureNot revealed    28.15       3.71        0</code></pre>
+<pre><code>                                        Estimate Std. Error t value p-value
+(Intercept)                               61.800      1.854   33.33 &lt; 0.001
+sourceAI                                 -13.533      2.622   -5.16 &lt; 0.001
+sourceHuman + AI                         -18.250      2.622   -6.96 &lt; 0.001
+disclosureNot revealed                    -9.667      2.622   -3.69 &lt; 0.001
+sourceAI:disclosureNot revealed           22.233      3.708    6.00 &lt; 0.001
+sourceHuman + AI:disclosureNot revealed   28.150      3.708    7.59 &lt; 0.001</code></pre>
 </div>
 </div>
 <table class="caption-top">

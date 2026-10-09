@@ -15,6 +15,24 @@ options(scipen = 5, digits = 4)
 
 base_url <- "https://raw.githubusercontent.com/wu-rds/MA2026/main/data/"
 
+# --- A small helper: tidy coefficient tables -------------------------------
+# Rounds estimates, standard errors and test statistics, and formats
+# p-values the way journals report them (three decimals, "< 0.001").
+coef_table <- function(model, digits = 3) {
+  tab <- coef(summary(model))
+  out <- data.frame(
+    Estimate     = round(tab[, 1], digits),
+    `Std. Error` = round(tab[, 2], digits),
+    statistic    = round(tab[, 3], 2),
+    `p-value`    = ifelse(tab[, 4] < 0.001, "< 0.001", sprintf("%.3f", tab[, 4])),
+    check.names = FALSE
+  )
+  names(out)[3] <- colnames(tab)[3]
+  rownames(out) <- rownames(tab)
+  out
+}
+
+
 
 # ======================================================================
 # 6.1 The second Smart Mix experiment
@@ -83,7 +101,7 @@ emtrends(model_prior, ~ prior_hours, var = "smart_mix", at = list(prior_hours = 
 
 # Your turn: does the effect differ by device?
 model_device <- lm(hours ~ smart_mix * device + prior_hours + premium + tenure, data = wave2)
-coef(summary(model_device))
+coef_table(model_device)
 emtrends(model_device, ~ device, var = "smart_mix")
 
 

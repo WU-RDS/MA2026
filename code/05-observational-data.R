@@ -14,6 +14,24 @@ options(scipen = 5, digits = 4)
 
 base_url <- "https://raw.githubusercontent.com/wu-rds/MA2026/main/data/"
 
+# --- A small helper: tidy coefficient tables -------------------------------
+# Rounds estimates, standard errors and test statistics, and formats
+# p-values the way journals report them (three decimals, "< 0.001").
+coef_table <- function(model, digits = 3) {
+  tab <- coef(summary(model))
+  out <- data.frame(
+    Estimate     = round(tab[, 1], digits),
+    `Std. Error` = round(tab[, 2], digits),
+    statistic    = round(tab[, 3], 2),
+    `p-value`    = ifelse(tab[, 4] < 0.001, "< 0.001", sprintf("%.3f", tab[, 4])),
+    check.names = FALSE
+  )
+  names(out)[3] <- colnames(tab)[3]
+  rownames(out) <- rownames(tab)
+  out
+}
+
+
 
 # ======================================================================
 # 5.1 Smart Mix without randomization
@@ -79,7 +97,7 @@ confint(model_full)["smart_mix", ]
 
 # Your turn: does age change anything? (Is age a confounder here?)
 model_age <- lm(hours ~ smart_mix + prior_hours + tenure + premium + device + age, data = smartmix_obs)
-coef(summary(model_age))["smart_mix", ]
+coef_table(model_age)["smart_mix", ]
 
 # Multicollinearity check: variance inflation factors (values > 5 deserve attention)
 car::vif(model_full)
@@ -237,7 +255,7 @@ summary(model_did)
 placebo_data <- did_data |>
   filter(post == 0) |>
   mutate(fake_post = ifelse(week >= as.Date("2018-02-12"), 1, 0))
-coef(summary(lm(log_streams ~ treated * fake_post, data = placebo_data)))["treated:fake_post", ]
+coef_table(lm(log_streams ~ treated * fake_post, data = placebo_data))["treated:fake_post", ]
 
 # Your turn: add a control variable
-coef(summary(lm(log_streams ~ treated * post + major_label, data = did_data)))
+coef_table(lm(log_streams ~ treated * post + major_label, data = did_data))
