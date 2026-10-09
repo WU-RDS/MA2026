@@ -11,7 +11,7 @@
 
 library(tidyverse)
 library(emmeans)      # install.packages("emmeans") if needed
-options(scipen = 999)
+options(scipen = 5, digits = 4)
 
 base_url <- "https://raw.githubusercontent.com/wu-rds/MA2026/main/data/"
 

@@ -634,23 +634,23 @@ lm(formula = hours ~ smart_mix * premium + prior_hours + tenure,
     data = wave2)
 
 Residuals:
-     Min       1Q   Median       3Q      Max 
--17.8895  -3.3365   0.1643   3.4216  15.9397 
+    Min      1Q  Median      3Q     Max 
+-17.889  -3.336   0.164   3.422  15.940 
 
 Coefficients:
-                   Estimate Std. Error t value             Pr(&gt;|t|)    
-(Intercept)        1.559966   0.468824   3.327             0.000903 ***
-smart_mix          4.998744   0.378346  13.212 &lt; 0.0000000000000002 ***
-premium            2.684600   0.431296   6.224       0.000000000668 ***
-prior_hours        0.751627   0.017093  43.974 &lt; 0.0000000000000002 ***
-tenure             0.027910   0.008573   3.256             0.001163 ** 
-smart_mix:premium -3.111456   0.590046  -5.273       0.000000158998 ***
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)        1.55997    0.46882    3.33   0.0009 ***
+smart_mix          4.99874    0.37835   13.21  &lt; 2e-16 ***
+premium            2.68460    0.43130    6.22  6.7e-10 ***
+prior_hours        0.75163    0.01709   43.97  &lt; 2e-16 ***
+tenure             0.02791    0.00857    3.26   0.0012 ** 
+smart_mix:premium -3.11146    0.59005   -5.27  1.6e-07 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 5.019 on 1194 degrees of freedom
-Multiple R-squared:   0.65, Adjusted R-squared:  0.6486 
-F-statistic: 443.6 on 5 and 1194 DF,  p-value: &lt; 0.00000000000000022</code></pre>
+Residual standard error: 5.02 on 1194 degrees of freedom
+Multiple R-squared:  0.65,  Adjusted R-squared:  0.649 
+F-statistic:  444 on 5 and 1194 DF,  p-value: &lt;2e-16</code></pre>
 </div>
 </div>
 <p>Reading the coefficients with the marginal-effect rule:</p>
@@ -690,28 +690,17 @@ Figure&nbsp;6.3: The effect of Smart Mix for free and for Premium users, from th
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>model_genre <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(streams) <span class="sc">~</span> <span class="fu">log</span>(spend) <span class="sc">*</span> genre <span class="sc">+</span> <span class="fu">log</span>(followers) <span class="sc">+</span> placements, <span class="at">data =</span> promo)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(model_genre))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                  Estimate Std. Error      t value
-(Intercept)                   -3.647668844 0.32117112 -11.35739991
-log(spend)                     0.205772946 0.03334596   6.17085086
-genreHipHop/Rap               -2.057894514 0.42998158  -4.78600625
-genreRock                      0.355791125 0.65436322   0.54372115
-genreElectro/Dance             0.021026229 0.61563571   0.03415369
-log(followers)                 0.506830322 0.01514894  33.45648675
-placements                     0.121775943 0.01066646  11.41671676
-log(spend):genreHipHop/Rap     0.267960015 0.05175421   5.17754995
-log(spend):genreRock          -0.052608661 0.07862671  -0.66909399
-log(spend):genreElectro/Dance  0.005161224 0.07566013   0.06821591
-                                                                                                                                                                       Pr(&gt;|t|)
-(Intercept)                   0.00000000000000000000000000358201308288310146383380625467800300419772342791194325119273694274155388911351494130030914675444364547729492187500000
-log(spend)                    0.00000000126280758038801830656692203779445024536265407277824124321341514587402343750000000000000000000000000000000000000000000000000000000000000
-genreHipHop/Rap               0.00000215301710262749552136397890311769742766045965254306793212890625000000000000000000000000000000000000000000000000000000000000000000000000000
-genreRock                     0.58683876191453632209515944850863888859748840332031250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-genreElectro/Dance            0.97276614852139431377509026788175106048583984375000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-log(followers)                0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000211392
-placements                    0.00000000000000000000000000205029825459686382176387270835718766530759737002135843662583090333231719114975843964998603041749447584152221679687500
-log(spend):genreHipHop/Rap    0.00000030882179463203912864237505112030568454883905360475182533264160156250000000000000000000000000000000000000000000000000000000000000000000000
-log(spend):genreRock          0.50369724820406469589784137497190386056900024414062500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-log(spend):genreElectro/Dance 0.94563687411112784531042052549310028553009033203125000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</code></pre>
+<pre><code>                               Estimate Std. Error   t value   Pr(&gt;|t|)
+(Intercept)                   -3.647669    0.32117 -11.35740  3.582e-27
+log(spend)                     0.205773    0.03335   6.17085  1.263e-09
+genreHipHop/Rap               -2.057895    0.42998  -4.78601  2.153e-06
+genreRock                      0.355791    0.65436   0.54372  5.868e-01
+genreElectro/Dance             0.021026    0.61564   0.03415  9.728e-01
+log(followers)                 0.506830    0.01515  33.45649 2.114e-138
+placements                     0.121776    0.01067  11.41672  2.050e-27
+log(spend):genreHipHop/Rap     0.267960    0.05175   5.17755  3.088e-07
+log(spend):genreRock          -0.052609    0.07863  -0.66909  5.037e-01
+log(spend):genreElectro/Dance  0.005161    0.07566   0.06822  9.456e-01</code></pre>
 </div>
 </div>
 <p><code>log(spend)</code> (0.21) is the spend elasticity <strong>for Pop</strong>, the reference genre; <code>log(spend):genreHipHop/Rap</code> (0.27) says that the elasticity for HipHop/Rap is higher by that amount — 0.47 in total (<a href="#fig-elasticity-by-genre" class="quarto-xref">Figure&nbsp;<span>6.4</span></a>). For Rock and Electro/Dance, the interaction terms are small and not significant: no evidence that their elasticities differ from Pop’s. The genre main effects (<code>genreHipHop/Rap</code> etc.) are the level differences at <code>log(spend)</code> = 0, i.e., at a spend of 1 euro — a reminder that main effects in an interaction model refer to the zero of the other variable.</p>
@@ -737,20 +726,13 @@ Figure&nbsp;6.4: Different slopes for different genres: the spend elasticity of 
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>model_prior <span class="ot">&lt;-</span> <span class="fu">lm</span>(hours <span class="sc">~</span> smart_mix <span class="sc">*</span> prior_hours <span class="sc">+</span> premium <span class="sc">+</span> tenure, <span class="at">data =</span> wave2)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(model_prior))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                         Estimate  Std. Error   t value
-(Intercept)            1.44631963 0.531792492  2.719707
-smart_mix              5.39147433 0.660398804  8.163967
-prior_hours            0.79748767 0.023164977 34.426439
-premium                1.04070340 0.300601447  3.462070
-tenure                 0.02724151 0.008642342  3.152098
-smart_mix:prior_hours -0.09642474 0.034173340 -2.821636
-                                                                                                                                                                                                           Pr(&gt;|t|)
-(Intercept)           0.0066287685909625507565956503697179869050160050392150878906250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-smart_mix             0.0000000000000008166569366448662006087569549415805648670752458703758769331670919200405478477478027343750000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-prior_hours           0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005738765
-premium               0.0005549924124249182473544994564917942625470459461212158203125000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-tenure                0.0016613678720807131643233400808412625337950885295867919921875000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-smart_mix:prior_hours 0.0048571176991110825982289611602027434855699539184570312500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</code></pre>
+<pre><code>                      Estimate Std. Error t value   Pr(&gt;|t|)
+(Intercept)            1.44632   0.531792   2.720  6.629e-03
+smart_mix              5.39147   0.660399   8.164  8.167e-16
+prior_hours            0.79749   0.023165  34.426 5.739e-181
+premium                1.04070   0.300601   3.462  5.550e-04
+tenure                 0.02724   0.008642   3.152  1.661e-03
+smart_mix:prior_hours -0.09642   0.034173  -2.822  4.857e-03</code></pre>
 </div>
 </div>
 <p>The marginal effect of Smart Mix is 5.39 + (-0.096) × prior hours: about 4.4 hours for a user who listened 10 hours before, and 2.5 hours for one who listened 30 (<a href="#fig-marginal-prior" class="quarto-xref">Figure&nbsp;<span>6.5</span></a>). The interaction is significant: Smart Mix helps light listeners more. Note again that <code>smart_mix</code> alone (5.39) is the effect for a user with <em>zero</em> prior listening — a user who hardly exists in the data. With a continuous moderator, always report the effect at a few meaningful values (e.g., the 10th, 50th, and 90th percentiles) or as a curve.</p>
@@ -806,24 +788,15 @@ Figure&nbsp;6.5: The effect of Smart Mix as a function of prior listening, with 
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>model_cc <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(streams) <span class="sc">~</span> <span class="fu">log</span>(spend) <span class="sc">*</span> <span class="fu">log</span>(followers) <span class="sc">+</span> placements <span class="sc">+</span> genre, <span class="at">data =</span> promo)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(model_cc))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                             Estimate Std. Error   t value
-(Intercept)                5.40990665 1.50566106  3.593044
-log(spend)                -0.89607581 0.18284271 -4.900801
-log(followers)            -0.42217608 0.14263474 -2.959840
-placements                 0.12058049 0.01054450 11.435397
-genreHipHop/Rap            0.16536987 0.04389582  3.767326
-genreRock                 -0.09564274 0.05887528 -1.624497
-genreElectro/Dance         0.06549257 0.05803210  1.128558
-log(spend):log(followers)  0.11309225 0.01732371  6.528176
-                                                     Pr(&gt;|t|)
-(Intercept)               0.000354025531956416686808070126702
-log(spend)                0.000001233894753282450418172206189
-log(followers)            0.003201127984222719609352925118628
-placements                0.000000000000000000000000001686893
-genreHipHop/Rap           0.000181505534982658180793643754036
-genreRock                 0.104801967638938675619897367141675
-genreElectro/Dance        0.259541626935444746937520221763407
-log(spend):log(followers) 0.000000000143279031732028409283104</code></pre>
+<pre><code>                          Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)                5.40991    1.50566   3.593 3.540e-04
+log(spend)                -0.89608    0.18284  -4.901 1.234e-06
+log(followers)            -0.42218    0.14263  -2.960 3.201e-03
+placements                 0.12058    0.01054  11.435 1.687e-27
+genreHipHop/Rap            0.16537    0.04390   3.767 1.815e-04
+genreRock                 -0.09564    0.05888  -1.624 1.048e-01
+genreElectro/Dance         0.06549    0.05803   1.129 2.595e-01
+log(spend):log(followers)  0.11309    0.01732   6.528 1.433e-10</code></pre>
 </div>
 </div>
 <p>The interaction (0.113) is clearly positive: the spend elasticity grows with the follower base. But the “main effects” look absurd — <code>log(spend)</code> is -0.9, a <em>negative</em> elasticity. The marginal-effect rule explains why: <code>log(spend)</code> is the elasticity for an artist with <code>log(followers)</code> = 0, i.e., with one follower. Nobody in the data is anywhere near that.</p>
@@ -838,24 +811,15 @@ log(spend):log(followers) 0.000000000143279031732028409283104</code></pre>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>model_cc_centered <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(streams) <span class="sc">~</span> log_spend_c <span class="sc">*</span> log_fol_c <span class="sc">+</span> placements <span class="sc">+</span> genre, <span class="at">data =</span> promo_c)</span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(model_cc_centered))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                         Estimate Std. Error   t value
-(Intercept)            3.41055167 0.04400705 77.500114
-log_spend_c            0.29930805 0.02247994 13.314451
-log_fol_c              0.50847354 0.01501253 33.869939
-placements             0.12058049 0.01054450 11.435397
-genreHipHop/Rap        0.16536987 0.04389582  3.767326
-genreRock             -0.09564274 0.05887528 -1.624497
-genreElectro/Dance     0.06549257 0.05803210  1.128558
-log_spend_c:log_fol_c  0.11309225 0.01732371  6.528176
-                                                                                                                                                                                                                                                                                                                                              Pr(&gt;|t|)
-(Intercept)           0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003907536
-log_spend_c           0.000000000000000000000000000000000014422411564425081910323696008709681776836389567924618846436546174803427872828427930710693850857584408231559791602194309234619140625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-log_fol_c             0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011785656468468127109776864478768738001505326276239796052506911411522091886713653224837454761165194047250356887773668204281583581275006798903282971753162495791459508146458494343662
-placements            0.000000000000000000000000001686893388226794955146021575043452206843532075322520050954901154824451038095889376933200765051878988742828369140625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-genreHipHop/Rap       0.000181505534982679160105681348547079778654733672738075256347656250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-genreRock             0.104801967638940451976736767392139881849288940429687500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-genreElectro/Dance    0.259541626935446800850115778303006663918495178222656250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-log_spend_c:log_fol_c 0.000000000143279031732022515621239286611615388472573684452981979120522737503051757812500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</code></pre>
+<pre><code>                      Estimate Std. Error t value   Pr(&gt;|t|)
+(Intercept)            3.41055    0.04401  77.500 3.908e-312
+log_spend_c            0.29931    0.02248  13.314  1.442e-35
+log_fol_c              0.50847    0.01501  33.870 1.179e-140
+placements             0.12058    0.01054  11.435  1.687e-27
+genreHipHop/Rap        0.16537    0.04390   3.767  1.815e-04
+genreRock             -0.09564    0.05888  -1.624  1.048e-01
+genreElectro/Dance     0.06549    0.05803   1.129  2.595e-01
+log_spend_c:log_fol_c  0.11309    0.01732   6.528  1.433e-10</code></pre>
 </div>
 </div>
 <p>Now <code>log_spend_c</code> (0.3) is the spend elasticity for an artist with an average (log) follower count, and the interaction says that it rises by 0.113 for each unit of log followers — that is, each time the follower base grows by a factor of about 2.7. <a href="#fig-marginal-spend-followers" class="quarto-xref">Figure&nbsp;<span>6.6</span></a> plots the marginal effect across the follower distribution: for an artist at the 10th percentile, promotion barely pays; at the 90th, the elasticity is about 0.49.</p>
@@ -944,20 +908,13 @@ Figure&nbsp;6.7: Mean creativity ratings in the six cells of the 2 × 3 design, 
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>model_ads <span class="ot">&lt;-</span> <span class="fu">lm</span>(creativity <span class="sc">~</span> source <span class="sc">*</span> disclosure, <span class="at">data =</span> ads)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(model_ads))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                          Estimate Std. Error   t value
-(Intercept)                              61.800000   1.854162 33.330414
-sourceAI                                -13.533333   2.622182 -5.161097
-sourceHuman + AI                        -18.250000   2.622182 -6.959854
-disclosureNot revealed                   -9.666667   2.622182 -3.686498
-sourceAI:disclosureNot revealed          22.233333   3.708325  5.995519
-sourceHuman + AI:disclosureNot revealed  28.150000   3.708325  7.591029
-                                                                                                                                                       Pr(&gt;|t|)
-(Intercept)                             0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003247209
-sourceAI                                0.000000410074234012266755947887647559824131349159870296716690063476562500000000000000000000000000000000000000000000000
-sourceHuman + AI                        0.000000000016593599536902425047577611730897158455466655624377381172962486743927001953125000000000000000000000000000000
-disclosureNot revealed                  0.000262993370024933864614880008048203308135271072387695312500000000000000000000000000000000000000000000000000000000000
-sourceAI:disclosureNot revealed         0.000000005003354566588202143423256976553781250061092578107491135597229003906250000000000000000000000000000000000000000
-sourceHuman + AI:disclosureNot revealed 0.000000000000284375620325619215872914996656579878408967892999825721744855400174856185913085937500000000000000000000000</code></pre>
+<pre><code>                                        Estimate Std. Error t value   Pr(&gt;|t|)
+(Intercept)                               61.800      1.854  33.330 3.247e-111
+sourceAI                                 -13.533      2.622  -5.161  4.101e-07
+sourceHuman + AI                         -18.250      2.622  -6.960  1.659e-11
+disclosureNot revealed                    -9.667      2.622  -3.686  2.630e-04
+sourceAI:disclosureNot revealed           22.233      3.708   5.996  5.003e-09
+sourceHuman + AI:disclosureNot revealed   28.150      3.708   7.591  2.844e-13</code></pre>
 </div>
 </div>
 <div id="tbl-ads-coefs" class="striped quarto-float quarto-figure quarto-figure-center anchored">
@@ -1026,11 +983,11 @@ Table&nbsp;6.2: Reading the coefficients of the 2 × 3 model
 <pre><code>Analysis of Variance Table
 
 Response: creativity
-                   Df Sum Sq Mean Sq F value             Pr(&gt;F)    
-source              2   1055   527.3  2.5561            0.07904 .  
-disclosure          1   4572  4572.5 22.1669 0.0000035934940020 ***
-source:disclosure   2  13218  6608.8 32.0385 0.0000000000001626 ***
-Residuals         354  73021   206.3                               
+                   Df Sum Sq Mean Sq F value  Pr(&gt;F)    
+source              2   1055     527    2.56   0.079 .  
+disclosure          1   4572    4572   22.17 3.6e-06 ***
+source:disclosure   2  13218    6609   32.04 1.6e-13 ***
+Residuals         354  73021     206                    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
@@ -1047,7 +1004,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>disclosure = Revealed:
  source     emmean   SE  df lower.CL upper.CL
- Human        61.8 1.85 354     58.2     65.4
+ Human        61.8 1.85 354     58.1     65.5
  AI           48.3 1.85 354     44.6     51.9
  Human + AI   43.5 1.85 354     39.9     47.2
 
@@ -1260,14 +1217,8 @@ Figure&nbsp;6.10: The mediation model: Smart Mix affects new-artist discovery (a
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>model_m <span class="ot">&lt;-</span> <span class="fu">lm</span>(new_artists <span class="sc">~</span> smart_mix <span class="sc">+</span> prior_hours <span class="sc">+</span> premium, <span class="at">data =</span> wave2)</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(model_m))[<span class="st">"smart_mix"</span>, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                                                                                                    Estimate 
- 3.6185327344963891249562948360107839107513427734375000000000000000000000000000000000000000000000000000000000000000000000000 
-                                                                                                                  Std. Error 
- 0.1410836737386021444429218263394432142376899719238281250000000000000000000000000000000000000000000000000000000000000000000 
-                                                                                                                     t value 
-25.6481323359976869369347696192562580108642578125000000000000000000000000000000000000000000000000000000000000000000000000000 
-                                                                                                                    Pr(&gt;|t|) 
- 0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000582386 </code></pre>
+<pre><code>  Estimate Std. Error    t value   Pr(&gt;|t|) 
+ 3.619e+00  1.411e-01  2.565e+01 5.824e-116 </code></pre>
 </div>
 </div>
 <p>Yes: Smart Mix users discovered 3.6 more new artists. Second, does the mediator affect the outcome, holding Smart Mix constant (path <em>b</em>), and what is left of the Smart Mix effect once the mediator is in the model (the direct effect <em>c′</em>)?</p>
@@ -1275,9 +1226,9 @@ Figure&nbsp;6.10: The mediation model: Smart Mix affects new-artist discovery (a
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>model_y <span class="ot">&lt;-</span> <span class="fu">lm</span>(hours <span class="sc">~</span> smart_mix <span class="sc">+</span> new_artists <span class="sc">+</span> prior_hours <span class="sc">+</span> premium <span class="sc">+</span> tenure, <span class="at">data =</span> wave2)</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(model_y))[<span class="fu">c</span>(<span class="st">"smart_mix"</span>, <span class="st">"new_artists"</span>), ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>            Estimate Std. Error  t value            Pr(&gt;|t|)
-smart_mix   2.306265 0.35958564 6.413675 0.00000000020424508
-new_artists 0.390942 0.05917621 6.606406 0.00000000005916418</code></pre>
+<pre><code>            Estimate Std. Error t value  Pr(&gt;|t|)
+smart_mix     2.3063    0.35959   6.414 2.042e-10
+new_artists   0.3909    0.05918   6.606 5.916e-11</code></pre>
 </div>
 </div>
 <p>Each new artist goes with 0.39 additional listening hours (<em>b</em>), and the direct effect of Smart Mix, with discovery held constant, is 2.31 hours (<em>c′</em>) — down from the total effect of 3.72. The <strong>indirect effect</strong> is the product of the two path coefficients:</p>
@@ -1288,7 +1239,7 @@ new_artists 0.390942 0.05917621 6.606406 0.00000000005916418</code></pre>
 <span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">indirect =</span> <span class="fu">unname</span>(indirect), <span class="at">direct =</span> <span class="fu">unname</span>(<span class="fu">coef</span>(model_y)[<span class="st">"smart_mix"</span>]), <span class="at">total =</span> <span class="fu">unname</span>(indirect <span class="sc">+</span> <span class="fu">coef</span>(model_y)[<span class="st">"smart_mix"</span>]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>indirect   direct    total 
-1.414637 2.306265 3.720902 </code></pre>
+   1.415    2.306    3.721 </code></pre>
 </div>
 </div>
 <p>About 1.41 of the 3.72 hours — 38% of the effect — run through the discovery of new artists; the rest is direct. For the product team, this means: discovery is an important mechanism, but not the only one, and improving the discovery feature can be expected to improve roughly a third of the effect.</p>
@@ -1306,8 +1257,8 @@ new_artists 0.390942 0.05917621 6.606406 0.00000000005916418</code></pre>
 <span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(boot_indirect, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     2.5%     97.5% 
-0.9860694 1.8632108 </code></pre>
+<pre><code>  2.5%  97.5% 
+0.9861 1.8632 </code></pre>
 </div>
 </div>
 <p>The 95% bootstrap interval of the indirect effect excludes zero: the mediation is statistically reliable. Reporting a mediation analysis means reporting all three numbers with their uncertainty: the total effect, the direct effect, and the indirect effect with its bootstrap interval — plus the share of the effect that is mediated.</p>

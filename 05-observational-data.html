@@ -559,7 +559,7 @@ Figure&nbsp;5.4: Listening hours after vs.&nbsp;before the launch, with the regr
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">lm</span>(hours <span class="sc">~</span> prior_hours, <span class="at">data =</span> smartmix_obs))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>(Intercept) prior_hours 
-  6.7848754   0.7291183 </code></pre>
+     6.7849      0.7291 </code></pre>
 </div>
 </div>
 <p>Every additional hour of listening before the launch goes with 0.73 additional hours after it. Note the wording: <em>goes with</em>, not <em>causes</em>. The line describes the association in the data, nothing more.</p>
@@ -722,19 +722,19 @@ Call:
 lm(formula = hours ~ smart_mix, data = smartmix_obs)
 
 Residuals:
-    Min      1Q  Median      3Q     Max 
--20.882  -7.641  -2.062   4.759 101.218 
+   Min     1Q Median     3Q    Max 
+-20.88  -7.64  -2.06   4.76 101.22 
 
 Coefficients:
-            Estimate Std. Error t value            Pr(&gt;|t|)    
-(Intercept)  17.5411     0.3001   58.45 &lt;0.0000000000000002 ***
-smart_mix     9.3410     0.5252   17.79 &lt;0.0000000000000002 ***
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   17.541      0.300    58.5   &lt;2e-16 ***
+smart_mix      9.341      0.525    17.8   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 11.01 on 1998 degrees of freedom
-Multiple R-squared:  0.1367,    Adjusted R-squared:  0.1363 
-F-statistic: 316.3 on 1 and 1998 DF,  p-value: &lt; 0.00000000000000022</code></pre>
+Residual standard error: 11 on 1998 degrees of freedom
+Multiple R-squared:  0.137, Adjusted R-squared:  0.136 
+F-statistic:  316 on 1 and 1998 DF,  p-value: &lt;2e-16</code></pre>
 </div>
 </div>
 <p><a href="#tbl-lm-output" class="quarto-xref">Table&nbsp;<span>5.2</span></a> walks through the parts that matter.</p>
@@ -789,9 +789,9 @@ Table&nbsp;5.2: How to read the output of <code>lm()</code>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(model_naive)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>               2.5 %   97.5 %
-(Intercept) 16.95260 18.12966
-smart_mix    8.31098 10.37093</code></pre>
+<pre><code>             2.5 % 97.5 %
+(Intercept) 16.953  18.13
+smart_mix    8.311  10.37</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Under the hood: R², the F-test, and standardized coefficients">
@@ -830,20 +830,20 @@ Call:
 lm(formula = hours ~ smart_mix + prior_hours, data = smartmix_obs)
 
 Residuals:
-    Min      1Q  Median      3Q     Max 
--29.979  -5.521  -1.380   4.152  90.192 
+   Min     1Q Median     3Q    Max 
+-29.98  -5.52  -1.38   4.15  90.19 
 
 Coefficients:
-            Estimate Std. Error t value            Pr(&gt;|t|)    
-(Intercept)  6.45081    0.41213   15.65 &lt;0.0000000000000002 ***
-smart_mix    4.90113    0.44252   11.07 &lt;0.0000000000000002 ***
-prior_hours  0.66225    0.01996   33.17 &lt;0.0000000000000002 ***
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)    6.451      0.412    15.7   &lt;2e-16 ***
+smart_mix      4.901      0.443    11.1   &lt;2e-16 ***
+prior_hours    0.662      0.020    33.2   &lt;2e-16 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 8.846 on 1997 degrees of freedom
-Multiple R-squared:  0.4434,    Adjusted R-squared:  0.4429 
-F-statistic: 795.5 on 2 and 1997 DF,  p-value: &lt; 0.00000000000000022</code></pre>
+Residual standard error: 8.85 on 1997 degrees of freedom
+Multiple R-squared:  0.443, Adjusted R-squared:  0.443 
+F-statistic:  795 on 2 and 1997 DF,  p-value: &lt;2e-16</code></pre>
 </div>
 </div>
 <p>The coefficient of <code>smart_mix</code> has dropped from 9.3 to 4.9 hours. Its interpretation has changed too: it is now the difference between adopters and non-adopters <strong>with the same prior listening time</strong> — the effect of Smart Mix “holding prior listening constant”. This is what adjustment means: the regression compares like with like, at least with respect to the variables in the model. Because adopters listened more before the launch, and prior listening predicts current listening, part of the naive difference was due to prior listening — and that part is now attributed to <code>prior_hours</code> instead of to Smart Mix.</p>
@@ -858,24 +858,24 @@ lm(formula = hours ~ smart_mix + prior_hours + tenure + premium +
     device, data = smartmix_obs)
 
 Residuals:
-    Min      1Q  Median      3Q     Max 
--30.377  -5.210  -1.265   4.099  90.223 
+   Min     1Q Median     3Q    Max 
+-30.38  -5.21  -1.26   4.10  90.22 
 
 Coefficients:
-              Estimate Std. Error t value             Pr(&gt;|t|)    
-(Intercept)    6.25472    0.54036  11.575 &lt; 0.0000000000000002 ***
-smart_mix      4.47240    0.43747  10.223 &lt; 0.0000000000000002 ***
-prior_hours    0.61258    0.02063  29.688 &lt; 0.0000000000000002 ***
-tenure         0.03771    0.01128   3.344             0.000840 ***
-premium        2.92426    0.42572   6.869     0.00000000000861 ***
-deviceAndroid -1.47497    0.42230  -3.493             0.000489 ***
-deviceDesktop -2.48802    0.57594  -4.320     0.00001637640172 ***
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     6.2547     0.5404   11.58  &lt; 2e-16 ***
+smart_mix       4.4724     0.4375   10.22  &lt; 2e-16 ***
+prior_hours     0.6126     0.0206   29.69  &lt; 2e-16 ***
+tenure          0.0377     0.0113    3.34  0.00084 ***
+premium         2.9243     0.4257    6.87  8.6e-12 ***
+deviceAndroid  -1.4750     0.4223   -3.49  0.00049 ***
+deviceDesktop  -2.4880     0.5759   -4.32  1.6e-05 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 8.674 on 1993 degrees of freedom
-Multiple R-squared:  0.4659,    Adjusted R-squared:  0.4642 
-F-statistic: 289.7 on 6 and 1993 DF,  p-value: &lt; 0.00000000000000022</code></pre>
+Residual standard error: 8.67 on 1993 degrees of freedom
+Multiple R-squared:  0.466, Adjusted R-squared:  0.464 
+F-statistic:  290 on 6 and 1993 DF,  p-value: &lt;2e-16</code></pre>
 </div>
 </div>
 <p>Tenure, Premium status, and the device change little: the estimate settles at about 4.5 hours. <a href="#fig-estimates" class="quarto-xref">Figure&nbsp;<span>5.6</span></a> lines the estimates up against the benchmark from the experiment.</p>
@@ -1011,7 +1011,7 @@ Figure&nbsp;5.6: The estimated effect of Smart Mix: naive, adjusted for more and
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(model_full)[<span class="fu">c</span>(<span class="st">"deviceAndroid"</span>, <span class="st">"deviceDesktop"</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>deviceAndroid deviceDesktop 
-    -1.474966     -2.488017 </code></pre>
+       -1.475        -2.488 </code></pre>
 </div>
 </div>
 <p>Each dummy coefficient is the difference between its category and the reference category: Android users listen 1.5 hours less than iOS users, Desktop users 2.5 hours less — again holding the other variables constant. The <em>p</em>-values test whether each category differs from the reference, not whether the variable matters at all; for the latter, compare the model with and without the variable (<code>anova(model_without, model_full)</code>), which is the ANOVA of <a href="04-experiments.html" class="quarto-xref"><span>Chapter 4</span></a> in regression form.</p>
@@ -1047,7 +1047,7 @@ Figure&nbsp;5.6: The estimated effect of Smart Mix: naive, adjusted for more and
 <span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>((test<span class="sc">$</span>hours <span class="sc">-</span> test<span class="sc">$</span>predicted)<span class="sc">^</span><span class="dv">2</span>))   <span class="co"># typical prediction error (RMSE) in hours</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 9.424568</code></pre>
+<pre><code>[1] 9.425</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1142,24 +1142,24 @@ lm(formula = log(streams) ~ log(spend) + log(followers) + placements +
     genre, data = campaigns)
 
 Residuals:
-     Min       1Q   Median       3Q      Max 
--1.59622 -0.26838  0.02843  0.30302  1.47993 
+    Min      1Q  Median      3Q     Max 
+-1.5962 -0.2684  0.0284  0.3030  1.4799 
 
 Coefficients:
-                   Estimate Std. Error t value             Pr(&gt;|t|)    
-(Intercept)         2.88146    0.23461  12.282 &lt; 0.0000000000000002 ***
-log(spend)          0.33099    0.02069  16.001 &lt; 0.0000000000000002 ***
-log(followers)      0.50715    0.01571  32.279 &lt; 0.0000000000000002 ***
-placements          0.12029    0.01195  10.067 &lt; 0.0000000000000002 ***
-genreHipHop/Rap     0.19937    0.04761   4.188            0.0000334 ***
-genreRock          -0.25555    0.05985  -4.270            0.0000235 ***
-genreElectro/Dance  0.10261    0.05939   1.728               0.0846 .  
+                   Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)          2.8815     0.2346   12.28  &lt; 2e-16 ***
+log(spend)           0.3310     0.0207   16.00  &lt; 2e-16 ***
+log(followers)       0.5071     0.0157   32.28  &lt; 2e-16 ***
+placements           0.1203     0.0119   10.07  &lt; 2e-16 ***
+genreHipHop/Rap      0.1994     0.0476    4.19 0.000033 ***
+genreRock           -0.2555     0.0599   -4.27 0.000023 ***
+genreElectro/Dance   0.1026     0.0594    1.73    0.085 .  
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.4402 on 493 degrees of freedom
-Multiple R-squared:  0.7537,    Adjusted R-squared:  0.7507 
-F-statistic: 251.4 on 6 and 493 DF,  p-value: &lt; 0.00000000000000022</code></pre>
+Residual standard error: 0.44 on 493 degrees of freedom
+Multiple R-squared:  0.754, Adjusted R-squared:  0.751 
+F-statistic:  251 on 6 and 493 DF,  p-value: &lt;2e-16</code></pre>
 </div>
 </div>
 <p>The coefficient of <code>log(spend)</code> has a special interpretation: it is an <strong>elasticity</strong>. A 1% increase in promotion spend goes with a 0.33% increase in streams; a 10% increase with about 3.3%. The elasticity is constant along the curve — which is exactly what makes the multiplicative model fit diminishing returns: 10% more spend always buys the same <em>percentage</em> of additional streams, but at a high budget 10% is a lot of money for the same percentage. Elasticities are the natural language of marketing response: they do not depend on units, and they are comparable across variables, markets, and studies. The followers elasticity of 0.51, for example, says that the artist’s existing audience matters more than the promotion budget.</p>
@@ -1349,12 +1349,12 @@ glm(formula = churn ~ hours + premium + tenure + smart_mix, family = binomial,
     data = smartmix_obs)
 
 Coefficients:
-             Estimate Std. Error z value       Pr(&gt;|z|)    
-(Intercept)  0.277121   0.161358   1.717       0.085900 .  
-hours       -0.060657   0.008507  -7.130 0.000000000001 ***
-premium     -0.532992   0.152782  -3.489       0.000486 ***
-tenure      -0.020454   0.003752  -5.452 0.000000049834 ***
-smart_mix   -0.256349   0.162344  -1.579       0.114324    
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  0.27712    0.16136    1.72  0.08590 .  
+hours       -0.06066    0.00851   -7.13    1e-12 ***
+premium     -0.53299    0.15278   -3.49  0.00049 ***
+tenure      -0.02045    0.00375   -5.45    5e-08 ***
+smart_mix   -0.25635    0.16234   -1.58  0.11432    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -1375,8 +1375,8 @@ Number of Fisher Scoring iterations: 5</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>typical_user <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">hours =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>), <span class="at">premium =</span> <span class="dv">0</span>, <span class="at">tenure =</span> <span class="dv">24</span>, <span class="at">smart_mix =</span> <span class="dv">0</span>)</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(model_churn, <span class="at">newdata =</span> typical_user, <span class="at">type =</span> <span class="st">"response"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>        1         2         3 
-0.3056914 0.1935812 0.1157331 </code></pre>
+<pre><code>     1      2      3 
+0.3057 0.1936 0.1157 </code></pre>
 </div>
 </div>
 <p>A free user with two years of tenure who listens 10 hours a month has a churn probability of about 31%; at 30 hours, it falls to about 12%. Differences between such predicted probabilities are effects in <strong>percentage points</strong>, the unit managers understand. A convenient summary is the <strong>average effect</strong> of a variable across all users — for example, of Premium status:</p>
@@ -1385,7 +1385,7 @@ Number of Fisher Scoring iterations: 5</code></pre>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>p_premium <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_churn, <span class="at">newdata =</span> <span class="fu">mutate</span>(smartmix_obs, <span class="at">premium =</span> <span class="dv">1</span>), <span class="at">type =</span> <span class="st">"response"</span>)</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(p_premium <span class="sc">-</span> p_free)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.06476585</code></pre>
+<pre><code>[1] -0.06477</code></pre>
 </div>
 </div>
 <p>Premium subscribers are about 6.5 percentage points less likely to churn than otherwise identical free users. (Whether this is a <em>causal</em> effect of the subscription is, of course, the same question as in <a href="#sec-obs-adjust" class="quarto-xref"><span>Section 5.4</span></a>.)</p>
@@ -1468,11 +1468,11 @@ Figure&nbsp;5.13: A funnel in the residual plot of the linear campaign model: th
 <pre><code>
 t test of coefficients:
 
-                Estimate   Std. Error t value            Pr(&gt;|t|)    
-(Intercept) 14779.433305 11620.861998  1.2718           0.2040395    
-spend           5.433690     0.686896  7.9105 0.00000000000001682 ***
-followers       0.340770     0.098455  3.4612           0.0005843 ***
-placements  16299.981818  2934.342764  5.5549 0.00000004537132205 ***
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 14779.4333 11620.8620    1.27  0.20404    
+spend           5.4337     0.6869    7.91  1.7e-14 ***
+followers       0.3408     0.0985    3.46  0.00058 ***
+placements  16299.9818  2934.3428    5.55  4.5e-08 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
@@ -1622,21 +1622,21 @@ Call:
 lm(formula = log_streams ~ treated * post, data = did_data)
 
 Residuals:
-    Min      1Q  Median      3Q     Max 
--6.2069 -0.4628 -0.0251  0.5722  3.6010 
+   Min     1Q Median     3Q    Max 
+-6.207 -0.463 -0.025  0.572  3.601 
 
 Coefficients:
-             Estimate Std. Error t value             Pr(&gt;|t|)    
-(Intercept)   9.76220    0.01788 545.865 &lt; 0.0000000000000002 ***
-treated       0.09128    0.04183   2.182               0.0292 *  
-post         -0.04560    0.02529  -1.803               0.0714 .  
-treated:post  0.27964    0.05916   4.727           0.00000234 ***
+             Estimate Std. Error t value  Pr(&gt;|t|)    
+(Intercept)    9.7622     0.0179  545.86   &lt; 2e-16 ***
+treated        0.0913     0.0418    2.18     0.029 *  
+post          -0.0456     0.0253   -1.80     0.071 .  
+treated:post   0.2796     0.0592    4.73 0.0000023 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 0.8706 on 5796 degrees of freedom
-Multiple R-squared:  0.01419,   Adjusted R-squared:  0.01368 
-F-statistic: 27.81 on 3 and 5796 DF,  p-value: &lt; 0.00000000000000022</code></pre>
+Residual standard error: 0.871 on 5796 degrees of freedom
+Multiple R-squared:  0.0142,    Adjusted R-squared:  0.0137 
+F-statistic: 27.8 on 3 and 5796 DF,  p-value: &lt;2e-16</code></pre>
 </div>
 </div>
 <p>In R, <code>treated * post</code> is shorthand for <code>treated + post + treated:post</code>. Each coefficient has a clear meaning (<a href="#tbl-did-coefs" class="quarto-xref">Table&nbsp;<span>5.5</span></a>), and the one we care about is the <strong>interaction</strong> <code>treated:post</code>: 0.28 log points, i.e., the playlist listing increased weekly streams by about 32% — exactly the by-hand estimate, now with a standard error and a confidence interval (0.16 to 0.4).</p>
@@ -1697,8 +1697,8 @@ Table&nbsp;5.5: The coefficients of the DiD regression
 <span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(<span class="fu">lm</span>(log_streams <span class="sc">~</span> treated <span class="sc">*</span> fake_post, <span class="at">data =</span> placebo_data)))[<span class="st">"treated:fake_post"</span>, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   Estimate  Std. Error     t value    Pr(&gt;|t|) 
-0.002307671 0.085281962 0.027059306 0.978414297 </code></pre>
+<pre><code>  Estimate Std. Error    t value   Pr(&gt;|t|) 
+  0.002308   0.085282   0.027059   0.978414 </code></pre>
 </div>
 </div>
 <p>The placebo effect is close to zero and not significant — the pre-trends are parallel. Had the treated songs been on a rising trend before the listing (say, because they were already becoming hits, which is why the playlist editors picked them), the DiD would attribute that trend to the listing.</p>
