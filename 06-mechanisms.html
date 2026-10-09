@@ -26,7 +26,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -75,7 +129,38 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="book-style.css">
 </head>
@@ -250,7 +335,42 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#references" id="toc-references" class="nav-link active" data-scroll-target="#references">References</a></li>
+  <li><a href="#sec-mech-motivation" id="toc-sec-mech-motivation" class="nav-link active" data-scroll-target="#sec-mech-motivation"><span class="header-section-number">6.1</span> Motivation: the average effect hides the interesting part</a></li>
+  <li><a href="#sec-mech-interactions" id="toc-sec-mech-interactions" class="nav-link" data-scroll-target="#sec-mech-interactions"><span class="header-section-number">6.2</span> Interactions and marginal effects</a>
+  <ul class="collapse">
+  <li><a href="#what-an-interaction-term-does" id="toc-what-an-interaction-term-does" class="nav-link" data-scroll-target="#what-an-interaction-term-does"><span class="header-section-number">6.2.1</span> What an interaction term does</a></li>
+  <li><a href="#in-r-the-asterisk" id="toc-in-r-the-asterisk" class="nav-link" data-scroll-target="#in-r-the-asterisk"><span class="header-section-number">6.2.2</span> In R: the asterisk</a></li>
+  </ul></li>
+  <li><a href="#sec-mech-cont-cat" id="toc-sec-mech-cont-cat" class="nav-link" data-scroll-target="#sec-mech-cont-cat"><span class="header-section-number">6.3</span> Continuous × categorical</a>
+  <ul class="collapse">
+  <li><a href="#a-treatment-effect-that-differs-between-groups" id="toc-a-treatment-effect-that-differs-between-groups" class="nav-link" data-scroll-target="#a-treatment-effect-that-differs-between-groups"><span class="header-section-number">6.3.1</span> A treatment effect that differs between groups</a></li>
+  <li><a href="#a-slope-that-differs-between-groups" id="toc-a-slope-that-differs-between-groups" class="nav-link" data-scroll-target="#a-slope-that-differs-between-groups"><span class="header-section-number">6.3.2</span> A slope that differs between groups</a></li>
+  <li><a href="#moderation-by-a-continuous-variable" id="toc-moderation-by-a-continuous-variable" class="nav-link" data-scroll-target="#moderation-by-a-continuous-variable"><span class="header-section-number">6.3.3</span> Moderation by a continuous variable</a></li>
+  </ul></li>
+  <li><a href="#sec-mech-cont-cont" id="toc-sec-mech-cont-cont" class="nav-link" data-scroll-target="#sec-mech-cont-cont"><span class="header-section-number">6.4</span> Continuous × continuous</a>
+  <ul class="collapse">
+  <li><a href="#centering" id="toc-centering" class="nav-link" data-scroll-target="#centering"><span class="header-section-number">6.4.1</span> Centering</a></li>
+  </ul></li>
+  <li><a href="#sec-mech-cat-cat" id="toc-sec-mech-cat-cat" class="nav-link" data-scroll-target="#sec-mech-cat-cat"><span class="header-section-number">6.5</span> Categorical × categorical: a 2 × 3 experiment</a>
+  <ul class="collapse">
+  <li><a href="#the-design" id="toc-the-design" class="nav-link" data-scroll-target="#the-design"><span class="header-section-number">6.5.1</span> The design</a></li>
+  <li><a href="#the-regression-and-its-coefficients" id="toc-the-regression-and-its-coefficients" class="nav-link" data-scroll-target="#the-regression-and-its-coefficients"><span class="header-section-number">6.5.2</span> The regression and its coefficients</a></li>
+  <li><a href="#is-there-an-interaction-at-all-the-anova-table" id="toc-is-there-an-interaction-at-all-the-anova-table" class="nav-link" data-scroll-target="#is-there-an-interaction-at-all-the-anova-table"><span class="header-section-number">6.5.3</span> Is there an interaction at all? The ANOVA table</a></li>
+  <li><a href="#sec-mech-emmeans" id="toc-sec-mech-emmeans" class="nav-link" data-scroll-target="#sec-mech-emmeans"><span class="header-section-number">6.5.4</span> Post-hoc comparisons: estimated marginal means</a></li>
+  </ul></li>
+  <li><a href="#sec-mech-pitfalls" id="toc-sec-mech-pitfalls" class="nav-link" data-scroll-target="#sec-mech-pitfalls"><span class="header-section-number">6.6</span> The pitfalls of looking for heterogeneity</a></li>
+  <li><a href="#sec-mech-mediation" id="toc-sec-mech-mediation" class="nav-link" data-scroll-target="#sec-mech-mediation"><span class="header-section-number">6.7</span> Mediation: why does it work?</a>
+  <ul class="collapse">
+  <li><a href="#total-direct-and-indirect-effects" id="toc-total-direct-and-indirect-effects" class="nav-link" data-scroll-target="#total-direct-and-indirect-effects"><span class="header-section-number">6.7.1</span> Total, direct, and indirect effects</a></li>
+  <li><a href="#three-regressions" id="toc-three-regressions" class="nav-link" data-scroll-target="#three-regressions"><span class="header-section-number">6.7.2</span> Three regressions</a></li>
+  <li><a href="#uncertainty-of-the-indirect-effect" id="toc-uncertainty-of-the-indirect-effect" class="nav-link" data-scroll-target="#uncertainty-of-the-indirect-effect"><span class="header-section-number">6.7.3</span> Uncertainty of the indirect effect</a></li>
+  <li><a href="#what-mediation-analysis-assumes" id="toc-what-mediation-analysis-assumes" class="nav-link" data-scroll-target="#what-mediation-analysis-assumes"><span class="header-section-number">6.7.4</span> What mediation analysis assumes</a></li>
+  </ul></li>
+  <li><a href="#sec-mech-dags" id="toc-sec-mech-dags" class="nav-link" data-scroll-target="#sec-mech-dags"><span class="header-section-number">6.8</span> Good and bad controls: forks, pipes, and colliders</a></li>
+  <li><a href="#sec-mech-project" id="toc-sec-mech-project" class="nav-link" data-scroll-target="#sec-mech-project"><span class="header-section-number">6.9</span> Moderation and mediation in your group project</a></li>
+  <li><a href="#sec-mech-wrapup" id="toc-sec-mech-wrapup" class="nav-link" data-scroll-target="#sec-mech-wrapup"><span class="header-section-number">6.10</span> From average effects to mechanisms</a></li>
+  <li><a href="#sec-lc-06" id="toc-sec-lc-06" class="nav-link" data-scroll-target="#sec-lc-06">Learning check</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -276,33 +396,1151 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>📽 <a href="slides/chapter06_slides.html" target="_blank" rel="noopener">Slides for this chapter</a> · <a href="slides/chapter06_slides_handout.pdf" target="_blank" rel="noopener">PDF handout</a> · 💻 <a href="code/06-mechanisms.R" download="06-mechanisms.R">R code for this chapter</a></p>
+</div>
+</div>
+</div>
 <p><em>Driving question: <strong>Why — and for whom — does it work?</strong></em></p>
-<div class="callout callout-style-default callout-note callout-titled" title="Contents follow soon">
+<p>An experiment answers the question <em>whether</em> something works, on average. Managers rarely stop there. If Smart Mix increases listening time by 3 hours on average, the next questions are: does it work for everyone, or mainly for some users — and <em>why</em> does it work? The first question is about <strong>heterogeneity</strong> of the effect, answered with <strong>moderation</strong> analysis (interaction terms). The second is about the <strong>mechanism</strong>, answered with <strong>mediation</strong> analysis. Both reuse the regression toolkit of <a href="05-observational-data.html" class="quarto-xref"><span>Chapter 5</span></a>, with one new ingredient: the product of two variables. After working through this chapter you will be able to:</p>
+<ul>
+<li>Explain what an <strong>interaction term</strong> does, and compute <strong>marginal effects</strong> from a model with interactions</li>
+<li>Estimate and interpret interactions between a <strong>continuous and a categorical</strong> variable, two <strong>continuous</strong> variables, and two <strong>categorical</strong> variables — including a 2 × 3 factorial experiment with post-hoc comparisons</li>
+<li>Recognize the <strong>pitfalls</strong> of searching for heterogeneity: subgroup fishing and underpowered interactions</li>
+<li>Decompose an effect into a <strong>direct</strong> and an <strong>indirect</strong> part with mediation analysis — and state what this decomposition assumes</li>
+<li>Tell <strong>good controls from bad controls</strong>: forks, pipes, and colliders</li>
+<li>Plan moderation and mediation questions for your <strong>group project</strong></li>
+</ul>
+<p>Session 7 covers <a href="#sec-mech-motivation" class="quarto-xref"><span>Section 6.1</span></a> to <a href="#sec-mech-mediation" class="quarto-xref"><span>Section 6.7</span></a> and <a href="#sec-mech-project" class="quarto-xref"><span>Section 6.9</span></a>; <a href="#sec-mech-cont-cont" class="quarto-xref"><span>Section 6.4</span></a> and <a href="#sec-mech-dags" class="quarto-xref"><span>Section 6.8</span></a> are reading for the chapter’s full picture.</p>
+<section id="sec-mech-motivation" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="sec-mech-motivation"><span class="header-section-number">6.1</span> Motivation: the average effect hides the interesting part</h2>
+<p>After the first A/B test (<a href="04-experiments.html" class="quarto-xref"><span>Chapter 4</span></a>), the product team ran a second, larger Smart Mix experiment: 1200 users, randomly assigned, and this time with information about each user — their plan (free or Premium), their listening before the experiment, their tenure and device — and one more variable: the number of <strong>new artists</strong> each user discovered during the four weeks. The team had a hypothesis about <em>why</em> Smart Mix works: it exposes users to music they would not have found themselves.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show how the data are loaded</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>wave2 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/wu-rds/MA2026/main/data/smartmix_wave2.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="tbl-wave2-vars" class="striped quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-wave2-vars-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.1: The second Smart Mix experiment (simulated)
+</figcaption>
+<div aria-describedby="tbl-wave2-vars-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>smart_mix</code></td>
+<td>1 if the user was assigned to Smart Mix (randomized), 0 for control</td>
+</tr>
+<tr class="even">
+<td><code>hours</code></td>
+<td>Listening hours in the four weeks of the experiment</td>
+</tr>
+<tr class="odd">
+<td><code>premium</code></td>
+<td>1 for Premium subscribers, 0 for free users</td>
+</tr>
+<tr class="even">
+<td><code>prior_hours</code></td>
+<td>Listening hours in the month before the experiment</td>
+</tr>
+<tr class="odd">
+<td><code>tenure</code>, <code>device</code></td>
+<td>Months since sign-up; main device</td>
+</tr>
+<tr class="even">
+<td><code>new_artists</code></td>
+<td>Number of new artists the user listened to during the experiment (the proposed mediator)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>The average effect is clear: Smart Mix users listened 3.7 hours more (95% CI 3.1 to 4.3), estimated with the covariates as controls — which, in a randomized experiment, is not needed for unbiasedness but tightens the confidence interval. Now the product team’s two questions:</p>
+<ol type="1">
+<li><strong>For whom?</strong> Smart Mix was meant to help users find music. Does it help free users, who have fewer features, more than Premium users? Does it help light listeners more than heavy listeners, who already know what they like?</li>
+<li><strong>Why?</strong> If Smart Mix works by making users discover new artists, the team can improve it by improving discovery. If it works for another reason, that effort is wasted.</li>
+</ol>
+<p>The first question is answered by <strong>moderation</strong>: the effect of Smart Mix <em>depends on</em> another variable (the moderator). The second by <strong>mediation</strong>: the effect of Smart Mix <em>runs through</em> another variable (the mediator). The distinction matters, because the two are easy to confuse: a moderator changes <em>how large</em> the effect is; a mediator is <em>part of the path</em> from cause to outcome.</p>
+</section>
+<section id="sec-mech-interactions" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="sec-mech-interactions"><span class="header-section-number">6.2</span> Interactions and marginal effects</h2>
+<section id="what-an-interaction-term-does" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="what-an-interaction-term-does"><span class="header-section-number">6.2.1</span> What an interaction term does</h3>
+<p>In every regression so far, the effect of a variable was the same for everybody: one coefficient, one slope. An <strong>interaction term</strong> lets the effect of one variable depend on another. The model</p>
+<p><span class="math display">\[
+y = \beta_0 + \beta_1 x + \beta_2 z + \beta_3 \, (x \times z) + \varepsilon
+\]</span></p>
+<p>contains the product of <span class="math inline">\(x\)</span> and <span class="math inline">\(z\)</span> as a third predictor. The <strong>marginal effect</strong> of <span class="math inline">\(x\)</span> — how much <span class="math inline">\(y\)</span> changes when <span class="math inline">\(x\)</span> increases by one unit — is no longer <span class="math inline">\(\beta_1\)</span> alone:</p>
+<p><span class="math display">\[
+\frac{\partial y}{\partial x} = \beta_1 + \beta_3 z
+\]</span></p>
+<p>The effect of <span class="math inline">\(x\)</span> now depends on <span class="math inline">\(z\)</span>: <span class="math inline">\(\beta_1\)</span> is the effect of <span class="math inline">\(x\)</span> <strong>when <span class="math inline">\(z\)</span> is zero</strong>, and <span class="math inline">\(\beta_3\)</span> says by how much the effect changes for each unit of <span class="math inline">\(z\)</span>. Symmetrically, the effect of <span class="math inline">\(z\)</span> is <span class="math inline">\(\beta_2 + \beta_3 x\)</span>. Two rules follow:</p>
+<ul>
+<li><strong>Read <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> as conditional effects</strong>, not as “main effects” in the everyday sense: they describe the effect of one variable at the value zero of the other. If zero is not a meaningful value (listening hours of zero, say), the coefficient is not meaningful either — <a href="#sec-mech-cont-cont" class="quarto-xref"><span>Section 6.4</span></a> shows how centering fixes this.</li>
+<li><strong>Always keep both variables in the model</strong> when you include their product. Dropping <span class="math inline">\(\beta_2\)</span>, for example, forces the lines in <a href="#fig-interaction-types" class="quarto-xref">Figure&nbsp;<span>6.1</span></a> to meet at zero and makes <span class="math inline">\(\beta_3\)</span> pick up a difference in levels as if it were a difference in slopes.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-interaction-types" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-interaction-types-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06-mechanisms_files/figure-html/fig-interaction-types-1.png" class="img-fluid figure-img" width="2200">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-interaction-types-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.1: Three situations for the effect of x in two groups: no interaction (parallel lines), an interaction (different slopes), and a crossover (the effect reverses).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-interaction-types" class="quarto-xref">Figure&nbsp;<span>6.1</span></a> shows what an interaction looks like when <span class="math inline">\(z\)</span> is a group indicator: without interaction, the lines for the two groups are parallel (same slope, different level); with an interaction, the slopes differ; and in a crossover, the effect of <span class="math inline">\(x\)</span> changes sign between groups. The interaction coefficient <span class="math inline">\(\beta_3\)</span> is simply the difference between the two slopes.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Try it: the interaction plot">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Try it: the interaction plot
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Two groups, one predictor. Set the <strong>slope of x in each group</strong> and the <strong>level difference</strong>. The interaction coefficient is the difference between the slopes — watch when the lines are parallel, diverge, or cross.</p>
+<div class="unc-widget">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb2" data-startfrom="106" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 105;"><span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a><span class="co">// ---- shared helpers for all widgets of this chapter ----</span></span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;style&gt;</span></span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a><span class="vs">  .unc-widget form { width: auto !important; max-width: none !important; }</span></span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a><span class="vs">  .unc-widget form &gt; div { display: flex; flex-wrap: wrap; gap: 0.5em; }</span></span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a><span class="vs">  .unc-widget form button { background: #0f5da8 !important; color: #fff !important; border: none;</span></span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a><span class="vs">    border-radius: 6px; padding: 0.45em 0.9em; font-weight: 600; cursor: pointer;</span></span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a><span class="vs">    width: 13em; white-space: nowrap; text-align: center; margin: 0; }</span></span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a><span class="vs">  .unc-widget form button:hover { background: #0a3d6e !important; }</span></span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a><span class="vs">  .unc-stats { font-size: 0.95em; margin: 0.3em 0 0.6em 0; }</span></span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;/style&gt;`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-1" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb3" data-startfrom="120" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 119;"><span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a>viewof i1_bA <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.8</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.05</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Slope of x in group A (β₁)"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb4" data-startfrom="125" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 124;"><span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a>viewof i1_bB <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.8</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.05</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Slope of x in group B (β₁ + β₃)"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb5" data-startfrom="130" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 129;"><span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a>viewof i1_lvl <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="op">-</span><span class="dv">5</span><span class="op">,</span> <span class="dv">5</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.5</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Level difference B − A at x = 0 (β₂)"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb6" data-startfrom="136" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 135;"><span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">700</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">320</span><span class="op">,</span> <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span></span>
+<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">10</span>]}<span class="op">,</span></span>
+<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="dv">5</span><span class="op">,</span> <span class="dv">25</span>]<span class="op">,</span> <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
+<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a>  <span class="dt">color</span><span class="op">:</span> {<span class="dt">domain</span><span class="op">:</span> [<span class="st">"Group A"</span><span class="op">,</span> <span class="st">"Group B"</span>]<span class="op">,</span> <span class="dt">range</span><span class="op">:</span> [<span class="st">"#58585a"</span><span class="op">,</span> <span class="st">"#0f5da8"</span>]<span class="op">,</span> <span class="dt">legend</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
+<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>([{<span class="dt">x</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">g</span><span class="op">:</span> <span class="st">"Group A"</span>}<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">10</span> <span class="op">*</span> i1_bA<span class="op">,</span> <span class="dt">g</span><span class="op">:</span> <span class="st">"Group A"</span>}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"g"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span>})<span class="op">,</span></span>
+<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>([{<span class="dt">x</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="dv">2</span> <span class="op">+</span> i1_lvl<span class="op">,</span> <span class="dt">g</span><span class="op">:</span> <span class="st">"Group B"</span>}<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="dv">2</span> <span class="op">+</span> i1_lvl <span class="op">+</span> <span class="dv">10</span> <span class="op">*</span> i1_bB<span class="op">,</span> <span class="dt">g</span><span class="op">:</span> <span class="st">"Group B"</span>}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"g"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span>})</span>
+<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-5" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb7" data-startfrom="150" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 149;"><span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div class="unc-stats"&gt;Model: y = 2 + &lt;b&gt;</span><span class="sc">${</span>i1_bA<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt;·x + &lt;b&gt;</span><span class="sc">${</span>i1_lvl<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">1</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt;·B + &lt;b&gt;</span><span class="sc">${</span>(i1_bB <span class="op">-</span> i1_bA)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt;·(x × B) ·</span></span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a><span class="vs">interaction β₃ = slope B − slope A = &lt;b&gt;</span><span class="sc">${</span>(i1_bB <span class="op">-</span> i1_bA)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt;</span></span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a><span class="sc">${</span><span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>(i1_bB <span class="op">-</span> i1_bA) <span class="op">&lt;</span> <span class="fl">0.001</span> <span class="op">?</span> <span class="fu">html</span><span class="vs">` — &lt;b&gt;parallel lines, no interaction&lt;/b&gt;`</span> <span class="op">:</span> (i1_bA <span class="op">*</span> i1_bB <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">?</span> <span class="fu">html</span><span class="vs">` — &lt;b&gt;crossover&lt;/b&gt;: the effect of x reverses between groups`</span> <span class="op">:</span> <span class="fu">html</span><span class="vs">` — the effect of x differs between groups`</span>)<span class="sc">}</span><span class="vs">&lt;/div&gt;`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-6" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p><strong>What to look for.</strong> The level difference β₂ moves one line up or down without changing the interaction. Only a difference in slopes creates an interaction — and it is the <em>slopes</em>, not the levels, that tell you whether the effect of x depends on the group.</p>
+</div>
+</div>
+</section>
+<section id="in-r-the-asterisk" class="level3" data-number="6.2.2">
+<h3 data-number="6.2.2" class="anchored" data-anchor-id="in-r-the-asterisk"><span class="header-section-number">6.2.2</span> In R: the asterisk</h3>
+<p>In a formula, <code>x * z</code> is shorthand for <code>x + z + x:z</code> — both variables and their product. Writing <code>x:z</code> alone (without the main terms) is the mistake described above; <code>x * z</code> always does the right thing.</p>
+</section>
+</section>
+<section id="sec-mech-cont-cat" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="sec-mech-cont-cat"><span class="header-section-number">6.3</span> Continuous × categorical</h2>
+<p>This is the most common interaction in practice, and it has two faces: a <strong>treatment effect that differs between groups</strong>, and a <strong>slope that differs between groups</strong>. They are the same model.</p>
+<section id="a-treatment-effect-that-differs-between-groups" class="level3" data-number="6.3.1">
+<h3 data-number="6.3.1" class="anchored" data-anchor-id="a-treatment-effect-that-differs-between-groups"><span class="header-section-number">6.3.1</span> A treatment effect that differs between groups</h3>
+<p>Does Smart Mix help free users more than Premium users? The raw means (<a href="#fig-lines-by-plan" class="quarto-xref">Figure&nbsp;<span>6.2</span></a>) suggest so: among free users, the Smart Mix group listens about 4.6 hours more than the control group; among Premium users, about 1 hour more.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-lines-by-plan" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-lines-by-plan-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06-mechanisms_files/figure-html/fig-lines-by-plan-1.png" class="img-fluid figure-img" width="1400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lines-by-plan-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.2: Mean listening hours by experimental group and plan. Non-parallel lines are the signature of an interaction.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The regression with the interaction <code>smart_mix * premium</code> quantifies this and adds the uncertainty:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>model_plan <span class="ot">&lt;-</span> <span class="fu">lm</span>(hours <span class="sc">~</span> smart_mix <span class="sc">*</span> premium <span class="sc">+</span> prior_hours <span class="sc">+</span> tenure, <span class="at">data =</span> wave2)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_plan)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = hours ~ smart_mix * premium + prior_hours + tenure, 
+    data = wave2)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-17.8895  -3.3365   0.1643   3.4216  15.9397 
+
+Coefficients:
+                   Estimate Std. Error t value             Pr(&gt;|t|)    
+(Intercept)        1.559966   0.468824   3.327             0.000903 ***
+smart_mix          4.998744   0.378346  13.212 &lt; 0.0000000000000002 ***
+premium            2.684600   0.431296   6.224       0.000000000668 ***
+prior_hours        0.751627   0.017093  43.974 &lt; 0.0000000000000002 ***
+tenure             0.027910   0.008573   3.256             0.001163 ** 
+smart_mix:premium -3.111456   0.590046  -5.273       0.000000158998 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 5.019 on 1194 degrees of freedom
+Multiple R-squared:   0.65, Adjusted R-squared:  0.6486 
+F-statistic: 443.6 on 5 and 1194 DF,  p-value: &lt; 0.00000000000000022</code></pre>
+</div>
+</div>
+<p>Reading the coefficients with the marginal-effect rule:</p>
+<ul>
+<li><code>smart_mix</code> (5): the effect of Smart Mix <strong>for free users</strong> (premium = 0).</li>
+<li><code>smart_mix:premium</code> (-3.11): how much the effect <strong>differs</strong> for Premium users. Its <em>p</em>-value tests whether the two effects differ — this is the test of heterogeneity.</li>
+<li>The effect for Premium users is the sum: 5.00 + (-3.11) = 1.89 hours.</li>
+<li><code>premium</code> (2.68): the difference between Premium and free users <strong>in the control group</strong> (smart_mix = 0) — not an overall Premium effect.</li>
+</ul>
+<p><a href="#fig-effect-by-plan" class="quarto-xref">Figure&nbsp;<span>6.3</span></a> shows both effects with their confidence intervals. The confidence interval of the Premium effect is not in the output; it has to be computed from the coefficients and their covariance (<a href="#sec-mech-emmeans" class="quarto-xref"><span>Section 6.5.4</span></a> does this for you). Smart Mix helps free users a lot and Premium users a little — a finding the product team can act on: the feature is worth promoting to free users first.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-effect-by-plan" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-effect-by-plan-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06-mechanisms_files/figure-html/fig-effect-by-plan-1.png" class="img-fluid figure-img" width="1400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-effect-by-plan-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.3: The effect of Smart Mix for free and for Premium users, from the model with the interaction.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="a-slope-that-differs-between-groups" class="level3" data-number="6.3.2">
+<h3 data-number="6.3.2" class="anchored" data-anchor-id="a-slope-that-differs-between-groups"><span class="header-section-number">6.3.2</span> A slope that differs between groups</h3>
+<p>The same model structure answers a different-looking question. In the promotion campaigns of <a href="05-observational-data.html" class="quarto-xref"><span>Chapter 5</span></a> (a second year of campaigns, <code>promo</code>), does the <strong>elasticity</strong> of streams with respect to spend differ between genres? Here the continuous variable is <code>log(spend)</code> and the groups are genres:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show how the data are loaded</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>promo <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/wu-rds/MA2026/main/data/promo_campaigns.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">genre =</span> <span class="fu">factor</span>(genre, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Pop"</span>, <span class="st">"HipHop/Rap"</span>, <span class="st">"Rock"</span>, <span class="st">"Electro/Dance"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>model_genre <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(streams) <span class="sc">~</span> <span class="fu">log</span>(spend) <span class="sc">*</span> genre <span class="sc">+</span> <span class="fu">log</span>(followers) <span class="sc">+</span> placements, <span class="at">data =</span> promo)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(model_genre))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                  Estimate Std. Error      t value
+(Intercept)                   -3.647668844 0.32117112 -11.35739991
+log(spend)                     0.205772946 0.03334596   6.17085086
+genreHipHop/Rap               -2.057894514 0.42998158  -4.78600625
+genreRock                      0.355791125 0.65436322   0.54372115
+genreElectro/Dance             0.021026229 0.61563571   0.03415369
+log(followers)                 0.506830322 0.01514894  33.45648675
+placements                     0.121775943 0.01066646  11.41671676
+log(spend):genreHipHop/Rap     0.267960015 0.05175421   5.17754995
+log(spend):genreRock          -0.052608661 0.07862671  -0.66909399
+log(spend):genreElectro/Dance  0.005161224 0.07566013   0.06821591
+                                                                                                                                                                       Pr(&gt;|t|)
+(Intercept)                   0.00000000000000000000000000358201308288310146383380625467800300419772342791194325119273694274155388911351494130030914675444364547729492187500000
+log(spend)                    0.00000000126280758038801830656692203779445024536265407277824124321341514587402343750000000000000000000000000000000000000000000000000000000000000
+genreHipHop/Rap               0.00000215301710262749552136397890311769742766045965254306793212890625000000000000000000000000000000000000000000000000000000000000000000000000000
+genreRock                     0.58683876191453632209515944850863888859748840332031250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+genreElectro/Dance            0.97276614852139431377509026788175106048583984375000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+log(followers)                0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000211392
+placements                    0.00000000000000000000000000205029825459686382176387270835718766530759737002135843662583090333231719114975843964998603041749447584152221679687500
+log(spend):genreHipHop/Rap    0.00000030882179463203912864237505112030568454883905360475182533264160156250000000000000000000000000000000000000000000000000000000000000000000000
+log(spend):genreRock          0.50369724820406469589784137497190386056900024414062500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+log(spend):genreElectro/Dance 0.94563687411112784531042052549310028553009033203125000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</code></pre>
+</div>
+</div>
+<p><code>log(spend)</code> (0.21) is the spend elasticity <strong>for Pop</strong>, the reference genre; <code>log(spend):genreHipHop/Rap</code> (0.27) says that the elasticity for HipHop/Rap is higher by that amount — 0.47 in total (<a href="#fig-elasticity-by-genre" class="quarto-xref">Figure&nbsp;<span>6.4</span></a>). For Rock and Electro/Dance, the interaction terms are small and not significant: no evidence that their elasticities differ from Pop’s. The genre main effects (<code>genreHipHop/Rap</code> etc.) are the level differences at <code>log(spend)</code> = 0, i.e., at a spend of 1 euro — a reminder that main effects in an interaction model refer to the zero of the other variable.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-elasticity-by-genre" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-elasticity-by-genre-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06-mechanisms_files/figure-html/fig-elasticity-by-genre-1.png" class="img-fluid figure-img" width="1400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-elasticity-by-genre-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.4: Different slopes for different genres: the spend elasticity of Pop and HipHop/Rap campaigns.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="moderation-by-a-continuous-variable" class="level3" data-number="6.3.3">
+<h3 data-number="6.3.3" class="anchored" data-anchor-id="moderation-by-a-continuous-variable"><span class="header-section-number">6.3.3</span> Moderation by a continuous variable</h3>
+<p>Does the effect of Smart Mix depend on how much a user listened <em>before</em>? Now the moderator is continuous, and the interaction <code>smart_mix * prior_hours</code> lets the Smart Mix effect change by a constant amount per hour of prior listening:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>model_prior <span class="ot">&lt;-</span> <span class="fu">lm</span>(hours <span class="sc">~</span> smart_mix <span class="sc">*</span> prior_hours <span class="sc">+</span> premium <span class="sc">+</span> tenure, <span class="at">data =</span> wave2)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(model_prior))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                         Estimate  Std. Error   t value
+(Intercept)            1.44631963 0.531792492  2.719707
+smart_mix              5.39147433 0.660398804  8.163967
+prior_hours            0.79748767 0.023164977 34.426439
+premium                1.04070340 0.300601447  3.462070
+tenure                 0.02724151 0.008642342  3.152098
+smart_mix:prior_hours -0.09642474 0.034173340 -2.821636
+                                                                                                                                                                                                           Pr(&gt;|t|)
+(Intercept)           0.0066287685909625507565956503697179869050160050392150878906250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+smart_mix             0.0000000000000008166569366448662006087569549415805648670752458703758769331670919200405478477478027343750000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+prior_hours           0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005738765
+premium               0.0005549924124249182473544994564917942625470459461212158203125000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+tenure                0.0016613678720807131643233400808412625337950885295867919921875000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+smart_mix:prior_hours 0.0048571176991110825982289611602027434855699539184570312500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</code></pre>
+</div>
+</div>
+<p>The marginal effect of Smart Mix is 5.39 + (-0.096) × prior hours: about 4.4 hours for a user who listened 10 hours before, and 2.5 hours for one who listened 30 (<a href="#fig-marginal-prior" class="quarto-xref">Figure&nbsp;<span>6.5</span></a>). The interaction is significant: Smart Mix helps light listeners more. Note again that <code>smart_mix</code> alone (5.39) is the effect for a user with <em>zero</em> prior listening — a user who hardly exists in the data. With a continuous moderator, always report the effect at a few meaningful values (e.g., the 10th, 50th, and 90th percentiles) or as a curve.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-marginal-prior" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-marginal-prior-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06-mechanisms_files/figure-html/fig-marginal-prior-1.png" class="img-fluid figure-img" width="1400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-marginal-prior-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.5: The effect of Smart Mix as a function of prior listening, with its 95% confidence band. The rug shows where the users are.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: confidence intervals for marginal effects">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Under the hood: confidence intervals for marginal effects
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A marginal effect such as <span class="math inline">\(\beta_1 + \beta_3 z\)</span> is a combination of two estimated coefficients, so its standard error depends on both their standard errors <em>and</em> their covariance: <span class="math inline">\(\text{SE} = \sqrt{V_{11} + z^2 V_{33} + 2 z V_{13}}\)</span>, where <span class="math inline">\(V\)</span> is the covariance matrix of the coefficients, <code>vcov(model)</code>. This is what <a href="#fig-marginal-prior" class="quarto-xref">Figure&nbsp;<span>6.5</span></a> and <a href="#fig-effect-by-plan" class="quarto-xref">Figure&nbsp;<span>6.3</span></a> compute. In practice, packages do it for you: <code>emmeans::emtrends()</code> for slopes by group, <code>emmeans::emmeans()</code> for group means, and the <code>interactions</code> package for plots of marginal effects.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Your turn (5 min)">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Contents follow soon
+<span class="screen-reader-only">Tip</span>Your turn (5 min)
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This chapter accompanies session 7 (<em>Mechanisms &amp; heterogeneity</em>). Planned contents:</p>
+<p>Fit the interaction of Smart Mix with <strong>device</strong>: <code>lm(hours ~ smart_mix * device + prior_hours + premium + tenure, data = wave2)</code>. For which device is the effect of Smart Mix largest? Compute the effect for each device from the coefficients, and check whether the differences are significant.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-mech-cont-cont" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="sec-mech-cont-cont"><span class="header-section-number">6.4</span> Continuous × continuous</h2>
+<p>When both interacting variables are continuous, the model is the same, but the interpretation needs more care. In the campaign data, is the spend elasticity larger for artists with a bigger follower base — do promotion and reach reinforce each other?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>model_cc <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(streams) <span class="sc">~</span> <span class="fu">log</span>(spend) <span class="sc">*</span> <span class="fu">log</span>(followers) <span class="sc">+</span> placements <span class="sc">+</span> genre, <span class="at">data =</span> promo)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(model_cc))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                             Estimate Std. Error   t value
+(Intercept)                5.40990665 1.50566106  3.593044
+log(spend)                -0.89607581 0.18284271 -4.900801
+log(followers)            -0.42217608 0.14263474 -2.959840
+placements                 0.12058049 0.01054450 11.435397
+genreHipHop/Rap            0.16536987 0.04389582  3.767326
+genreRock                 -0.09564274 0.05887528 -1.624497
+genreElectro/Dance         0.06549257 0.05803210  1.128558
+log(spend):log(followers)  0.11309225 0.01732371  6.528176
+                                                     Pr(&gt;|t|)
+(Intercept)               0.000354025531956416686808070126702
+log(spend)                0.000001233894753282450418172206189
+log(followers)            0.003201127984222719609352925118628
+placements                0.000000000000000000000000001686893
+genreHipHop/Rap           0.000181505534982658180793643754036
+genreRock                 0.104801967638938675619897367141675
+genreElectro/Dance        0.259541626935444746937520221763407
+log(spend):log(followers) 0.000000000143279031732028409283104</code></pre>
+</div>
+</div>
+<p>The interaction (0.113) is clearly positive: the spend elasticity grows with the follower base. But the “main effects” look absurd — <code>log(spend)</code> is -0.9, a <em>negative</em> elasticity. The marginal-effect rule explains why: <code>log(spend)</code> is the elasticity for an artist with <code>log(followers)</code> = 0, i.e., with one follower. Nobody in the data is anywhere near that.</p>
+<section id="centering" class="level3" data-number="6.4.1">
+<h3 data-number="6.4.1" class="anchored" data-anchor-id="centering"><span class="header-section-number">6.4.1</span> Centering</h3>
+<p>The fix is to <strong>center</strong> the interacting variables at their means before forming the product. The interaction coefficient does not change; the main effects become the marginal effects <em>at the mean</em> of the other variable:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>promo_c <span class="ot">&lt;-</span> promo <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">log_spend_c =</span> <span class="fu">log</span>(spend) <span class="sc">-</span> <span class="fu">mean</span>(<span class="fu">log</span>(spend)),</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">log_fol_c   =</span> <span class="fu">log</span>(followers) <span class="sc">-</span> <span class="fu">mean</span>(<span class="fu">log</span>(followers)))</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>model_cc_centered <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(streams) <span class="sc">~</span> log_spend_c <span class="sc">*</span> log_fol_c <span class="sc">+</span> placements <span class="sc">+</span> genre, <span class="at">data =</span> promo_c)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(model_cc_centered))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                         Estimate Std. Error   t value
+(Intercept)            3.41055167 0.04400705 77.500114
+log_spend_c            0.29930805 0.02247994 13.314451
+log_fol_c              0.50847354 0.01501253 33.869939
+placements             0.12058049 0.01054450 11.435397
+genreHipHop/Rap        0.16536987 0.04389582  3.767326
+genreRock             -0.09564274 0.05887528 -1.624497
+genreElectro/Dance     0.06549257 0.05803210  1.128558
+log_spend_c:log_fol_c  0.11309225 0.01732371  6.528176
+                                                                                                                                                                                                                                                                                                                                              Pr(&gt;|t|)
+(Intercept)           0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003907536
+log_spend_c           0.000000000000000000000000000000000014422411564425081910323696008709681776836389567924618846436546174803427872828427930710693850857584408231559791602194309234619140625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+log_fol_c             0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011785656468468127109776864478768738001505326276239796052506911411522091886713653224837454761165194047250356887773668204281583581275006798903282971753162495791459508146458494343662
+placements            0.000000000000000000000000001686893388226794955146021575043452206843532075322520050954901154824451038095889376933200765051878988742828369140625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+genreHipHop/Rap       0.000181505534982679160105681348547079778654733672738075256347656250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+genreRock             0.104801967638940451976736767392139881849288940429687500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+genreElectro/Dance    0.259541626935446800850115778303006663918495178222656250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+log_spend_c:log_fol_c 0.000000000143279031732022515621239286611615388472573684452981979120522737503051757812500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</code></pre>
+</div>
+</div>
+<p>Now <code>log_spend_c</code> (0.3) is the spend elasticity for an artist with an average (log) follower count, and the interaction says that it rises by 0.113 for each unit of log followers — that is, each time the follower base grows by a factor of about 2.7. <a href="#fig-marginal-spend-followers" class="quarto-xref">Figure&nbsp;<span>6.6</span></a> plots the marginal effect across the follower distribution: for an artist at the 10th percentile, promotion barely pays; at the 90th, the elasticity is about 0.49.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-marginal-spend-followers" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-marginal-spend-followers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06-mechanisms_files/figure-html/fig-marginal-spend-followers-1.png" class="img-fluid figure-img" width="1400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-marginal-spend-followers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.6: The spend elasticity as a function of the artist’s follower base, with its 95% confidence band.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Two practical notes. First, centering is cosmetic for the interaction and the model’s fit (predictions are identical), but essential for <em>reading</em> the main effects. Second, with two continuous variables, a plot of the marginal effect — or predicted values at a few combinations — communicates far better than the coefficient table.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: centering, standardizing, and the interaction term">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Under the hood: centering, standardizing, and the interaction term
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Centering subtracts the mean; standardizing additionally divides by the standard deviation. Either changes the main effects (now interpreted at the mean) and the intercept, but not the interaction coefficient (for centering) or the model fit. An old recommendation was that centering reduces multicollinearity between <span class="math inline">\(x\)</span>, <span class="math inline">\(z\)</span>, and <span class="math inline">\(x \times z\)</span>. It does lower the correlation between the terms, but it does not change the standard error of the interaction or any marginal effect — the gain is interpretability, not precision.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-mech-cat-cat" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="sec-mech-cat-cat"><span class="header-section-number">6.5</span> Categorical × categorical: a 2 × 3 experiment</h2>
+<section id="the-design" class="level3" data-number="6.5.1">
+<h3 data-number="6.5.1" class="anchored" data-anchor-id="the-design"><span class="header-section-number">6.5.1</span> The design</h3>
+<p>Interactions between two categorical variables are the natural analysis of <strong>factorial experiments</strong>, in which two treatments are manipulated at once. The streaming service’s marketing team wanted to know whether ads designed with AI are judged as creative as ads designed by humans — and whether it matters if people <em>know</em> who made them. 360 respondents each saw one ad for the service and rated its creativity (0–100). The design has two factors: the <strong>source</strong> of the design (made by a human, by AI, or by a human with AI) and the <strong>disclosure</strong> of the source (revealed to the respondent or not). Each of the 2 × 3 = 6 combinations — the <strong>cells</strong> — had 60 respondents, assigned at random.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show how the data are loaded</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ads <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://raw.githubusercontent.com/wu-rds/MA2026/main/data/ad_designs.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source =</span> <span class="fu">factor</span>(source, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Human"</span>, <span class="st">"AI"</span>, <span class="st">"Human + AI"</span>)),</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">disclosure =</span> <span class="fu">factor</span>(disclosure, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Revealed"</span>, <span class="st">"Not revealed"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>The cell means tell the story (<a href="#fig-ads-cells" class="quarto-xref">Figure&nbsp;<span>6.7</span></a>): when the source is revealed, human designs are rated clearly more creative than AI or hybrid designs. When it is not revealed, the AI and hybrid designs are rated <em>as creative</em> as the human ones — in fact slightly higher. The effect of the source depends on disclosure: a textbook interaction, with crossing lines.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ads <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(source, disclosure) <span class="sc">|&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">mean_creativity =</span> <span class="fu">mean</span>(creativity), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  source     disclosure       n mean_creativity
+  &lt;fct&gt;      &lt;fct&gt;        &lt;int&gt;           &lt;dbl&gt;
+1 Human      Revealed        60            61.8
+2 Human      Not revealed    60            52.1
+3 AI         Revealed        60            48.3
+4 AI         Not revealed    60            60.8
+5 Human + AI Revealed        60            43.6
+6 Human + AI Not revealed    60            62.0</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-ads-cells" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ads-cells-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06-mechanisms_files/figure-html/fig-ads-cells-1.png" class="img-fluid figure-img" width="1400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ads-cells-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.7: Mean creativity ratings in the six cells of the 2 × 3 design, with 95% confidence intervals.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="the-regression-and-its-coefficients" class="level3" data-number="6.5.2">
+<h3 data-number="6.5.2" class="anchored" data-anchor-id="the-regression-and-its-coefficients"><span class="header-section-number">6.5.2</span> The regression and its coefficients</h3>
+<p>The regression with <code>source * disclosure</code> reproduces the six cell means with six coefficients. With the reference categories <em>Human</em> and <em>Revealed</em>, each coefficient has a precise meaning (<a href="#tbl-ads-coefs" class="quarto-xref">Table&nbsp;<span>6.2</span></a>):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>model_ads <span class="ot">&lt;-</span> <span class="fu">lm</span>(creativity <span class="sc">~</span> source <span class="sc">*</span> disclosure, <span class="at">data =</span> ads)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(model_ads))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                          Estimate Std. Error   t value
+(Intercept)                              61.800000   1.854162 33.330414
+sourceAI                                -13.533333   2.622182 -5.161097
+sourceHuman + AI                        -18.250000   2.622182 -6.959854
+disclosureNot revealed                   -9.666667   2.622182 -3.686498
+sourceAI:disclosureNot revealed          22.233333   3.708325  5.995519
+sourceHuman + AI:disclosureNot revealed  28.150000   3.708325  7.591029
+                                                                                                                                                       Pr(&gt;|t|)
+(Intercept)                             0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003247209
+sourceAI                                0.000000410074234012266755947887647559824131349159870296716690063476562500000000000000000000000000000000000000000000000
+sourceHuman + AI                        0.000000000016593599536902425047577611730897158455466655624377381172962486743927001953125000000000000000000000000000000
+disclosureNot revealed                  0.000262993370024933864614880008048203308135271072387695312500000000000000000000000000000000000000000000000000000000000
+sourceAI:disclosureNot revealed         0.000000005003354566588202143423256976553781250061092578107491135597229003906250000000000000000000000000000000000000000
+sourceHuman + AI:disclosureNot revealed 0.000000000000284375620325619215872914996656579878408967892999825721744855400174856185913085937500000000000000000000000</code></pre>
+</div>
+</div>
+<div id="tbl-ads-coefs" class="striped quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ads-coefs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6.2: Reading the coefficients of the 2 × 3 model
+</figcaption>
+<div aria-describedby="tbl-ads-coefs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-striped caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Coefficient</th>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>(Intercept)</code></td>
+<td>61.8</td>
+<td>Mean rating of <strong>human</strong> designs when the source is <strong>revealed</strong> (the reference cell)</td>
+</tr>
+<tr class="even">
+<td><code>sourceAI</code></td>
+<td>-13.5</td>
+<td>AI designs, <em>when revealed</em>, are rated this much lower than human designs</td>
+</tr>
+<tr class="odd">
+<td><code>sourceHuman + AI</code></td>
+<td>-18.2</td>
+<td>Hybrid designs, <em>when revealed</em>, are rated this much lower than human designs</td>
+</tr>
+<tr class="even">
+<td><code>disclosureNot revealed</code></td>
+<td>-9.7</td>
+<td><em>Human</em> designs are rated this much lower when the source is not revealed</td>
+</tr>
+<tr class="odd">
+<td><code>sourceAI:disclosureNot revealed</code></td>
+<td>22.2</td>
+<td>AI designs gain this much <em>extra</em> when the source is not revealed, beyond what the two main effects would predict</td>
+</tr>
+<tr class="even">
+<td><code>sourceHuman + AI:disclosureNot revealed</code></td>
+<td>28.1</td>
+<td>The same for hybrid designs</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Any cell mean can be rebuilt from these: the mean for AI designs with the source not revealed is 61.8 + (-13.5) + (-9.7) + 22.2 = 60.8. The interaction coefficients are large and significant: disclosure changes the ranking of the designs.</p>
+</section>
+<section id="is-there-an-interaction-at-all-the-anova-table" class="level3" data-number="6.5.3">
+<h3 data-number="6.5.3" class="anchored" data-anchor-id="is-there-an-interaction-at-all-the-anova-table"><span class="header-section-number">6.5.3</span> Is there an interaction at all? The ANOVA table</h3>
+<p>With several categories per factor, the question “is there an interaction?” involves several coefficients at once (here two). The ANOVA table tests each factor and the interaction as a whole, the same logic as the ANOVA in <a href="04-experiments.html" class="quarto-xref"><span>Chapter 4</span></a>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model_ads)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: creativity
+                   Df Sum Sq Mean Sq F value             Pr(&gt;F)    
+source              2   1055   527.3  2.5561            0.07904 .  
+disclosure          1   4572  4572.5 22.1669 0.0000035934940020 ***
+source:disclosure   2  13218  6608.8 32.0385 0.0000000000001626 ***
+Residuals         354  73021   206.3                               
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>The interaction <code>source:disclosure</code> is highly significant: the effect of the source depends on disclosure. When the interaction is significant, the <strong>main effects</strong> should not be interpreted on their own — “AI designs are rated lower on average” is true only when averaged over a condition in which they are rated higher and one in which they are rated lower.</p>
+</section>
+<section id="sec-mech-emmeans" class="level3" data-number="6.5.4">
+<h3 data-number="6.5.4" class="anchored" data-anchor-id="sec-mech-emmeans"><span class="header-section-number">6.5.4</span> Post-hoc comparisons: estimated marginal means</h3>
+<p>The interaction tells us <em>that</em> the effect of the source depends on disclosure; it does not tell us <em>which</em> cells differ. For that, we compare the cell means pairwise, with the usual correction for multiple comparisons (<a href="04-experiments.html" class="quarto-xref"><span>Chapter 4</span></a>). The <code>emmeans</code> package computes the <strong>estimated marginal means</strong> — the model’s predicted cell means with their standard errors — and the pairwise contrasts:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>emm <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(model_ads, <span class="sc">~</span> source <span class="sc">|</span> disclosure)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>emm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>disclosure = Revealed:
+ source     emmean   SE  df lower.CL upper.CL
+ Human        61.8 1.85 354     58.2     65.4
+ AI           48.3 1.85 354     44.6     51.9
+ Human + AI   43.5 1.85 354     39.9     47.2
+
+disclosure = Not revealed:
+ source     emmean   SE  df lower.CL upper.CL
+ Human        52.1 1.85 354     48.5     55.8
+ AI           60.8 1.85 354     57.2     64.5
+ Human + AI   62.0 1.85 354     58.4     65.7
+
+Confidence level used: 0.95 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(emm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>disclosure = Revealed:
+ contrast             estimate   SE  df t.ratio p.value
+ Human - AI              13.53 2.62 354   5.161  &lt;.0001
+ Human - (Human + AI)    18.25 2.62 354   6.960  &lt;.0001
+ AI - (Human + AI)        4.72 2.62 354   1.799  0.1715
+
+disclosure = Not revealed:
+ contrast             estimate   SE  df t.ratio p.value
+ Human - AI              -8.70 2.62 354  -3.318  0.0029
+ Human - (Human + AI)    -9.90 2.62 354  -3.775  0.0005
+ AI - (Human + AI)       -1.20 2.62 354  -0.458  0.8910
+
+P value adjustment: tukey method for comparing a family of 3 estimates </code></pre>
+</div>
+</div>
+<p>The output answers the question at the level a manager needs: when the source is revealed, human designs beat both AI (by about 14 points) and hybrid designs, which do not differ from each other; when the source is not revealed, the ranking flips, and the AI and hybrid designs beat the human one by about 9–10 points. The <em>p</em>-values are Tukey-adjusted for the three comparisons within each disclosure condition. This two-step logic — an overall test of the interaction, then corrected comparisons of the cells — is the same as for the one-way ANOVA, with one extra dimension.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: the ANOVA table in factorial designs, and unbalanced cells">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Under the hood: the ANOVA table in factorial designs, and unbalanced cells
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>anova()</code> on an <code>lm</code> object produces <em>sequential</em> (Type I) sums of squares: each term is tested after the terms listed before it. With equal cell sizes — a balanced design, as here — the order does not matter and all common ANOVA tables agree. With <em>unbalanced</em> cells (different numbers of respondents, typical for survey experiments with dropouts), the sequential table depends on the order of the factors; <code>car::Anova(model_ads, type = 2)</code> gives the usual order-independent tests. The regression coefficients and the <code>emmeans</code> results are not affected by this issue.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Your turn (5 min)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Your turn (5 min)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Rebuild the cell mean for <em>hybrid</em> designs with the source <em>not revealed</em> from the coefficients of <code>model_ads</code>, and check it against the table of cell means. Then: which single number in the regression output answers the question “does disclosure change the rating of hybrid designs more than it changes the rating of human designs”?</p>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-mech-pitfalls" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="sec-mech-pitfalls"><span class="header-section-number">6.6</span> The pitfalls of looking for heterogeneity</h2>
+<p>Heterogeneity is where analytics gets interesting — and where it goes wrong most easily.</p>
+<p><strong>Subgroup fishing.</strong> Any data set with a few covariates offers dozens of possible subgroups: by plan, device, tenure, age, country, prior listening, and all their combinations. Testing the effect in every subgroup is multiple testing (<a href="04-experiments.html" class="quarto-xref"><span>Chapter 4</span></a>): with 20 subgroups and no true heterogeneity at all, the chance of finding at least one “significant” subgroup effect is <span class="math inline">\(1 - 0.95^{20}\)</span> = 64% (<a href="#fig-subgroup-fishing" class="quarto-xref">Figure&nbsp;<span>6.8</span></a>). A subgroup effect found this way is far more likely to be noise than a discovery — and it will not replicate.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-subgroup-fishing" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-subgroup-fishing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06-mechanisms_files/figure-html/fig-subgroup-fishing-1.png" class="img-fluid figure-img" width="1400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-subgroup-fishing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.8: The probability of at least one ‘significant’ subgroup effect when there is no heterogeneity at all.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Try it: subgroup fishing">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Try it: subgroup fishing
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The simulation runs 200 experiments in which the treatment has the <strong>same effect for everyone</strong>. In each experiment, an analyst tests the effect separately in <em>k</em> subgroups and reports the most significant one. Set <em>k</em> and see how often the analyst “finds” heterogeneity.</p>
+<div class="unc-widget">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb30" data-startfrom="429" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 428;"><span id="cb30-429"><a href="#cb30-429" aria-hidden="true" tabindex="-1"></a>viewof f_k <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">1</span><span class="op">,</span> <span class="dv">30</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Number of subgroups examined"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-7" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb31" data-startfrom="434" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 433;"><span id="cb31-434"><a href="#cb31-434" aria-hidden="true" tabindex="-1"></a>viewof f_batch <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">button</span>(<span class="st">"Simulate 200 new experiments"</span><span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">reduce</span><span class="op">:</span> v <span class="kw">=&gt;</span> v <span class="op">+</span> <span class="dv">1</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-8" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb32" data-startfrom="440" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 439;"><span id="cb32-440"><a href="#cb32-440" aria-hidden="true" tabindex="-1"></a>f_sim <span class="op">=</span> {</span>
+<span id="cb32-441"><a href="#cb32-441" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rng <span class="op">=</span> d3<span class="op">.</span><span class="fu">randomLcg</span>(<span class="dv">300</span> <span class="op">+</span> f_batch)<span class="op">,</span> rn <span class="op">=</span> d3<span class="op">.</span><span class="at">randomNormal</span><span class="op">.</span><span class="fu">source</span>(rng)(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb32-442"><a href="#cb32-442" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> K <span class="op">=</span> <span class="dv">200</span><span class="op">,</span> n <span class="op">=</span> <span class="dv">400</span><span class="op">,</span> per <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">max</span>(<span class="dv">10</span><span class="op">,</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">floor</span>(n <span class="op">/</span> f_k))<span class="op">;</span></span>
+<span id="cb32-443"><a href="#cb32-443" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> pnorm <span class="op">=</span> x <span class="kw">=&gt;</span> { <span class="kw">const</span> t <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> <span class="fl">0.2316419</span> <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>(x))<span class="op">;</span> <span class="kw">const</span> d <span class="op">=</span> <span class="fl">0.3989422804</span> <span class="op">*</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>(<span class="op">-</span>x <span class="op">*</span> x <span class="op">/</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb32-444"><a href="#cb32-444" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> p <span class="op">=</span> d <span class="op">*</span> t <span class="op">*</span> (<span class="fl">0.319381530</span> <span class="op">+</span> t <span class="op">*</span> (<span class="op">-</span><span class="fl">0.356563782</span> <span class="op">+</span> t <span class="op">*</span> (<span class="fl">1.781477937</span> <span class="op">+</span> t <span class="op">*</span> (<span class="op">-</span><span class="fl">1.821255978</span> <span class="op">+</span> t <span class="op">*</span> <span class="fl">1.330274429</span>))))<span class="op">;</span> <span class="cf">return</span> x <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">-</span> p <span class="op">:</span> p<span class="op">;</span> }<span class="op">;</span></span>
+<span id="cb32-445"><a href="#cb32-445" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> found <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> minps <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb32-446"><a href="#cb32-446" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">let</span> e <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> e <span class="op">&lt;</span> K<span class="op">;</span> e<span class="op">++</span>) {</span>
+<span id="cb32-447"><a href="#cb32-447" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> minp <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb32-448"><a href="#cb32-448" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">let</span> g <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> g <span class="op">&lt;</span> f_k<span class="op">;</span> g<span class="op">++</span>) {</span>
+<span id="cb32-449"><a href="#cb32-449" aria-hidden="true" tabindex="-1"></a>      <span class="kw">let</span> a <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> b <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="kw">const</span> m <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">floor</span>(per <span class="op">/</span> <span class="dv">2</span>)<span class="op">;</span></span>
+<span id="cb32-450"><a href="#cb32-450" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> m<span class="op">;</span> i<span class="op">++</span>) { a <span class="op">+=</span> <span class="fu">rn</span>()<span class="op">;</span> b <span class="op">+=</span> <span class="dv">1</span> <span class="op">+</span> <span class="fu">rn</span>()<span class="op">;</span> }        <span class="co">// same true effect (+1) in every subgroup</span></span>
+<span id="cb32-451"><a href="#cb32-451" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> diff <span class="op">=</span> b <span class="op">/</span> m <span class="op">-</span> a <span class="op">/</span> m<span class="op">,</span> se <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">sqrt</span>(<span class="dv">2</span> <span class="op">/</span> m)<span class="op">;</span></span>
+<span id="cb32-452"><a href="#cb32-452" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> p <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> <span class="fu">pnorm</span>(<span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>((diff <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> se)))<span class="op">;</span>           <span class="co">// test: does this subgroup's effect differ from the overall effect?</span></span>
+<span id="cb32-453"><a href="#cb32-453" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (p <span class="op">&lt;</span> minp) minp <span class="op">=</span> p<span class="op">;</span></span>
+<span id="cb32-454"><a href="#cb32-454" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb32-455"><a href="#cb32-455" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (minp <span class="op">&lt;</span> <span class="fl">0.05</span>) found<span class="op">++;</span></span>
+<span id="cb32-456"><a href="#cb32-456" aria-hidden="true" tabindex="-1"></a>    minps<span class="op">.</span><span class="fu">push</span>(minp)<span class="op">;</span></span>
+<span id="cb32-457"><a href="#cb32-457" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb32-458"><a href="#cb32-458" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {found<span class="op">,</span> K<span class="op">,</span> per<span class="op">,</span> <span class="dt">expected</span><span class="op">:</span> <span class="dv">1</span> <span class="op">-</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">pow</span>(<span class="fl">0.95</span><span class="op">,</span> f_k)}<span class="op">;</span></span>
+<span id="cb32-459"><a href="#cb32-459" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-9" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb33" data-startfrom="464" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 463;"><span id="cb33-464"><a href="#cb33-464" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div class="unc-stats"&gt;Experiments in which at least one subgroup effect "differs significantly" from the overall effect:</span></span>
+<span id="cb33-465"><a href="#cb33-465" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;b&gt;</span><span class="sc">${</span>f_sim<span class="op">.</span><span class="at">found</span><span class="sc">}</span><span class="vs"> of </span><span class="sc">${</span>f_sim<span class="op">.</span><span class="at">K</span><span class="sc">}</span><span class="vs">&lt;/b&gt; (</span><span class="sc">${</span>(<span class="dv">100</span> <span class="op">*</span> f_sim<span class="op">.</span><span class="at">found</span> <span class="op">/</span> f_sim<span class="op">.</span><span class="at">K</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">0</span>)<span class="sc">}</span><span class="vs">%) · expected with </span><span class="sc">${</span>f_k<span class="sc">}</span><span class="vs"> independent subgroup tests: </span><span class="sc">${</span>(<span class="dv">100</span> <span class="op">*</span> f_sim<span class="op">.</span><span class="at">expected</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">0</span>)<span class="sc">}</span><span class="vs">% ·</span></span>
+<span id="cb33-466"><a href="#cb33-466" aria-hidden="true" tabindex="-1"></a><span class="sc">${</span><span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>(f_sim<span class="op">.</span><span class="at">per</span>)<span class="sc">}</span><span class="vs"> users per subgroup&lt;/div&gt;`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-10" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p><strong>What to look for.</strong> With one pre-specified subgroup, false alarms occur in about 5% of experiments. With ten subgroups, in about 40%. The analyst who reports “Smart Mix works particularly well for Android users aged 25–34” after looking at twenty subgroups is reporting noise.</p>
+</div>
+</div>
+<p><strong>Interactions need large samples.</strong> A difference <em>between</em> two effects is estimated far less precisely than an effect itself: for two groups of equal size, the standard error of the difference between their effects is twice the standard error of the overall effect, so detecting an interaction of the same size as a main effect needs about <strong>four times</strong> as many participants (<a href="#fig-power-interaction" class="quarto-xref">Figure&nbsp;<span>6.9</span></a>). Underpowered interaction tests do double damage: they miss real heterogeneity, and the heterogeneity they do find tends to be exaggerated.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-power-interaction" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-power-interaction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06-mechanisms_files/figure-html/fig-power-interaction-1.png" class="img-fluid figure-img" width="1400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-power-interaction-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.9: Stylized sample sizes: an interaction of the same size as a main effect needs about four times the sample.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>What to do instead.</strong> Decide <em>before</em> the experiment which moderators you expect, and why — and <strong>pre-register</strong> them (<a href="04-experiments.html" class="quarto-xref"><span>Chapter 4</span></a>). Test those with the interaction model of this chapter. Everything else is exploratory: report it as a hypothesis for the next experiment, not as a finding of this one. And when the interaction is not significant, say “we found no evidence that the effect differs”, not “the effect is the same for everyone” — an underpowered test cannot show that.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: power for interactions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Under the hood: power for interactions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>In a two-group experiment with <span class="math inline">\(n\)</span> users per group, the standard error of the treatment effect is about <span class="math inline">\(\sigma \sqrt{2/n}\)</span>. Splitting the sample into two equal subgroups and comparing their effects gives a standard error of <span class="math inline">\(\sigma \sqrt{2/(n/2)} \cdot \sqrt{2} = 2 \sigma \sqrt{2/n}\)</span> — twice as large. Because the required sample size grows with the square of the standard error, the interaction needs four times the sample for the same power, if it is as large as the main effect. Interactions are typically <em>smaller</em> than main effects, which makes the ratio worse. <code>power.t.test()</code> with the appropriate standard deviation, or a simulation, gives the exact numbers for a planned design.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-mech-mediation" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="sec-mech-mediation"><span class="header-section-number">6.7</span> Mediation: why does it work?</h2>
+<section id="total-direct-and-indirect-effects" class="level3" data-number="6.7.1">
+<h3 data-number="6.7.1" class="anchored" data-anchor-id="total-direct-and-indirect-effects"><span class="header-section-number">6.7.1</span> Total, direct, and indirect effects</h3>
+<p>Back to the product team’s second question. Smart Mix increases listening time — but <em>how</em>? The hypothesis: Smart Mix makes users discover new artists, and discovering new artists makes them listen more. If this is right, part of the effect of Smart Mix runs <em>through</em> discovery, and the rest does not (<a href="#fig-mediation-diagram" class="quarto-xref">Figure&nbsp;<span>6.10</span></a>):</p>
 <ul>
-<li>Moderation: when an effect differs between groups of customers — interaction effects</li>
-<li>Mediation: through which mechanism an effect works — direct and indirect effects</li>
-<li>Both in experiments and in observational data — and why mediation analysis needs assumptions even in a randomized experiment</li>
-<li>Applying moderation and mediation in your group project</li>
+<li>The <strong>indirect effect</strong> is the part that runs through the mediator: Smart Mix → new artists → hours.</li>
+<li>The <strong>direct effect</strong> is the rest: Smart Mix → hours, for any other reason (convenience, habit, curiosity).</li>
+<li>The <strong>total effect</strong> is their sum — the effect we estimated in <a href="#sec-mech-motivation" class="quarto-xref"><span>Section 6.1</span></a>.</li>
 </ul>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-mediation-diagram" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mediation-diagram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06-mechanisms_files/figure-html/fig-mediation-diagram-1.png" class="img-fluid figure-img" width="1400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mediation-diagram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.10: The mediation model: Smart Mix affects new-artist discovery (a), discovery affects listening hours (b), and Smart Mix may affect hours directly (c′).
+</figcaption>
+</figure>
 </div>
 </div>
+</div>
+</section>
+<section id="three-regressions" class="level3" data-number="6.7.2">
+<h3 data-number="6.7.2" class="anchored" data-anchor-id="three-regressions"><span class="header-section-number">6.7.2</span> Three regressions</h3>
+<p>Mediation analysis estimates the three paths with regressions. First, does Smart Mix affect the mediator (path <em>a</em>)?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>model_m <span class="ot">&lt;-</span> <span class="fu">lm</span>(new_artists <span class="sc">~</span> smart_mix <span class="sc">+</span> prior_hours <span class="sc">+</span> premium, <span class="at">data =</span> wave2)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(model_m))[<span class="st">"smart_mix"</span>, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                                                                    Estimate 
+ 3.6185327344963891249562948360107839107513427734375000000000000000000000000000000000000000000000000000000000000000000000000 
+                                                                                                                  Std. Error 
+ 0.1410836737386021444429218263394432142376899719238281250000000000000000000000000000000000000000000000000000000000000000000 
+                                                                                                                     t value 
+25.6481323359976869369347696192562580108642578125000000000000000000000000000000000000000000000000000000000000000000000000000 
+                                                                                                                    Pr(&gt;|t|) 
+ 0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000582386 </code></pre>
+</div>
+</div>
+<p>Yes: Smart Mix users discovered 3.6 more new artists. Second, does the mediator affect the outcome, holding Smart Mix constant (path <em>b</em>), and what is left of the Smart Mix effect once the mediator is in the model (the direct effect <em>c′</em>)?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>model_y <span class="ot">&lt;-</span> <span class="fu">lm</span>(hours <span class="sc">~</span> smart_mix <span class="sc">+</span> new_artists <span class="sc">+</span> prior_hours <span class="sc">+</span> premium <span class="sc">+</span> tenure, <span class="at">data =</span> wave2)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">summary</span>(model_y))[<span class="fu">c</span>(<span class="st">"smart_mix"</span>, <span class="st">"new_artists"</span>), ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Estimate Std. Error  t value            Pr(&gt;|t|)
+smart_mix   2.306265 0.35958564 6.413675 0.00000000020424508
+new_artists 0.390942 0.05917621 6.606406 0.00000000005916418</code></pre>
+</div>
+</div>
+<p>Each new artist goes with 0.39 additional listening hours (<em>b</em>), and the direct effect of Smart Mix, with discovery held constant, is 2.31 hours (<em>c′</em>) — down from the total effect of 3.72. The <strong>indirect effect</strong> is the product of the two path coefficients:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">coef</span>(model_m)[<span class="st">"smart_mix"</span>]</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(model_y)[<span class="st">"new_artists"</span>]</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>indirect <span class="ot">&lt;-</span> a <span class="sc">*</span> b</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">indirect =</span> <span class="fu">unname</span>(indirect), <span class="at">direct =</span> <span class="fu">unname</span>(<span class="fu">coef</span>(model_y)[<span class="st">"smart_mix"</span>]), <span class="at">total =</span> <span class="fu">unname</span>(indirect <span class="sc">+</span> <span class="fu">coef</span>(model_y)[<span class="st">"smart_mix"</span>]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>indirect   direct    total 
+1.414637 2.306265 3.720902 </code></pre>
+</div>
+</div>
+<p>About 1.41 of the 3.72 hours — 38% of the effect — run through the discovery of new artists; the rest is direct. For the product team, this means: discovery is an important mechanism, but not the only one, and improving the discovery feature can be expected to improve roughly a third of the effect.</p>
+</section>
+<section id="uncertainty-of-the-indirect-effect" class="level3" data-number="6.7.3">
+<h3 data-number="6.7.3" class="anchored" data-anchor-id="uncertainty-of-the-indirect-effect"><span class="header-section-number">6.7.3</span> Uncertainty of the indirect effect</h3>
+<p>The indirect effect is a product of two estimates, and its sampling distribution is not normal, so the usual formula for a standard error does not apply. The standard solution is the <strong>bootstrap</strong> (<a href="03-uncertainty.html" class="quarto-xref"><span>Chapter 3</span></a>): resample the users with replacement, re-estimate both regressions, and look at the distribution of the product:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>boot_indirect <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">2000</span>, {</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(wave2), <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  d_boot <span class="ot">&lt;-</span> wave2[idx, ]</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>(<span class="fu">lm</span>(new_artists <span class="sc">~</span> smart_mix <span class="sc">+</span> prior_hours <span class="sc">+</span> premium, <span class="at">data =</span> d_boot))[<span class="st">"smart_mix"</span>] <span class="sc">*</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coef</span>(<span class="fu">lm</span>(hours <span class="sc">~</span> smart_mix <span class="sc">+</span> new_artists <span class="sc">+</span> prior_hours <span class="sc">+</span> premium <span class="sc">+</span> tenure, <span class="at">data =</span> d_boot))[<span class="st">"new_artists"</span>]</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(boot_indirect, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     2.5%     97.5% 
+0.9860694 1.8632108 </code></pre>
+</div>
+</div>
+<p>The 95% bootstrap interval of the indirect effect excludes zero: the mediation is statistically reliable. Reporting a mediation analysis means reporting all three numbers with their uncertainty: the total effect, the direct effect, and the indirect effect with its bootstrap interval — plus the share of the effect that is mediated.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: the mediation package, and several mediators">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Under the hood: the mediation package, and several mediators
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The <code>mediation</code> package <span class="citation" data-cites="imai2010">(<a href="#ref-imai2010" role="doc-biblioref">Imai et al. 2010</a>)</span> automates the procedure: <code>mediate(model_m, model_y, treat = "smart_mix", mediator = "new_artists", boot = TRUE)</code> returns the average causal mediation effect (ACME, the indirect effect), the average direct effect (ADE), the total effect, and the proportion mediated, each with bootstrap confidence intervals — and it handles non-linear outcome models, such as logistic regression for a yes/no outcome. With several candidate mediators (discovery, playlist use, notifications), each can be examined in turn, but their indirect effects are only separable if the mediators do not affect each other — an assumption that needs an argument.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Try it: the mediation decomposition">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Try it: the mediation decomposition
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The simulation generates an experiment with a randomized treatment X, a mediator M, and an outcome Y. Set the three paths — <strong>a</strong> (X → M), <strong>b</strong> (M → Y), and the <strong>direct effect c′</strong> — and watch the total effect assemble. Then switch on an <strong>unobserved confounder</strong> of M and Y: something that makes people both discover more and listen more, independently of the treatment.</p>
+<div class="unc-widget">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb42" data-startfrom="574" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 573;"><span id="cb42-574"><a href="#cb42-574" aria-hidden="true" tabindex="-1"></a>viewof md_a <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">6</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="fl">3.6</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.2</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"a: effect of X on M (artists)"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-11" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb43" data-startfrom="579" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 578;"><span id="cb43-579"><a href="#cb43-579" aria-hidden="true" tabindex="-1"></a>viewof md_b <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="fl">0.4</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.05</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"b: effect of M on Y (hours per artist)"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-12" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb44" data-startfrom="584" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 583;"><span id="cb44-584"><a href="#cb44-584" aria-hidden="true" tabindex="-1"></a>viewof md_c <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">5</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="fl">2.3</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.1</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"c′: direct effect of X on Y (hours)"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-13" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb45" data-startfrom="589" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 588;"><span id="cb45-589"><a href="#cb45-589" aria-hidden="true" tabindex="-1"></a>viewof md_u <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">3</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.25</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Unobserved confounder of M and Y (strength)"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-14" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb46" data-startfrom="595" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 594;"><span id="cb46-595"><a href="#cb46-595" aria-hidden="true" tabindex="-1"></a>md <span class="op">=</span> {</span>
+<span id="cb46-596"><a href="#cb46-596" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rng <span class="op">=</span> d3<span class="op">.</span><span class="fu">randomLcg</span>(<span class="dv">42</span>)<span class="op">,</span> rn <span class="op">=</span> d3<span class="op">.</span><span class="at">randomNormal</span><span class="op">.</span><span class="fu">source</span>(rng)(<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb46-597"><a href="#cb46-597" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> n <span class="op">=</span> <span class="dv">2000</span><span class="op">,</span> rows <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb46-598"><a href="#cb46-598" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> n<span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb46-599"><a href="#cb46-599" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> x <span class="op">=</span> <span class="fu">rng</span>() <span class="op">&lt;</span> <span class="fl">0.5</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">0</span><span class="op">,</span> u <span class="op">=</span> <span class="fu">rn</span>()<span class="op">;</span></span>
+<span id="cb46-600"><a href="#cb46-600" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> m <span class="op">=</span> <span class="dv">3</span> <span class="op">+</span> md_a <span class="op">*</span> x <span class="op">+</span> md_u <span class="op">*</span> <span class="fl">1.5</span> <span class="op">*</span> u <span class="op">+</span> <span class="fl">2.5</span> <span class="op">*</span> <span class="fu">rn</span>()<span class="op">;</span></span>
+<span id="cb46-601"><a href="#cb46-601" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> y <span class="op">=</span> <span class="dv">15</span> <span class="op">+</span> md_c <span class="op">*</span> x <span class="op">+</span> md_b <span class="op">*</span> m <span class="op">+</span> md_u <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> u <span class="op">+</span> <span class="dv">5</span> <span class="op">*</span> <span class="fu">rn</span>()<span class="op">;</span></span>
+<span id="cb46-602"><a href="#cb46-602" aria-hidden="true" tabindex="-1"></a>    rows<span class="op">.</span><span class="fu">push</span>({x<span class="op">,</span> m<span class="op">,</span> y})<span class="op">;</span></span>
+<span id="cb46-603"><a href="#cb46-603" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb46-604"><a href="#cb46-604" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> ols <span class="op">=</span> (X<span class="op">,</span> y) <span class="kw">=&gt;</span> {</span>
+<span id="cb46-605"><a href="#cb46-605" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> p <span class="op">=</span> X[<span class="dv">0</span>]<span class="op">.</span><span class="at">length</span><span class="op">;</span> <span class="kw">const</span> A <span class="op">=</span> <span class="bu">Array</span><span class="op">.</span><span class="fu">from</span>({<span class="dt">length</span><span class="op">:</span> p}<span class="op">,</span> () <span class="kw">=&gt;</span> <span class="bu">Array</span>(p)<span class="op">.</span><span class="fu">fill</span>(<span class="dv">0</span>))<span class="op">;</span> <span class="kw">const</span> bb <span class="op">=</span> <span class="bu">Array</span>(p)<span class="op">.</span><span class="fu">fill</span>(<span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb46-606"><a href="#cb46-606" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> X<span class="op">.</span><span class="at">length</span><span class="op">;</span> i<span class="op">++</span>) <span class="cf">for</span> (<span class="kw">let</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> p<span class="op">;</span> j<span class="op">++</span>) { bb[j] <span class="op">+=</span> X[i][j] <span class="op">*</span> y[i]<span class="op">;</span> <span class="cf">for</span> (<span class="kw">let</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> p<span class="op">;</span> k<span class="op">++</span>) A[j][k] <span class="op">+=</span> X[i][j] <span class="op">*</span> X[i][k]<span class="op">;</span> }</span>
+<span id="cb46-607"><a href="#cb46-607" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">let</span> c <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> c <span class="op">&lt;</span> p<span class="op">;</span> c<span class="op">++</span>) { <span class="kw">const</span> piv <span class="op">=</span> A[c][c]<span class="op">;</span> <span class="cf">for</span> (<span class="kw">let</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> p<span class="op">;</span> k<span class="op">++</span>) A[c][k] <span class="op">/=</span> piv<span class="op">;</span> bb[c] <span class="op">/=</span> piv<span class="op">;</span></span>
+<span id="cb46-608"><a href="#cb46-608" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (<span class="kw">let</span> r <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> r <span class="op">&lt;</span> p<span class="op">;</span> r<span class="op">++</span>) <span class="cf">if</span> (r <span class="op">!==</span> c) { <span class="kw">const</span> f <span class="op">=</span> A[r][c]<span class="op">;</span> <span class="cf">for</span> (<span class="kw">let</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> p<span class="op">;</span> k<span class="op">++</span>) A[r][k] <span class="op">-=</span> f <span class="op">*</span> A[c][k]<span class="op">;</span> bb[r] <span class="op">-=</span> f <span class="op">*</span> bb[c]<span class="op">;</span> } }</span>
+<span id="cb46-609"><a href="#cb46-609" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> bb<span class="op">;</span></span>
+<span id="cb46-610"><a href="#cb46-610" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb46-611"><a href="#cb46-611" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> a_est <span class="op">=</span> <span class="fu">ols</span>(rows<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> [<span class="dv">1</span><span class="op">,</span> d<span class="op">.</span><span class="at">x</span>])<span class="op">,</span> rows<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">m</span>))[<span class="dv">1</span>]<span class="op">;</span></span>
+<span id="cb46-612"><a href="#cb46-612" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> y_est <span class="op">=</span> <span class="fu">ols</span>(rows<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> [<span class="dv">1</span><span class="op">,</span> d<span class="op">.</span><span class="at">x</span><span class="op">,</span> d<span class="op">.</span><span class="at">m</span>])<span class="op">,</span> rows<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">y</span>))<span class="op">;</span></span>
+<span id="cb46-613"><a href="#cb46-613" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> tot_est <span class="op">=</span> <span class="fu">ols</span>(rows<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> [<span class="dv">1</span><span class="op">,</span> d<span class="op">.</span><span class="at">x</span>])<span class="op">,</span> rows<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">y</span>))[<span class="dv">1</span>]<span class="op">;</span></span>
+<span id="cb46-614"><a href="#cb46-614" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {<span class="dt">a</span><span class="op">:</span> a_est<span class="op">,</span> <span class="dt">b</span><span class="op">:</span> y_est[<span class="dv">2</span>]<span class="op">,</span> <span class="dt">c</span><span class="op">:</span> y_est[<span class="dv">1</span>]<span class="op">,</span> <span class="dt">indirect</span><span class="op">:</span> a_est <span class="op">*</span> y_est[<span class="dv">2</span>]<span class="op">,</span> <span class="dt">total</span><span class="op">:</span> tot_est<span class="op">,</span></span>
+<span id="cb46-615"><a href="#cb46-615" aria-hidden="true" tabindex="-1"></a>          <span class="dt">true_indirect</span><span class="op">:</span> md_a <span class="op">*</span> md_b<span class="op">,</span> <span class="dt">true_total</span><span class="op">:</span> md_c <span class="op">+</span> md_a <span class="op">*</span> md_b}<span class="op">;</span></span>
+<span id="cb46-616"><a href="#cb46-616" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-15" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb47" data-startfrom="621" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 620;"><span id="cb47-621"><a href="#cb47-621" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb47-622"><a href="#cb47-622" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">700</span><span class="op">,</span> <span class="dt">height</span><span class="op">:</span> <span class="dv">220</span><span class="op">,</span> <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">160</span><span class="op">,</span></span>
+<span id="cb47-623"><a href="#cb47-623" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Hours"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="dv">1</span><span class="op">,</span> <span class="dv">9</span>]<span class="op">,</span> <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
+<span id="cb47-624"><a href="#cb47-624" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="kw">null</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="st">"Total effect"</span><span class="op">,</span> <span class="st">"Indirect (through M)"</span><span class="op">,</span> <span class="st">"Direct (c′)"</span>]}<span class="op">,</span></span>
+<span id="cb47-625"><a href="#cb47-625" aria-hidden="true" tabindex="-1"></a>  <span class="dt">color</span><span class="op">:</span> {<span class="dt">domain</span><span class="op">:</span> [<span class="st">"Estimated"</span><span class="op">,</span> <span class="st">"True"</span>]<span class="op">,</span> <span class="dt">range</span><span class="op">:</span> [<span class="st">"#0f5da8"</span><span class="op">,</span> <span class="st">"#b03a2e"</span>]<span class="op">,</span> <span class="dt">legend</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
+<span id="cb47-626"><a href="#cb47-626" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb47-627"><a href="#cb47-627" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">barX</span>([{<span class="dt">y</span><span class="op">:</span> <span class="st">"Total effect"</span><span class="op">,</span> <span class="dt">x</span><span class="op">:</span> md<span class="op">.</span><span class="at">total</span>}<span class="op">,</span> {<span class="dt">y</span><span class="op">:</span> <span class="st">"Indirect (through M)"</span><span class="op">,</span> <span class="dt">x</span><span class="op">:</span> md<span class="op">.</span><span class="at">indirect</span>}<span class="op">,</span> {<span class="dt">y</span><span class="op">:</span> <span class="st">"Direct (c′)"</span><span class="op">,</span> <span class="dt">x</span><span class="op">:</span> md<span class="op">.</span><span class="at">c</span>}]<span class="op">,</span> {<span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#0f5da8"</span>})<span class="op">,</span></span>
+<span id="cb47-628"><a href="#cb47-628" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">tickX</span>([{<span class="dt">y</span><span class="op">:</span> <span class="st">"Total effect"</span><span class="op">,</span> <span class="dt">x</span><span class="op">:</span> md<span class="op">.</span><span class="at">true_total</span>}<span class="op">,</span> {<span class="dt">y</span><span class="op">:</span> <span class="st">"Indirect (through M)"</span><span class="op">,</span> <span class="dt">x</span><span class="op">:</span> md<span class="op">.</span><span class="at">true_indirect</span>}<span class="op">,</span> {<span class="dt">y</span><span class="op">:</span> <span class="st">"Direct (c′)"</span><span class="op">,</span> <span class="dt">x</span><span class="op">:</span> md_c}]<span class="op">,</span> {<span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#b03a2e"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span>})<span class="op">,</span></span>
+<span id="cb47-629"><a href="#cb47-629" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleX</span>([<span class="dv">0</span>])</span>
+<span id="cb47-630"><a href="#cb47-630" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb47-631"><a href="#cb47-631" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-16" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb48" data-startfrom="636" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 635;"><span id="cb48-636"><a href="#cb48-636" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div class="unc-stats"&gt;Estimated: total &lt;b&gt;</span><span class="sc">${</span>md<span class="op">.</span><span class="at">total</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt; · indirect &lt;b&gt;</span><span class="sc">${</span>md<span class="op">.</span><span class="at">indirect</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt; (a = </span><span class="sc">${</span>md<span class="op">.</span><span class="at">a</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs"> × b = </span><span class="sc">${</span>md<span class="op">.</span><span class="at">b</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">) · direct &lt;b&gt;</span><span class="sc">${</span>md<span class="op">.</span><span class="at">c</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt; —</span></span>
+<span id="cb48-637"><a href="#cb48-637" aria-hidden="true" tabindex="-1"></a><span class="vs">true: total </span><span class="sc">${</span>md<span class="op">.</span><span class="at">true_total</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs"> · indirect </span><span class="sc">${</span>md<span class="op">.</span><span class="at">true_indirect</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs"> · direct </span><span class="sc">${</span>md_c<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span></span>
+<span id="cb48-638"><a href="#cb48-638" aria-hidden="true" tabindex="-1"></a><span class="sc">${</span>md_u <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span> <span class="fu">html</span><span class="vs">`&lt;br&gt;&lt;b&gt;With the confounder:&lt;/b&gt; the total effect is still right (X is randomized), but the split into direct and indirect is wrong — the confounder inflates b and makes the mediator look more important than it is.`</span> <span class="op">:</span> <span class="st">""</span><span class="sc">}</span><span class="vs">&lt;/div&gt;`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-17" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<p><strong>What to look for.</strong> Without the confounder, the three regressions recover the decomposition. With the confounder, the total effect stays correct — randomization protects it — but the indirect effect is overestimated and the direct effect underestimated. No regression on these data can tell the difference.</p>
+</div>
+</div>
+</section>
+<section id="what-mediation-analysis-assumes" class="level3" data-number="6.7.4">
+<h3 data-number="6.7.4" class="anchored" data-anchor-id="what-mediation-analysis-assumes"><span class="header-section-number">6.7.4</span> What mediation analysis assumes</h3>
+<p>The widget shows the catch. Randomizing Smart Mix identifies the <em>total</em> effect: users were assigned by coin flip, so the groups are comparable. But nobody randomized the <em>mediator</em>. Users who discovered many new artists chose to do so — perhaps because they are curious, or had time on their hands — and such users may listen more for the same reasons. The path <em>b</em> then mixes the effect of discovery with the effect of curiosity, exactly the confounding problem of <a href="05-observational-data.html" class="quarto-xref"><span>Chapter 5</span></a>, one step down the causal chain. The decomposition into direct and indirect effects is only valid if there are <strong>no unobserved confounders of the mediator–outcome relationship</strong> (given the treatment and the covariates). This assumption is as untestable as its cousin in <a href="05-observational-data.html" class="quarto-xref"><span>Chapter 5</span></a>, and it is the reason why mediation results deserve more caution than the total effect they decompose. What helps: measuring and adjusting for likely confounders of the mediator (prior listening and plan are in the models above for this reason), and — best of all — experiments that manipulate the mediator directly, e.g., a version of Smart Mix with and without the discovery feature.</p>
+</section>
+</section>
+<section id="sec-mech-dags" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="sec-mech-dags"><span class="header-section-number">6.8</span> Good and bad controls: forks, pipes, and colliders</h2>
+<p>The question “which variables should be in the model?” has come up in every chapter since <a href="01-foundations.html" class="quarto-xref"><span>Chapter 1</span></a>. The three elementary structures in <a href="#fig-dag-structures" class="quarto-xref">Figure&nbsp;<span>6.11</span></a> organize the answers <span class="citation" data-cites="cinelli2024">(<a href="#ref-cinelli2024" role="doc-biblioref">Cinelli et al. 2024</a>)</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-dag-structures" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dag-structures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06-mechanisms_files/figure-html/fig-dag-structures-1.png" class="img-fluid figure-img" width="2200">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dag-structures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.11: Three ways a third variable Z can relate to a cause X and an outcome Y — and what to do about it when estimating the effect of X on Y.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><strong>The fork</strong> — Z causes both X and Y — is the <strong>confounder</strong> of <a href="01-foundations.html" class="quarto-xref"><span>Chapter 1</span></a> and <a href="05-observational-data.html" class="quarto-xref"><span>Chapter 5</span></a>. Not adjusting for Z leaves a spurious association; adjusting for it (a “good control”) removes it. Music enthusiasm in the opt-in Smart Mix data was a fork.</li>
+<li><strong>The pipe</strong> — X causes Z, and Z causes Y — is the <strong>mediator</strong> of this chapter. Adjusting for Z blocks the path through it: you estimate the direct effect, not the total effect. If you want the total effect of X, Z is a “bad control”. New artists discovered is a pipe between Smart Mix and listening hours.</li>
+<li><strong>The collider</strong> — X and Y both cause Z — is the structure that surprises most people. X and Y may be entirely unrelated, but <em>among units with the same Z</em>, they become related: adjusting for a collider (or selecting the sample on it) <strong>creates</strong> a spurious association that was not there before. Suppose both ad spend and product quality raise the chance that a campaign makes it into the “top campaigns” report. Among the campaigns in that report, spend and quality will be <em>negatively</em> related — high-spend campaigns got in despite mediocre products, high-quality ones despite small budgets — even if they are unrelated in the full population. Analyzing only the top campaigns is adjusting for a collider.</li>
+</ul>
+<p>The practical rule: adjust for forks, never for colliders, and for pipes only when you want the direct effect. Since the structure cannot be read from the data, drawing the diagram <em>before</em> the analysis — which variable is caused by what — is the most useful ten minutes of any observational study.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Under the hood: the formal assumption behind mediation analysis">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Under the hood: the formal assumption behind mediation analysis
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The decomposition of a total effect into direct and indirect effects requires <em>sequential ignorability</em>: (1) the treatment is as good as randomly assigned given the covariates, and (2) the mediator is as good as randomly assigned given the treatment and the covariates. In a randomized experiment, (1) holds by design; (2) is the untestable part, and it is the mediator-outcome confounding shown in the widget. The DAG vocabulary makes it precise: any unobserved fork between M and Y violates (2). Sensitivity analyses (e.g., <code>medsens()</code> in the <code>mediation</code> package) show how strong such a confounder would have to be to explain the mediation away.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-mech-project" class="level2" data-number="6.9">
+<h2 data-number="6.9" class="anchored" data-anchor-id="sec-mech-project"><span class="header-section-number">6.9</span> Moderation and mediation in your group project</h2>
+<p>Your experiment randomizes one factor with two or three conditions and measures one or more outcomes with about 120 respondents. Here is how this chapter applies.</p>
+<p><strong>Should you add a moderator?</strong> Only if the moderation question is central to your topic and you can state <em>in advance</em> which direction you expect — e.g., “the effect of the sustainability label should be larger for respondents who care about the environment”. Measure the moderator before the manipulation (so that it cannot be affected by it), and test it with <code>outcome ~ condition * moderator</code>. Keep expectations modest: with 60 respondents per condition, you can detect only large interactions. A <strong>2 × 2 design</strong> (two manipulated factors) is the cleaner way to study a moderator you can manipulate, but it spreads your respondents over four cells of 30 — enough for a demonstration, rarely for a precise estimate.</p>
+<p><strong>Should you measure a mediator?</strong> Measuring one or two plausible mechanisms <em>after</em> the manipulation (e.g., perceived quality, trust, attention) costs little and allows a mediation analysis — with the caveats of <a href="#sec-mech-mediation" class="quarto-xref"><span>Section 6.7</span></a> stated honestly. It also protects you against the empty result “the manipulation had no effect”: a manipulation check and a mediator tell you <em>where</em> the chain broke.</p>
+<p><strong>Reporting.</strong> Moderation: “The effect of the label was 0.9 scale points for environmentally concerned respondents and 0.2 for the others; the interaction was significant (<em>p</em> = .03) / not significant (<em>p</em> = .40), so we found no evidence that the effect differs.” Mediation: “Of the total effect of 0.6 points, 0.25 (bootstrap 95% CI [0.05; 0.48]) ran through perceived quality.” And in both cases: which analyses were planned, and which were exploratory.</p>
+</section>
+<section id="sec-mech-wrapup" class="level2" data-number="6.10">
+<h2 data-number="6.10" class="anchored" data-anchor-id="sec-mech-wrapup"><span class="header-section-number">6.10</span> From average effects to mechanisms</h2>
+<p>The course started with four kinds of questions. By now, you have tools for all of them: description (<a href="02-describing-data.html" class="quarto-xref"><span>Chapter 2</span></a>), prediction (<a href="05-observational-data.html" class="quarto-xref"><span>Chapter 5</span></a>), causal effects from experiments (<a href="04-experiments.html" class="quarto-xref"><span>Chapter 4</span></a>) and — with assumptions — from observational data (<a href="05-observational-data.html" class="quarto-xref"><span>Chapter 5</span></a>), and in this chapter, the two questions that come after the effect: for whom, and why. The prescriptive question — what should we do? — is where all of them meet: an action that works on average, for the right customers, for understood reasons, and whose effect size justifies its cost.</p>
+<p>The toolkit is a regression with a product term, used in two ways. Moderation asks whether the effect <em>differs</em> across values of a third variable; mediation asks whether the effect <em>passes through</em> it. Both are more demanding than the average effect — statistically (interactions need large samples; indirect effects need the bootstrap) and conceptually (mediation needs an assumption that randomization does not provide). Used with these limits in mind, they turn a yes/no result into something a product team can build on.</p>
+</section>
+<section id="sec-lc-06" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="sec-lc-06">Learning check</h2>
+<p><strong>(LC6.1)</strong> In the model <code>hours ~ smart_mix * premium + prior_hours</code>, the coefficient of <code>smart_mix</code> is 5.0 and the coefficient of <code>smart_mix:premium</code> is −3.1. What is the effect of Smart Mix for free users? For Premium users? What does the <em>p</em>-value of the interaction test?</p>
+<p><strong>(LC6.2)</strong> Which statements about interaction models are correct?</p>
+<ul class="task-list">
+<li><label><input type="checkbox">In a model with <code>x * z</code>, the coefficient of <code>x</code> is the effect of <code>x</code> when <code>z</code> = 0</label></li>
+<li><label><input type="checkbox">If the interaction is not significant, the main effects can be interpreted as usual</label></li>
+<li><label><input type="checkbox">Centering the variables changes the interaction coefficient</label></li>
+<li><label><input type="checkbox">The model <code>y ~ x:z</code> (without the main terms) is a valid simplification when the main effects are small</label></li>
+</ul>
+<p><strong>(LC6.3)</strong> A marketing team finds that a discount increases purchases by 12% among new customers and by 2% among existing customers. The interaction has <em>p</em> = 0.08 with 150 customers per group. How should the result be reported?</p>
+<p><strong>(LC6.4)</strong> In a 2 × 2 experiment (price framing: monthly vs.&nbsp;yearly; trial: yes vs.&nbsp;no), the regression gives: intercept 40, <code>framingYearly</code> −5, <code>trialYes</code> +8, <code>framingYearly:trialYes</code> +6. Compute all four cell means. Does the trial help more with monthly or with yearly framing?</p>
+<p><strong>(LC6.5)</strong> After a significant interaction in a 2 × 3 design, why are pairwise comparisons of the six cells with ordinary <em>t</em>-tests a problem, and what does <code>emmeans</code> do about it?</p>
+<p><strong>(LC6.6)</strong> Which statements about mediation analysis are correct?</p>
+<ul class="task-list">
+<li><label><input type="checkbox">The indirect effect is the product of the path from treatment to mediator and the path from mediator to outcome</label></li>
+<li><label><input type="checkbox">In a randomized experiment, the decomposition into direct and indirect effects is automatically valid</label></li>
+<li><label><input type="checkbox">A bootstrap is used for the confidence interval of the indirect effect because its sampling distribution is not normal</label></li>
+<li><label><input type="checkbox">If the direct effect is not significant, the mediator explains the entire effect</label></li>
+</ul>
+<p><strong>(LC6.7)</strong> An analyst wants to estimate the total effect of a loyalty program on annual spending and includes “number of store visits” as a control variable. Which structure is this (fork, pipe, or collider), and what is the consequence?</p>
+<p><strong>(LC6.8)</strong> A study of top-rated restaurants finds that price and food quality are negatively correlated among them. Explain how a collider could produce this result even if price and quality are unrelated in the population of all restaurants.</p>
+<p><strong>(LC6.9)</strong> A colleague tests the effect of a new checkout page in 25 customer segments and reports that it “works particularly well for returning customers on tablets” (<em>p</em> = 0.02). What is the problem, and what would you recommend for the next test?</p>
+<p><strong>(LC6.10)</strong> Your group project experiment compares two versions of a product description. Name one plausible moderator and one plausible mediator for your effect, and explain for each when you would measure it in the questionnaire.</p>
+</section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-cinelli2024" class="csl-entry" role="listitem">
+Cinelli, Carlos, Andrew Forney, and Judea Pearl. 2024. <span>“A Crash Course in Good and Bad Controls.”</span> <em>Sociological Methods &amp; Research</em> 53 (3): 1071–104.
+</div>
+<div id="ref-imai2010" class="csl-entry" role="listitem">
+Imai, Kosuke, Luke Keele, and Dustin Tingley. 2010. <span>“A General Approach to Causal Mediation Analysis.”</span> <em>Psychological Methods</em> 15 (4): 309–34.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Ii8vIC0tLS0gc2hhcmVkIGhlbHBlcnMgZm9yIGFsbCB3aWRnZXRzIG9mIHRoaXMgY2hhcHRlciAtLS0tXG5odG1sYDxzdHlsZT5cbiAgLnVuYy13aWRnZXQgZm9ybSB7IHdpZHRoOiBhdXRvICFpbXBvcnRhbnQ7IG1heC13aWR0aDogbm9uZSAhaW1wb3J0YW50OyB9XG4gIC51bmMtd2lkZ2V0IGZvcm0gPiBkaXYgeyBkaXNwbGF5OiBmbGV4OyBmbGV4LXdyYXA6IHdyYXA7IGdhcDogMC41ZW07IH1cbiAgLnVuYy13aWRnZXQgZm9ybSBidXR0b24geyBiYWNrZ3JvdW5kOiAjMGY1ZGE4ICFpbXBvcnRhbnQ7IGNvbG9yOiAjZmZmICFpbXBvcnRhbnQ7IGJvcmRlcjogbm9uZTtcbiAgICBib3JkZXItcmFkaXVzOiA2cHg7IHBhZGRpbmc6IDAuNDVlbSAwLjllbTsgZm9udC13ZWlnaHQ6IDYwMDsgY3Vyc29yOiBwb2ludGVyO1xuICAgIHdpZHRoOiAxM2VtOyB3aGl0ZS1zcGFjZTogbm93cmFwOyB0ZXh0LWFsaWduOiBjZW50ZXI7IG1hcmdpbjogMDsgfVxuICAudW5jLXdpZGdldCBmb3JtIGJ1dHRvbjpob3ZlciB7IGJhY2tncm91bmQ6ICMwYTNkNmUgIWltcG9ydGFudDsgfVxuICAudW5jLXN0YXRzIHsgZm9udC1zaXplOiAwLjk1ZW07IG1hcmdpbjogMC4zZW0gMCAwLjZlbSAwOyB9XG48L3N0eWxlPmBcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMiIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiBpMV9iQSA9IElucHV0cy5yYW5nZShbLTEsIDJdLCB7dmFsdWU6IDAuOCwgc3RlcDogMC4wNSwgbGFiZWw6IFwiU2xvcGUgb2YgeCBpbiBncm91cCBBICjOsuKCgSlcIn0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTMiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ2aWV3b2YgaTFfYkIgPSBJbnB1dHMucmFuZ2UoWy0xLCAyXSwge3ZhbHVlOiAwLjgsIHN0ZXA6IDAuMDUsIGxhYmVsOiBcIlNsb3BlIG9mIHggaW4gZ3JvdXAgQiAozrLigoEgKyDOsuKCgylcIn0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTQiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ2aWV3b2YgaTFfbHZsID0gSW5wdXRzLnJhbmdlKFstNSwgNV0sIHt2YWx1ZTogMiwgc3RlcDogMC41LCBsYWJlbDogXCJMZXZlbCBkaWZmZXJlbmNlIEIg4oiSIEEgYXQgeCA9IDAgKM6y4oKCKVwifSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlBsb3QucGxvdCh7XG4gIHdpZHRoOiA3MDAsIGhlaWdodDogMzIwLCBtYXJnaW5MZWZ0OiA1MCxcbiAgeDoge2xhYmVsOiBcInhcIiwgZG9tYWluOiBbMCwgMTBdfSxcbiAgeToge2xhYmVsOiBcInlcIiwgZG9tYWluOiBbLTUsIDI1XSwgZ3JpZDogdHJ1ZX0sXG4gIGNvbG9yOiB7ZG9tYWluOiBbXCJHcm91cCBBXCIsIFwiR3JvdXAgQlwiXSwgcmFuZ2U6IFtcIiM1ODU4NWFcIiwgXCIjMGY1ZGE4XCJdLCBsZWdlbmQ6IHRydWV9LFxuICBtYXJrczogW1xuICAgIFBsb3QubGluZShbe3g6IDAsIHk6IDIsIGc6IFwiR3JvdXAgQVwifSwge3g6IDEwLCB5OiAyICsgMTAgKiBpMV9iQSwgZzogXCJHcm91cCBBXCJ9XSwge3g6IFwieFwiLCB5OiBcInlcIiwgc3Ryb2tlOiBcImdcIiwgc3Ryb2tlV2lkdGg6IDN9KSxcbiAgICBQbG90LmxpbmUoW3t4OiAwLCB5OiAyICsgaTFfbHZsLCBnOiBcIkdyb3VwIEJcIn0sIHt4OiAxMCwgeTogMiArIGkxX2x2bCArIDEwICogaTFfYkIsIGc6IFwiR3JvdXAgQlwifV0sIHt4OiBcInhcIiwgeTogXCJ5XCIsIHN0cm9rZTogXCJnXCIsIHN0cm9rZVdpZHRoOiAzfSlcbiAgXVxufSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNiIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Imh0bWxgPGRpdiBjbGFzcz1cInVuYy1zdGF0c1wiPk1vZGVsOiB5ID0gMiArIDxiPiR7aTFfYkEudG9GaXhlZCgyKX08L2I+wrd4ICsgPGI+JHtpMV9sdmwudG9GaXhlZCgxKX08L2I+wrdCICsgPGI+JHsoaTFfYkIgLSBpMV9iQSkudG9GaXhlZCgyKX08L2I+wrcoeCDDlyBCKSDCt1xuaW50ZXJhY3Rpb24gzrLigoMgPSBzbG9wZSBCIOKIkiBzbG9wZSBBID0gPGI+JHsoaTFfYkIgLSBpMV9iQSkudG9GaXhlZCgyKX08L2I+XG4ke01hdGguYWJzKGkxX2JCIC0gaTFfYkEpIDwgMC4wMDEgPyBodG1sYCDigJQgPGI+cGFyYWxsZWwgbGluZXMsIG5vIGludGVyYWN0aW9uPC9iPmAgOiAoaTFfYkEgKiBpMV9iQiA8IDAgPyBodG1sYCDigJQgPGI+Y3Jvc3NvdmVyPC9iPjogdGhlIGVmZmVjdCBvZiB4IHJldmVyc2VzIGJldHdlZW4gZ3JvdXBzYCA6IGh0bWxgIOKAlCB0aGUgZWZmZWN0IG9mIHggZGlmZmVycyBiZXR3ZWVuIGdyb3Vwc2ApfTwvZGl2PmBcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNyIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiBmX2sgPSBJbnB1dHMucmFuZ2UoWzEsIDMwXSwge3ZhbHVlOiA1LCBzdGVwOiAxLCBsYWJlbDogXCJOdW1iZXIgb2Ygc3ViZ3JvdXBzIGV4YW1pbmVkXCJ9KVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC04IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIGZfYmF0Y2ggPSBJbnB1dHMuYnV0dG9uKFwiU2ltdWxhdGUgMjAwIG5ldyBleHBlcmltZW50c1wiLCB7dmFsdWU6IDEsIHJlZHVjZTogdiA9PiB2ICsgMX0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTkiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJmX3NpbSA9IHtcbiAgY29uc3Qgcm5nID0gZDMucmFuZG9tTGNnKDMwMCArIGZfYmF0Y2gpLCBybiA9IGQzLnJhbmRvbU5vcm1hbC5zb3VyY2Uocm5nKSgwLCAxKTtcbiAgY29uc3QgSyA9IDIwMCwgbiA9IDQwMCwgcGVyID0gTWF0aC5tYXgoMTAsIE1hdGguZmxvb3IobiAvIGZfaykpO1xuICBjb25zdCBwbm9ybSA9IHggPT4geyBjb25zdCB0ID0gMSAvICgxICsgMC4yMzE2NDE5ICogTWF0aC5hYnMoeCkpOyBjb25zdCBkID0gMC4zOTg5NDIyODA0ICogTWF0aC5leHAoLXggKiB4IC8gMik7XG4gICAgY29uc3QgcCA9IGQgKiB0ICogKDAuMzE5MzgxNTMwICsgdCAqICgtMC4zNTY1NjM3ODIgKyB0ICogKDEuNzgxNDc3OTM3ICsgdCAqICgtMS44MjEyNTU5NzggKyB0ICogMS4zMzAyNzQ0MjkpKSkpOyByZXR1cm4geCA+IDAgPyAxIC0gcCA6IHA7IH07XG4gIGxldCBmb3VuZCA9IDAsIG1pbnBzID0gW107XG4gIGZvciAobGV0IGUgPSAwOyBlIDwgSzsgZSsrKSB7XG4gICAgbGV0IG1pbnAgPSAxO1xuICAgIGZvciAobGV0IGcgPSAwOyBnIDwgZl9rOyBnKyspIHtcbiAgICAgIGxldCBhID0gMCwgYiA9IDA7IGNvbnN0IG0gPSBNYXRoLmZsb29yKHBlciAvIDIpO1xuICAgICAgZm9yIChsZXQgaSA9IDA7IGkgPCBtOyBpKyspIHsgYSArPSBybigpOyBiICs9IDEgKyBybigpOyB9ICAgICAgICAvLyBzYW1lIHRydWUgZWZmZWN0ICgrMSkgaW4gZXZlcnkgc3ViZ3JvdXBcbiAgICAgIGNvbnN0IGRpZmYgPSBiIC8gbSAtIGEgLyBtLCBzZSA9IE1hdGguc3FydCgyIC8gbSk7XG4gICAgICBjb25zdCBwID0gMiAqICgxIC0gcG5vcm0oTWF0aC5hYnMoKGRpZmYgLSAxKSAvIHNlKSkpOyAgICAgICAgICAgLy8gdGVzdDogZG9lcyB0aGlzIHN1Ymdyb3VwJ3MgZWZmZWN0IGRpZmZlciBmcm9tIHRoZSBvdmVyYWxsIGVmZmVjdD9cbiAgICAgIGlmIChwIDwgbWlucCkgbWlucCA9IHA7XG4gICAgfVxuICAgIGlmIChtaW5wIDwgMC4wNSkgZm91bmQrKztcbiAgICBtaW5wcy5wdXNoKG1pbnApO1xuICB9XG4gIHJldHVybiB7Zm91bmQsIEssIHBlciwgZXhwZWN0ZWQ6IDEgLSBNYXRoLnBvdygwLjk1LCBmX2spfTtcbn1cbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMTAiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJodG1sYDxkaXYgY2xhc3M9XCJ1bmMtc3RhdHNcIj5FeHBlcmltZW50cyBpbiB3aGljaCBhdCBsZWFzdCBvbmUgc3ViZ3JvdXAgZWZmZWN0IFwiZGlmZmVycyBzaWduaWZpY2FudGx5XCIgZnJvbSB0aGUgb3ZlcmFsbCBlZmZlY3Q6XG48Yj4ke2Zfc2ltLmZvdW5kfSBvZiAke2Zfc2ltLkt9PC9iPiAoJHsoMTAwICogZl9zaW0uZm91bmQgLyBmX3NpbS5LKS50b0ZpeGVkKDApfSUpIMK3IGV4cGVjdGVkIHdpdGggJHtmX2t9IGluZGVwZW5kZW50IHN1Ymdyb3VwIHRlc3RzOiAkeygxMDAgKiBmX3NpbS5leHBlY3RlZCkudG9GaXhlZCgwKX0lIMK3XG4ke01hdGgucm91bmQoZl9zaW0ucGVyKX0gdXNlcnMgcGVyIHN1Ymdyb3VwPC9kaXY+YFxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiBtZF9hID0gSW5wdXRzLnJhbmdlKFswLCA2XSwge3ZhbHVlOiAzLjYsIHN0ZXA6IDAuMiwgbGFiZWw6IFwiYTogZWZmZWN0IG9mIFggb24gTSAoYXJ0aXN0cylcIn0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTEyIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIG1kX2IgPSBJbnB1dHMucmFuZ2UoWzAsIDFdLCB7dmFsdWU6IDAuNCwgc3RlcDogMC4wNSwgbGFiZWw6IFwiYjogZWZmZWN0IG9mIE0gb24gWSAoaG91cnMgcGVyIGFydGlzdClcIn0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTEzIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIG1kX2MgPSBJbnB1dHMucmFuZ2UoWzAsIDVdLCB7dmFsdWU6IDIuMywgc3RlcDogMC4xLCBsYWJlbDogXCJj4oCyOiBkaXJlY3QgZWZmZWN0IG9mIFggb24gWSAoaG91cnMpXCJ9KVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xNCIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiBtZF91ID0gSW5wdXRzLnJhbmdlKFswLCAzXSwge3ZhbHVlOiAwLCBzdGVwOiAwLjI1LCBsYWJlbDogXCJVbm9ic2VydmVkIGNvbmZvdW5kZXIgb2YgTSBhbmQgWSAoc3RyZW5ndGgpXCJ9KVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xNSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Im1kID0ge1xuICBjb25zdCBybmcgPSBkMy5yYW5kb21MY2coNDIpLCBybiA9IGQzLnJhbmRvbU5vcm1hbC5zb3VyY2Uocm5nKSgwLCAxKTtcbiAgY29uc3QgbiA9IDIwMDAsIHJvd3MgPSBbXTtcbiAgZm9yIChsZXQgaSA9IDA7IGkgPCBuOyBpKyspIHtcbiAgICBjb25zdCB4ID0gcm5nKCkgPCAwLjUgPyAxIDogMCwgdSA9IHJuKCk7XG4gICAgY29uc3QgbSA9IDMgKyBtZF9hICogeCArIG1kX3UgKiAxLjUgKiB1ICsgMi41ICogcm4oKTtcbiAgICBjb25zdCB5ID0gMTUgKyBtZF9jICogeCArIG1kX2IgKiBtICsgbWRfdSAqIDIgKiB1ICsgNSAqIHJuKCk7XG4gICAgcm93cy5wdXNoKHt4LCBtLCB5fSk7XG4gIH1cbiAgY29uc3Qgb2xzID0gKFgsIHkpID0+IHtcbiAgICBjb25zdCBwID0gWFswXS5sZW5ndGg7IGNvbnN0IEEgPSBBcnJheS5mcm9tKHtsZW5ndGg6IHB9LCAoKSA9PiBBcnJheShwKS5maWxsKDApKTsgY29uc3QgYmIgPSBBcnJheShwKS5maWxsKDApO1xuICAgIGZvciAobGV0IGkgPSAwOyBpIDwgWC5sZW5ndGg7IGkrKykgZm9yIChsZXQgaiA9IDA7IGogPCBwOyBqKyspIHsgYmJbal0gKz0gWFtpXVtqXSAqIHlbaV07IGZvciAobGV0IGsgPSAwOyBrIDwgcDsgaysrKSBBW2pdW2tdICs9IFhbaV1bal0gKiBYW2ldW2tdOyB9XG4gICAgZm9yIChsZXQgYyA9IDA7IGMgPCBwOyBjKyspIHsgY29uc3QgcGl2ID0gQVtjXVtjXTsgZm9yIChsZXQgayA9IDA7IGsgPCBwOyBrKyspIEFbY11ba10gLz0gcGl2OyBiYltjXSAvPSBwaXY7XG4gICAgICBmb3IgKGxldCByID0gMDsgciA8IHA7IHIrKykgaWYgKHIgIT09IGMpIHsgY29uc3QgZiA9IEFbcl1bY107IGZvciAobGV0IGsgPSAwOyBrIDwgcDsgaysrKSBBW3JdW2tdIC09IGYgKiBBW2NdW2tdOyBiYltyXSAtPSBmICogYmJbY107IH0gfVxuICAgIHJldHVybiBiYjtcbiAgfTtcbiAgY29uc3QgYV9lc3QgPSBvbHMocm93cy5tYXAoZCA9PiBbMSwgZC54XSksIHJvd3MubWFwKGQgPT4gZC5tKSlbMV07XG4gIGNvbnN0IHlfZXN0ID0gb2xzKHJvd3MubWFwKGQgPT4gWzEsIGQueCwgZC5tXSksIHJvd3MubWFwKGQgPT4gZC55KSk7XG4gIGNvbnN0IHRvdF9lc3QgPSBvbHMocm93cy5tYXAoZCA9PiBbMSwgZC54XSksIHJvd3MubWFwKGQgPT4gZC55KSlbMV07XG4gIHJldHVybiB7YTogYV9lc3QsIGI6IHlfZXN0WzJdLCBjOiB5X2VzdFsxXSwgaW5kaXJlY3Q6IGFfZXN0ICogeV9lc3RbMl0sIHRvdGFsOiB0b3RfZXN0LFxuICAgICAgICAgIHRydWVfaW5kaXJlY3Q6IG1kX2EgKiBtZF9iLCB0cnVlX3RvdGFsOiBtZF9jICsgbWRfYSAqIG1kX2J9O1xufVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0xNiIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlBsb3QucGxvdCh7XG4gIHdpZHRoOiA3MDAsIGhlaWdodDogMjIwLCBtYXJnaW5MZWZ0OiAxNjAsXG4gIHg6IHtsYWJlbDogXCJIb3Vyc1wiLCBkb21haW46IFstMSwgOV0sIGdyaWQ6IHRydWV9LFxuICB5OiB7bGFiZWw6IG51bGwsIGRvbWFpbjogW1wiVG90YWwgZWZmZWN0XCIsIFwiSW5kaXJlY3QgKHRocm91Z2ggTSlcIiwgXCJEaXJlY3QgKGPigLIpXCJdfSxcbiAgY29sb3I6IHtkb21haW46IFtcIkVzdGltYXRlZFwiLCBcIlRydWVcIl0sIHJhbmdlOiBbXCIjMGY1ZGE4XCIsIFwiI2IwM2EyZVwiXSwgbGVnZW5kOiB0cnVlfSxcbiAgbWFya3M6IFtcbiAgICBQbG90LmJhclgoW3t5OiBcIlRvdGFsIGVmZmVjdFwiLCB4OiBtZC50b3RhbH0sIHt5OiBcIkluZGlyZWN0ICh0aHJvdWdoIE0pXCIsIHg6IG1kLmluZGlyZWN0fSwge3k6IFwiRGlyZWN0IChj4oCyKVwiLCB4OiBtZC5jfV0sIHt5OiBcInlcIiwgeDogXCJ4XCIsIGZpbGw6IFwiIzBmNWRhOFwifSksXG4gICAgUGxvdC50aWNrWChbe3k6IFwiVG90YWwgZWZmZWN0XCIsIHg6IG1kLnRydWVfdG90YWx9LCB7eTogXCJJbmRpcmVjdCAodGhyb3VnaCBNKVwiLCB4OiBtZC50cnVlX2luZGlyZWN0fSwge3k6IFwiRGlyZWN0IChj4oCyKVwiLCB4OiBtZF9jfV0sIHt5OiBcInlcIiwgeDogXCJ4XCIsIHN0cm9rZTogXCIjYjAzYTJlXCIsIHN0cm9rZVdpZHRoOiAzfSksXG4gICAgUGxvdC5ydWxlWChbMF0pXG4gIF1cbn0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTE3IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiaHRtbGA8ZGl2IGNsYXNzPVwidW5jLXN0YXRzXCI+RXN0aW1hdGVkOiB0b3RhbCA8Yj4ke21kLnRvdGFsLnRvRml4ZWQoMil9PC9iPiDCtyBpbmRpcmVjdCA8Yj4ke21kLmluZGlyZWN0LnRvRml4ZWQoMil9PC9iPiAoYSA9ICR7bWQuYS50b0ZpeGVkKDIpfSDDlyBiID0gJHttZC5iLnRvRml4ZWQoMil9KSDCtyBkaXJlY3QgPGI+JHttZC5jLnRvRml4ZWQoMil9PC9iPiDigJRcbnRydWU6IHRvdGFsICR7bWQudHJ1ZV90b3RhbC50b0ZpeGVkKDIpfSDCtyBpbmRpcmVjdCAke21kLnRydWVfaW5kaXJlY3QudG9GaXhlZCgyKX0gwrcgZGlyZWN0ICR7bWRfYy50b0ZpeGVkKDIpfVxuJHttZF91ID4gMCA/IGh0bWxgPGJyPjxiPldpdGggdGhlIGNvbmZvdW5kZXI6PC9iPiB0aGUgdG90YWwgZWZmZWN0IGlzIHN0aWxsIHJpZ2h0IChYIGlzIHJhbmRvbWl6ZWQpLCBidXQgdGhlIHNwbGl0IGludG8gZGlyZWN0IGFuZCBpbmRpcmVjdCBpcyB3cm9uZyDigJQgdGhlIGNvbmZvdW5kZXIgaW5mbGF0ZXMgYiBhbmQgbWFrZXMgdGhlIG1lZGlhdG9yIGxvb2sgbW9yZSBpbXBvcnRhbnQgdGhhbiBpdCBpcy5gIDogXCJcIn08L2Rpdj5gXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ2kxX2JBJykifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ2kxX2JCJykifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ2kxX2x2bCcpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCdmX2snKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnZl9iYXRjaCcpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCdtZF9hJykifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6InNoaW55SW5wdXQoJ21kX2InKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnbWRfYycpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCdtZF91JykifV19
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../..";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
