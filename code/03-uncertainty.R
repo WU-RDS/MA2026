@@ -39,6 +39,35 @@ ggplot(ab_test, aes(x = group, y = hours)) +
 # Real effect or noise? The t-test output is explained in Chapters 3 and 4
 t.test(hours ~ group, data = ab_test)
 
+# --- What would make the difference more convincing? -------------------
+# Two thought experiments with EXACTLY the same group means.
+
+# (1) A larger sample: 2,000 users per group, rescaled to the original means
+ab_means <- ab_test |> group_by(group) |> summarise(m = mean(hours))
+set.seed(32)
+ab_large <- tibble(
+  group = factor(rep(c("Control", "Smart Mix"), each = 2000), levels = c("Smart Mix", "Control")),
+  hours = c(rgamma(2000, shape = 2, scale = 10), rgamma(2000, shape = 2, scale = 11.5))
+) |>
+  group_by(group) |>
+  mutate(hours = hours * ab_means$m[match(group, ab_means$group)] / mean(hours)) |>
+  ungroup()
+
+ab_large |> group_by(group) |> summarise(n = n(), mean_hours = mean(hours), sd_hours = sd(hours))
+t.test(hours ~ group, data = ab_large)      # same difference, larger t, smaller p, narrower CI
+
+# (2) More similar users: the original 400 users, pulled halfway toward their group mean
+ab_similar <- ab_test |>
+  group_by(group) |>
+  mutate(hours = mean(hours) + 0.5 * (hours - mean(hours))) |>
+  ungroup()
+
+ab_similar |> group_by(group) |> summarise(n = n(), mean_hours = mean(hours), sd_hours = sd(hours))
+t.test(hours ~ group, data = ab_similar)    # same difference, same n, less spread -> less uncertainty
+
+# Two ingredients of uncertainty: the number of observations and their spread.
+# Section 3.4 puts them together: the standard error sigma / sqrt(n).
+
 
 # ======================================================================
 # 3.3 Sampling variation
