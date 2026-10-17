@@ -24,10 +24,19 @@ ab_test <- tibble(
   hours = c(rgamma(200, shape = 2, scale = 10), rgamma(200, shape = 2, scale = 11.5))
 )
 
-# Group means: Smart Mix users listened about 3 hours more
+# The dashboard view: two group means as bars (point estimates only)
 ab_test |>
   group_by(group) |>
-  summarise(n = n(), mean_hours = mean(hours), sd_hours = sd(hours))
+  summarise(mean_hours = mean(hours)) |>
+  ggplot(aes(x = group, y = mean_hours)) +
+  geom_col(width = 0.55, fill = "#0f5da8") +
+  labs(x = NULL, y = "Mean listening hours (four weeks)") +
+  theme_minimal()
+
+# Group means, medians, and spread: Smart Mix users listened about 3 hours more
+ab_test |>
+  group_by(group) |>
+  summarise(n = n(), mean_hours = mean(hours), median_hours = median(hours), sd_hours = sd(hours))
 
 ggplot(ab_test, aes(x = group, y = hours)) +
   geom_jitter(width = 0.18, height = 0, alpha = 0.35) +
@@ -209,6 +218,17 @@ ab_test |>
     upper = mean + qt(0.975, n - 1) * se
   )
 
+# The dashboard view again — now with 95% confidence intervals
+ab_test |>
+  group_by(group) |>
+  summarise(n = n(), mean = mean(hours), se = sd(hours) / sqrt(n),
+            lower = mean - qt(0.975, n - 1) * se, upper = mean + qt(0.975, n - 1) * se) |>
+  ggplot(aes(x = group, y = mean)) +
+  geom_col(width = 0.55, fill = "#0f5da8") +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.15) +
+  labs(x = NULL, y = "Mean listening hours (95% CI)") +
+  theme_minimal()
+
 # The confidence interval for the DIFFERENCE between the groups
 # (computed by t.test(); explained in Chapter 4)
 t.test(hours ~ group, data = ab_test)$conf.int
@@ -220,6 +240,9 @@ se_p  <- sqrt(p_hat * (1 - p_hat) / n)
 c(share = p_hat, lower = p_hat - 1.96 * se_p, upper = p_hat + 1.96 * se_p)
 
 prop.test(x = sum(listening$hours > 30), n = n)$conf.int
+# prop.test() uses the Wilson score interval (more reliable for small samples
+# and shares near 0 or 1): slightly asymmetric and shifted toward 50%, hence
+# the small difference to the hand calculation. Both tell the same story.
 
 # --- The margin of error of a poll -----------------------------------------
 # 1,000 respondents, share of about 50%
