@@ -233,13 +233,14 @@ ab_test |>
 # (computed by t.test(); explained in Chapter 4)
 t.test(hours ~ group, data = ab_test)$conf.int
 
-# --- Confidence interval for a share ----------------------------------------
-# Share of students who listen more than 30 hours per month
-p_hat <- mean(listening$hours > 30)
-se_p  <- sqrt(p_hat * (1 - p_hat) / n)
-c(share = p_hat, lower = p_hat - 1.96 * se_p, upper = p_hat + 1.96 * se_p)
+# --- A confidence interval for a share: the poll from 3.1 -------------------
+n_poll <- 1000
+p_hat  <- c(Harris = 0.49, Trump = 0.44)
+se_p   <- sqrt(p_hat * (1 - p_hat) / n_poll)
+cbind(share = p_hat, lower = p_hat - 1.96 * se_p, upper = p_hat + 1.96 * se_p)
 
-prop.test(x = sum(listening$hours > 30), n = n)$conf.int
+# The same with prop.test(): number of "successes" and sample size
+prop.test(x = 490, n = 1000)$conf.int
 # prop.test() uses the Wilson score interval (more reliable for small samples
 # and shares near 0 or 1): slightly asymmetric and shifted toward 50%, hence
 # the small difference to the hand calculation. Both tell the same story.

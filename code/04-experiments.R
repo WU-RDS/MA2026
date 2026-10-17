@@ -29,10 +29,15 @@ ab_test |>
   group_by(group) |>
   summarise(n = n(), mean = mean(hours), sd = sd(hours))
 
-ggplot(ab_test, aes(x = group, y = hours)) +
-  geom_boxplot(fill = "#dbe7f3") +
-  stat_summary(fun = mean, geom = "point", color = "#0f5da8", size = 4) +
-  labs(x = NULL, y = "Listening hours (four weeks)") +
+# Where Chapter 3 ended: the group means with their 95% confidence intervals
+ab_test |>
+  group_by(group) |>
+  summarise(n = n(), mean = mean(hours), se = sd(hours) / sqrt(n),
+            lower = mean - qt(0.975, n - 1) * se, upper = mean + qt(0.975, n - 1) * se) |>
+  ggplot(aes(x = group, y = mean)) +
+  geom_col(width = 0.55, fill = "#0f5da8") +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.15) +
+  labs(x = NULL, y = "Mean listening hours (95% CI)") +
   theme_minimal()
 
 
@@ -147,6 +152,17 @@ mix_test <- tibble(
 
 mix_test |> group_by(version) |> summarise(n = n(), mean = mean(hours), sd = sd(hours))
 
+# The quantities the ANOVA compares: group means with their confidence intervals
+mix_test |>
+  group_by(version) |>
+  summarise(n = n(), mean = mean(hours), se = sd(hours) / sqrt(n),
+            lower = mean - qt(0.975, n - 1) * se, upper = mean + qt(0.975, n - 1) * se) |>
+  ggplot(aes(x = version, y = mean)) +
+  geom_col(width = 0.55, fill = "#0f5da8") +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.15) +
+  labs(x = NULL, y = "Mean listening hours (95% CI)") +
+  theme_minimal()
+
 # Why not several t-tests? Family-wise error rate with k tests
 k <- c(1, 3, 10, 20)
 1 - 0.95^k
@@ -178,8 +194,11 @@ search_test <- tibble(
   new_design = round(38 + skill + rnorm(60, 0, 3), 1)
 )
 
-t.test(search_test$new_design, search_test$old_design, paired = TRUE)
-t.test(search_test$new_design, search_test$old_design)   # wrong test for this design
+head(search_test)                                          # one row per user, one column per design
+search_test$new_design - search_test$old_design            # the within-user differences
+
+t.test(search_test$new_design, search_test$old_design, paired = TRUE)   # tests the mean difference
+t.test(search_test$new_design, search_test$old_design)                  # wrong test for this design
 
 # --- Non-parametric alternatives -----------------------------------------
 # Two independent groups: Wilcoxon rank-sum test (Mann-Whitney U test)

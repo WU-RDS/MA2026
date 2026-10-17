@@ -1950,25 +1950,123 @@ Table&nbsp;1.10: The course map
 <section id="sec-lc-01" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="sec-lc-01">Learning check</h2>
 <p><strong>(LC1.1)</strong> An analyst reports: <em>“Customers who use our app have twice the lifetime value of non-users — the app clearly pays off.”</em> Which type of question (per <a href="#tbl-four-questions" class="quarto-xref">Table&nbsp;<span>1.2</span></a>) does the comparison actually answer, and which type does the conclusion claim? Name the most plausible confounder.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The comparison answers a <strong>descriptive</strong> question: app users <em>have</em> higher lifetime value. The conclusion (“the app pays off”) claims a <strong>causal</strong> answer: the app <em>causes</em> higher value. The most plausible confounder is engagement or loyalty: customers who already like the brand and buy a lot are the ones who install the app, so they would have had a higher lifetime value anyway. (Reverse causality adds to the problem: heavy buyers have more reason to install the app.) To learn whether the app pays off, the company would have to randomize who is nudged to install it — or find a quasi-experiment.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC1.2)</strong> A social media platform’s advertising dashboard compares the purchases of users who clicked your ad with the purchases of users who saw it but did not click. Is this comparison an experiment? What role (in the sense of <a href="#sec-cast" class="quarto-xref"><span>Section 1.5</span></a>) does “interest in the product” play here?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>No.&nbsp;Nobody assigned the click; users decided themselves whether to click, so the two groups are self-selected. “Interest in the product” is a <strong>confounder</strong>: it drives both the click (interested users click) and the purchase (interested users buy). The comparison mixes the effect of the ad with the effect of interest — it is the eBay problem in a new costume. Even if the platform randomized <em>who sees</em> the ad, the comparison clickers vs.&nbsp;non-clickers <em>within</em> the exposed group would still be observational.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC1.3)</strong> Your CMO ran a 4-week price promotion <strong>in Vienna only</strong>. Weekly sales in Vienna rose from 200k€ to 230k€; in Graz (no promotion), they rose from 150k€ to 160k€ over the same weeks. What is the difference-in-differences estimate of the promotion effect? What must you assume for this estimate to be causal — and why might Vienna be a questionable choice for the pilot?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>DiD = (230 − 200) − (160 − 150) = 30 − 10 = <strong>20k€ per week</strong>. The 10k€ increase in Graz estimates what would have happened in Vienna without the promotion (season, weather, a general upswing), so only the remaining 20k€ is attributed to the promotion. The estimate is causal only under <strong>parallel trends</strong>: without the promotion, Vienna’s sales would have changed by the same amount as Graz’s. Vienna is questionable because it differs from Graz in ways that may produce <em>different</em> trends regardless of the promotion — a larger market, more tourism, its own events and seasonality — and because pilots tend to be placed where management expects success, which itself is a form of selection. A randomly chosen pilot city, or several pilot cities, would make the assumption more plausible.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC1.4)</strong> Classify the role of the third variable in each statement — confounder, mediator, or moderator: (a) “The newsletter increases purchases <em>because it increases site visits</em>.” (b) “The discount works much better <em>for students</em>.” (c) “Customers who buy our cereal also buy more of our toys — <em>households with more children</em> buy more of both.”</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="a">
+<li><strong>Mediator</strong>: site visits lie on the causal path from the newsletter to purchases. (b) <strong>Moderator</strong>: being a student changes <em>how large</em> the effect of the discount is. (c) <strong>Confounder</strong>: the number of children drives both cereal and toy purchases and creates the association between them.</li>
+</ol>
+</div>
+</div>
+</div>
 <p><strong>(LC1.5)</strong> Which of the following statements are correct?</p>
 <ul class="task-list">
 <li><label><input type="checkbox">A sufficiently large dataset removes the need for the no-unobserved-confounders assumption</label></li>
-<li><label><input type="checkbox">Randomization balances treatment groups even on characteristics that were never measured</label></li>
-<li><label><input type="checkbox">A variable can be an excellent predictor of an outcome without having any causal effect on it</label></li>
+<li><label><input type="checkbox" checked="">Randomization balances treatment groups even on characteristics that were never measured</label></li>
+<li><label><input type="checkbox" checked="">A variable can be an excellent predictor of an outcome without having any causal effect on it</label></li>
 <li><label><input type="checkbox">The no-unobserved-confounders assumption can be verified with a statistical test if all observed covariates are balanced</label></li>
 <li><label><input type="checkbox">Adjusting for more variables always brings an observational estimate closer to the causal effect</label></li>
-<li><label><input type="checkbox">Two time series that both trend upward will be correlated — even if they are completely unrelated</label></li>
+<li><label><input type="checkbox" checked="">Two time series that both trend upward will be correlated — even if they are completely unrelated</label></li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Correct: statements 2, 3, and 6. Statement 1 is wrong: more data reduce random error, not bias; a confounder biases a sample of ten million exactly as it biases a sample of a hundred. Statement 4 is wrong: balance on <em>observed</em> variables says nothing about <em>unobserved</em> ones; the assumption is untestable in principle. Statement 5 is wrong: adjusting for a mediator removes part of the effect, and adjusting for a consequence of the outcome can create bias where there was none — more variables are not automatically better.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC1.6)</strong> Which of the following statements are correct?</p>
 <ul class="task-list">
 <li><label><input type="checkbox">In a quasi-experiment, the researcher controls who receives the treatment</label></li>
 <li><label><input type="checkbox">If Spotify users spent more on music than non-users <em>before</em> adopting Spotify, difference-in-differences cannot be used</label></li>
-<li><label><input type="checkbox">Difference-in-differences requires that, without the treatment, the treated and control groups would have followed parallel trends</label></li>
+<li><label><input type="checkbox" checked="">Difference-in-differences requires that, without the treatment, the treated and control groups would have followed parallel trends</label></li>
 <li><label><input type="checkbox">In a platform A/B test, randomizing users into ad A vs.&nbsp;ad B guarantees that both ads reach comparable audiences</label></li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Correct: statement 3 only. Statement 1 is wrong: in a quasi-experiment, the treatment is assigned by circumstances (a market entry, a policy, a listing), not by the researcher — that is what distinguishes it from an experiment. Statement 2 is wrong: a difference in <em>levels</em> before the treatment is exactly what DiD handles; what it requires is parallel <em>trends</em>. Statement 4 is wrong: randomization determines who is <em>eligible</em> for each ad, but the platform’s delivery algorithm decides who actually <em>sees</em> it, separately for each ad — divergent delivery can make the exposed audiences systematically different.</p>
+</div>
+</div>
+</div>
 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4em;">
 <p><img src="img/logo_wu.jpg" class="img-fluid" width="150"></p>
 <p><img src="img/logo_rds.png" class="img-fluid" width="150"></p>

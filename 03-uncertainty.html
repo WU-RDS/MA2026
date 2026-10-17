@@ -1857,40 +1857,42 @@ Figure&nbsp;3.21: The dashboard view of the A/B test from <a href="#sec-unc-abte
 </section>
 <section id="a-confidence-interval-for-a-share" class="level3" data-number="3.8.4">
 <h3 data-number="3.8.4" class="anchored" data-anchor-id="a-confidence-interval-for-a-share"><span class="header-section-number">3.8.4</span> A confidence interval for a share</h3>
-<p>What share of students listens more than 30 hours per month? A share is the mean of a logical (TRUE/FALSE) variable:</p>
+<p>Back to the poll from <a href="#sec-unc-motivation" class="quarto-xref"><span>Section 3.1</span></a>: 1,000 registered voters, 49% for Harris, 44% for Trump. A share is the mean of a yes/no variable, and its standard error follows from <a href="#sec-unc-proportions" class="quarto-xref"><span>Section 3.7</span></a> — so the interval is built exactly like the one for a mean:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>p_hat <span class="ot">&lt;-</span> <span class="fu">mean</span>(listening<span class="sc">$</span>hours <span class="sc">&gt;</span> <span class="dv">30</span>)</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>se_p  <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_hat) <span class="sc">/</span> n)</span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">share =</span> p_hat, <span class="at">lower =</span> p_hat <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se_p, <span class="at">upper =</span> p_hat <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se_p)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>n_poll <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>p_hat  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">Harris =</span> <span class="fl">0.49</span>, <span class="at">Trump =</span> <span class="fl">0.44</span>)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>se_p   <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_hat) <span class="sc">/</span> n_poll)</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="at">share =</span> p_hat, <span class="at">lower =</span> p_hat <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se_p, <span class="at">upper =</span> p_hat <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se_p)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>    share     lower     upper 
-0.2200000 0.1388077 0.3011923 </code></pre>
+<pre><code>       share     lower     upper
+Harris  0.49 0.4590159 0.5209841
+Trump   0.44 0.4092336 0.4707664</code></pre>
 </div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-share-bar" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-poll-ci-bars" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-share-bar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="03-uncertainty_files/figure-html/fig-share-bar-1.png" class="img-fluid figure-img" width="900">
+<div aria-describedby="fig-poll-ci-bars-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="03-uncertainty_files/figure-html/fig-poll-ci-bars-1.png" class="img-fluid figure-img" style="width:60.0%">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-share-bar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3.22: The share of students listening more than 30 hours, with its 95% confidence interval.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-poll-ci-bars-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.22: The NBC poll of September 2024: vote shares with their 95% confidence intervals.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>The function <code>prop.test()</code> computes a confidence interval for a share directly; its input is the number of “successes” and the sample size:</p>
+<p>Each share comes with a margin of about ± 3 percentage points — the “± 3.1” of the news report, now computed from the poll’s own numbers. The function <code>prop.test()</code> computes a confidence interval for a share directly; its input is the number of “successes” and the sample size:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>(<span class="at">x =</span> <span class="fu">sum</span>(listening<span class="sc">$</span>hours <span class="sc">&gt;</span> <span class="dv">30</span>), <span class="at">n =</span> n)<span class="sc">$</span>conf.int</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>(<span class="at">x =</span> <span class="dv">490</span>, <span class="at">n =</span> <span class="dv">1000</span>)<span class="sc">$</span>conf.int</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1458266 0.3161314
+<pre><code>[1] 0.4586166 0.5214612
 attr(,"conf.level")
 [1] 0.95</code></pre>
 </div>
 </div>
-<p>The two intervals do not match exactly, and that is not a mistake. Our hand calculation is the simple formula from <a href="#sec-unc-proportions" class="quarto-xref"><span>Section 3.7</span></a> (estimate ± 1.96 standard errors, symmetric around the share). <code>prop.test()</code> uses a different formula, the <em>Wilson score interval</em> (with a small continuity correction), which is more reliable for small samples and for shares close to 0 or 1: it is slightly asymmetric and shifted toward 50%. With 100 students and a share of 22%, the difference is a few tenths of a percentage point at each end — both intervals tell the same story. For reporting, either is fine; <code>prop.test()</code> is the one to use when the share is small or the sample is.</p>
+<p>The two intervals do not match exactly, and that is not a mistake. Our hand calculation is the simple formula from <a href="#sec-unc-proportions" class="quarto-xref"><span>Section 3.7</span></a> (estimate ± 1.96 standard errors, symmetric around the share). <code>prop.test()</code> uses a different formula, the <em>Wilson score interval</em> (with a small continuity correction), which is more reliable for small samples and for shares close to 0 or 1: it is slightly asymmetric and shifted toward 50%. With 1,000 voters and a share of 49%, the difference is a few tenths of a percentage point at each end — both intervals tell the same story. For reporting, either is fine; <code>prop.test()</code> is the one to use when the share is small or the sample is.</p>
 </section>
 </section>
 <section id="sec-unc-limits" class="level2" data-number="3.9">
