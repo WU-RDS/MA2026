@@ -233,7 +233,7 @@ ab_test |>
 # (computed by t.test(); explained in Chapter 4)
 t.test(hours ~ group, data = ab_test)$conf.int
 
-# --- A confidence interval for a share: the poll from 3.1 -------------------
+# --- A confidence interval for a share: the poll from 3.7 -------------------
 n_poll <- 1000
 p_hat  <- c(Harris = 0.49, Trump = 0.44)
 se_p   <- sqrt(p_hat * (1 - p_hat) / n_poll)
