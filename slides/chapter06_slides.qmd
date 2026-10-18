@@ -1,0 +1,563 @@
+---
+title: "Marketing Analytics"
+subtitle: "Chapter 6 · Mechanisms & Heterogeneity"
+author: "Nils Wlömert"
+institute: "Vienna University of Economics and Business (WU)"
+date: today
+date-format: "MMMM YYYY"
+format:
+  revealjs:
+    theme: [default, wu-theme.scss]
+    embed-resources: true
+    width: 1280
+    height: 720
+    margin: 0.08
+    slide-number: c/t
+    footer: "Marketing Analytics — Nils Wlömert"
+    logo: ../img/wu_logo_trans.png
+    transition: none
+    center: false
+    menu: true
+    pdf-separate-fragments: false
+    fig-dpi: 200
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+library(tidyverse)
+library(emmeans)
+data_dir <- "../data"
+source("../R/ch06-figures.R")
+options(scipen = 5, digits = 4, width = 95)
+wave2 <- load_wave2()
+ads   <- load_ads()
+promo <- load_promo()
+book_url <- "https://wu-rds.github.io/MA2026/06-mechanisms.html"
+```
+
+## Before we start {.midsize}
+
+::: columns
+::: {.column width="50%"}
+**Paper quiz on Chapter 5, Part II** *(§5.7–5.10, 8 min)*
+
+-   Individual, closed book
+-   Counts toward participation
+:::
+
+::: {.column width="50%"}
+**Assignment 3** is running
+
+-   Deadline: Group A Sun, Nov 22 · Group B Wed, Nov 25
+-   Debrief at the start of next session
+:::
+:::
+
+## Today's session {.midsize}
+
+::: columns
+::: {.column width="50%"}
+6.1 The average effect hides the interesting part\
+6.2 Interactions and **marginal effects**\
+6.3 Continuous × categorical\
+6.4 Continuous × continuous *(short)*\
+6.5 Categorical × categorical: a **2 × 3 experiment**\
+6.6 Pitfalls: subgroup fishing & power\
+6.7 **Mediation**: why does it work?\
+6.8 Good and bad controls *(short)*\
+6.9 Your group project
+:::
+
+::: {.column width="50%"}
+::: keybox
+**Driving question:** *Why — and for whom — does it work?*
+
+One new ingredient: the **product of two variables**.
+:::
+:::
+:::
+
+# 6.1 The average effect hides the interesting part {.divider background-color="#0a3d6e"}
+
+## Smart Mix, second wave {.midsize}
+
+::: columns
+::: {.column width="55%"}
+-   **1,200 users**, randomized to Smart Mix or control
+-   This time with **covariates**: plan (free/Premium), prior listening, tenure, device
+-   And one more variable: **new artists discovered** during the four weeks
+-   Average effect: **+3.7 hours** (95% CI 3.1–4.3)
+:::
+
+::: {.column width="45%"}
+::: discussion
+The product team asks two more questions:
+
+1.  **For whom** does it work — free or Premium users? light or heavy listeners?
+2.  **Why** does it work — does it make users discover new music?
+:::
+:::
+:::
+
+. . .
+
+::: keybox
+**Moderation** (for whom): the effect *depends on* a third variable. **Mediation** (why): the effect *runs through* a third variable. Easy to confuse — a moderator changes *how large*, a mediator is *part of the path*.
+:::
+
+# 6.2 Interactions and marginal effects {.divider background-color="#0a3d6e"}
+
+## What an interaction term does {.midsize}
+
+$$
+y = \beta_0 + \beta_1 x + \beta_2 z + \beta_3 (x \times z) + \varepsilon
+\qquad \Rightarrow \qquad
+\frac{\partial y}{\partial x} = \beta_1 + \beta_3 z
+$$
+
+::: columns
+::: {.column width="50%"}
+-   The **marginal effect** of $x$ depends on $z$
+-   $\beta_1$ = effect of $x$ **when $z = 0$** (a *conditional* effect, not a "main effect")
+-   $\beta_3$ = how much the effect of $x$ changes per unit of $z$
+-   Symmetric: effect of $z$ = $\beta_2 + \beta_3 x$
+:::
+
+::: {.column width="50%"}
+::: keybox
+**Two rules:** (1) if zero is not a meaningful value of $z$, $\beta_1$ is not meaningful either → center (§6.4). (2) **Always keep both main terms**: in R, `x * z` = `x + z + x:z`.
+:::
+:::
+:::
+
+## Parallel, diverging, crossing {.midsize}
+
+```{r types, fig.width=11.5, fig.height=3.6}
+fig_interaction_types(base_size = 12)
+```
+
+::: keybox
+With a group indicator as $z$: **no interaction** = parallel lines (same slope, different level) · **interaction** = different slopes · **crossover** = the effect of $x$ reverses. $\beta_3$ is simply the **difference between the slopes**.
+:::
+
+::: notes
+Live demo if time: the interaction-plot widget in the book (§6.2) — move the level difference: nothing happens to the interaction. Only the slopes matter.
+:::
+
+# 6.3 Continuous × categorical {.divider background-color="#0a3d6e"}
+
+## Face 1: a treatment effect that differs between groups {.smaller}
+
+```{r m-plan, echo=TRUE}
+model_plan <- lm(hours ~ smart_mix * premium + prior_hours + tenure, data = wave2)
+coef_table(model_plan)
+```
+
+::: columns
+::: {.column width="45%"}
+```{r lines-plan, fig.width=5.5, fig.height=3}
+fig_lines_by_plan(base_size = 11)
+```
+:::
+
+::: {.column width="55%"}
+::: keybox
+`smart_mix` = effect **for free users** (premium = 0): **5.0 h** · `smart_mix:premium` = how much the effect **differs** for Premium: **−3.1 h** (the heterogeneity test) · effect for Premium = 5.0 − 3.1 = **1.9 h** · `premium` = plan difference **in the control group**.
+:::
+:::
+:::
+
+## Both effects with their uncertainty {.midsize}
+
+::: columns
+::: {.column width="55%"}
+```{r eff-plan, fig.width=6.5, fig.height=4}
+fig_effect_by_plan(base_size = 12)
+```
+:::
+
+::: {.column width="45%"}
+-   The CI of the Premium effect is **not** in the output — it combines two coefficients and their covariance (`emmeans` does it for you)
+-   Actionable: promote Smart Mix to **free users first**
+
+::: keybox
+The interaction coefficient tests whether the effects **differ**; the two marginal effects tell you **what they are**. Report both.
+:::
+:::
+:::
+
+## Face 2: a slope that differs between groups {.smaller}
+
+::: columns
+::: {.column width="50%"}
+```{r m-genre, echo=TRUE}
+model_genre <- lm(log(streams) ~ log(spend) * genre + log(followers) + placements,
+                  data = promo)
+coef_table(model_genre)
+```
+:::
+
+::: {.column width="50%"}
+```{r el-genre, fig.width=5.8, fig.height=3.6}
+fig_elasticity_by_genre(base_size = 11)
+```
+:::
+:::
+
+::: keybox
+Same model, different question: `log(spend)` = elasticity for **Pop** (reference); `log(spend):genreHipHop/Rap` = **+0.27** → HipHop/Rap elasticity ≈ **0.47**. Rock and Electro: no evidence of a different slope. Genre "main effects" = level differences at **1 euro** of spend.
+:::
+
+## Moderation by a continuous variable {.smaller}
+
+::: columns
+::: {.column width="50%"}
+```{r m-prior, echo=TRUE}
+model_prior <- lm(hours ~ smart_mix * prior_hours + premium + tenure, data = wave2)
+coef_table(model_prior)
+```
+
+Marginal effect of Smart Mix = 5.39 − 0.096 × prior hours:
+
+-   10 hours before → **4.4 h** · 30 hours → **2.5 h**
+-   `smart_mix` alone = effect at **zero** prior hours — a user who hardly exists
+:::
+
+::: {.column width="50%"}
+```{r mprior, fig.width=5.8, fig.height=3.8}
+fig_marginal_prior(base_size = 11)
+```
+:::
+:::
+
+::: keybox
+With a continuous moderator, report the effect at **meaningful values** (10th / 50th / 90th percentile) or as a **curve with its confidence band** — never the coefficient at zero.
+:::
+
+## Your turn (5 min) {.midsize}
+
+::: discussion
+Fit the interaction of Smart Mix with **device**:
+
+```r
+model_device <- lm(hours ~ smart_mix * device + prior_hours + premium + tenure, data = wave2)
+coef_table(model_device)
+```
+
+For which device is the effect of Smart Mix largest? Compute the effect for each device from the coefficients. Are the differences significant?
+:::
+
+::: notes
+iOS is the reference: smart_mix = effect for iOS; add the interaction coefficients for Android and Desktop. In these data the device interactions are small and not significant — a good moment to say "no evidence that the effect differs by device" rather than "the effect is the same".
+:::
+
+# 6.4 Continuous × continuous {.divider background-color="#0a3d6e"}
+
+## Spend × followers: the problem with "main effects" {.smaller}
+
+::: columns
+::: {.column width="50%"}
+**Uncentered:**
+
+```{r cc1, echo=TRUE}
+m_cc <- lm(log(streams) ~ log(spend) * log(followers) +
+             placements + genre, data = promo)
+coef_table(m_cc)[2:3, ]
+```
+
+A **negative** spend elasticity? It is the elasticity for an artist with **one follower** (log = 0).
+:::
+
+::: {.column width="50%"}
+**Centered at the means:**
+
+```{r cc2, echo=TRUE}
+promo_c <- promo |> mutate(ls = log(spend) - mean(log(spend)),
+                           lf = log(followers) - mean(log(followers)))
+m_ccc <- lm(log(streams) ~ ls * lf + placements + genre, data = promo_c)
+coef_table(m_ccc)[c(2, 3, 8), ]
+```
+
+Now `ls` = elasticity for an **average** artist; the interaction is unchanged.
+:::
+:::
+
+::: keybox
+Centering changes the main effects (now "at the mean of the other variable"), **not** the interaction or the fit. Communicate with a **plot of the marginal effect** — book §6.4 — not with the table.
+:::
+
+::: notes
+Reading section for students: §6.4 in the book, including the marginal-effect plot across the follower distribution (elasticity 0.12 at the 10th percentile, 0.49 at the 90th).
+:::
+
+# 6.5 Categorical × categorical: a 2 × 3 experiment {.divider background-color="#0a3d6e"}
+
+## Are AI-made ads judged as creative as human-made ads? {.smaller}
+
+::: columns
+::: {.column width="50%"}
+-   **360 respondents** rate the creativity of an ad (0–100)
+-   Factor 1 — **source** of the design: Human · AI · Human + AI
+-   Factor 2 — **disclosure**: source revealed · not revealed
+-   2 × 3 = **6 cells**, 60 respondents each, randomized
+:::
+
+::: {.column width="50%"}
+```{r cells, fig.width=6, fig.height=3.8}
+fig_ads_cells(base_size = 11)
+```
+:::
+:::
+
+::: keybox
+Revealed: human designs win. Not revealed: AI and hybrid designs are rated **as creative** — slightly higher. **Crossing lines = the effect of the source depends on disclosure.**
+:::
+
+## The regression: six coefficients, six cell means {.smaller}
+
+```{r m-ads, echo=TRUE}
+model_ads <- lm(creativity ~ source * disclosure, data = ads)
+coef_table(model_ads)
+```
+
+| Coefficient | Meaning (reference: Human, Revealed) |
+|---|---|
+| `(Intercept)` 61.8 | Human designs, source revealed |
+| `sourceAI` −13.5 · `sourceHuman + AI` −18.3 | AI / hybrid designs, *when revealed*, vs. human |
+| `disclosureNot revealed` −9.7 | *Human* designs: not revealed vs. revealed |
+| `sourceAI:…` +22.2 · `sourceHuman + AI:…` +28.2 | The **extra** gain of AI / hybrid designs when not revealed, beyond the two main effects |
+
+::: notes
+Rebuild a cell: AI, not revealed = 61.8 − 13.5 − 9.7 + 22.2 = 60.8. Any cell mean is a sum of the relevant coefficients.
+:::
+
+## Step 1: is there an interaction at all? {.smaller}
+
+```{r anova-ads, echo=TRUE}
+anova(model_ads)
+```
+
+::: keybox
+The ANOVA table tests each factor and the **interaction as a whole** (two coefficients at once). Interaction highly significant → the effect of the source depends on disclosure → **do not interpret the main effects on their own**. (Unbalanced cells: `car::Anova(model_ads, type = 2)`.)
+:::
+
+## Step 2: which cells differ? Estimated marginal means {.smaller}
+
+```{r emm, echo=TRUE}
+library(emmeans)
+emm <- emmeans(model_ads, ~ source | disclosure)
+pairs(emm)
+```
+
+::: keybox
+From "there is an interaction" to "**where exactly** are the differences": revealed → human beats AI (14 points) and hybrid; not revealed → AI and hybrid beat human by 9–10 points. *p*-values **Tukey-adjusted** within each disclosure condition — the two-step logic of Chapter 4, with one extra dimension.
+:::
+
+## Your turn (5 min) {.midsize}
+
+::: discussion
+1.  Rebuild the cell mean for **hybrid** designs with the source **not revealed** from the coefficients of `model_ads`. Check it against the table of cell means.
+2.  Which **single number** in the regression output answers: "does disclosure change the rating of hybrid designs *more* than it changes the rating of human designs?"
+:::
+
+::: notes
+(1) 61.8 − 18.3 − 9.7 + 28.2 = 62.0. (2) The interaction coefficient sourceHuman + AI:disclosureNot revealed (+28.2): the difference between the disclosure effects of the two sources.
+:::
+
+# 6.6 The pitfalls of looking for heterogeneity {.divider background-color="#0a3d6e"}
+
+## Subgroup fishing {.smaller}
+
+::: columns
+::: {.column width="55%"}
+```{r fish, fig.width=6.5, fig.height=3.6}
+fig_subgroup_fishing(base_size = 11)
+```
+:::
+
+::: {.column width="45%"}
+-   Plan × device × tenure × age × country … = dozens of subgroups
+-   Testing each = **multiple testing** (Chapter 4)
+-   20 subgroups, no heterogeneity: **64%** chance of a "significant" one
+-   Live demo: subgroup-fishing widget, book §6.6
+:::
+:::
+
+::: keybox
+"Smart Mix works particularly well for Android users aged 25–34" after twenty subgroups = **noise with a story**.
+:::
+
+## Interactions need large samples {.midsize}
+
+::: columns
+::: {.column width="50%"}
+```{r pow, fig.width=5.5, fig.height=3.6}
+fig_power_interaction(base_size = 11)
+```
+:::
+
+::: {.column width="50%"}
+-   SE of a *difference between two effects* = **2 ×** SE of the overall effect
+-   Same power → **4 × the sample** for an interaction as large as a main effect
+-   And interactions are usually **smaller**
+-   Underpowered: miss real heterogeneity, **exaggerate** what you find
+:::
+:::
+
+::: keybox
+**Pre-register** the moderators you expect and test those. Everything else is exploratory — a hypothesis for the *next* experiment. Not significant → "no evidence that the effect differs", not "the effect is the same".
+:::
+
+# 6.7 Mediation: why does it work? {.divider background-color="#0a3d6e"}
+
+## Total = direct + indirect {.midsize}
+
+```{r med-diag, fig.width=9, fig.height=3}
+fig_mediation_diagram(base_size = 13)
+```
+
+::: columns
+::: {.column width="50%"}
+-   **Indirect effect**: Smart Mix → new artists → hours = **a × b**
+-   **Direct effect** c′: everything else (convenience, habit, curiosity)
+-   **Total** = direct + indirect
+:::
+
+::: {.column width="50%"}
+::: keybox
+Hypothesis of the product team: Smart Mix works **because** it makes users discover new music. If true, improving discovery improves the effect.
+:::
+:::
+:::
+
+## Three regressions {.smaller}
+
+```{r med1, echo=TRUE}
+model_m <- lm(new_artists ~ smart_mix + prior_hours + premium, data = wave2)          # path a
+model_y <- lm(hours ~ smart_mix + new_artists + prior_hours + premium + tenure, data = wave2)   # paths b and c'
+a <- coef(model_m)["smart_mix"]; b <- coef(model_y)["new_artists"]; c_direct <- coef(model_y)["smart_mix"]
+c(a = unname(a), b = unname(b), direct = unname(c_direct), indirect = unname(a * b), total = unname(c_direct + a * b))
+```
+
+::: columns
+::: {.column width="50%"}
+-   **a** = 3.6 more new artists with Smart Mix
+-   **b** = 0.39 hours per new artist, holding Smart Mix constant
+-   **c′** = 2.31 hours direct — down from the total 3.72
+:::
+
+::: {.column width="50%"}
+::: keybox
+Indirect effect a × b = **1.42 hours = 38%** of the effect runs through discovery. Discovery is **an** important mechanism — not the only one.
+:::
+:::
+:::
+
+## Uncertainty of the indirect effect: bootstrap {.smaller}
+
+```{r boot, echo=TRUE}
+set.seed(1)
+boot_indirect <- replicate(2000, {
+  d_boot <- wave2[sample(nrow(wave2), replace = TRUE), ]
+  coef(lm(new_artists ~ smart_mix + prior_hours + premium, data = d_boot))["smart_mix"] *
+    coef(lm(hours ~ smart_mix + new_artists + prior_hours + premium + tenure, data = d_boot))["new_artists"]
+})
+quantile(boot_indirect, c(0.025, 0.975))
+```
+
+::: keybox
+A product of two estimates is **not normally distributed** → no textbook standard error → **bootstrap** (Chapter 3): resample users, re-estimate, look at the distribution. Report **total, direct, indirect** with uncertainty, plus the **share mediated**. (`mediation` package: `mediate()` does this incl. logistic outcomes.)
+:::
+
+## The catch: nobody randomized the mediator {.midsize}
+
+::: columns
+::: {.column width="55%"}
+Live demo: book §6.7 — mediation widget, switch on the **unobserved confounder of M and Y**
+
+`r paste0("[", book_url, "#sec-mech-mediation](", book_url, "#sec-mech-mediation)")`
+
+::: {style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 1.5em; text-align: center; color: #58585a; margin-top: 0.6em;"}
+*Screenshot placeholder: the mediation widget*\
+`img/ch06/widget_mediation.png`
+:::
+:::
+
+::: {.column width="45%"}
+::: keybox
+Randomization identifies the **total** effect. The **split** needs one more assumption: **no unobserved confounder of mediator and outcome** (curious users discover more *and* listen more). Untestable — and the same problem as Chapter 5, one step down the chain.
+:::
+
+What helps: measure likely confounders of M; **manipulate the mediator** (Smart Mix with vs. without discovery).
+:::
+:::
+
+# 6.8 Good and bad controls {.divider background-color="#0a3d6e"}
+
+## Fork, pipe, collider {.midsize}
+
+```{r dags, fig.width=11.5, fig.height=3.6}
+fig_dag_structures(base_size = 12)
+```
+
+::: keybox
+**Fork** = confounder → adjust (Ch. 5). **Pipe** = mediator → adjusting gives the *direct* effect, not the total. **Collider** = common effect → adjusting (or selecting on it) **creates** a spurious association. Draw the diagram **before** the analysis.
+:::
+
+::: notes
+Collider example for the room: among "top campaigns" (selected on spend AND quality), spend and quality look negatively related even if unrelated overall. Reading section: §6.8 in the book, including the formal assumption of mediation (sequential ignorability).
+:::
+
+# 6.9 Your group project {.divider background-color="#0a3d6e"}
+
+## Moderation and mediation with 120 respondents {.midsize}
+
+::: columns
+::: {.column width="50%"}
+**Add a moderator?**
+
+-   Only if central to your topic and you can state the **expected direction** in advance
+-   Measure it **before** the manipulation
+-   `outcome ~ condition * moderator`
+-   60 per condition → only **large** interactions detectable
+-   A 2 × 2 spreads you over cells of 30
+:::
+
+::: {.column width="50%"}
+**Measure a mediator?**
+
+-   One or two plausible mechanisms, measured **after** the manipulation (perceived quality, trust, attention)
+-   Cheap — and tells you **where the chain broke** if the manipulation did not work
+-   Report total / direct / indirect **with the caveats**
+:::
+:::
+
+::: keybox
+State what was **planned** and what was **exploratory**. "No evidence that the effect differs" ≠ "the effect is the same".
+:::
+
+## Learning check {.smaller}
+
+1.  `smart_mix` = 5.0, `smart_mix:premium` = −3.1. Effect for free users? For Premium? What does the interaction's *p*-value test?
+2.  2 × 2: intercept 40, `framingYearly` −5, `trialYes` +8, `framingYearly:trialYes` +6. The four cell means? Where does the trial help more?
+3.  A loyalty program's total effect on spending, with "store visits" as a control — fork, pipe, or collider? Consequence?
+4.  25 segments tested, "works particularly well for returning customers on tablets" (*p* = .02). Problem — and what next?
+
+::: notes
+(1) 5.0 free, 1.9 Premium; whether the two effects differ. (2) 40 / 35 / 48 / 49: trial helps more with yearly framing (+14 vs +8). (3) Pipe: visits are a mediator; adjusting removes part of the total effect. (4) Subgroup fishing; pre-register the segment and test it in the next experiment.
+:::
+
+## Next session
+
+**Module 8 · Survey design** — *from research question to questionnaire*
+
+-   Measuring constructs: items, scales, reliability
+-   Embedding your experiment in a Qualtrics survey
+-   Questionnaire structure, pretesting, data collection
+
+::: keybox
+Bring your group's **research question and planned manipulation** — we will work on your questionnaires in class.
+:::

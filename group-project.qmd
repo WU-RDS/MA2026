@@ -1,0 +1,5 @@
+# Overview & guidelines {#sec-group-project .unnumbered}
+
+::: {.callout-note title="Contents follow soon"}
+This page will contain the detailed guidelines for the group project: tasks and milestones, requirements for the video presentation and the submission, the peer review, and the grading criteria. The key dates are already listed in the [Introduction](00-introduction.qmd).
+:::

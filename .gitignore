@@ -3,3 +3,6 @@ _book/
 _freeze/
 .Rproj.user/
 slides/*.html
+
+/.quarto/
+**/*.quarto_ipynb

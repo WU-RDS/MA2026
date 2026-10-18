@@ -1,0 +1,202 @@
+# Introduction {.unnumbered}
+
+## Course structure
+
+This course combines weekly in-person sessions with self-study elements on this website. The syllabus consists of three main parts:
+
+1.  **Weekly sessions & lecture notes**: the in-person sessions introduce the concepts and methods — with live analyses, discussion, and plenty of time for questions. The chapters on this website consolidate each session with full explanations, commented R code, and a learning check. **Work through the assigned chapter *after* the respective session.** Each session opens with a short paper quiz on the previous chapter (counts toward participation).
+2.  **Individual assignments**: three assignments require you to transfer the acquired knowledge to new data and business settings.
+3.  **Group project**: you will design and conduct your own market research project — including a real randomized experiment — and present the results in a pre-recorded video presentation.
+
+**Before the second session**, complete the self-paced [R onboarding module](r-onboarding.qmd), which walks you through installing R and RStudio (or working in Posit Cloud as a zero-install alternative). AI assistants are an endorsed study aid for setup problems.
+
+If questions come up, please use the **forum on Canvas** and your **AI assistant** first — if you have the question, so do five others. Beyond that, we are available in the weekly sessions and the coaching sessions.
+
+### Schedule
+
+#### Sessions
+
+**Group A (Mondays)**
+
+| # | Date | Time | Room | Topic |
+|:-:|---|---|---|--------|
+| 1 | Mon, Oct 5 | 13:00–16:00 | TC.4.03 | Questions, decisions & data |
+| 2 | Mon, Oct 12 | 13:00–17:00 | D3.0.233 | Describing data |
+| 3 | Mon, Oct 19 | 13:00–17:00 | D3.0.233 | Uncertainty & Experiments I |
+| 4 | Tue, Oct 27 | 13:00–16:00 | TC.5.05 | Experiments II |
+| 5 | Mon, Nov 2 | 13:00–16:00 | TC.4.03 | Observational data I |
+| 6 | Mon, Nov 9 | 13:00–16:00 | TC.4.03 | Observational data II |
+| 7 | Mon, Nov 16 | 13:00–16:00 | TC.4.03 | Mechanisms & heterogeneity |
+| 8 | Mon, Nov 23 | 13:00–16:00 | TC.4.03 | Survey design |
+
+: Session dates — Group A. {.striped}
+
+**Group B (Thursdays)**
+
+| # | Date | Time | Room | Topic |
+|:-:|---|---|---|--------|
+| 1 | Thu, Oct 8 | 13:00–16:00 | TC.5.03 | Questions, decisions & data |
+| 2 | Thu, Oct 15 | 13:30–17:30 | TC.3.03 | Describing data |
+| 3 | Thu, Oct 22 | 13:00–17:00 | TC.5.15 | Uncertainty & Experiments I |
+| 4 | Thu, Oct 29 | 13:00–16:00 | TC.5.03 | Experiments II |
+| 5 | Thu, Nov 5 | 13:00–16:00 | TC.5.03 | Observational data I |
+| 6 | Thu, Nov 12 | 13:00–16:00 | TC.5.03 | Observational data II |
+| 7 | Thu, Nov 19 | 13:00–16:00 | TC.5.03 | Mechanisms & heterogeneity |
+| 8 | Thu, Nov 26 | 13:30–16:30 | TC.3.03 | Survey design |
+
+: Session dates — Group B. {.striped}
+
+**Attendance:** to pass the course, you need to be present for at least **80%** of the in-class time.
+
+#### Group project milestones
+
+| Milestone | Group A (Mondays) | Group B (Thursdays) |
+|---|---|---|
+| Coaching I — questionnaire design *(online)* | Mon, Nov 30, 13:00–17:00 | Thu, Dec 3, 14:00–18:00 |
+| Field your survey | December | December |
+| Coaching II — data analysis *(online)* | Thu, Jan 7, 13:00–17:00 | Fri, Jan 8, 14:00–18:00 |
+| Submission: video presentation | Wed, Jan 20 | Wed, Jan 20 |
+| Submission: peer review of one other group's video | Mon, Jan 25 | Mon, Jan 25 |
+
+: Group project milestones for both groups. {.striped}
+
+#### Final exam
+
+The **final exam** takes place on **Tuesday, December 15, 10:00–12:00, in D5.0.001** (both groups) — **paper & pencil, in person, open book** (course slides may be used). The exam covers the concepts and methods of the course (no coding). Example exams will be provided on Canvas before the exam.
+
+#### Individual assignments
+
+There are **three individual assignments**. Each is handed out in class, submitted as a **reproducible report** (.Rmd → HTML) via Canvas, and followed by a short **in-class debrief** — three short paper questions about *your* results at the start of the next session (closed book, no laptop). **Each assignment is worth 10 points: 7 for the report and 3 for the debrief.** Your lowest debrief score across the three assignments is replaced by the average of the other two — so one missed or unsuccessful debrief does not count against you. The **submission deadline is always the day before the debrief session**. **Every student receives an individual dataset**, so results and conclusions differ by design. The solutions are posted in the section [Assignments](assignment1.qmd) after the respective debrief.
+
+**Group A (Mondays)**
+
+| # | Topic | Hand-out | Submission | Debrief |
+|---|--------|---|---|---|
+| A1 | Data handling & description in R | Mon, Oct 12 | Mon, Oct 26 | Tue, Oct 27 |
+| A2 | Analyzing experiments | Tue, Oct 27 | Sun, Nov 8 | Mon, Nov 9 |
+| A3 | Analyzing observational data | Mon, Nov 9 | Sun, Nov 22 | Mon, Nov 23 |
+
+: Assignment schedule — Group A. {.striped}
+
+**Group B (Thursdays)**
+
+| # | Topic | Hand-out | Submission | Debrief |
+|---|--------|---|---|---|
+| A1 | Data handling & description in R | Thu, Oct 15 | Wed, Oct 28 | Thu, Oct 29 |
+| A2 | Analyzing experiments | Thu, Oct 29 | Wed, Nov 11 | Thu, Nov 12 |
+| A3 | Analyzing observational data | Thu, Nov 12 | Wed, Nov 25 | Thu, Nov 26 |
+
+: Assignment schedule — Group B. {.striped}
+
+::: {.callout-important title="Our AI policy"}
+**AI assistants are welcome in the assignments** — they may support your work at every step, but not do it for you: a submission without individual contribution earns no credit, disclosed or not. You must be able to **explain everything you submit** (that is what the debrief checks), and each report ends with a short **AI-use disclosure**. Honest disclosure is never penalized; concealing substantial AI use is. The final exam is the unassisted layer: paper & pencil, in person.
+
+*"How much AI is allowed?" — As much as you like, provided you can explain what was done and why.*
+:::
+
+**Use it — but don't let it study for you.** Why is the policy designed this way? Recent evidence shows that the outcomes of AI use depend on *how* students use it. In a 30-month panel of 26,811 Chinese students, AI adoption increased homework scores by 18% and reduced homework time by 30% — but lowered exam scores by 20%, and entrance exam scores by 18–24% after two years. These losses were driven by the roughly 80% of students who *outsourced* their homework; students who used AI but spent the same amount of time on their homework showed no learning loss (Strömberg, Lei & Wu, 2026; see also Autor et al., 2026, NBER Working Paper 35720; Bastani et al., 2025, *PNAS*; Kestin et al., 2025). The course design mirrors this evidence: the assignments are your homework, with AI allowed; the debriefs and the exam are the layer where you show what *you* have learned.
+
+#### Group project
+
+The group project consists of two parts:
+
+1.  **Questionnaire design & data collection**: your group picks one of **14 proposed topics** (with starter literature) or suggests its own, and designs a questionnaire of **≈ 30 questions** (~5 per member) in **Qualtrics** (free account provided). The design contains a **real experiment** with random assignment of participants to conditions. You present your draft in **Coaching I** (research problem, design, measurement, planned analyses), receive feedback, and revise. Each member then recruits **≈ 20 respondents**, i.e. **≈ 120 responses** per group.
+2.  **Data analysis & presentation**: you import and clean your Qualtrics data in R and analyze it — descriptives, your experimental comparison, and heterogeneity (for whom does it work?). **Coaching II** (online) is dedicated to working through your analysis. You submit a .zip containing the **pre-recorded video presentation**, the data, the reproducible R code, and your slides. Afterwards, each student **peer reviews two other groups' videos** (counts toward participation).
+
+What makes a good project?
+
+-   A **precise research question** with managerial relevance — and hypotheses stated *before* data collection
+-   A clean **experimental manipulation**: everything constant except the treatment; randomizer placed correctly
+-   **Keep it simple**: two conditions are sufficient (your sample size will be limited)
+-   **Deliberate measurement**: a dependent variable with real variation (e.g., willingness to pay)
+-   **Moderators** to analyze heterogeneous treatment responses, and **mediators** to understand the process
+-   Analyses **matched to the design** — justified test choice, honest uncertainty, assumptions checked
+-   A presentation that **tells the decision-maker what to do** — not a parade of charts
+
+**Individual grades**: a peer assessment among group members and a short **contribution & AI-use statement** enter the individual grade. In addition, each student submits a **peer review of one other group's video**, using a structured form; it is part of the individual project grade (2 of 30 points).
+
+Detailed guidelines, the topic list, and the materials on survey design will be available in the section [Group project](group-project.qmd) of this website.
+
+### Grading
+
+| Component | Weight |
+|:--------|:--:|
+| Market research **group project** (design → data collection → analysis → **video presentation**) | 30% |
+| Individual **take-home assignments** (3 × reproducible report + **in-class debrief**; per assignment 7 + 3 points) | 30% |
+| **Final exam** (concepts & methods — no coding · **course slides may be used**, paper & pencil, in person) | 30% |
+| **Class participation** (weekly quizzes · active contributions in class & forum) | 10% |
+
+: Grading components. {.striped}
+
+-   To pass, your **weighted final grade must reach at least 60%** — across all components combined; there is no minimum per component.
+-   In addition, you need to be **present for at least 80%** of the in-class time.
+-   **Participation has two parts, and strengths in one can partly compensate for the other.** *Quizzes (up to 6 points):* each session opens with a short paper quiz on the previous chapter; of the seven quizzes, your **best six** count — so one quiz does not count, and not every quiz has to be perfect. *Active contributions (up to 6 points):* you earn **one point per session, at most**, for a substantive contribution — presenting your solution to an in-class task, a question or comment that moves a discussion forward, or answering a fellow student's question in the forum (at most two points from the forum). The two parts add up to **at most 10 points**.
+
+| Overall percentage | Grade |
+|:---:|:---:|
+| 90–100% | 1 (excellent) |
+| 80–89% | 2 (good) |
+| 70–79% | 3 (satisfactory) |
+| 60–69% | 4 (sufficient) |
+| < 60% | 5 (fail) |
+
+: Grading scheme. {.striped}
+
+## Course materials
+
+### Main reference
+
+The main reference for this course is **this website** along with the corresponding **slides and PDF handouts**, which are linked from every chapter. The chapters condense the contents with full explanations, commented R code, and learning checks, so that we can focus the classroom sessions on application, discussion, and the points that require clarification. Everything is **free and always current** — no textbook purchase is required. **Canvas** is used for assignment hand-outs and submissions, the forum, and announcements.
+
+At the end of each chapter, you will find a section with references. It is highly recommended that you consult these references for further clarification in case you require additional information on a topic.
+
+### Further readings
+
+In addition to these lecture notes, there are many excellent books available (many of them for free) that focus on different aspects of R and data analysis. There are so many free resources available by now that a team of R programmers has set up a website that provides an overview of the available resources by topic: [Big Book of R](https://www.bigbookofr.com/).
+
+In case you would like to learn more about the topics of this course, I can particularly recommend the following books:
+
+-   **[Data Analysis for Business, Economics, and Policy](https://gabors-data-analysis.com/)** (Békés & Kézdi) — an excellent, case-based treatment of data analysis, prediction, and causal inference whose spirit this course shares.
+-   **[R for Data Science](https://r4ds.hadley.nz/)** — Hadley Wickham's introduction to R as a tool for doing data science, focusing on the tidyverse. \[FREE online version\]
+-   **[An Introduction to Statistical Learning](https://www.statlearning.com/)** — an introduction to statistical learning methods, from linear regression to more advanced methods. \[FREE online version\]
+-   **[R for Marketing Research and Analytics](http://r-marketing.r-forge.r-project.org/)** — designed to teach R to marketing practitioners and data scientists.
+-   **[Statistical Inference via Data Science](https://moderndive.com/)** — an accessible treatment of statistical inference. \[FREE online version\]
+-   **[Text Mining with R](http://tidytextmining.com/)** — analyzing unstructured data (texts) using R. \[FREE online version\]
+-   **[R Graphics Cookbook](https://r-graphics.org/)** — more than 150 recipes for generating high-quality graphs quickly. \[FREE online version\]
+-   **[Using R For Introductory Econometrics](http://www.urfie.net/read/index.html)** — an introduction to R with a focus on standard tools and methods used in econometrics. \[FREE online version\]
+-   **[Discovering Statistics Using R](https://www.amazon.de/Discovering-Statistics-Using-Andy-Field/dp/1446200469)** (Field, Miles & Field, 2012) — an accessible and comprehensive introduction to statistics.
+
+### Discussion forum
+
+**We strongly encourage you to ask your questions via the online forum** on the course page on CANVAS WU. The purpose of the forum is to allow you to discuss questions related to the contents with your classmates and us. Please make use of this forum as much as possible and ask questions if something remained unclear. Remember that there are no stupid questions! And if you know the answer to a question that is asked in the forum, it is also a good exercise to explain the concepts to your classmates.
+
+### Other web resources
+
+-   <https://www.r-project.org/> — official R website
+-   <https://www.rdocumentation.org/> — R documentation aggregator
+-   <https://stackoverflow.com/> — general discussion forum for programmers, incl. R
+-   <https://stats.stackexchange.com/> — discussion forum on statistics and data analytics
+-   <https://www.r-bloggers.com/> — R blog aggregator
+-   <http://www.cookbook-r.com/> — useful examples for all kinds of R problems
+-   <https://ggplot2.tidyverse.org/reference/index.html> — reference for data visualization
+
+### Contact
+
+We are happy to answer your questions, so feel free to send a short email:
+
+-   **Lectures & group project:** Univ.Prof. Dr. Nils Wlömert (<nils.wloemert@wu.ac.at>)
+-   **Individual assignments:** Anna Di Donato (<anna.di.donato@wu.ac.at>)
+
+We will be available during the weekly sessions to clarify your questions. **However, please note that before you contact us, you should try to solve problems on your own first** — by using this website, your AI assistant of choice, the forum on Canvas, or by asking in class.
+
+### Acknowledgements
+
+This tutorial is supported through Digital Learning Project Funding by WU Vienna. None of the materials covered in this tutorial are new. We intend to provide a summary of existing methods from a marketing research perspective and cite the corresponding sources. If you should have any comments or suggestions, please [contact us through the GitHub page of this course](https://github.com/WU-RDS).
+
+::: {style="display: flex; justify-content: space-between; align-items: center; margin-top: 4em;"}
+![](img/logo_wu.jpg){width=150px}
+
+![](img/logo_rds.png){width=150px}
+:::
+
+

@@ -57,9 +57,23 @@ $code-color: $wu-blue-dark;
   border-radius: 0 6px 6px 0;
 }
 
-// Slightly smaller tables
+// Tables on slides: zebra rows, readable size, tidy cells
 .reveal table {
-  font-size: 0.72em;
+  font-size: 0.95em;
+  margin: 0.4em auto 0.6em 0;
+  border-collapse: collapse;
+}
+.reveal table th {
+  border-bottom: 2px solid $wu-grey;
+  padding: 0.28em 0.75em;
+  text-align: left;
+}
+.reveal table td {
+  padding: 0.28em 0.75em;
+  border-bottom: 1px solid #e2e2e2;
+}
+.reveal table tbody tr:nth-child(odd) td {
+  background-color: #eef3f8;
 }
 
 // Source lines under exhibits
@@ -67,4 +81,9 @@ $code-color: $wu-blue-dark;
   font-size: 0.45em;
   color: $wu-grey;
   margin-top: 0.4em;
+}
+
+// Intermediate slide size between normal and .smaller
+.reveal .slides section.midsize {
+  font-size: 0.8em;
 }

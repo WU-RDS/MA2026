@@ -1,0 +1,29 @@
+# Questionnaire Design {.unnumbered}
+
+::: {.callout-warning title="In preparation"}
+This appendix is being migrated from last year's course site. The section structure below reflects the planned contents; the full guidelines, examples, and Qualtrics how-tos follow.
+:::
+
+## Research design
+
+*From research question to design: descriptive, predictive, or causal; experimental designs (between- vs. within-subjects), randomization, confounders and control variables, reverse causality.*
+
+## Questionnaire structure
+
+*Introduction page, familiarization questions, placement of the manipulation, dependent and independent variables, demographics at the end; respondent experience and mobile-friendliness; structure for between- and within-subjects designs; setting up a randomizer in Qualtrics.*
+
+## Question contents & wording
+
+*Brevity and simple language; double-barreled, leading, and ambiguous questions; aided vs. unaided recall; sensitive questions.*
+
+## Measurement scales & scaling techniques
+
+*Levels of measurement and their consequences for the analysis; itemized rating scales (Likert, semantic differential), continuous rating scales; comparative scales (rank order, constant sum); choices: number of categories, balanced/unbalanced, forced/non-forced.*
+
+## Question types with examples
+
+*Single choice, multiple choice, open-ended entries (numeric and text); choosing a dependent variable with real variation; item batteries; price anchors; keeping everything else constant in experiments.*
+
+## Pretesting & data collection
+
+*Pretest your questionnaire; force-response settings, progress bar, mobile preview; convenience sampling and sample diversity; per-member recruiting targets.*

@@ -1,0 +1,5 @@
+# Assignment 1: Data handling & description {#sec-assignment1 .unnumbered}
+
+::: {.callout-note title="Contents follow soon"}
+The solution to Assignment 1 will be posted here after the in-class debrief (Group A: Tue, Oct 27 · Group B: Thu, Oct 29).
+:::

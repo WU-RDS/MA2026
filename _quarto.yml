@@ -1,6 +1,10 @@
 project:
   type: book
   output-dir: _book
+  resources:
+    - img
+    - code
+    - data
 
 book:
   title: "Marketing Analytics"
@@ -8,12 +12,29 @@ book:
   date: last-modified
   chapters:
     - index.qmd
+    - 00-introduction.qmd
     - 01-foundations.qmd
-  # Add further chapters here as they are migrated, e.g.:
-  #  - 02-describing-data.qmd
+    - 02-describing-data.qmd
+    - 03-uncertainty.qmd
+    - 04-experiments.qmd
+    - 05-observational-data.qmd
+    - 06-mechanisms.qmd
+    - part: "Assignments"
+      chapters:
+        - assignment1.qmd
+        - assignment2.qmd
+        - assignment3.qmd
+    - part: "Group project"
+      chapters:
+        - group-project.qmd
+        - project-topics.qmd
+        - survey-design.qmd
+  appendices:
+    - r-onboarding.qmd
   repo-url: https://github.com/wu-rds/MA2026   # adjust to the actual repo
   sidebar:
     search: true
+    collapse-level: 1
 
 bibliography: references.bib
 
@@ -27,6 +48,8 @@ format:
     code-fold: true
     code-summary: "Show the code"
     fig-dpi: 200
+    link-external-newwindow: true
+    link-external-icon: true
 
 execute:
   warning: false

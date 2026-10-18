@@ -1,0 +1,5 @@
+# Topics {#sec-project-topics .unnumbered}
+
+::: {.callout-note title="Contents follow soon"}
+This page will contain the 14 proposed topics for the group project, each with starter literature.
+:::

@@ -1,0 +1,251 @@
+# ======================================================================
+# Marketing Analytics — Chapter 3: Uncertainty
+# Companion code to Chapter 3 of the course book. The chapter explains
+# every step in detail; this script collects the code in one place.
+# ======================================================================
+
+# ----------------------------------------------------------------------
+# 0. Setup
+# ----------------------------------------------------------------------
+
+library(tidyverse)
+options(scipen = 999)
+
+# ======================================================================
+# 3.1 Motivation: an A/B test at a streaming service
+# ======================================================================
+
+# Simulated A/B test: 400 randomly selected users, randomly split into
+# two groups of 200. The treatment group sees the new "Smart Mix" feature.
+# Outcome: listening hours in the four weeks after the start of the test.
+set.seed(31)
+ab_test <- tibble(
+  group = factor(rep(c("Control", "Smart Mix"), each = 200), levels = c("Smart Mix", "Control")),
+  hours = c(rgamma(200, shape = 2, scale = 10), rgamma(200, shape = 2, scale = 11.5))
+)
+
+# The dashboard view: two group means as bars (point estimates only)
+ab_test |>
+  group_by(group) |>
+  summarise(mean_hours = mean(hours)) |>
+  ggplot(aes(x = group, y = mean_hours)) +
+  geom_col(width = 0.55, fill = "#0f5da8") +
+  labs(x = NULL, y = "Mean listening hours (four weeks)") +
+  theme_minimal()
+
+# Group means, medians, and spread: Smart Mix users listened about 3 hours more
+ab_test |>
+  group_by(group) |>
+  summarise(n = n(), mean_hours = mean(hours), median_hours = median(hours), sd_hours = sd(hours))
+
+ggplot(ab_test, aes(x = group, y = hours)) +
+  geom_jitter(width = 0.18, height = 0, alpha = 0.35) +
+  stat_summary(fun = mean, geom = "point", color = "#0f5da8", size = 5) +
+  coord_flip() +
+  labs(x = NULL, y = "Listening hours in the four weeks after the start of the test") +
+  theme_minimal()
+
+# Real effect or noise? The t-test output is explained in Chapters 3 and 4
+t.test(hours ~ group, data = ab_test)
+
+# --- What would make the difference more convincing? -------------------
+# Two thought experiments with EXACTLY the same group means.
+
+# (1) A larger sample: 2,000 users per group, rescaled to the original means
+ab_means <- ab_test |> group_by(group) |> summarise(m = mean(hours))
+set.seed(32)
+ab_large <- tibble(
+  group = factor(rep(c("Control", "Smart Mix"), each = 2000), levels = c("Smart Mix", "Control")),
+  hours = c(rgamma(2000, shape = 2, scale = 10), rgamma(2000, shape = 2, scale = 11.5))
+) |>
+  group_by(group) |>
+  mutate(hours = hours * ab_means$m[match(group, ab_means$group)] / mean(hours)) |>
+  ungroup()
+
+ab_large |> group_by(group) |> summarise(n = n(), mean_hours = mean(hours), sd_hours = sd(hours))
+t.test(hours ~ group, data = ab_large)      # same difference, larger t, smaller p, narrower CI
+
+# (2) More similar users: the original 400 users, pulled halfway toward their group mean
+ab_similar <- ab_test |>
+  group_by(group) |>
+  mutate(hours = mean(hours) + 0.5 * (hours - mean(hours))) |>
+  ungroup()
+
+ab_similar |> group_by(group) |> summarise(n = n(), mean_hours = mean(hours), sd_hours = sd(hours))
+t.test(hours ~ group, data = ab_similar)    # same difference, same n, less spread -> less uncertainty
+
+# Two ingredients of uncertainty: the number of observations and their spread.
+# Section 3.4 puts them together: the standard error sigma / sqrt(n).
+
+
+# ======================================================================
+# 3.3 Sampling variation
+# ======================================================================
+
+# A simulated population: monthly listening time (hours) of all
+# 25,000 WU students. Because we simulate it, we know the true values.
+set.seed(321)
+population <- rnorm(25000, mean = 50, sd = 10)
+
+mean(population)   # population mean (mu)
+sd(population)     # population standard deviation (sigma)
+
+ggplot(tibble(hours = population), aes(hours)) +
+  geom_histogram(bins = 60, fill = "#dbe7f3", color = "white") +
+  geom_vline(xintercept = mean(population), color = "#0a3d6e", linewidth = 1) +
+  labs(x = "Hours per month", y = "Number of students") +
+  theme_minimal()
+
+# One random sample of 100 students ...
+set.seed(6789)
+sample_1 <- sample(population, size = 100)
+mean(sample_1)
+
+# ... and another one: a different mean (sampling variation)
+sample_2 <- sample(population, size = 100)
+mean(sample_2)
+
+# The sampling distribution: the means of many samples
+set.seed(12345)
+sample_means <- replicate(20000, mean(sample(population, size = 100)))
+
+mean(sample_means)   # close to the population mean
+sd(sample_means)     # the standard error
+
+ggplot(tibble(mean = sample_means), aes(mean)) +
+  geom_histogram(bins = 50, fill = "#0f5da8", color = "white") +
+  geom_vline(xintercept = mean(population), color = "#b03a2e", linetype = "dashed") +
+  labs(x = "Sample mean (hours per month)", y = "Number of samples") +
+  theme_minimal()
+
+
+# ======================================================================
+# 3.4 The standard error
+# ======================================================================
+
+# Standard error from the formula: sigma / sqrt(n)
+sd(population) / sqrt(100)
+
+# The square-root law: 4x the sample size, half the standard error
+tibble(n = c(25, 100, 400, 1600)) |>
+  mutate(se = sd(population) / sqrt(n))
+
+# In practice we do not know sigma -> estimate it with the sample SD
+sd(sample_1) / sqrt(length(sample_1))
+
+
+# ======================================================================
+# 3.5 The central limit theorem
+# ======================================================================
+
+# A right-skewed population (most students listen a moderate amount,
+# a few listen a lot)
+set.seed(321)
+population_skewed <- rgamma(25000, shape = 2, scale = 10)
+
+ggplot(tibble(hours = population_skewed), aes(hours)) +
+  geom_histogram(bins = 60, fill = "#dbe7f3", color = "white") +
+  labs(x = "Hours per month", y = "Number of students") +
+  theme_minimal()
+
+# Sample means for different sample sizes: the larger n, the more
+# normal (and the narrower) the distribution of the sample means
+set.seed(12345)
+clt <- map_dfr(c(1, 5, 30, 100), function(size) {
+  tibble(n    = paste("n =", size),
+         mean = replicate(10000, mean(sample(population_skewed, size = size))))
+}) |>
+  mutate(n = fct_inorder(n))
+
+ggplot(clt, aes(mean)) +
+  geom_histogram(bins = 50, fill = "#0f5da8", color = "white") +
+  facet_wrap(~ n, nrow = 1, scales = "free") +
+  labs(x = "Sample mean (hours per month)", y = "Number of samples") +
+  theme_minimal()
+
+
+# ======================================================================
+# 3.6 Confidence intervals
+# ======================================================================
+
+# Critical values
+qnorm(0.975)           # normal distribution: 1.96
+qt(0.975, df = 99)     # t-distribution with n = 100: 1.98
+qt(0.975, df = 9)      # t-distribution with n = 10: 2.26
+
+# How often does a 95% confidence interval contain the true mean?
+# (100 samples, 100 intervals)
+set.seed(12345)
+intervals <- map_dfr(1:100, function(i) {
+  x  <- sample(population, size = 100)
+  se <- sd(x) / sqrt(100)
+  tibble(sample = i,
+         lower  = mean(x) - qt(0.975, 99) * se,
+         upper  = mean(x) + qt(0.975, 99) * se)
+}) |>
+  mutate(contains_mu = lower <= mean(population) & upper >= mean(population))
+
+count(intervals, contains_mu)   # about 95 of 100
+
+
+# ======================================================================
+# 3.8 Uncertainty in R: working with one sample
+# ======================================================================
+
+# A random sample of 100 students from the (unknown) skewed population
+set.seed(6789)
+listening <- tibble(hours = sample(population_skewed, size = 100))
+
+# --- Confidence interval for a mean, step by step -----------------------
+n    <- nrow(listening)
+xbar <- mean(listening$hours)
+se   <- sd(listening$hours) / sqrt(n)     # standard error of the mean
+crit <- qt(0.975, df = n - 1)             # critical value (95%)
+
+c(mean = xbar, se = se, lower = xbar - crit * se, upper = xbar + crit * se)
+
+# --- The same in one line --------------------------------------------------
+t.test(listening$hours)$conf.int
+
+# --- Back to the A/B test: confidence intervals per group ----------------
+ab_test |>
+  group_by(group) |>
+  summarise(
+    n     = n(),
+    mean  = mean(hours),
+    se    = sd(hours) / sqrt(n),
+    lower = mean - qt(0.975, n - 1) * se,
+    upper = mean + qt(0.975, n - 1) * se
+  )
+
+# The dashboard view again — now with 95% confidence intervals
+ab_test |>
+  group_by(group) |>
+  summarise(n = n(), mean = mean(hours), se = sd(hours) / sqrt(n),
+            lower = mean - qt(0.975, n - 1) * se, upper = mean + qt(0.975, n - 1) * se) |>
+  ggplot(aes(x = group, y = mean)) +
+  geom_col(width = 0.55, fill = "#0f5da8") +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.15) +
+  labs(x = NULL, y = "Mean listening hours (95% CI)") +
+  theme_minimal()
+
+# The confidence interval for the DIFFERENCE between the groups
+# (computed by t.test(); explained in Chapter 4)
+t.test(hours ~ group, data = ab_test)$conf.int
+
+# --- A confidence interval for a share: the poll from 3.7 -------------------
+n_poll <- 1000
+p_hat  <- c(Harris = 0.49, Trump = 0.44)
+se_p   <- sqrt(p_hat * (1 - p_hat) / n_poll)
+cbind(share = p_hat, lower = p_hat - 1.96 * se_p, upper = p_hat + 1.96 * se_p)
+
+# The same with prop.test(): number of "successes" and sample size
+prop.test(x = 490, n = 1000)$conf.int
+# prop.test() uses the Wilson score interval (more reliable for small samples
+# and shares near 0 or 1): slightly asymmetric and shifted toward 50%, hence
+# the small difference to the hand calculation. Both tell the same story.
+
+# --- The margin of error of a poll -----------------------------------------
+# 1,000 respondents, share of about 50%
+qnorm(0.975) * sqrt(0.5 * 0.5 / 1000)     # 0.031 = 3.1 percentage points
+

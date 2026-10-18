@@ -1,0 +1,1249 @@
+---
+code-fold: false
+---
+
+# Learning from Experiments {#sec-experiments}
+
+::: {.callout-note appearance="simple"}
+📽 [Slides for this chapter](slides/chapter04_slides.html){target="_blank" rel="noopener"} · [PDF handout](slides/chapter04_slides_handout.pdf){target="_blank" rel="noopener"} · 💻 [R code for this chapter](code/04-experiments.R){download="04-experiments.R"}
+:::
+
+```{r setup-ch04}
+#| echo: false
+#| warning: false
+#| message: false
+source("R/ch03-figures.R")
+source("R/ch04-figures.R")
+options(scipen = 999)
+```
+
+*Driving question: **Did it work?***
+
+Randomized experiments are the most credible way to learn what an action *causes* (@sec-randomization). But running an experiment is only half of the job: the result comes from a sample, and every sample carries random error (@sec-uncertainty). This chapter is about the second half — how to read the result of an experiment. After working through this chapter you will be able to:
+
+- Explain the logic of a statistical test: comparing the observed difference with the differences that chance alone would produce
+- Run and interpret a *t*-test for the difference between two groups — and read every line of its output
+- Choose the right *t*-test for the design: the Welch test for **between-subjects** data, the paired test for **within-subjects** data
+- Distinguish **statistical significance** from **practical relevance**, and quantify the size of an effect
+- Compare **shares** (e.g., conversion rates) between groups
+- Explain type I and type II errors and **statistical power** — and determine the sample size an experiment needs *before* running it
+- Choose an appropriate test for other designs: more than two groups and skewed data
+- Use *p*-values responsibly — and recognize practices that make them meaningless
+
+The chapter builds on the Smart Mix A/B test from @sec-unc-abtest. The formulas are kept to a minimum: we compute a standard error once, by hand, to see what a test does — afterwards, R does the arithmetic, and we concentrate on the interpretation.
+
+## Back to the A/B test {#sec-exp-abtest}
+
+Recall the situation: a streaming service tested its new *Smart Mix* feature on 400 randomly selected users. The 200 users with Smart Mix listened `r round(diff(rev(tapply(ab_data()$hours, ab_data()$group, mean))), 1)` hours more on average in four weeks than the 200 users without it (@fig-ab-recap).
+
+```{r}
+#| label: fig-ab-recap
+#| echo: false
+#| fig-width: 6
+#| fig-height: 3.8
+#| fig-cap: "The Smart Mix A/B test as Chapter 3 left it: group means with their 95% confidence intervals (simulated data; see @sec-unc-abtest)."
+fig_ab_bars(ci = TRUE)
+```
+
+In @sec-unc-abtest, we ran a *t*-test and postponed its interpretation. Here is the output again:
+
+```{r}
+#| message: false
+library(tidyverse)
+
+set.seed(31)
+ab_test <- tibble(
+  group = factor(rep(c("Control", "Smart Mix"), each = 200), levels = c("Smart Mix", "Control")),
+  hours = c(rgamma(200, shape = 2, scale = 10), rgamma(200, shape = 2, scale = 11.5))
+)
+
+t.test(hours ~ group, data = ab_test)
+```
+
+The product team wants answers to three questions, and this chapter takes them in turn:
+
+1.  **Could the difference be chance?** Even if Smart Mix did nothing, two random groups of 200 users would never have exactly the same mean. Is 3.2 hours more than chance would typically produce? (@sec-exp-difference and @sec-exp-testing)
+2.  **How large is the effect — and does it matter?** A "real" effect can still be too small to be worth the rollout. (@sec-exp-effect)
+3.  **Was the experiment large enough?** Would a larger experiment have given a clearer answer — and how large should the next one be? (@sec-exp-power)
+
+## The difference between two means {#sec-exp-difference}
+
+### Signal and noise
+
+The key to the first question is an idea you already know from @sec-uncertainty: any number computed from a sample varies from sample to sample. This also holds for the *difference* between two group means. If we could repeat the Smart Mix experiment many times — each time with 400 new users, randomly split — we would get a slightly different difference every time. The distribution of these differences is the **sampling distribution of the difference**, and it has the same three properties as the sampling distribution of a mean:
+
+1.  It is **centered on the true difference** in the population — the true effect of Smart Mix.
+2.  It is **approximately normal** — thanks to the central limit theorem, even though listening times are skewed.
+3.  Its width is the **standard error of the difference**, which combines the uncertainty of both group means:
+
+$$
+SE_{\bar{x}_1 - \bar{x}_2} = \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}
+$$
+
+For Smart Mix: $\sqrt{16.2^2 / 200 + 13.7^2 / 200}$ = 1.50 hours. Differences of about ± 1.5 hours are therefore the "typical wobble" we must expect from random sampling alone; differences of about ± 3 hours (two standard errors) are rare, but possible.
+
+::: {.callout-note collapse="true" title="Under the hood: why the variances add"}
+The standard error of one mean is $s / \sqrt{n}$; its square, $s^2 / n$, is the *variance* of the sample mean. For two **independent** quantities, the **variance sum law** states that the variance of their difference is the sum of their variances: $\text{Var}(\bar{x}_1 - \bar{x}_2) = s_1^2 / n_1 + s_2^2 / n_2$ — the minus sign vanishes because subtracting an uncertain number adds uncertainty just as adding one does. Taking the square root gives the formula above. Uncertainties therefore combine like the sides of a right triangle, not end to end: two standard errors of 1.1 and 1.0 hours give 1.5, not 2.1, because random errors in the two groups partly cancel. The law has one condition — independence. When the two measurements belong to the same person, as in the paired design of @sec-exp-other, they are correlated, the covariance is subtracted, and the standard error of the difference becomes *smaller*: $\text{Var}(X - Y) = \text{Var}(X) + \text{Var}(Y) - 2\,\text{Cov}(X, Y)$.
+:::
+
+::: {.callout-tip title="Try it: one experiment, one difference" icon="false"}
+
+Each click runs a new Smart Mix experiment: it draws new users for both groups from two populations in which Smart Mix **truly** increases listening time by 3 hours. The first chart shows the users of the **latest** experiment with their group means; the second chart collects the differences of **all** experiments run so far.
+
+::: {.unc-widget}
+```{ojs}
+//| echo: false
+viewof d1_runs = Inputs.button(
+  [["Run 1 experiment", v => v + 1], ["Run 100 experiments", v => v + 100], ["Reset", v => 1]],
+  {value: 1})
+```
+
+```{ojs}
+//| echo: false
+viewof d1_n = Inputs.radio([50, 200, 800], {value: 200, label: "Users per group",
+  format: d => d.toLocaleString("en")})
+```
+:::
+
+```{ojs}
+//| echo: false
+d1 = {
+  const rng = d3.randomLcg(77);
+  const gc = d3.randomGamma.source(rng)(2, 10), gt = d3.randomGamma.source(rng)(2, 11.5);
+  const n = d1_n, diffs = [];
+  let last = null;
+  for (let k = 0; k < d1_runs; k++) {
+    const c = Array.from({length: n}, () => gc()), t = Array.from({length: n}, () => gt());
+    const mc = d3.mean(c), mt = d3.mean(t);
+    diffs.push(mt - mc);
+    if (k === d1_runs - 1) last = {c, t, mc, mt};
+  }
+  const se = Math.sqrt((2 * 10 ** 2) / n + (2 * 11.5 ** 2) / n);
+  return {diffs, last, n, se};
+}
+```
+
+```{ojs}
+//| echo: false
+{
+  const jit = i => ((i * 0.6180339887) % 1) - 0.5;
+  const pts = d1.last.c.map((x, i) => ({x, y: 0 + 0.6 * jit(i), g: "Control"}))
+    .concat(d1.last.t.map((x, i) => ({x, y: 1 + 0.6 * jit(i + 7), g: "Smart Mix"})));
+  const left = Plot.plot({
+    width: 380, height: 240, marginLeft: 75,
+    x: {label: "Listening hours (four weeks)", domain: [0, 100]},
+    y: {label: null, domain: [-0.6, 1.6], ticks: [0, 1], tickFormat: d => d === 0 ? "Control" : "Smart Mix"},
+    marks: [
+      Plot.dot(pts, {x: "x", y: "y", r: 1.6, fillOpacity: 0.35, fill: d => d.g === "Control" ? "#d99a2b" : "#0f5da8"}),
+      Plot.ruleX([d1.last.mc], {y1: -0.45, y2: 0.45, stroke: "#b03a2e", strokeWidth: 3}),
+      Plot.ruleX([d1.last.mt], {y1: 0.55, y2: 1.45, stroke: "#b03a2e", strokeWidth: 3})
+    ]
+  });
+  const right = Plot.plot({
+    width: 380, height: 240, marginLeft: 50,
+    x: {label: "Difference in means (Smart Mix − Control)", domain: [-6, 12]},
+    y: {label: "Experiments", grid: true},
+    marks: [
+      Plot.rectY(d1.diffs, Plot.binX({y: "count"}, {x: d => d, thresholds: d3.range(-6, 12.01, 0.5), fill: "#0f5da8"})),
+      Plot.ruleX([0], {stroke: "#58585a", strokeDasharray: "2,3"}),
+      Plot.ruleX([3], {stroke: "#b03a2e", strokeWidth: 2, strokeDasharray: "4,3"}),
+      Plot.ruleY([0])
+    ]
+  });
+  return html`<div style="display:flex; flex-wrap:wrap; gap:1em;">
+    <div><b>The latest experiment</b> (red lines: group means)${left}</div>
+    <div><b>Differences of all experiments so far</b> (red line: true effect)${right}</div></div>`;
+}
+```
+
+```{ojs}
+//| echo: false
+{
+  const k = d1.diffs.length, last = d1.diffs[k - 1];
+  return html`<div class="unc-stats">Latest experiment: Smart Mix ${d1.last.mt.toFixed(1)} vs. Control ${d1.last.mc.toFixed(1)} hours —
+    difference <b>${last >= 0 ? "+" : ""}${last.toFixed(2)} hours</b> (true effect: +3.00) ·
+    experiments run: <b>${k.toLocaleString("en")}</b>
+    ${k > 1 ? html` · mean of all differences: <b>${d3.mean(d1.diffs).toFixed(2)}</b> ·
+      standard deviation: <b>${d3.deviation(d1.diffs).toFixed(2)}</b> (predicted standard error: ${d1.se.toFixed(2)})` : ""}</div>`;
+}
+```
+
+**What to look for.** Every experiment gives a different difference — sometimes 1 hour, sometimes 5, now and then even a negative one, although the true effect is always +3 hours. Run 100 experiments: the differences pile up around the true effect in a bell shape, and their spread matches the standard error. Switch to 50 or 800 users per group and watch the spread change.
+:::
+
+::: {.callout-tip title="Try it: differences are normal — whatever the data look like" icon="false"}
+
+Choose the type of outcome and the number of users per group. The first chart shows the two populations (control in orange, treatment in blue); the second chart shows the differences between the group means in 3,000 simulated experiments, together with the normal distribution predicted by the central limit theorem (orange line).
+
+::: {.unc-widget}
+```{ojs}
+//| echo: false
+viewof d2_shape = Inputs.select(
+  ["Right-skewed (listening hours)", "Symmetric (normal)", "Two groups (casual and heavy listeners)", "Yes/no (upgrade to Premium)"],
+  {label: "Outcome"})
+```
+
+```{ojs}
+//| echo: false
+viewof d2_n = Inputs.range([2, 300], {value: 2, step: 1, label: "Users per group"})
+```
+:::
+
+```{ojs}
+//| echo: false
+d2 = {
+  const rng = d3.randomLcg(13);
+  const nrm = d3.randomNormal.source(rng), gam = d3.randomGamma.source(rng);
+  let gc, gt, binary = false;
+  if (d2_shape.startsWith("Right")) { const a = gam(2, 10), b = gam(2, 11.5); gc = () => a(); gt = () => b(); }
+  else if (d2_shape.startsWith("Symmetric")) { const a = nrm(20, 14), b = nrm(23, 14); gc = () => a(); gt = () => b(); }
+  else if (d2_shape.startsWith("Two")) {
+    const lo = nrm(10, 3), hi = nrm(40, 6);
+    gc = () => rng() < 0.4 ? hi() : lo(); gt = () => rng() < 0.5 ? hi() : lo();
+  } else { binary = true; gc = () => rng() < 0.05 ? 1 : 0; gt = () => rng() < 0.065 ? 1 : 0; }
+  const popC = Float64Array.from({length: 20000}, gc), popT = Float64Array.from({length: 20000}, gt);
+  const k = binary ? 100 : 1;                         // shares in percentage points
+  const mu = k * (d3.mean(popT) - d3.mean(popC));
+  const n = d2_n, reps = 3000;
+  const se = k * Math.sqrt(d3.variance(popC) / n + d3.variance(popT) / n);
+  const diffs = Float64Array.from({length: reps}, () => {
+    let a = 0, b = 0;
+    for (let i = 0; i < n; i++) { a += gc(); b += gt(); }
+    return k * (b - a) / n;
+  });
+  const pmin = Math.min(d3.min(popC), d3.min(popT)), pmax = Math.max(d3.max(popC), d3.max(popT));
+  const pthr = binary ? [-0.25, 0.25, 0.75, 1.25] : d3.range(pmin, pmax + (pmax - pmin) / 40, (pmax - pmin) / 40);
+  const lo = d3.min(diffs), hi = d3.max(diffs);
+  const bw = binary ? Math.max(100 / n, (hi - lo) / 40) : (hi - lo) / 40;
+  const curve = d3.range(lo, hi, (hi - lo) / 200).map(x => ({x, y: reps * bw * Math.exp(-0.5 * ((x - mu) / se) ** 2) / (se * Math.sqrt(2 * Math.PI))}));
+  return {popC, popT, pthr, diffs, mu, se, lo, hi, bw, curve, binary};
+}
+```
+
+```{ojs}
+//| echo: false
+{
+  const left = Plot.plot({
+    width: 380, height: 250, marginLeft: 55,
+    x: {label: d2.binary ? "Upgraded (0 = no, 1 = yes)" : "Value of the outcome"},
+    y: {label: "Users", grid: true},
+    marks: [
+      Plot.rectY(d2.popC, Plot.binX({y: "count"}, {x: d => d, thresholds: d2.pthr, fill: "#d99a2b", fillOpacity: 0.55})),
+      Plot.rectY(d2.popT, Plot.binX({y: "count"}, {x: d => d, thresholds: d2.pthr, fill: "#0f5da8", fillOpacity: 0.45}))
+    ]
+  });
+  const right = Plot.plot({
+    width: 380, height: 250, marginLeft: 55,
+    x: {label: d2.binary ? "Difference in shares, percentage points (treatment − control)" : "Difference in means (treatment − control)"},
+    y: {label: "Experiments", grid: true},
+    marks: [
+      Plot.rectY(d2.diffs, Plot.binX({y: "count"}, {x: d => d, thresholds: d3.range(d2.lo, d2.hi + d2.bw, d2.bw), fill: "#0f5da8"})),
+      Plot.line(d2.curve, {x: "x", y: "y", stroke: "#d99a2b", strokeWidth: 2.5}),
+      Plot.ruleY([0])
+    ]
+  });
+  return html`<div style="display:flex; flex-wrap:wrap; gap:1em;">
+    <div><b>The two populations</b>${left}</div>
+    <div><b>Differences in 3,000 experiments with ${d2_n} users per group</b>${right}</div></div>`;
+}
+```
+
+**What to look for.** With only a handful of users per group, the differences inherit the shape of the data — skewed, lumpy, or (for yes/no outcomes) jumping in coarse steps. As the groups grow, the differences become bell-shaped for every type of outcome, as the central limit theorem predicts. Yes/no outcomes with rare successes need the largest groups — which is why conversion tests need so many users (@sec-exp-power).
+:::
+
+This is the only standard error we compute by hand in this chapter. Every test that follows works on the same principle: it compares the **signal** (the observed difference) with the **noise** (the standard error — the differences chance alone would produce).
+
+### A world in which Smart Mix does nothing
+
+To judge whether 3.2 hours is a lot, imagine a world in which Smart Mix has *no effect at all*: all users come from the same population, and any difference between the groups is pure chance. @fig-null-world simulates 10,000 A/B tests in this world.
+
+```{r}
+#| label: fig-null-world
+#| echo: false
+#| fig-width: 9
+#| fig-height: 4.3
+#| fig-cap: "The sampling distribution of the difference if Smart Mix has no effect: 10,000 simulated A/B tests with 200 users per group. Differences at least as large as the observed one (in either direction) are shown in orange."
+fig_null_world()
+```
+
+In this no-effect world, the differences scatter around zero in a bell shape, as the central limit theorem predicts. A difference as large as the one we observed — 3.2 hours or more, in either direction — occurs in only about 3.6% of the simulated tests. So either Smart Mix has an effect, or the team observed a fairly rare accident. This comparison is exactly what a statistical test formalizes.
+
+::: {.callout-tip title="Try it: how surprising is the observed difference?" icon="false"}
+
+The chart shows 2,000 simulated A/B tests **in a world in which Smart Mix has no effect**. The orange bars mark the tests whose difference is at least as large as the observed one. Change the **sample size per group** and the **observed difference**: when is a difference of 3.2 hours surprising — and when is it not?
+
+```{ojs}
+//| echo: false
+// ---- shared helpers for all widgets of this chapter ----
+html`<style>
+  .unc-widget form button { background: #0f5da8 !important; color: #fff !important; border: none;
+    border-radius: 6px; padding: 0.3em 0.9em; font-weight: 600; cursor: pointer; margin-right: 0.3em; }
+  .unc-widget form button:hover { background: #0a3d6e !important; }
+  .unc-stats { font-size: 0.95em; margin: 0.3em 0 0.6em 0; }
+</style>`
+```
+
+```{ojs}
+//| echo: false
+function pnorm(x) {
+  // standard normal distribution function (Abramowitz & Stegun 26.2.17)
+  const t = 1 / (1 + 0.2316419 * Math.abs(x));
+  const d = 0.3989422804 * Math.exp(-x * x / 2);
+  const p = d * t * (0.319381530 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429))));
+  return x > 0 ? 1 - p : p;
+}
+```
+
+```{ojs}
+//| echo: false
+function qnorm(p) {
+  // inverse of the standard normal distribution (Acklam's algorithm)
+  const a = [-3.969683028665376e+01, 2.209460984245205e+02, -2.759285104469687e+02, 1.383577518672690e+02, -3.066479806614716e+01, 2.506628277459239e+00];
+  const b = [-5.447609879822406e+01, 1.615858368580409e+02, -1.556989798598866e+02, 6.680131188771972e+01, -1.328068155288572e+01];
+  const c = [-7.784894002430293e-03, -3.223964580411365e-01, -2.400758277161838e+00, -2.549732539343734e+00, 4.374664141464968e+00, 2.938163982698783e+00];
+  const d = [7.784695709041462e-03, 3.224671290700398e-01, 2.445134137142996e+00, 3.754408661907416e+00];
+  const pl = 0.02425, ph = 1 - pl;
+  let q, r;
+  if (p < pl) { q = Math.sqrt(-2 * Math.log(p));
+    return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) / ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+  if (p <= ph) { q = p - 0.5; r = q * q;
+    return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q / (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1); }
+  q = Math.sqrt(-2 * Math.log(1 - p));
+  return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) / ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
+}
+```
+
+::: {.unc-widget}
+```{ojs}
+//| echo: false
+viewof e1_n = Inputs.range([25, 800], {value: 200, step: 1, label: "Users per group", transform: Math.log, invert: Math.exp})
+```
+
+```{ojs}
+//| echo: false
+viewof e1_obs = Inputs.range([0, 8], {value: 3.2, step: 0.1, label: "Observed difference (hours)"})
+```
+:::
+
+```{ojs}
+//| echo: false
+e1 = {
+  const rng = d3.randomLcg(11);
+  const gam = d3.randomGamma.source(rng)(2, 10.75);
+  const n = Math.round(e1_n), reps = 2000;
+  const diffs = Array.from({length: reps}, () => {
+    let a = 0, b = 0;
+    for (let i = 0; i < n; i++) { a += gam(); b += gam(); }
+    return (a - b) / n;
+  });
+  const sd = 10.75 * Math.sqrt(2);                 // SD of the gamma(2, 10.75) population
+  const se = sd * Math.sqrt(2 / n);
+  const share = diffs.filter(d => Math.abs(d) >= e1_obs).length / reps;
+  const lim = Math.max(4.5 * se, e1_obs + se);
+  const bw = lim / 30;
+  const curve = d3.range(-lim, lim, lim / 150).map(x => ({x, y: reps * bw * Math.exp(-0.5 * (x / se) ** 2) / (se * Math.sqrt(2 * Math.PI))}));
+  return {diffs, se, share, lim, bw, curve, n};
+}
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 760, height: 300, marginLeft: 55,
+  x: {label: "Difference in mean listening hours (no true effect)", domain: [-e1.lim, e1.lim]},
+  y: {label: "Simulated tests", grid: true},
+  marks: [
+    Plot.rectY(e1.diffs.filter(d => Math.abs(d) < e1_obs), Plot.binX({y: "count"}, {x: d => d, thresholds: d3.range(-e1.lim, e1.lim + e1.bw, e1.bw), fill: "#dbe7f3"})),
+    Plot.rectY(e1.diffs.filter(d => Math.abs(d) >= e1_obs), Plot.binX({y: "count"}, {x: d => d, thresholds: d3.range(-e1.lim, e1.lim + e1.bw, e1.bw), fill: "#d99a2b"})),
+    Plot.line(e1.curve, {x: "x", y: "y", stroke: "#0a3d6e", strokeWidth: 1.5}),
+    Plot.ruleX([-e1_obs, e1_obs], {stroke: "#b03a2e", strokeDasharray: "4,3", strokeWidth: 2}),
+    Plot.ruleY([0])
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+html`<div class="unc-stats">Standard error of the difference: <b>${e1.se.toFixed(2)}</b> hours ·
+an observed difference of ${e1_obs.toFixed(1)} hours is <b>${(e1_obs / e1.se).toFixed(2)}</b> standard errors away from zero ·
+share of no-effect tests at least as extreme: <b>${(100 * e1.share).toFixed(1)}%</b></div>`
+```
+
+**What to look for.** With 50 users per group, a difference of 3.2 hours happens all the time by chance. With 800 users per group, even 1.5 hours would be surprising. Whether a difference is "large" depends on how much it could vary by chance — on the standard error.
+:::
+
+## Testing a hypothesis {#sec-exp-testing}
+
+### Null and alternative hypothesis
+
+A statistical test turns the thought experiment into a formal procedure. It starts with two competing statements about the *population*:
+
+- The **null hypothesis** ($H_0$): there is no effect. The mean listening time of all users with Smart Mix equals that of all users without it: $\mu_1 = \mu_2$.
+- The **alternative hypothesis** ($H_1$): there is an effect: $\mu_1 \neq \mu_2$.
+
+The test asks: *if the null hypothesis were true, how surprising would our data be?* If they would be very surprising, we reject the null hypothesis in favor of the alternative.
+
+### The test statistic: signal divided by noise
+
+To measure "how surprising", the test expresses the observed difference in units of its standard error:
+
+$$
+t = \frac{\text{observed difference} - \text{difference under } H_0}{\text{standard error of the difference}} = \frac{3.24 - 0}{1.50} = 2.16
+$$
+
+The observed difference is 2.16 standard errors away from zero. If $H_0$ is true, *t* values follow a *t*-distribution (for samples of this size, practically the normal distribution): 95% of them lie between about −1.97 and +1.97 (@fig-t-test). Our value lies outside this range.
+
+```{r}
+#| label: fig-t-test
+#| echo: false
+#| fig-width: 9
+#| fig-height: 4
+#| fig-cap: "The distribution of t values if the null hypothesis is true. The orange areas mark the 5% most extreme values; the observed t value lies in this region."
+fig_t_test()
+```
+
+### The *p*-value
+
+The **p-value** is the probability of observing a difference at least as extreme as the one in our data — **if the null hypothesis were true**. For Smart Mix, *p* = 0.031: in a world in which Smart Mix does nothing, only about 3 in 100 experiments would produce a difference of 3.2 hours or more (in either direction). Our simulation in @fig-null-world gave almost the same answer (3.6%).
+
+The conventional decision rule compares the *p*-value with a **significance level** $\alpha$ chosen in advance, usually 5%:
+
+- If $p < \alpha$: the result is **statistically significant** — we reject $H_0$. For Smart Mix: 0.031 < 0.05, so we conclude that Smart Mix increases listening time.
+- If $p \geq \alpha$: we **do not reject** $H_0$. Note the careful wording: this does *not* show that there is no effect — only that the data are compatible with no effect (@sec-exp-nhst).
+
+### The confidence interval of the difference
+
+The test gives a yes/no answer; the **confidence interval** of the difference tells us more: the range of effects that are compatible with the data. It is built exactly like the confidence interval of a mean (@sec-unc-ci) — estimate ± critical value × standard error:
+
+$$
+(\bar{x}_1 - \bar{x}_2) \pm t_{0.975} \times \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}
+$$
+
+For Smart Mix: 3.24 ± 1.97 × 1.50, i.e., from 0.29 to 6.20 hours (@fig-ci-diff).
+
+```{r}
+#| label: fig-ci-diff
+#| echo: false
+#| fig-width: 9
+#| fig-height: 2.6
+#| fig-cap: "The estimated effect of Smart Mix with its 95% confidence interval."
+fig_ci_diff()
+```
+
+The interval and the test always agree: **if the 95% interval does not contain zero, the test is significant at the 5% level**, and vice versa. But the interval adds information the *p*-value hides: the effect could be as small as a quarter of an hour or as large as six hours. For a rollout decision, that range is often more useful than the yes/no of the test.
+
+### Reading the output
+
+With these concepts, every line of the output becomes readable (@tbl-ttest-output).
+
+| Output | Meaning |
+|---|---|
+| `Welch Two Sample t-test` | A *t*-test for two independent groups that does not assume equal variances in both groups (R's safe default) |
+| `t = 2.1617` | The observed difference is 2.16 standard errors away from zero |
+| `df = 386.96` | Degrees of freedom — determine the exact shape of the *t*-distribution; with large samples, practically irrelevant |
+| `p-value = 0.03125` | If Smart Mix had no effect, a difference at least this large would occur in 3.1% of experiments |
+| `alternative hypothesis: ...` | The test is two-sided: it looks for a difference in either direction |
+| `95 percent confidence interval: 0.29 6.20` | The range of effects compatible with the data |
+| `mean in group ...` | The two group means; their difference is the estimated effect |
+
+: How to read the output of `t.test()` {#tbl-ttest-output .striped}
+
+::: {.callout-note collapse="true" title="Under the hood: what are degrees of freedom?"}
+**Degrees of freedom** are the number of values that are still *free to vary* once we have used the data to estimate something. The most useful way to think about them is as an **information budget**: every observation is one piece of information, and every quantity we estimate from the data uses one up. What remains is the information available for judging the *noise* — the variability we have to measure the uncertainty with.
+
+| Situation | Estimated from the data | Degrees of freedom |
+|---|---|:-:|
+| The standard deviation of one sample of $n$ values | 1 mean | $n - 1$ |
+| A *t*-test for two groups | 2 means | $n_1 + n_2 - 2$ |
+| An ANOVA with 3 groups | 3 means | $N - 3$ |
+| A regression with $k$ predictors (@sec-observational) | $k + 1$ coefficients | $n - k - 1$ |
+
+: Degrees of freedom as "observations minus estimated parameters" {#tbl-df .striped}
+
+With 400 users and two group means, 398 pieces of information are left for the noise; with 10 users and two means, only 8. In the second case, the standard error is itself a shaky estimate, and the *t*-distribution has to allow for that.
+
+Why "free to vary"? An everyday example: you have a budget of 100 € for three presents and decide to spend it all. You can choose the price of the first present freely (say 30 €) and that of the second (50 €) — but then the third is fixed: it must cost 20 €. Three prices, one constraint, **two degrees of freedom**.
+
+Statistics works the same way. To compute the standard deviation of a sample, we first need its mean. Once the mean is fixed, only $n - 1$ of the $n$ deviations from the mean are free — the last one is determined by the others (they must add up to zero). This is why the sample standard deviation divides by $n - 1$ (@sec-unc-se), and why a sample of $n$ observations has $n - 1$ degrees of freedom for estimating its variability.
+
+Why does this matter? The fewer degrees of freedom, the less information we have about the variability in the data, and the more uncertain our standard error is. The *t*-distribution accounts for this: with few degrees of freedom, it has fatter tails and larger critical values (@tbl-t-values); with many, it becomes the normal distribution. For two groups of 200 users, we have about 400 − 2 = 398 degrees of freedom — plenty. (The Welch test reports a non-integer value such as 386.96, because it combines the two groups' variances with different weights; the idea is the same.)
+
+The same logic appears in the ANOVA (@sec-exp-other): with 3 groups, the group means have 3 − 1 = 2 degrees of freedom (once the overall mean is known, the third group mean is fixed), and the variation within the groups has $N - 3$ degrees of freedom (one mean estimated per group).
+:::
+
+::: {.callout-note collapse="true" title="Under the hood: one-sided or two-sided?"}
+A **two-sided test** asks whether the groups differ in *either* direction; a **one-sided test** only looks in one direction (e.g., "Smart Mix *increases* listening time") and is therefore more likely to find an effect in that direction. The temptation is obvious — but a one-sided test ignores the possibility that the new feature makes things *worse*, and it must be decided *before* seeing the data. In business experiments, where a negative effect is exactly what you want to know about, the two-sided test is the right default. In R: `t.test(..., alternative = "greater")`.
+:::
+
+::: {.callout-note collapse="true" title="Under the hood: assumptions of the t-test"}
+The *t*-test for two independent groups relies on three assumptions:
+
+- **Independent observations:** each user appears in only one group, and users do not influence each other. Random assignment usually takes care of this — but watch out for spillovers (@sec-randomization).
+- **An approximately normal sampling distribution:** guaranteed by the central limit theorem for reasonably large samples (@sec-unc-clt). With small samples *and* strongly skewed data or extreme outliers, consider the alternatives in @sec-exp-other.
+- **A metric outcome:** the mean must be meaningful (@sec-desc-measurement).
+
+Equal variances in both groups are *not* required: R's default, the Welch test, does not assume them.
+:::
+
+::: {.callout-tip title="Your turn (5 min)"}
+Run the *t*-test again, but only for the first 50 users of each group: `t.test(hours ~ group, data = ab_test |> group_by(group) |> slice_head(n = 50))`. How do the difference, the confidence interval, and the *p*-value change? Explain the change with the standard error.
+:::
+
+## The same people in both conditions: the paired *t*-test {#sec-exp-paired}
+
+### Two designs, two tests
+
+@sec-randomization introduced two ways to randomize. In a **between-subjects design**, each person is assigned to *one* condition, and we compare *different people*: this is the Smart Mix A/B test, and the Welch *t*-test above is its analysis. In a **within-subjects design**, each person experiences *all* conditions, in random order, and we compare each person *with themselves*. The second design needs a different test — not because the question changes, but because the data come in pairs.
+
+| Design | Who is compared | Data | Test |
+|---|---|---|---|
+| Between-subjects | Different people in each condition | One row per person, a group variable | Welch *t*-test: `t.test(y ~ group)` |
+| Within-subjects | The same people in every condition | One row per person, one column per condition | Paired *t*-test: `t.test(x1, x2, paired = TRUE)` |
+
+: Which *t*-test for which design {#tbl-design-test .striped}
+
+### A within-subjects experiment
+
+Suppose the service wants to know whether a redesigned search page lets users find songs faster. Instead of splitting users into two groups, the team asks **the same 60 users** to search for songs with the old design *and* with the new one, in random order (half of them old first, half new first), and measures the seconds each search takes. The data have one row per user and one column per design:
+
+```{r}
+set.seed(4)
+skill <- rnorm(60, 0, 8)                               # users differ a lot ...
+search_test <- tibble(
+  old_design = round(40 + skill + rnorm(60, 0, 3), 1),
+  new_design = round(38 + skill + rnorm(60, 0, 3), 1)  # ... the designs only a little
+)
+
+head(search_test, 5)
+```
+
+The two columns are **not independent**: a user who is quick with the old design is usually quick with the new one too. Users differ enormously in how fast they search; the designs differ only a little. What we care about is the difference *within* each user — new minus old — and that is exactly what the **paired *t*-test** analyzes: it computes one difference per user and tests whether the mean of these differences is zero:
+
+```{r}
+search_test <- search_test |> mutate(difference = new_design - old_design)
+head(search_test, 5)
+
+t.test(search_test$new_design, search_test$old_design, paired = TRUE)
+```
+
+The new design saves about two seconds per search (*p* < .001). @fig-paired-lines shows why the test is so clear-cut although users differ so much: almost every line slopes down — most users are faster with the new design, each by a small amount — while the vertical spread of the points, the differences *between* users, is enormous.
+
+```{r}
+#| label: fig-paired-lines
+#| echo: false
+#| fig-width: 6.5
+#| fig-height: 4.2
+#| fig-cap: "The search-design experiment, user by user. Users differ a lot from each other (the vertical spread), but almost every user is a little faster with the new design (the slopes)."
+fig_paired_lines()
+```
+
+### The same data as a between-subjects comparison
+
+What would have happened if the team had ignored the pairing and analyzed the two columns *as if* they came from two independent groups of 60 users — the test of @sec-exp-testing?
+
+```{r}
+t.test(search_test$new_design, search_test$old_design)   # wrong for this design
+```
+
+Same data, same means, same difference of two seconds — but *p* = 0.14, and the confidence interval now includes zero. The reason is the standard error. The independent-groups test judges the difference against the spread of *all* search times, which is dominated by how differently fast the users are (SD ≈ 8 seconds); it has to allow for the possibility that the two "groups" happen to contain faster or slower users. The paired test judges the difference against the spread of the *within-user differences*, which is much smaller (SD ≈ 4 seconds), because each user's speed cancels out when we subtract. That is the whole advantage of the within-subjects design: the uncertainty that comes from comparing different people is removed by design — provided the pairing is real.
+
+::: {.callout-important title="When to use which test"}
+- **Between-subjects data** (each person in one condition): the Welch *t*-test. Using a paired test here is impossible anyway — there is nothing to pair.
+- **Within-subjects data** (the same people in both conditions): the paired *t*-test. Using the independent-groups test here is the common mistake: it is not wrong in the sense of biased, but it throws away the pairing and is far less powerful.
+- The paired test also applies to **matched pairs** (two similar stores, one with the promotion) and to **before/after** measurements of the same customers — with the caveat from @sec-randomization that a before/after comparison *without* a control group is not an experiment: anything else that changed in between is confounded with the treatment.
+- The price of the within-subjects design is not statistical but behavioral: **carryover and order effects** (@sec-randomization). The paired test cannot fix those.
+:::
+
+::: {.callout-tip title="Your turn (5 min)"}
+Compute the within-user differences yourself (`search_test$new_design - search_test$old_design`), then run a *one-sample* *t*-test of these differences against zero: `t.test(search_test$new_design - search_test$old_design)`. Compare the output with the paired test above. What does this tell you about what a paired *t*-test is?
+:::
+
+
+
+## How large is the effect? {#sec-exp-effect}
+
+A significant result tells us that the effect is probably not zero. It does not tell us whether the effect is **large enough to matter**. With a large enough sample, even a trivial difference becomes significant (@sec-exp-nhst). Always report the size of the effect — in three ways:
+
+- **In the original unit:** Smart Mix users listened 3.2 hours more in four weeks. This is the number a manager can relate to a business case: what are 3.2 extra listening hours per user worth in retention or advertising revenue?
+- **Relative to the control group:** 3.2 hours on a baseline of 20.0 hours is an increase of about **16%**.
+- **Standardized:** **Cohen's *d*** divides the difference by the (pooled) standard deviation of the outcome:
+
+$$
+d = \frac{\bar{x}_1 - \bar{x}_2}{s_{\text{pooled}}}, \qquad s_{\text{pooled}} = \sqrt{\frac{(n_1 - 1)\, s_1^2 + (n_2 - 1)\, s_2^2}{n_1 + n_2 - 2}}
+$$
+
+It expresses the effect in units of "how much users differ anyway" and makes effects comparable across studies with different outcomes. In R, the function `cohen.d()` from the `psych` package (which you know from @sec-describing) computes it, together with a confidence interval:
+
+```{r}
+#| message: false
+library(psych)
+cohen.d(ab_test$hours, ab_test$group)$cohen.d
+```
+
+The sign only reflects the order of the groups (here: the second group minus the first); what matters is the size, $d \approx$ 0.22, and the direction you know from the group means. Note the confidence interval: the standardized effect could be anywhere between almost zero and 0.41.
+
+As a rough convention, $d$ = 0.2 is considered a *small*, 0.5 a *medium*, and 0.8 a *large* effect [@cohen1992]. The effect of Smart Mix ($d$ = 0.22) is small: the two groups overlap almost completely, as @fig-ab-recap showed. Yet a 16% increase in listening time can be very valuable for a streaming service with millions of users. **Small in statistical terms is not the same as unimportant in business terms** — and vice versa. The conventions are a starting point, not a verdict.
+
+## Reporting the result {#sec-exp-reporting}
+
+A good report of an experiment states the effect, its uncertainty, and the test — in words a manager can follow, with the numbers a statistician needs:
+
+> Users with Smart Mix listened on average 23.2 hours in four weeks, compared with 20.0 hours in the control group — an increase of 3.2 hours (+16%, 95% CI [0.3; 6.2] hours). The difference is statistically significant (Welch *t*-test: *t*(387) = 2.16, *p* = .031) but small in standardized terms (*d* = 0.22). The confidence interval is wide: the true effect could be anywhere between a few minutes and six hours.
+
+Note the order: effect first, uncertainty second, test last. And note the final sentence — the honest caveat that tells the reader how much the conclusion is worth.
+
+A chart should accompany the paragraph, and it should show the same three things (@fig-report-bars): the two means, their confidence intervals, and the result of the test — the latter usually as a bracket between the bars with the *p*-value, the way results are presented in research articles.
+
+```{r}
+#| label: fig-report-bars
+#| echo: false
+#| fig-width: 6.5
+#| fig-height: 4.2
+#| fig-cap: "Reporting the Smart Mix result: group means with 95% confidence intervals, and the difference with its interval and p-value on the bracket."
+fig_report_bars()
+```
+
+## The difference between two shares {#sec-exp-shares}
+
+### Conversion rates
+
+Many experiments do not measure a continuous outcome but a **yes/no outcome**: did the user buy, click, sign up, upgrade? The result is a **share** (proportion) per group, often called the *conversion rate*.
+
+Suppose the streaming service tests a new page for its Premium subscription that offers a one-month free trial. 2,000 randomly selected free users see the new page; 2,000 see the standard page. Within two weeks, 131 users upgrade with the trial offer (6.55%) and 104 with the standard page (5.20%) (@fig-conversion).
+
+```{r}
+#| label: fig-conversion
+#| echo: false
+#| fig-width: 6
+#| fig-height: 3.8
+#| fig-cap: "Upgrade rates in the (simulated) Premium test, with 95% confidence intervals."
+fig_conversion()
+```
+
+The logic is exactly the same as for means. The standard error of the difference between two shares has the same structure as the one for two means (@sec-exp-difference):
+
+$$
+SE_{\hat{p}_1 - \hat{p}_2} = \sqrt{\frac{\hat{p}_1 (1 - \hat{p}_1)}{n_1} + \frac{\hat{p}_2 (1 - \hat{p}_2)}{n_2}}
+$$
+
+Compare it with the formula for means: $\hat{p}(1 - \hat{p})$ simply takes the place of the variance $s^2$. For a yes/no variable, $\hat{p}(1 - \hat{p})$ *is* the variance — it is largest when the outcome is most uncertain (a 50/50 split) and small when almost everybody (or almost nobody) converts. So the intuition carries over one to one: **the more the outcome varies within the groups and the smaller the groups, the more uncertain the difference.**
+
+The 95% confidence interval of the difference is again estimate ± critical value × standard error:
+
+$$
+(\hat{p}_1 - \hat{p}_2) \pm 1.96 \times SE_{\hat{p}_1 - \hat{p}_2}
+$$
+
+For the Premium test: $(0.0655 - 0.0520) \pm 1.96 \times 0.0074$, i.e., from −0.11 to +2.81 percentage points. (For shares, the normal distribution's 1.96 is used instead of a *t* value, because the variance follows directly from the share itself.) In R, `prop.test()` does the work; it takes the number of "successes" and the number of users per group:
+
+```{r}
+prop.test(x = c(131, 104), n = c(2000, 2000))
+```
+
+The trial offer increased the upgrade rate by 1.35 percentage points, or about 26% in relative terms. But the test is not significant (*p* = 0.08), and the 95% confidence interval for the difference runs from −0.16 to +2.86 percentage points (slightly wider than our hand calculation, because `prop.test()` applies a small correction for the fact that counts are whole numbers): the data are compatible with no effect, but also with a substantial one. The correct conclusion is not "the trial offer does not work" but "**this experiment was too small to tell**" — with 2,000 users per group, a difference of about one percentage point is hard to distinguish from chance. How large the experiment would have needed to be is the subject of @sec-exp-power.
+
+::: {.callout-note collapse="true" title="Under the hood: prop.test and the chi-square test"}
+`prop.test()` is a version of the **chi-square test** of independence for a 2 × 2 table (group × outcome). The chi-square test compares the observed counts in each cell with the counts we would expect if the outcome were independent of the group. It also works for more than two groups or more than two outcome categories: `chisq.test(table(data$group, data$outcome))`. For two groups and a yes/no outcome, `prop.test()` gives the same *p*-value and, in addition, the confidence interval of the difference.
+:::
+
+::: {.callout-tip title="Your turn (5 min)"}
+Two sales agents, Jon and Mark, each talk to 300 customers. Jon gets 200 of them to buy, Mark 100. Is Jon's conversion rate significantly higher? Use `prop.test()` and report the difference with its 95% confidence interval. Then: does this comparison tell you that Jon is the better salesperson? Think about how customers were assigned to the two agents. *(Example after McDonnell Feit & McCullough's* Business Experiments *course.)*
+:::
+
+## Errors, power, and sample size {#sec-exp-power}
+
+### Two ways to be wrong
+
+Every test decision can be wrong in two ways (@tbl-errors):
+
+|  | **No effect in reality** ($H_0$ true) | **Effect in reality** ($H_0$ false) |
+|---|---|---|
+| **Test significant** (reject $H_0$) | **Type I error** — false alarm (probability $\alpha$) | Correct: effect detected (probability = **power**, $1 - \beta$) |
+| **Test not significant** (keep $H_0$) | Correct | **Type II error** — effect missed (probability $\beta$) |
+
+: Type I and type II errors {#tbl-errors .striped}
+
+The same two kinds of mistakes appear in many everyday decisions (@tbl-error-examples) — and in each case, the two errors have very different consequences.
+
+| Situation | Type I error (false alarm) | Type II error (missed effect) |
+|---|---|---|
+| Pregnancy test | The test says "pregnant", but the woman is not | The test says "not pregnant", but she is |
+| Smoke detector | The alarm goes off because of burnt toast | A real fire, but the alarm stays silent |
+| Court trial ("innocent until proven guilty") | An innocent person is convicted | A guilty person is acquitted |
+| A/B test of a new feature | A useless feature is rolled out — cost without benefit | A valuable feature is dropped — a missed opportunity |
+
+: Type I and type II errors in everyday life {#tbl-error-examples .striped}
+
+The court trial shows the logic of a test particularly well: the null hypothesis ("innocent") is kept unless the evidence is strong; a verdict of "not guilty" does not prove innocence — just as a non-significant test does not prove that there is no effect.
+
+The significance level $\alpha$ controls the false alarms: with $\alpha$ = 5%, one in twenty experiments of an ineffective feature will nevertheless come out significant. The **power** of a test is the probability of detecting an effect that really exists. A common target is 80% power — accepting that one in five real effects of the assumed size will be missed. Lowering $\alpha$ (fewer false alarms) reduces the power (more missed effects); the only way to reduce both errors at once is a **larger sample**.
+
+### What determines power
+
+Power depends on three things (@fig-power):
+
+- **The size of the true effect:** large effects are easier to detect than small ones.
+- **The sample size:** larger samples shrink the standard error and separate the "no effect" distribution from the "effect" distribution.
+- **The variability of the outcome:** the more users differ anyway, the harder it is to see the effect.
+
+```{r}
+#| label: fig-power
+#| echo: false
+#| fig-width: 9
+#| fig-height: 4.2
+#| fig-cap: "Power of the Smart Mix test for a true effect of 3 hours (SD = 15 hours, 200 users per group). Grey: distribution of observed differences if there is no effect; blue: if the true effect is 3 hours. Differences to the right of the dashed line are significant."
+fig_power()
+```
+
+Applied to Smart Mix: if the true effect is about 3 hours, an experiment with 200 users per group has a power of only about 55% — almost a coin flip. The team was somewhat lucky to get a significant result; with a slightly unluckier draw of users, the same real effect would have been "not significant".
+
+::: {.callout-tip title="Try it: what determines power?" icon="false"}
+
+Choose the **true effect** of Smart Mix, the **number of users per group**, and the **significance level**. The grey curve shows the observed differences we would expect if there were no effect; the blue curve those we would expect with the chosen true effect (standard deviation of listening time: 15 hours). The green area is the power.
+
+::: {.unc-widget}
+```{ojs}
+//| echo: false
+viewof e2_delta = Inputs.range([0, 8], {value: 3, step: 0.1, label: "True effect (hours)"})
+```
+
+```{ojs}
+//| echo: false
+viewof e2_n = Inputs.range([20, 2000], {value: 200, step: 1, label: "Users per group", transform: Math.log, invert: Math.exp})
+```
+
+```{ojs}
+//| echo: false
+viewof e2_alpha = Inputs.radio([0.05, 0.01], {value: 0.05, label: "Significance level α", format: d => d.toString()})
+```
+:::
+
+```{ojs}
+//| echo: false
+e2 = {
+  const sd = 15, n = Math.round(e2_n), se = sd * Math.sqrt(2 / n);
+  const zc = qnorm(1 - e2_alpha / 2), crit = zc * se;
+  const power = e2_delta === 0 ? e2_alpha : (1 - pnorm((crit - e2_delta) / se)) + pnorm((-crit - e2_delta) / se);
+  const lo = -4 * se, hi = Math.max(e2_delta, 0) + 4 * se;
+  const xs = d3.range(lo, hi, (hi - lo) / 400);
+  const dens = (x, m) => Math.exp(-0.5 * ((x - m) / se) ** 2) / (se * Math.sqrt(2 * Math.PI));
+  const pts = xs.map(x => ({x, h0: dens(x, 0), h1: dens(x, e2_delta)}));
+  const need = e2_delta > 0 ? Math.ceil(2 * ((zc + qnorm(0.8)) * sd / e2_delta) ** 2) : Infinity;
+  return {n, se, crit, power, pts, lo, hi, need};
+}
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 760, height: 280, marginLeft: 20,
+  x: {label: "Observed difference in mean listening hours", domain: [e2.lo, e2.hi]},
+  y: {axis: null},
+  marks: [
+    Plot.areaY(e2.pts.filter(d => d.x >= e2.crit || d.x <= -e2.crit), {x: "x", y: "h1", fill: "#1e8449", fillOpacity: 0.45, z: d => d.x >= e2.crit}),
+    Plot.areaY(e2.pts.filter(d => d.x < e2.crit && d.x > -e2.crit), {x: "x", y: "h1", fill: "#b03a2e", fillOpacity: 0.2}),
+    Plot.line(e2.pts, {x: "x", y: "h0", stroke: "#58585a", strokeWidth: 2}),
+    Plot.line(e2.pts, {x: "x", y: "h1", stroke: "#0f5da8", strokeWidth: 2}),
+    Plot.ruleX([-e2.crit, e2.crit], {stroke: "black", strokeDasharray: "4,3"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+html`<div class="unc-stats">Standard error of the difference: <b>${e2.se.toFixed(2)}</b> hours ·
+differences beyond ±${e2.crit.toFixed(2)} hours are significant ·
+<b>power = ${(100 * e2.power).toFixed(0)}%</b>
+${isFinite(e2.need) ? html` · for 80% power, you would need <b>${e2.need.toLocaleString("en")}</b> users per group` : ""}</div>`
+```
+
+**What to look for.** Set the true effect to 0: the "power" is then just the false-alarm rate α. Increase the sample size: the two curves become narrower and separate — power rises. Halve the true effect: you need about four times as many users for the same power.
+:::
+
+::: {.callout-important title="Where does the true effect come from?"}
+In the widget, you *set* the true effect — a luxury you never have in practice: if we knew the true effect, we would not need the experiment. A power analysis is therefore always based on an **assumed** effect size. There are two sensible ways to choose it:
+
+- **The smallest effect that would still matter** for the decision: e.g., "Smart Mix is worth rolling out if it increases listening time by at least 2 hours". The experiment is then designed to detect effects of at least this size.
+- **Evidence from earlier experiments** or published studies of similar interventions — with caution, since published effects tend to be overestimated (@sec-exp-nhst).
+
+What you should *not* do is compute the power **after** the experiment using the effect you observed ("post-hoc power" or "observed power"). This number adds no information: it is a direct transformation of the *p*-value — a non-significant result always has low "observed power". Power analysis belongs to the planning stage; after the experiment, the confidence interval tells you what the data can and cannot rule out.
+:::
+
+### Determining the sample size in advance
+
+Because power depends on the sample size, the sample size of an experiment should be determined **before** it starts — based on the smallest effect that would still matter for the business decision. R's `power.t.test()` does the computation. For Smart Mix, with the standardized effect $d$ = 0.22 and the conventional 80% power:
+
+```{r}
+power.t.test(delta = 0.22, sd = 1, sig.level = 0.05, power = 0.80)
+```
+
+About 330 users per group (`n` is per group) — rather than the 200 the team used. Here we used the effect size observed in the first experiment as the assumption for planning a *follow-up* experiment; for a first experiment, you would start from the smallest effect that matters. The same function answers the reverse question for the planning stage: with `n = 200` instead of `power = 0.80`, it returns the power that an experiment with 200 users per group would have for the assumed effect.
+
+For **shares**, `power.prop.test()` works the same way. How many users would the Premium test have needed to reliably detect an increase from 5% to 6%?
+
+```{r}
+power.prop.test(p1 = 0.05, p2 = 0.06, sig.level = 0.05, power = 0.80)
+```
+
+More than 8,000 users per group — four times as many as in the test that was actually run.
+
+### Why online advertising needs huge experiments
+
+Experiments on shares need large samples when the baseline rate is low and the effect is small — which is exactly the situation in online advertising. Click-through rates are often below 1%, purchase rates after an ad exposure even lower, and a successful campaign may lift them by only a few percent. @fig-n-required shows how quickly the required sample size grows.
+
+```{r}
+#| label: fig-n-required
+#| echo: false
+#| fig-width: 8
+#| fig-height: 4.2
+#| fig-cap: "Users needed per group to detect a relative lift with 80% power (α = 5%), for three baseline rates. Note the logarithmic scale."
+fig_n_required()
+```
+
+To detect a 10% lift in a click-through rate of 0.5% (from 0.50% to 0.55%), an experiment needs more than 300,000 users *per group*. In their paper *The Unfavorable Economics of Measuring the Returns to Advertising*, @lewis2015 analyze 25 large field experiments on advertising effectiveness at major US firms and show that even experiments with millions of users are often too imprecise to tell whether a campaign pays off — the effect of advertising on an individual's purchases is tiny compared with how much purchases vary anyway. Remember the eBay experiments from @sec-ebay: they needed the entire US market to reach a clear answer.
+
+::: {.callout-tip title="Try it: how many users does a conversion test need?" icon="false"}
+
+Set the **baseline conversion rate** (the rate without the change) and the **relative lift** you want to be able to detect. The widget computes the users needed per group for 80% power at α = 5%.
+
+::: {.unc-widget}
+```{ojs}
+//| echo: false
+viewof e4_base = Inputs.range([0.1, 30], {value: 5, step: 0.1, label: "Baseline rate (%)", transform: Math.log, invert: Math.exp})
+```
+
+```{ojs}
+//| echo: false
+viewof e4_lift = Inputs.range([1, 50], {value: 10, step: 1, label: "Relative lift to detect (%)"})
+```
+
+```{ojs}
+//| echo: false
+viewof e4_traffic = Inputs.range([100, 1000000], {value: 10000, step: 100, label: "Users per day (both groups)", transform: Math.log, invert: Math.exp})
+```
+:::
+
+```{ojs}
+//| echo: false
+e4 = {
+  const za = qnorm(0.975), zb = qnorm(0.8);
+  const nfun = (p1, lift) => {
+    const p2 = p1 * (1 + lift), pb = (p1 + p2) / 2;
+    return Math.ceil((za * Math.sqrt(2 * pb * (1 - pb)) + zb * Math.sqrt(p1 * (1 - p1) + p2 * (1 - p2))) ** 2 / (p2 - p1) ** 2);
+  };
+  const p1 = e4_base / 100, lift = e4_lift / 100;
+  const n = nfun(p1, lift);
+  const curve = d3.range(1, 51).map(l => ({lift: l, n: nfun(p1, l / 100)}));
+  const days = Math.ceil(2 * n / Math.round(e4_traffic));
+  return {n, curve, days, p1, p2: p1 * (1 + lift)};
+}
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 760, height: 280, marginLeft: 70,
+  x: {label: "Relative lift to detect (%)", domain: [1, 50]},
+  y: {label: "Users per group", type: "log", grid: true, tickFormat: "~s"},
+  marks: [
+    Plot.line(e4.curve, {x: "lift", y: "n", stroke: "#0f5da8", strokeWidth: 2}),
+    Plot.dot([{lift: e4_lift, n: e4.n}], {x: "lift", y: "n", r: 6, fill: "#0a3d6e"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+html`<div class="unc-stats">To detect an increase from <b>${(100 * e4.p1).toFixed(2)}%</b> to <b>${(100 * e4.p2).toFixed(2)}%</b>,
+you need about <b>${e4.n.toLocaleString("en")}</b> users per group (${(2 * e4.n).toLocaleString("en")} in total) —
+at ${Math.round(e4_traffic).toLocaleString("en")} users per day, the test runs about <b>${e4.days.toLocaleString("en")} days</b>.</div>`
+```
+:::
+
+::: {.callout-important title="What this means for your group project"}
+With about 120 respondents split into two conditions, each group has about 60 people. At 80% power, such an experiment can only reliably detect **medium-to-large effects** ($d \approx 0.5$ or more): `power.t.test(n = 60, sd = 1, power = 0.80)` returns a detectable effect of $d$ = 0.52. For a small effect ($d$ = 0.2), the power would be below 20%. Design your manipulation to be **strong** — a subtle wording change will probably not produce a detectable effect — and interpret non-significant results with the corresponding caution.
+:::
+
+::: {.callout-tip title="Your turn (5 min)"}
+A retailer's newsletter has a click-through rate of 2%. The marketing team wants to test a new subject line and considers a 10% relative increase (to 2.2%) worth detecting. (a) How many recipients per version do they need for 80% power? (b) How does the answer change if they only care about a 25% increase? Use `power.prop.test()`.
+:::
+
+## Beyond two groups: other designs and tests {#sec-exp-other}
+
+The two-group comparison is the workhorse of experimentation, but not every experiment fits it. This section gives a short tour of the most common variations — the logic stays the same, only the R function changes.
+
+### More than two groups: analysis of variance (ANOVA)
+
+Suppose the product team tests three versions: no mix, a mix updated weekly, and a mix updated daily — 150 users each (@fig-three-groups).
+
+```{r}
+#| label: fig-three-groups
+#| echo: false
+#| fig-width: 6
+#| fig-height: 3.8
+#| fig-cap: "Mean listening hours with 95% confidence intervals in a (simulated) experiment with three versions of Smart Mix — the quantities the ANOVA compares."
+fig_three_groups_bars()
+```
+
+```{r}
+set.seed(14)
+mix_test <- tibble(
+  version = factor(rep(c("No mix", "Weekly mix", "Daily mix"), each = 150),
+                   levels = c("No mix", "Weekly mix", "Daily mix")),
+  hours   = c(rgamma(150, 2, scale = 10), rgamma(150, 2, scale = 10.8), rgamma(150, 2, scale = 12))
+)
+
+mix_test |> group_by(version) |> summarise(n = n(), mean = mean(hours), sd = sd(hours))
+```
+
+**Why not simply run three *t*-tests?** No mix vs. weekly, no mix vs. daily, weekly vs. daily — three comparisons, each with a 5% chance of a false alarm. The chances add up: the probability of *at least one* false alarm across a family of $k$ tests, the **family-wise error rate**, is
+
+$$
+\text{family-wise error rate} = 1 - (1 - \alpha)^k
+$$
+
+With three tests, it is $1 - 0.95^3$ = 14%; with ten tests (five groups), 40%. The more groups you compare pairwise, the more likely you are to "find" a difference that does not exist. The analysis of more than two groups therefore proceeds in **two steps**.
+
+**Step 1: Is there any difference at all?** The **analysis of variance (ANOVA)** tests all groups at once, with a single test:
+
+- $H_0$: all group means are equal, $\mu_1 = \mu_2 = \mu_3$
+- $H_1$: at least one group mean differs from the others
+
+The idea is once more signal divided by noise. The ANOVA splits the total variation of listening times into two parts: the variation **between** the groups (how far the group means are from the overall mean — the signal, explained by the version) and the variation **within** the groups (how much users differ within the same version — the noise). The **F statistic** is the ratio of the two, each averaged per degree of freedom:
+
+$$
+F = \frac{\text{variation between the groups per degree of freedom}}{\text{variation within the groups per degree of freedom}}
+$$
+
+If the versions make no difference, the group means differ only by chance, and $F$ is close to 1; the larger $F$, the stronger the evidence that at least one version differs.
+
+```{r}
+mix_aov <- aov(hours ~ version, data = mix_test)
+summary(mix_aov)
+```
+
+The output shows both parts of the variation (`Sum Sq`), their degrees of freedom (`Df`: 3 − 1 = 2 between the groups; 450 − 3 = 447 within), the averaged variations (`Mean Sq`), the *F* value, and its *p*-value. The result: $F(2, 447)$ = 5.71, *p* = .004 — at least one version differs. The share of the total variation explained by the versions, **eta squared** ($\eta^2$), is the ANOVA's effect size:
+
+```{r}
+ss <- summary(mix_aov)[[1]]$`Sum Sq`
+ss[1] / sum(ss)    # eta squared: share of variation explained by the version
+```
+
+The versions explain only 2.5% of the variation in listening times: users differ far more among themselves than the versions differ from each other — a small effect, even though it is significant.
+
+**Step 2: Which groups differ?** The ANOVA tells us *that* the groups differ, not *which*. **Post-hoc tests** compare all pairs of groups, while correcting the *p*-values for the number of comparisons so that the family-wise error rate stays at 5%. The simplest correction, **Bonferroni**, multiplies each *p*-value by the number of comparisons (equivalently: it tests each comparison at $\alpha / k$):
+
+```{r}
+pairwise.t.test(mix_test$hours, mix_test$version, p.adjust.method = "bonferroni")
+```
+
+Only the daily mix differs clearly from no mix (corrected *p* = .003); the weekly mix lies in between and cannot be distinguished from either. The Bonferroni correction is conservative — it errs on the side of missing effects. R's default for `pairwise.t.test()`, the **Holm** correction, is slightly more powerful and equally safe; **Tukey's HSD** test, `TukeyHSD(mix_aov)`, is a classic alternative designed specifically for all pairwise comparisons after an ANOVA and reports the differences with family-wise confidence intervals.
+
+::: {.callout-note collapse="true" title="Under the hood: assumptions of the ANOVA"}
+The ANOVA shares the assumptions of the *t*-test: independent observations, an approximately normal sampling distribution of the group means (guaranteed by the central limit theorem for reasonably large groups), and a metric outcome. In addition, the classic ANOVA assumes **similar variances in all groups**. If the group standard deviations differ considerably, use the **Welch ANOVA**, which does not require this assumption — just as R's default *t*-test does:
+
+```{r}
+oneway.test(hours ~ version, data = mix_test)
+```
+
+For ordinal outcomes or strongly skewed data in small samples, the Kruskal–Wallis test is the non-parametric alternative (see below).
+:::
+
+::: {.callout-note collapse="true" title="Under the hood: the ANOVA as a regression"}
+An ANOVA can equivalently be written as a **regression** with the group variable as the predictor — the tool at the heart of the next module:
+
+```{r}
+summary(lm(hours ~ version, data = mix_test))
+```
+
+The last line reports exactly the same $F$ test as the ANOVA ($F$ = 5.71 on 2 and 447 degrees of freedom). The coefficients have a direct interpretation: the intercept is the mean of the reference group (no mix, 19.07 hours), and each further coefficient is the difference between a group and the reference group (weekly: +2.60 hours; daily: +6.65 hours).
+
+What about multiple comparisons in a regression? The **overall F test** in the last line is a single test of all groups together, so it has no multiple-comparison problem — just like the ANOVA. The **individual coefficient tests**, however, are ordinary *t*-tests and are **not** corrected: each compares one group with the reference group at $\alpha$ = 5%. The degrees of freedom do not change this. Each group adds one coefficient and uses up one degree of freedom, which affects how precisely the noise (the residual variance) is estimated — but not the chance of a false alarm across several comparisons. Note also that the coefficients only compare each group with the reference group, not all pairs. If you interpret several group comparisons from a regression, the same corrections apply (e.g., `p.adjust(p_values, method = "holm")`).
+:::
+
+### Non-parametric tests: when the mean is not the right summary
+
+All tests so far compare **means** and rely on the central limit theorem. **Non-parametric tests** do not work with the values themselves, but with their **ranks**: all observations are sorted, the smallest gets rank 1, the next rank 2, and so on. The test then asks whether the ranks are systematically higher in one group than in another. Because a rank does not care *how much* larger a value is, a few extreme values cannot dominate the result. Non-parametric tests are useful when:
+
+- the outcome is **ordinal**, so that means are not meaningful — e.g., ratings from "poor" to "excellent" (@sec-desc-measurement);
+- the data are **strongly skewed or contain extreme outliers** and the samples are **small**, so that the central limit theorem cannot be relied on;
+- you are interested in the **typical** observation rather than the average.
+
+Each test of this chapter has a non-parametric counterpart (@tbl-nonparametric).
+
+| Design | Parametric test | Non-parametric counterpart | R function |
+|---|---|---|---|
+| Two independent groups | Welch *t*-test | Wilcoxon rank-sum test (Mann–Whitney U test) | `wilcox.test(y ~ group)` |
+| Two conditions, same people | Paired *t*-test | Wilcoxon signed-rank test | `wilcox.test(x1, x2, paired = TRUE)` |
+| Three or more independent groups | ANOVA | Kruskal–Wallis test | `kruskal.test(y ~ group)` |
+
+: Parametric tests and their non-parametric counterparts {#tbl-nonparametric .striped}
+
+Applied to Smart Mix, the Wilcoxon rank-sum test gives *p* = 0.07 — not significant at 5%, while the *t*-test was. The two tests answer different questions: the *t*-test is about the **average** listening time, which a few heavy listeners pull up; the Wilcoxon test is about whether Smart Mix users **typically** listen more. Which question matters depends on the business case: if revenue depends on *total* listening time, the mean is the relevant quantity. The price of the rank-based approach: because it ignores *how much* values differ, a non-parametric test is usually somewhat less powerful than its parametric counterpart when the latter's assumptions hold.
+
+The boxes below show how to run each test in R — for reference, when you need them later (e.g., in your group project).
+
+::: {.callout-note collapse="true" title="Under the hood: Wilcoxon rank-sum test (two independent groups)"}
+**Idea:** rank all observations of both groups together. If the groups do not differ, high and low ranks are mixed evenly across the groups; if one group tends to have higher values, it collects the high ranks. $H_0$: the values in both groups come from the same distribution (neither group tends to have higher values).
+
+```{r}
+wilcox.test(hours ~ group, data = ab_test)
+```
+
+The test statistic `W` is based on the sum of the ranks in the first group. Report it together with the medians of both groups, e.g.: "Users with Smart Mix did not listen significantly more than users without it (medians: `r round(median(ab_test$hours[ab_test$group == "Smart Mix"]), 1)` vs. `r round(median(ab_test$hours[ab_test$group == "Control"]), 1)` hours; Wilcoxon rank-sum test: *W* = 22,072, *p* = .073)."
+:::
+
+::: {.callout-note collapse="true" title="Under the hood: Wilcoxon signed-rank test (same people, two conditions)"}
+**Idea:** compute the difference between the two conditions for each person, rank the *absolute* differences, and compare the sum of the ranks of positive differences with that of negative differences. If there is no effect, both sums should be similar. $H_0$: the differences are distributed symmetrically around zero.
+
+```{r}
+wilcox.test(search_test$new_design, search_test$old_design, paired = TRUE)
+```
+
+Report it together with the median difference, e.g.: "Users found songs faster with the new design (median difference: `r round(median(search_test$new_design - search_test$old_design), 1)` seconds; Wilcoxon signed-rank test: *V* = 473.5, *p* = .001)." Typical use: ratings of two products or designs by the same respondents on an ordinal scale.
+:::
+
+::: {.callout-note collapse="true" title="Under the hood: Kruskal–Wallis test (three or more independent groups)"}
+**Idea:** the rank-based version of the ANOVA. Rank all observations together and compare the average ranks of the groups. $H_0$: the values in all groups come from the same distribution.
+
+```{r}
+kruskal.test(hours ~ version, data = mix_test)
+```
+
+As with the ANOVA, a significant result says only that *some* groups differ. For pairwise comparisons, use Wilcoxon rank-sum tests with a correction for multiple comparisons:
+
+```{r}
+pairwise.wilcox.test(mix_test$hours, mix_test$version, p.adjust.method = "bonferroni")
+```
+:::
+
+### Choosing a test
+
+@tbl-test-choice summarizes the tests of this chapter. In most business experiments, you will need the first two rows.
+
+| Outcome | Groups | Design | Test | R function |
+|---|---|---|---|---|
+| Metric (e.g., hours, revenue) | 2 | Different people per group | Welch *t*-test | `t.test(y ~ group)` |
+| Yes/no (e.g., conversion) | 2 or more | Different people per group | Test of proportions / chi-square test | `prop.test()`, `chisq.test()` |
+| Metric | 2 | Same people in both conditions | Paired *t*-test | `t.test(x1, x2, paired = TRUE)` |
+| Metric | 3 or more | Different people per group | ANOVA + corrected post-hoc tests | `aov()`, `pairwise.t.test()` |
+| Ordinal, or metric with extreme skew and small samples | 2 | Different people per group | Wilcoxon rank-sum test | `wilcox.test(y ~ group)` |
+| Ordinal, or metric with extreme skew and small samples | 2 | Same people in both conditions | Wilcoxon signed-rank test | `wilcox.test(x1, x2, paired = TRUE)` |
+| Ordinal, or metric with extreme skew and small samples | 3 or more | Different people per group | Kruskal–Wallis test | `kruskal.test(y ~ group)` |
+
+: Choosing a test for an experiment {#tbl-test-choice .striped}
+
+```{mermaid}
+%%| label: fig-test-tree
+%%| fig-cap: "A decision tree for choosing a test for an experiment. It is a starting point, not a recipe — always check what your research question actually asks."
+flowchart TD
+  A["What is the outcome?"] -->|"Metric (e.g., hours, revenue)"| Q["Parametric assumptions in doubt?<br/>(small samples with extreme<br/>skew or outliers)"]
+  A -->|"Yes/no or categories (e.g., conversion)"| C["Test of proportions / chi-square test<br/>prop.test(), chisq.test()"]
+  A -->|"Ordinal (e.g., ratings)"| N["How many groups?"]
+  Q -->|No| B["How many groups?"]
+  Q -->|Yes| N
+  B -->|Two| D["Same people in both conditions?"]
+  B -->|Three or more| E["ANOVA + corrected post-hoc tests<br/>aov(), pairwise.t.test()"]
+  D -->|No| F["Welch t-test<br/>t.test(y ~ group)"]
+  D -->|Yes| G["Paired t-test<br/>t.test(x1, x2, paired = TRUE)"]
+  N -->|"Two, different people"| H["Wilcoxon rank-sum test<br/>wilcox.test(y ~ group)"]
+  N -->|"Two, same people"| I["Wilcoxon signed-rank test<br/>wilcox.test(x1, x2, paired = TRUE)"]
+  N -->|Three or more| J["Kruskal–Wallis test<br/>kruskal.test(y ~ group)"]
+```
+
+Two caveats. First, "in doubt" means *small* samples with extreme skew or outliers: with larger samples, the central limit theorem usually makes the *t*-test and the ANOVA work well even for skewed data (@sec-unc-clt) — and remember that a non-parametric test answers a slightly different question (the typical observation rather than the average). Second, decision trees like this one are useful for orientation, but they invite a recipe-like use of statistics. @mcelreath2020 opens his textbook with a much larger flowchart of this kind — as an example of how *not* to think about statistics: the right analysis follows from the research question and the design of the study, not from walking down a tree.
+
+## Using p-values responsibly {#sec-exp-nhst}
+
+The procedure of this chapter — state a null hypothesis, compute a *p*-value, compare it with 5% — is called **null hypothesis significance testing (NHST)**. It is used everywhere, and it is misused almost as often. In 2016, the American Statistical Association took the unusual step of publishing a statement on how *p*-values should — and should not — be used [@wasserstein2016]. The main points are easy to remember.
+
+### What a *p*-value is — and what it is not
+
+The *p*-value answers the question: *if there were no effect, how likely would data like ours be?* — in short, $P(\text{data} \mid H_0)$. Managers usually want the answer to the reverse question: *given our data, how likely is it that there is no effect?* — $P(H_0 \mid \text{data})$. The two are not the same, just as "the probability that a person who has a cold has a runny nose" is not "the probability that a person with a runny nose has a cold".
+
+::: {.callout-warning title="Common misinterpretations"}
+For *p* = 0.031, all of the following statements are **wrong**:
+
+- "There is a 3.1% probability that Smart Mix has no effect."
+- "There is a 96.9% probability that Smart Mix works."
+- "The effect of Smart Mix is large (or important)."
+
+The correct statement: "If Smart Mix had no effect, a difference of at least this size would occur in 3.1% of experiments of this size."
+:::
+
+### Significant is not the same as important — and not significant is not the same as no effect
+
+**Statistical significance depends on the sample size.** With enough users, even an effect of a few seconds of listening time becomes significant — large platforms with millions of users find "significant" differences almost everywhere. Whether an effect matters is a question for the effect size and the business case (@sec-exp-effect), not for the *p*-value.
+
+Conversely, **a non-significant result does not show that there is no effect.** The Premium test (@sec-exp-shares) was not significant, but its confidence interval included increases of almost three percentage points. "Absence of evidence is not evidence of absence": with a small sample, even a real and relevant effect often goes undetected (@sec-exp-power).
+
+To get a feel for sample sizes, @tbl-simmons shows how many respondents per group are needed to reliably detect some everyday differences in a survey.
+
+| Comparison | Effect size *d* | Respondents per group for 80% power |
+|---|:-:|:-:|
+| Men are taller than women | 1.85 | 6 |
+| People who like spicy food like Indian food more | 0.80 | 26 |
+| Men weigh more than women | 0.59 | 46 |
+| People who prefer science to art can name more planets | 0.07 | 3,669 |
+
+: How many respondents are needed to detect everyday effects? Based on Simmons, Nelson & Simonsohn (2013), survey of 697 US participants {#tbl-simmons .striped}
+
+Many effects that marketers care about are closer to the lower rows than to the upper ones.
+
+### The 5% threshold is a convention, not a law of nature
+
+Nothing special happens at *p* = 0.05. A result with *p* = 0.049 is not meaningfully stronger evidence than one with *p* = 0.051 — yet the first is often reported as a success and the second as a failure. Treating 0.05 as a bright line encourages exactly the behavior that makes *p*-values meaningless. Good practice: **report the exact *p*-value together with the effect size and its confidence interval**, and base decisions on all three — plus the costs and benefits of acting. This is increasingly the norm in research as well: many journals — including leading marketing journals such as the *Journal of Marketing* and the *Journal of Marketing Research* — ask authors to report exact *p*-values, effect sizes, and confidence intervals instead of significance stars or statements such as "*p* < .05".
+
+### Peeking: why the sample size must be fixed in advance
+
+A particularly common problem in online experiments: A/B-testing dashboards show the *p*-value live while the test is running, and it is tempting to stop the test as soon as it turns significant. This practice — called **optional stopping** or **peeking** — destroys the meaning of the *p*-value. The *p*-value of an experiment without any effect wanders randomly between 0 and 1 as data come in; the more often you look, the more likely it is to dip below 0.05 at some point (@fig-optional-stopping).
+
+```{r}
+#| label: fig-optional-stopping
+#| echo: false
+#| fig-width: 9
+#| fig-height: 4.3
+#| fig-cap: "The p-values of 20 simulated A/B tests in which there is no effect, recomputed after every 20 users per group. Tests that cross the 5% line at some point are shown in orange."
+fig_optional_stopping()
+```
+
+::: {.callout-tip title="Try it: the danger of peeking" icon="false"}
+
+The widget simulates 200 A/B tests **without any true effect**. An impatient analyst checks the *p*-value after every batch of new users and stops as soon as *p* < 0.05. Compare the share of tests that are significant at the planned end with the share that are significant **at some look**.
+
+::: {.unc-widget}
+```{ojs}
+//| echo: false
+viewof e3_max = Inputs.range([100, 2000], {value: 1000, step: 50, label: "Planned users per group"})
+```
+
+```{ojs}
+//| echo: false
+viewof e3_step = Inputs.radio([10, 50, 100], {value: 10, label: "Check after every … users per group"})
+```
+
+```{ojs}
+//| echo: false
+viewof e3_batch = Inputs.button("Simulate 200 new tests", {value: 1, reduce: v => v + 1})
+```
+:::
+
+```{ojs}
+//| echo: false
+e3 = {
+  const rng = d3.randomLcg(500 + e3_batch);
+  const rn = d3.randomNormal.source(rng)(0, 1);
+  const K = 200, maxN = e3_max, step = e3_step;
+  let everSig = 0, finalSig = 0;
+  const paths = [];
+  for (let k = 0; k < K; k++) {
+    let sa = 0, sb = 0, ever = false, p = 1;
+    const path = [];
+    for (let n = 1; n <= maxN; n++) {
+      sa += rn(); sb += rn();
+      if (n % step === 0) {
+        const z = (sa / n - sb / n) / Math.sqrt(2 / n);
+        p = 2 * (1 - pnorm(Math.abs(z)));
+        if (p < 0.05) ever = true;
+        if (k < 25) path.push({test: k, n, p, ever: false});
+      }
+    }
+    if (ever) everSig++;
+    if (p < 0.05) finalSig++;
+    if (k < 25) { const e = path.some(d => d.p < 0.05); path.forEach(d => d.ever = e); paths.push(...path); }
+  }
+  return {paths, everSig, finalSig, K};
+}
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 760, height: 300, marginLeft: 50,
+  x: {label: "Users per group so far"},
+  y: {label: "p-value", domain: [0, 1], grid: true},
+  color: {domain: [false, true], range: ["#c8c8c8", "#d99a2b"]},
+  marks: [
+    Plot.line(e3.paths, {x: "n", y: "p", z: "test", stroke: "ever", strokeWidth: 1.2}),
+    Plot.ruleY([0.05], {stroke: "#b03a2e", strokeDasharray: "4,3", strokeWidth: 2})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+html`<div class="unc-stats">Significant at the planned end: <b>${(100 * e3.finalSig / e3.K).toFixed(0)}%</b> of the tests (as it should be: about 5%) ·
+significant <b>at some look</b>: <b>${(100 * e3.everSig / e3.K).toFixed(0)}%</b> — the false-alarm rate of the impatient analyst.
+The chart shows the first 25 tests; orange ones cross the red line at some point.</div>`
+```
+:::
+
+The consequence is simple: **determine the sample size before the experiment (@sec-exp-power), and evaluate the test once, at the end.** If you need to monitor a test while it runs — e.g., to stop a harmful change early — use methods designed for this purpose (*sequential testing*), which many A/B-testing platforms offer.
+
+### Many metrics, many segments, many tests
+
+The same problem arises without peeking. An A/B-testing dashboard typically reports dozens of metrics — clicks, sessions, revenue, retention — for dozens of segments — new users, returning users, mobile, desktop, each country. With 20 comparisons and no true effect anywhere, the probability of at least one "significant" result — the family-wise error rate from @sec-exp-other — is $1 - 0.95^{20}$ = 64%. Finding *something* significant is almost guaranteed; reporting only that finding is known as **p-hacking**. Combined with the tendency of journals, conferences, and management meetings to pay attention mainly to "successful" results (**publication bias**), it fills the world with effects that do not replicate.
+
+@fig-publication-bias shows the result in one striking picture: among more than a million *z*-values reported in medical research, values just below the significance threshold of ±1.96 are strangely rare — while values just above it are abundant.
+
+The most effective remedy is **pre-registration**: before collecting any data, researchers publicly record their hypotheses, the outcome, the sample size, and the planned analysis — e.g., on platforms such as AsPredicted or the Open Science Framework. Afterwards, readers can see which analyses were planned and which were added after looking at the data. Pre-registration has become common practice in many fields of science, including consumer research and marketing, and some journals go further and review studies *before* the results are known (*registered reports*). The same discipline works in companies: write down the plan of an A/B test before it starts.
+
+![The distribution of more than one million *z*-values from medical research articles (Medline, 1976–2019). If studies were reported regardless of their results, the distribution would be smooth; instead, there is a gap between −1.96 and +1.96 — the values that are not significant at the 5% level. Figure from van Zwet & Cator (2021), *The significance filter, the winner's curse and the need to shrink*, Statistica Neerlandica, 75(4), 437–452, licensed under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/); unchanged.](img/ch04/publication_bias.jpg){#fig-publication-bias width=80%}
+
+::: {.callout-important title="Good practice for experiments"}
+1.  **Before the experiment:** define the outcome, the hypothesis, the smallest effect that would matter, and the sample size — and write them down (*pre-registration*).
+2.  **During the experiment:** do not stop early because the result looks good (or bad), unless you use a sequential testing method.
+3.  **After the experiment:** report the effect size, its confidence interval, and the exact *p*-value — for the planned outcome first. Label everything else as exploratory.
+4.  **Decide with more than the *p*-value:** consider the size of the effect, the uncertainty, and the costs and benefits of acting.
+:::
+
+## Learning check {#sec-lc-04 .unnumbered}
+
+**(LC4.1)** Explain in your own words what the standard error of the difference between two group means measures, and why it gets smaller when the groups get larger.
+
+**(LC4.2)** An A/B test of a new checkout page yields: difference in average order value +2.40 €, 95% CI [−0.30 €; 5.10 €], *p* = 0.08. (a) Is the result statistically significant at the 5% level? (b) Write one sentence for the head of e-commerce that describes the result correctly. (c) What would you recommend?
+
+**(LC4.3)** Which of the following statements about *p* = 0.02 are correct?
+
+- [ ] The probability that the null hypothesis is true is 2%
+- [ ] If there were no effect, a result at least this extreme would occur in 2% of experiments
+- [ ] The effect is large
+- [ ] With the same true effect, a smaller sample would probably have produced a larger *p*-value
+
+**(LC4.4)** A test of a new ad creative on 5 million users shows a significant increase in the click-through rate from 0.410% to 0.415% (*p* < 0.001). Discuss whether the new creative should be rolled out.
+
+**(LC4.5)** A colleague runs an A/B test, checks the results every morning, and stops the test on the day the *p*-value falls below 0.05. Explain what is wrong with this approach and how the test should have been planned.
+
+**(LC4.6)** Which test would you use? (a) Conversion rates of three different newsletter versions. (b) Satisfaction ratings (1–7) of the same 40 customers for two product prototypes. (c) Average basket size of customers who saw a discount banner vs. customers who did not (randomized, 3,000 customers per group).
+
+**(LC4.7)** Your group project experiment has two conditions with about 60 respondents each. What is the smallest standardized effect ($d$) you can detect with 80% power — and what does this imply for the design of your manipulation?
+
+**(LC4.8)** Which of the following statements about the analysis of variance are correct?
+
+- [ ] A significant ANOVA shows that all group means differ from each other
+- [ ] Comparing five groups with all ten pairwise *t*-tests without correction leads to a family-wise error rate far above 5%
+- [ ] Post-hoc tests such as Bonferroni or Tukey's HSD keep the family-wise error rate at the chosen level
+- [ ] An *F* value close to 1 indicates large differences between the group means
+
+**(LC4.9)** A 95% confidence interval for the difference in average basket size between two versions of a product page is [−1.20 €; 4.50 €]. Which statements are correct?
+
+- [ ] The difference is significant at the 5% level
+- [ ] The data are compatible with no difference between the versions
+- [ ] The experiment proves that the two versions perform equally well
+- [ ] The true difference could plausibly be as large as 4.50 €
+
+**(LC4.10)** Which statements about power are correct?
+
+- [ ] Power is the probability of detecting an effect of a given size if it exists
+- [ ] Increasing the sample size increases the power
+- [ ] Lowering the significance level from 5% to 1% increases the power
+- [ ] Computing the power after an experiment, using the observed effect, shows whether a non-significant result can be trusted
+
+**(LC4.11)** Which statements about non-parametric tests are correct?
+
+- [ ] They are based on the ranks of the observations rather than on the values themselves
+- [ ] The Wilcoxon signed-rank test is the non-parametric counterpart of the paired *t*-test
+- [ ] They are always preferable to *t*-tests, because they need fewer assumptions
+- [ ] They are suitable for ordinal outcomes such as ratings from "poor" to "excellent"
+
+## References {.unnumbered}

@@ -1,0 +1,5 @@
+# Assignment 2: Analyzing experiments {#sec-assignment2 .unnumbered}
+
+::: {.callout-note title="Contents follow soon"}
+The solution to Assignment 2 will be posted here after the in-class debrief (Group A: Mon, Nov 9 · Group B: Thu, Nov 12).
+:::

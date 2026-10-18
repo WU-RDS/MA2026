@@ -1,0 +1,938 @@
+---
+title: "Marketing Analytics"
+subtitle: "Chapter 2 · Describing Data"
+author: "Nils Wlömert"
+institute: "Vienna University of Economics and Business (WU)"
+date: today
+date-format: "MMMM YYYY"
+format:
+  revealjs:
+    theme: [default, wu-theme.scss]
+    embed-resources: true
+    width: 1280
+    height: 720
+    margin: 0.08
+    slide-number: c/t
+    footer: "Marketing Analytics — Nils Wlömert"
+    logo: ../img/wu_logo_trans.png
+    transition: none
+    center: false
+    menu: true
+    pdf-separate-fragments: false
+    fig-dpi: 200
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+library(tidyverse)
+source("../R/ch01-figures.R")   # for the dual-axis callback (fig_spurious_ie)
+source("../R/ch02-figures.R")
+options(scipen = 999, width = 90, pillar.print_min = 6)
+
+music_url <- "https://raw.githubusercontent.com/wu-rds/MA2026/main/data/music_data_fin.csv"
+music_raw <- read_csv2(music_url)
+music_data <- music_raw |>
+  mutate(
+    genre    = as.factor(genre),
+    label    = as.factor(label),
+    explicit = factor(explicit, levels = c(0, 1), labels = c("not explicit", "explicit")),
+    top10    = factor(top10, levels = c(0, 1), labels = c("no", "yes")),
+    artist_id = as.character(artist_id),
+    expert_rating = factor(expert_rating,
+                           levels = c("poor", "fair", "good", "excellent", "masterpiece"),
+                           ordered = TRUE),
+    release_year = as.integer(format(release_date, "%Y"))
+  ) |>
+  rename(artist = artistName, track = trackName)
+```
+
+## Before we start {.midsize}
+
+::: columns
+::: {.column width="50%"}
+**Paper quiz on Chapter 1** *(10 min)*
+
+-   Individual, closed book
+-   Counts toward participation
+-   Questions look like the learning check at the end of last session
+:::
+
+::: {.column width="50%"}
+**Setup check**
+
+-   Who completed the **R onboarding** checkpoint (report knitted to HTML)?
+-   Still stuck? → **setup clinic** now, during the quiz debrief — bring your laptop and the error message
+:::
+:::
+
+::: notes
+Quiz first, then a show of hands on the checkpoint. Anyone whose setup fails gets paired with a neighbor whose setup works for the live-coding parts, and one of us sits down with them during the first block. Posit Cloud is the fallback that works in five minutes.
+:::
+
+## Today's session {.midsize}
+
+::: columns
+::: {.column width="50%"}
+**Part A — Getting to know the data**
+
+2.1 A first conversation with your data\
+2.2 Getting data into R\
+2.3 Variables and levels of measurement\
+2.4 Data handling
+:::
+
+::: {.column width="50%"}
+**Part B — Describing it well**
+
+2.5 Not trusting your data too early\
+2.6 Summarizing data\
+2.7 Visualizing data\
+2.8 From description to insight
+
+::: keybox
+**Laptops open:** today is a live-coding session. Code along in your RStudio Project.
+:::
+:::
+:::
+
+# 2.1 A first conversation with your data {.divider background-color="#0a3d6e"}
+
+## Your first day in the data team {.midsize}
+
+::: columns
+::: {.column width="55%"}
+The head of A&R at a record label hands you a data set of tracks from the streaming charts:
+
+> *"What is going on in the charts?"*
+
+-   Which genres dominate?
+-   How concentrated is success?
+-   What distinguishes the hits from the rest?
+:::
+
+::: {.column width="45%"}
+::: keybox
+**Driving question of this chapter:** *What is going on?* — the **descriptive** question from §1.3.
+
+Before any model: **look at the data**. Description is where the problems are caught.
+:::
+:::
+:::
+
+## Four data sets — one set of statistics {.midsize}
+
+```{r anscombe-table}
+knitr::kable(anscombe_table())
+```
+
+. . .
+
+::: discussion
+Same means, same standard deviations, same correlation. **Are these four data sets alike?**
+:::
+
+## Summaries compress — pictures reveal {.midsize}
+
+```{r anscombe-fig, fig.width=12.8, fig.height=3.8}
+fig_anscombe()
+```
+
+::: keybox
+A noisy line, a perfect curve, a line with one outlier, a "relationship" created by a single point — **identical summary statistics**. Good description always uses **both** numbers and pictures.
+:::
+
+::: source
+Anscombe (1973), *The American Statistician* — built-in R data set `anscombe`.
+:::
+
+## The data: tracks in the streaming charts {.smaller}
+
+**~67,000 tracks** that appeared in the Spotify charts, with 31 variables:
+
+| Group | Variables |
+|---|---|
+| Identifiers | `isrc`, `artist_id`, `artistName`, `trackName` |
+| Chart performance | `streams`, `weeks_in_charts`, `n_regions`, `top10` |
+| Audio characteristics (0–100) | `danceability`, `energy`, `speechiness`, `instrumentalness`, `liveness`, `valence` |
+| Track properties | `tempo`, `song_length`, `song_age`, `explicit`, `release_date`, `genre`, `label` |
+| Other platforms & reach | `youtube_views`, `tiktok_counts`, `shazam_counts`, `n_playlists`, artist-level followers & listeners |
+| Expert judgment | `expert_rating` (poor – fair – good – excellent – masterpiece) |
+
+::: notes
+Continuity: this is the Spotify world from §1.7. Don't read the table — point at the groups; the details come up as we use them.
+:::
+
+# 2.2 Getting data into R {.divider background-color="#0a3d6e"}
+
+## Reading the data {.midsize}
+
+```{r read-demo, echo=TRUE, eval=FALSE}
+library(tidyverse)
+
+music_url <- "https://raw.githubusercontent.com/wu-rds/MA2026/main/data/music_data_fin.csv"
+music_data <- read_csv2(music_url)
+```
+
+. . .
+
+::: discussion
+Why `read_csv2()` and not `read_csv()`? **What do you expect to happen** with `read_csv()`?
+:::
+
+::: notes
+Let them guess, then run the next slide live. The European convention: comma = decimal mark, so columns are separated by semicolons.
+:::
+
+## An import can fail silently {.midsize}
+
+```{r wrong-import, echo=TRUE}
+wrong_import <- read_csv(music_url)
+dim(wrong_import)
+```
+
+. . .
+
+| Convention | Columns separated by | Decimal mark | Function |
+|---|:-:|:-:|---|
+| International | `,` | `.` | `read_csv()` |
+| European | `;` | `,` | `read_csv2()` |
+
+::: keybox
+**No error ≠ correct.** Worse variants go unnoticed: `3,14` silently becoming `314`. Always **inspect right after importing**.
+:::
+
+## A first look {.smaller}
+
+```{r glimpse-demo, echo=TRUE}
+music_raw |>
+  select(streams, danceability, genre, label, release_date, expert_rating) |>
+  glimpse()
+```
+
+. . .
+
+```{r summary-demo, echo=TRUE}
+summary(select(music_raw, streams, song_length))
+```
+
+::: notes
+glimpse() is THE function after an import: plausible number of columns? numbers as <dbl>, text as <chr>, dates as <date>? Then point at streams in summary(): mean more than 20x the median — "hold that thought until 2.6".
+:::
+
+## Other formats — same logic {.smaller}
+
+| Format | Package | Function |
+|---|---|---|
+| CSV (international / European) | readr | `read_csv()` / `read_csv2()` |
+| Other delimiters | readr | `read_delim("file.txt", delim = "\t")` |
+| Excel | readxl | `read_excel("file.xlsx", sheet = "Sheet1")` |
+| SPSS / Stata | haven | `read_sav()` / `read_dta()` |
+| Qualtrics export | qualtRics | `read_survey()` → group project |
+| Web pages / APIs | rvest / jsonlite | see the course book *(optional)* |
+
+::: keybox
+Files in your project folder are read by their **relative path**: `read_excel("data/survey.xlsx")` — no `setwd()` needed inside an RStudio Project.
+:::
+
+## What is a row? {.smaller}
+
+::: columns
+::: {.column width="50%"}
+**Tidy data** (Wickham, 2014):
+
+1.  Each **variable** is a column
+2.  Each **observation** is a row
+3.  Each **value** is a cell
+:::
+
+::: {.column width="50%"}
+::: keybox
+Before any analysis, answer explicitly: **what does one row represent?** — the **unit of observation** (cf. "unit of analysis" in §1.8). Here: one row = one track. *Does that really hold?* → §2.5
+:::
+:::
+:::
+
+```{r tidy-example}
+untidy <- tibble(
+  track = c("Track A", "Track B"),
+  Jan = c(120, 80), Feb = c(135, 70), Mar = c(150, 65)
+)
+tidy <- untidy |>
+  pivot_longer(cols = Jan:Mar, names_to = "month", values_to = "streams")
+```
+
+::: {style="font-size: 0.85em;"}
+::: columns
+::: {.column width="45%"}
+**Untidy:** one column per month — "month" is hidden in the column names
+
+```{r tidy-untidy-table}
+knitr::kable(untidy)
+```
+:::
+
+::: {.column width="55%"}
+**Tidy:** one row per track and month
+
+```{r tidy-tidy-table}
+knitr::kable(tidy)
+```
+:::
+:::
+:::
+
+# 2.3 Variables and levels of measurement {.divider background-color="#0a3d6e"}
+
+## Levels of measurement: categorical {.smaller}
+
+::: {style="display: grid; grid-template-columns: 16% 42% 42%; gap: 0.6em; align-items: center;"}
+::: {style="background: #0f5da8; color: white; font-weight: 700; text-align: center; padding: 1.2em 0.3em; border-radius: 6px;"}
+Nominal
+:::
+
+::: {style="border: 2px solid #0f5da8; border-radius: 6px; padding: 0.4em 0.8em;"}
+-   Numbers only serve as **labels** for identification and categorization
+-   They do not reflect the **amount** of a characteristic
+-   Two categories: **binary**
+-   Permissible operation: **counting**
+:::
+
+::: {style="border: 2px solid #0f5da8; border-radius: 6px; padding: 0.4em 0.8em; text-align: center;"}
+E.g., **starting numbers** in a race
+
+![](../img/boat_3.png){width="31%"} ![](../img/boat_2.png){width="31%"} ![](../img/boat_1.png){width="31%"}
+
+7 · 11 · 3
+:::
+
+::: {style="background: #0f5da8; color: white; font-weight: 700; text-align: center; padding: 1.2em 0.3em; border-radius: 6px;"}
+Ordinal
+:::
+
+::: {style="border: 2px solid #0f5da8; border-radius: 6px; padding: 0.4em 0.8em;"}
+-   Numbers indicate the **relative position** (order)
+-   …but not the **size of the differences**
+-   Also: **greater / less than**; percentile-based statistics such as **median** and **quartiles**
+:::
+
+::: {style="border: 2px solid #0f5da8; border-radius: 6px; padding: 0.4em 0.8em; text-align: center;"}
+E.g., **finishing order** in the race
+
+![](../img/boat_1.png){width="31%"} ![](../img/boat_2.png){width="31%"} ![](../img/boat_3.png){width="31%"}
+
+1st · 2nd · 3rd place
+:::
+:::
+
+## Levels of measurement: continuous (metric) {.smaller}
+
+::: {style="display: grid; grid-template-columns: 16% 42% 42%; gap: 0.6em; align-items: center;"}
+::: {style="background: #0f5da8; color: white; font-weight: 700; text-align: center; padding: 1.2em 0.3em; border-radius: 6px;"}
+Interval
+:::
+
+::: {style="border: 2px solid #0f5da8; border-radius: 6px; padding: 0.4em 0.8em;"}
+-   **Differences** can be compared (equal intervals)
+-   …but the **zero point is arbitrary**
+-   Ratios are **not** meaningful
+-   Also: **range, mean, standard deviation**
+:::
+
+::: {style="border: 2px solid #0f5da8; border-radius: 6px; padding: 0.4em 0.8em; text-align: center;"}
+E.g., **finishing clock time** (start: 14:00)
+
+![](../img/boat_1.png){width="31%"} ![](../img/boat_2.png){width="31%"} ![](../img/boat_3.png){width="31%"}
+
+14:07:06 · 14:14:12 · 14:15:12
+:::
+
+::: {style="background: #0f5da8; color: white; font-weight: 700; text-align: center; padding: 1.2em 0.3em; border-radius: 6px;"}
+Ratio
+:::
+
+::: {style="border: 2px solid #0f5da8; border-radius: 6px; padding: 0.4em 0.8em;"}
+-   All properties of the scales above
+-   **Absolute zero point**
+-   Ratios are meaningful ("**twice as fast**")
+-   All statistical techniques apply
+:::
+
+::: {style="border: 2px solid #0f5da8; border-radius: 6px; padding: 0.4em 0.8em; text-align: center;"}
+E.g., **time to finish** (minutes)
+
+![](../img/boat_1.png){width="31%"} ![](../img/boat_2.png){width="31%"} ![](../img/boat_3.png){width="31%"}
+
+7.1 · 14.2 · 15.2
+:::
+:::
+
+::: notes
+The punchline: SAME three boats, four different numbers — the level of measurement is a property of the measurement, not of the object. Clock times and times to finish carry the same information; the only difference is the zero point. Ask: did boat B finish "twice as late" as boat A? The question makes no sense for 14:14 vs. 14:07 — midnight is an arbitrary zero. Subtract the start time and it does: 14.2 minutes is twice 7.1 minutes. Setting a natural zero turns an interval scale into a ratio scale. And the median of the finishing order is 2nd place; its mean is meaningless.
+:::
+
+## Not every number is a quantity {.smaller}
+
+| Level | Values express | Music data | Meaningful | Summary |
+|---|---|---|---|---|
+| **Nominal** | Categories, no order | `genre`, `label`, `artist_id` | = / ≠ | Frequencies, mode |
+| **Ordinal** | Ordered categories | `expert_rating` | + < / > | + median, quantiles |
+| **Interval** | Equal distances, arbitrary zero | release *year*, °C | + differences | + mean, SD |
+| **Ratio** | Equal distances, natural zero | `streams`, `song_length` | + ratios | + coefficient of variation |
+
+. . .
+
+::: keybox
+Nominal + ordinal = **categorical**; interval + ratio = **continuous**. The level decides which **summaries**, **charts** — and later **tests** — are meaningful. The mean `artist_id` is as meaningless as the mean phone number.
+:::
+
+## Your turn: classify these (2 min) {.midsize}
+
+::: discussion
+Nominal, ordinal, interval, or ratio?
+
+(a) Customer ID · (b) Satisfaction: "very dissatisfied" … "very satisfied" · (c) Price in € · (d) Payment method · (e) Year of first purchase · (f) Purchased (yes / no)
+:::
+
+::: notes
+(a) nominal — despite being a number; (b) ordinal — rating scales with many points are often treated as interval in practice, but strictly ordinal; (c) ratio; (d) nominal; (e) interval (year zero is arbitrary); (f) nominal/binary — useful property: mean of a 0/1 variable = share of 1s.
+:::
+
+## Telling R the level of measurement {.smaller}
+
+```{r types-demo, echo=TRUE, eval=FALSE}
+music_data <- music_raw |>
+  mutate(
+    genre    = as.factor(genre),                                     # nominal
+    explicit = factor(explicit, levels = c(0, 1),
+                      labels = c("not explicit", "explicit")),        # nominal (binary)
+    artist_id = as.character(artist_id),                             # an ID is not a number
+    expert_rating = factor(expert_rating,
+                           levels = c("poor", "fair", "good", "excellent", "masterpiece"),
+                           ordered = TRUE)                           # ordinal
+  )
+```
+
+```{r types-out, echo=TRUE}
+table(music_data$expert_rating)
+```
+
+::: keybox
+As text, R would sort the ratings **alphabetically**; as an **ordered factor**, R knows that *good* lies between *fair* and *excellent*.
+:::
+
+# 2.4 Data handling {.divider background-color="#0a3d6e"}
+
+## The verbs of data handling {.smaller}
+
+| Verb | Does | Example question |
+|---|---|---|
+| `filter()` | keeps **rows** meeting a condition | Pop tracks with > 10M streams? |
+| `select()` | keeps **columns** | only artist, title, streams |
+| `arrange()` | **sorts** rows | the most-streamed tracks? |
+| `mutate()` | creates / changes **columns** | streams in millions? release year? |
+| `group_by()` + `summarise()` | condenses to **one row per group** | median streams per label? |
+| `count()` | counts rows per group | tracks per genre? |
+| `left_join()` | **combines** tables via a key | add label information |
+
+::: keybox
+Same logic everywhere: data frame in → **column names without quotes** → data frame out. Chained with the pipe `|>`: *"and then"*.
+:::
+
+## Chaining steps with the pipe {.midsize}
+
+```{r pipe-demo, echo=TRUE}
+music_data |>                                  # take the music data, then
+  filter(genre == "Pop") |>                    # keep the pop tracks, then
+  arrange(desc(streams)) |>                    # sort by streams, then
+  select(artist, track, streams) |>            # keep three columns, then
+  head(4)                                      # show the first four rows
+```
+
+::: notes
+Live: change "Pop" to "Rock"; add a second condition streams > 1e8; replace desc(). Note `==` (double!) and that `%>%` from older tutorials/AI output does the same.
+:::
+
+## "… per …": group_by() + summarise() {.midsize}
+
+```{r group-demo, echo=TRUE}
+music_data |>
+  group_by(label) |>
+  summarise(
+    n_tracks       = n(),
+    median_streams = median(streams),
+    share_top10 = scales::percent(mean(top10 == "yes"), accuracy = 0.1)
+  )
+```
+
+::: keybox
+The workhorse of descriptive analysis: **every question of the form "… per …"** has this shape.
+:::
+
+## Combining tables: left_join() {.midsize}
+
+```{r join-demo, echo=TRUE}
+label_info <- tibble(
+  label      = c("Universal Music", "Sony Music", "Warner Music", "Independent"),
+  label_type = c("Major", "Major", "Major", "Independent")
+)
+music_data <- music_data |> left_join(label_info, by = "label")
+music_data |> count(label_type)
+```
+
+::: keybox
+Keeps **all rows of the left table**; no match → `NA`. **Check the row count after every join** — a non-unique key duplicates rows silently.
+:::
+
+## Your turn (live coding, 8 min) {.midsize}
+
+::: discussion
+Using the verbs, answer:
+
+1.  How many **hip-hop** tracks reached the **top 10**?
+2.  Which **label** has the highest **median streams** among hip-hop tracks?
+3.  Create a variable `streams_mio` (streams in millions) and show the five **rock** tracks with the most streams.
+:::
+
+::: notes
+Circulate. Solutions: (1) music_data |> filter(genre == "HipHop/Rap", top10 == "yes") |> nrow(); (2) filter(genre == "HipHop/Rap") |> group_by(label) |> summarise(med = median(streams)) |> arrange(desc(med)); (3) mutate + filter + arrange + select + head(5). Encourage AI use for syntax — then ask one student to explain their pipe line by line.
+:::
+
+# 2.5 Not trusting your data too early {.divider background-color="#0a3d6e"}
+
+## Five checks before you trust a data set {.midsize}
+
+::: incremental
+1.  **Did the import work?** Rows, columns, types — §2.2
+2.  **Missing values** — including zeros that mean "unknown"
+3.  **Impossible values** — ranges, dates, units
+4.  **Duplicates** — is the identifier really unique?
+5.  **Extreme values** — errors or information?
+:::
+
+. . .
+
+::: keybox
+…and one question beyond the checks: **how did the data come to be?**
+:::
+
+## Check 2: zeros that mean "unknown" {.midsize}
+
+```{r na-demo, echo=TRUE}
+sum(is.na(music_data))                              # missing values: none at all?
+mean(music_data$youtube_views == 0)                 # share of tracks with 0 YouTube views
+```
+
+. . .
+
+::: keybox
+58% of charting tracks with **zero** YouTube views? Almost certainly **"no data"**, not "no views". **Disguised missing values** (revenue 0 for never-contacted customers, age 0 in the CRM) drag every average down. Recode: `na_if(youtube_views, 0)` — and report how many are missing.
+:::
+
+## Check 3: impossible values {.midsize}
+
+```{r range-demo, echo=TRUE}
+music_data |>
+  summarise(first_release = min(release_date), last_release = max(release_date),
+            min_length = min(song_length), max_length = max(song_length),
+            min_tempo = min(tempo))
+```
+
+. . .
+
+::: keybox
+Releases in **2029**, a **1-second** song, a tempo of **0 bpm**. Some values are clearly errors, others merely unusual (intros, medleys) — **inspect individually** before deciding.
+:::
+
+## Check 4: what is a row, really? {.midsize}
+
+```{r dup-demo, echo=TRUE}
+music_data |> summarise(n_rows = n(), n_distinct_isrc = n_distinct(isrc))
+```
+
+. . .
+
+::: keybox
+The ISRC should identify a recording uniquely — yet there are **`r format(nrow(music_data) - n_distinct(music_data$isrc), big.mark = ",")` more rows than ISRCs**, and the rows differ in streams and chart weeks. Versions? Periods? Errors? Without documentation we cannot tell — but "one row = one recording" **does not hold**.
+:::
+
+## Check 5: outliers are not always errors {.midsize}
+
+```{r top-demo, echo=TRUE}
+music_data |> arrange(desc(streams)) |> select(artist, track, streams) |> head(4)
+```
+
+::: columns
+::: {.column width="50%"}
+::: keybox
+In markets for creative products, **a few hits account for a large share of consumption**. Here, the extremes are the story — check them, don't delete them.
+:::
+:::
+
+::: {.column width="50%"}
+::: keybox
+**Document, don't silently delete:** corrections in **code**, **explicit** flags instead of overwriting, **transparent** reporting of what changed.
+:::
+:::
+:::
+
+## How did the data come to be? {.midsize}
+
+```{r selection-fig, fig.width=11, fig.height=4.3}
+fig_selection_charts()
+```
+
+::: keybox
+Only **charted** tracks are in the data. Catchiness and promotion are unrelated among all songs (left) — but **negatively related among the survivors** (right). Created purely by the selection.
+:::
+
+::: notes
+Walk the logic: to make the charts, a song needs catchiness + promotion to be high; so a charting song with low promotion MUST be catchy, and vice versa. Callback: §1.5 mentioned "selection into the sample" as the second species of selection bias — here it is. Ask for more examples before revealing the next slide.
+:::
+
+## Survivorship is everywhere in marketing data {.midsize}
+
+::: incremental
+-   Successful **products** only (launch data of products still on the market)
+-   **Customers who did not churn** (loyalty-program data)
+-   **Companies that still exist** ("what do successful firms do?")
+-   **Survey respondents** — who chooses to answer is itself a choice (→ your group project!)
+:::
+
+. . .
+
+::: keybox
+Add one question to every descriptive checklist: **who is *not* in my data — and why?** Relationships among the survivors can differ from those in the population you care about (*Berkson's paradox*).
+:::
+
+# 2.6 Summarizing data {.divider background-color="#0a3d6e"}
+
+## Categorical variables: frequencies {.midsize}
+
+```{r freq-demo, echo=TRUE}
+music_data |>
+  count(genre, sort = TRUE) |>
+  mutate(share = n / sum(n)) |>
+  head(5)
+```
+
+::: notes
+Pop + hip-hop ≈ 77% of all tracks. Base R alternative: table() and prop.table() — in the book.
+:::
+
+## Conditional frequencies {.midsize}
+
+```{r cond-demo, echo=TRUE}
+music_data |>
+  group_by(genre) |>
+  summarise(n = n(), share_top10 = mean(top10 == "yes")) |>
+  arrange(desc(share_top10)) |>
+  mutate(share_top10 = scales::percent(share_top10, accuracy = 0.1))
+```
+
+::: keybox
+Beware of **small groups**: a share computed from 80 tracks is far less reliable than one from 30,000 — made precise in Module 3.
+:::
+
+## Mean or median? {.midsize}
+
+```{r center-demo, echo=TRUE}
+music_data |>
+  summarise(mean = mean(streams), median = median(streams),
+            q25 = quantile(streams, 0.25), q75 = quantile(streams, 0.75))
+```
+
+. . .
+
+::: discussion
+"The average track has **7.3 million** streams." — Is this a good description of the typical track?
+:::
+
+. . .
+
+::: keybox
+No: a few mega-hits pull the mean up — the distribution is **right-skewed**. The **median** (~333,000) describes the typical track. Mean far above median → a few extremes dominate the average (sales, revenue, followers, streams).
+:::
+
+## Location, dispersion, shape — in one call {.smaller}
+
+```{r describe-demo, echo=TRUE}
+library(psych)
+music_data |>
+  select(streams, danceability, energy, valence, song_length) |>
+  describe() |>
+  select(n, mean, sd, median, min, max, skew)
+```
+
+::: columns
+::: {.column width="50%"}
+-   **Location:** mean, median
+-   **Dispersion:** SD, range, IQR, coefficient of variation (SD / mean)
+-   **Shape:** skewness — `streams` ≈ 17: extremely right-skewed
+:::
+
+::: {.column width="50%"}
+::: keybox
+**z-scores** express relative position: $z = (x - \bar{x}) / s$ → "1.5 SDs above the average track". Their link to probabilities: Module 3.
+:::
+:::
+:::
+
+# 2.7 Visualizing data {.divider background-color="#0a3d6e"}
+
+## The grammar of graphics {.smaller}
+
+::: columns
+::: {.column width="50%"}
+Every `ggplot2` chart is built from the same components, **layer by layer** with `+`:
+
+1.  **Data** — `ggplot(music_data, …)`
+2.  **Aesthetic mappings** — `aes(x = …, y = …, color = …)`
+3.  **Geoms** — `geom_col()`, `geom_point()`, `geom_boxplot()`, …
+4.  **Labels, scales, themes** — `labs()`, `scale_…()`, `theme_…()`
+:::
+
+::: {.column width="50%"}
+```{r gg-min, echo=TRUE, fig.width=5.5, fig.height=2.6}
+genre_shares <- music_data |>
+  count(genre) |> mutate(share = n / sum(n))
+ggplot(genre_shares, aes(x = genre, y = share)) +
+  geom_col()
+```
+:::
+:::
+
+## From default to useful {.smaller}
+
+::: columns
+::: {.column width="52%"}
+```{r gg-full, echo=TRUE, eval=FALSE}
+ggplot(genre_shares,
+       aes(x = fct_reorder(genre, share), y = share)) +
+  geom_col(fill = "#0f5da8") +
+  geom_text(aes(label = scales::percent(share, accuracy = 0.1)),
+            hjust = -0.15, size = 3.5) +
+  coord_flip() +
+  scale_y_continuous(labels = scales::percent,
+                     limits = c(0, 0.5)) +
+  labs(x = NULL, y = "Share of tracks",
+       title = "Pop and hip-hop dominate the charts") +
+  theme_minimal()
+```
+:::
+
+::: {.column width="48%"}
+```{r gg-full-out, fig.width=5.4, fig.height=4.2}
+ggplot(genre_shares, aes(x = fct_reorder(genre, share), y = share)) +
+  geom_col(fill = "#0f5da8") +
+  geom_text(aes(label = scales::percent(share, accuracy = 0.1)), hjust = -0.15, size = 3.5) +
+  coord_flip() +
+  scale_y_continuous(labels = scales::percent, limits = c(0, 0.5)) +
+  labs(x = NULL, y = "Share of tracks", title = "Pop and hip-hop dominate the charts") +
+  theme_minimal()
+```
+:::
+:::
+
+::: keybox
+Sorted bars · readable labels · percent axis · a title that **states the finding**, not the topic.
+:::
+
+## Which chart for which variables? {.smaller}
+
+| To show … | Variables | Chart | geom |
+|---|---|---|---|
+| One distribution | categorical | Bar chart | `geom_bar()` / `geom_col()` |
+| | continuous | Histogram, density, boxplot | `geom_histogram()`, `geom_density()`, `geom_boxplot()` |
+| Groups compared | categorical × continuous | Boxplots, jittered points | `geom_boxplot()`, `geom_jitter()` |
+| A relationship | continuous × continuous | Scatter plot | `geom_point()` |
+| Two categoricals | categorical × categorical | Grouped / stacked bars of shares | `geom_col(position = "dodge")` |
+| Change over time | time × continuous | Line chart | `geom_line()` |
+
+::: keybox
+A third variable: **color** (`aes(color = …)`) or **small multiples** (`facet_wrap(~ …)`).
+:::
+
+## Skewed data: the log scale {.midsize}
+
+```{r hist-both, fig.width=12, fig.height=3.8}
+lab_short <- scales::label_number(scale_cut = scales::cut_short_scale())
+p_raw <- ggplot(music_data, aes(x = streams)) +
+  geom_histogram(bins = 50, fill = "#0f5da8") +
+  scale_x_continuous(labels = lab_short) +
+  labs(title = "Linear axis", x = "Streams", y = "Number of tracks") + theme_minimal(base_size = 14)
+p_log <- ggplot(music_data, aes(x = streams)) +
+  geom_histogram(bins = 50, fill = "#0f5da8") +
+  scale_x_log10(labels = lab_short) +
+  labs(title = "Log scale", x = "Streams (log scale)", y = "Number of tracks") + theme_minimal(base_size = 14)
+p_raw + p_log
+```
+
+::: keybox
+On a log scale, each step **multiplies** (10K → 100K → 1M). Makes skewed distributions readable — **always label it** in the axis title.
+:::
+
+## Comparing groups: boxplots {.midsize}
+
+```{r box-demo, fig.width=11, fig.height=4.4}
+music_data |>
+  mutate(genre = fct_lump_n(genre, n = 6, other_level = "Remaining genres")) |>
+  ggplot(aes(x = fct_reorder(genre, streams, .fun = median), y = streams)) +
+  geom_boxplot(fill = "#dbe7f3", outlier.alpha = 0.15) +
+  scale_y_log10(labels = scales::label_number(scale_cut = scales::cut_short_scale())) +
+  coord_flip() +
+  labs(x = NULL, y = "Streams (log scale)") +
+  theme_minimal(base_size = 15)
+```
+
+::: notes
+Read one box: median line, box = middle 50% (IQR), whiskers to 1.5 IQR, dots beyond. Takeaway: medians differ by genre, but the spread WITHIN each genre dwarfs the differences BETWEEN them.
+:::
+
+## Charts are data-quality tools, too {.midsize}
+
+```{r time-demo, fig.width=11, fig.height=3.6}
+music_data |>
+  count(release_year) |>
+  ggplot(aes(x = release_year, y = n)) +
+  geom_line(color = "#0f5da8", linewidth = 1) +
+  geom_point(color = "#0f5da8", size = 1.5) +
+  labs(x = "Release year", y = "Number of tracks") +
+  theme_minimal(base_size = 15)
+```
+
+::: discussion
+Two things in this chart should make you suspicious. **Which?**
+:::
+
+::: notes
+(1) The axis runs to 2029 — the impossible release dates. (2) The collapse in 2021 is not a drop in releases: the latest plausible release date is July 2021, the last year is incomplete. "Sales collapsed this month!" — the incomplete final period is a classic false alarm.
+:::
+
+## Honest visualization I: bars start at zero {.midsize}
+
+```{r trunc-fig, fig.width=10.5, fig.height=4.2}
+fig_truncated_axis()
+```
+
+::: keybox
+Bars encode values by **length** — a truncated axis makes the lengths lie. (Points and lines encode by *position* and may start elsewhere — clearly labeled.)
+:::
+
+## Honest visualization II: dual axes {.midsize}
+
+::: columns
+::: {.column width="55%"}
+```{r ie-callback, fig.width=6.8, fig.height=4}
+fig_spurious_ie()
+```
+:::
+
+::: {.column width="45%"}
+Remember this one from §1.4?
+
+::: keybox
+Two independently chosen y-axes let you make **almost any two series look related**. Alternatives: index both series (first year = 100), or two charts side by side.
+:::
+
+-   Also avoid: **3D effects**, **pies** with many slices, colors without meaning, unsorted categories, axes without units
+:::
+:::
+
+# 2.8 From description to insight {.divider background-color="#0a3d6e"}
+
+## "Do explicit tracks perform worse?" {.midsize}
+
+```{r explicit-1, echo=TRUE}
+music_data |>
+  group_by(explicit) |>
+  summarise(n = n(), median_streams = median(streams))
+```
+
+. . .
+
+::: discussion
+Can we write *"explicit lyrics reduce streams"*? **What would you check first?**
+:::
+
+## Looking within genres {.smaller}
+
+```{r explicit-2, echo=TRUE}
+music_data |>
+  mutate(genre = fct_lump_n(genre, n = 5, other_level = "Remaining genres")) |>
+  group_by(genre) |>
+  summarise(share_explicit      = mean(explicit == "explicit"),
+            median_not_explicit = median(streams[explicit == "not explicit"]),
+            median_explicit     = median(streams[explicit == "explicit"]))
+```
+
+::: keybox
+The gap persists within each large genre — but its size **and the share of explicit tracks** vary strongly. Genre, label, artist popularity, and the selection into the charts are all candidate **confounders** (§1.5).
+:::
+
+## What we can — and cannot — write {.midsize}
+
+::: columns
+::: {.column width="50%"}
+**Descriptive ✓**
+
+*"Among the tracks in our chart data, those with explicit lyrics have a lower median number of streams than those without (about 94,000 vs. 385,000). The gap is visible within each large genre, but varies in size."*
+:::
+
+::: {.column width="50%"}
+**Causal ✗**
+
+*"Explicit lyrics reduce streams."*
+
+That would require comparing the **same** tracks with and without explicit lyrics — a counterfactual the data cannot provide (§1.2).
+:::
+:::
+
+. . .
+
+::: keybox
+A good descriptive finding answers: **What** was measured? **How much** (numbers, not adjectives)? **Compared to what? For whom? With which caveat?** — and uses descriptive verbs: *is higher, differs, is associated with* — not *causes, drives, increases*.
+:::
+
+::: notes
+AI note to say out loud: assistants write fluent descriptions and slide happily from "is associated with" to "drives". Check every sentence against the five questions and against your own output.
+:::
+
+## Assignment 1: data handling & description {.midsize}
+
+-   **Your personal version of the data** (based on your student ID) — check, handle, summarize, visualize
+-   Submit as a **reproducible report** (.Rmd → HTML) via Canvas
+-   **Deadline:** Group A: Mon, Oct 26 · Group B: Wed, Oct 28
+-   **Debrief:** 3 short paper questions about *your* results at the start of session 4 (closed book)
+-   **10 points:** report 7 + debrief 3
+
+::: keybox
+Everything you need is in **this chapter**. AI assistants welcome — you must be able to **explain every line** you submit.
+:::
+
+## Learning check {.smaller}
+
+1.  After `read_csv("file.csv")` on a file from a German Excel, the data frame has **one column**. Why — and what should you use instead?
+2.  Mean revenue per customer: **€480**, median: **€95**. What does this tell you about the distribution? Which number describes the typical customer?
+3.  A loyalty-program data set contains **only active customers**. Among them, those who received few discounts buy most often. Why might this pattern mislead?
+4.  **True or false?** (a) A variable stored as a number can be nominal. (b) Outliers should always be removed. (c) The y-axis of a bar chart should start at zero. (d) A zero in a data set always means the quantity was zero.
+
+::: notes
+(1) European CSV: semicolons + decimal commas → read_csv2(). (2) Right-skewed; median. (3) Survivorship / selection into the sample: churned customers are missing — perhaps the loyal ones never needed discounts, while discount-receivers who churned are gone. (4) T, F, T, F.
+:::
+
+## Next session
+
+**Module 3 · Uncertainty & Experiments I** — *How sure can I be?*
+
+-   Why every number from a sample is uncertain — and how to quantify it
+-   Standard errors and confidence intervals — by simulation
+-   Our first experiment analysis: comparing two groups
+
+<br>
+
+::: source
+Course book chapter 2 (consolidation reading for today) is online — with all code from these slides. **Assignment 1** is on Canvas.
+:::

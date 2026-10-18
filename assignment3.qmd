@@ -1,0 +1,5 @@
+# Assignment 3: Analyzing observational data {#sec-assignment3 .unnumbered}
+
+::: {.callout-note title="Contents follow soon"}
+The solution to Assignment 3 will be posted here after the in-class debrief (Group A: Mon, Nov 23 · Group B: Thu, Nov 26).
+:::

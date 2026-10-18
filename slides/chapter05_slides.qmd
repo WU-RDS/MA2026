@@ -1,0 +1,748 @@
+---
+title: "Marketing Analytics"
+subtitle: "Chapter 5 · Learning from Observational Data"
+author: "Nils Wlömert"
+institute: "Vienna University of Economics and Business (WU)"
+date: today
+date-format: "MMMM YYYY"
+format:
+  revealjs:
+    theme: [default, wu-theme.scss]
+    embed-resources: true
+    width: 1280
+    height: 720
+    margin: 0.08
+    slide-number: c/t
+    footer: "Marketing Analytics — Nils Wlömert"
+    logo: ../img/wu_logo_trans.png
+    transition: none
+    center: false
+    menu: true
+    pdf-separate-fragments: false
+    fig-dpi: 200
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+library(tidyverse)
+data_dir <- "../data"
+source("../R/ch05-figures.R")
+options(scipen = 5, digits = 4, width = 90)
+smartmix_obs <- load_smartmix()
+campaigns    <- load_campaigns()
+playlist     <- load_playlist()
+book_url <- "https://wu-rds.github.io/MA2026/05-observational-data.html"
+```
+
+# Part 1 · Observational data I {.divider background-color="#0a3d6e"}
+
+## Before we start {.midsize}
+
+::: columns
+::: {.column width="50%"}
+**Paper quiz on Chapter 4** *(10 min)*
+
+-   Individual, closed book
+-   Counts toward participation
+:::
+
+::: {.column width="50%"}
+**Assignment 2** is running
+
+-   Deadline: Group A Sun, Nov 8 · Group B Wed, Nov 11
+-   Debrief at the start of next session
+:::
+:::
+
+## Today's session {.midsize}
+
+::: columns
+::: {.column width="50%"}
+**Observational data I** *(today)*
+
+5.1 Smart Mix without randomization\
+5.2 From correlation to a line\
+5.3 Reading a regression\
+5.4 Adjusting for confounders\
+5.5 Categorical predictors\
+5.6 Prediction vs. explanation
+:::
+
+::: {.column width="50%"}
+**Observational data II** *(next session)*
+
+5.7 Functional form and elasticities\
+5.8 Logistic regression\
+5.9 Diagnostics that change decisions\
+5.10 Difference-in-differences
+
+::: keybox
+**Driving question:** *What if we cannot randomize?*
+:::
+:::
+:::
+
+# 5.1 Smart Mix without randomization {.divider background-color="#0a3d6e"}
+
+## A different history {.midsize}
+
+::: columns
+::: {.column width="50%"}
+-   Chapter 4: A/B test, 400 users → **+3.2 hours**
+-   Now: no experiment. Smart Mix launched as an **opt-in** feature
+-   Four weeks later: data of **2,000 users**, `r sum(smartmix_obs$smart_mix)` adopters
+
+```{r obs-naive, fig.width=6.5, fig.height=3}
+fig_obs_naive(base_size = 12)
+```
+:::
+
+::: {.column width="50%"}
+::: discussion
+The dashboard says: adopters listen **9.3 hours more** — three times the experimental effect. Would you report this number to management?
+:::
+:::
+:::
+
+::: notes
+Let them articulate the problem before showing the next slide: who switches on a new music feature? The same intuition as the newsletter and the eBay ads in Chapter 1.
+:::
+
+## Adopters were different before Smart Mix existed {.midsize}
+
+::: columns
+::: {.column width="58%"}
+```{r prior, fig.width=7, fig.height=3.6}
+fig_prior_by_adoption(base_size = 12)
+```
+:::
+
+::: {.column width="42%"}
+```{r dag, fig.width=5, fig.height=2.6}
+fig_adoption_dag(base_size = 12)
+```
+
+::: keybox
+Same costume, new villain: **music enthusiasm** drives adoption *and* listening. Without a coin flip, we have one tool left: **adjustment**.
+:::
+:::
+:::
+
+# 5.2 From correlation to a line {.divider background-color="#0a3d6e"}
+
+## Two variables, one line {.midsize}
+
+::: columns
+::: {.column width="55%"}
+```{r scatter, fig.width=6.5, fig.height=4.2}
+fig_scatter_prior(base_size = 12)
+```
+:::
+
+::: {.column width="45%"}
+$$
+\text{hours} = \beta_0 + \beta_1 \cdot \text{prior hours} + \varepsilon
+$$
+
+-   $\beta_0$ **intercept** · $\beta_1$ **slope** · $\varepsilon$ **residual**
+-   Correlation: *that* they move together · regression: *how much*
+
+```{r lm1, echo=TRUE}
+coef(lm(hours ~ prior_hours, data = smartmix_obs))
+```
+
+::: keybox
+Each extra hour before the launch **goes with** 0.73 hours after it — *goes with*, not *causes*.
+:::
+:::
+:::
+
+## Which line? Least squares {.smaller}
+
+::: columns
+::: {.column width="45%"}
+```{r ls, fig.width=5, fig.height=5.6}
+fig_least_squares(base_size = 11)
+```
+:::
+
+::: {.column width="55%"}
+-   Residual = observed − predicted (orange segments)
+-   The regression line **minimizes the sum of squared residuals**
+-   Squaring: big misses count a lot; above and below the line count alike
+-   `lm()` = "linear model": does exactly this
+
+**Live demo:** fit the line yourself — course book, §5.2
+
+`r paste0("[", book_url, "#sec-obs-line](", book_url, "#sec-obs-line)")`
+
+::: {style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 1em; text-align: center; color: #58585a; margin-top: 0.5em;"}
+*Screenshot placeholder: the line-fitting widget*\
+`img/ch05/widget_line.png`
+:::
+:::
+:::
+
+# 5.3 Reading a regression {.divider background-color="#0a3d6e"}
+
+## The full output {.smaller}
+
+```{r lm-naive, echo=TRUE}
+model_naive <- lm(hours ~ smart_mix, data = smartmix_obs)
+summary(model_naive)
+```
+
+## Line by line {.smaller}
+
+| Output | Meaning |
+|---|---|
+| `Estimate` | Intercept = mean of non-adopters (18.4); `smart_mix` = difference adopters − non-adopters (9.3) |
+| `Std. Error` | Uncertainty of each coefficient (Chapter 3) |
+| `t value`, `Pr(>|t|)` | *t*-test of each coefficient against zero (Chapter 4): signal / noise |
+| `Residual standard error` | Typical distance of a user from the line, in hours |
+| `Multiple R-squared` | Share of the variation in hours explained by the model (14%) |
+| `F-statistic` | The whole model against "no predictors" |
+
+::: keybox
+With one 0/1 predictor, the regression **is** the comparison of two means — and its *t*-test is the two-sample *t*-test. `confint(model_naive)` gives the confidence intervals.
+:::
+
+::: notes
+R², the F-test and standardized coefficients are in an "Under the hood" box in the book. Don't spend time on them here.
+:::
+
+# 5.4 Adjusting for confounders {.divider background-color="#0a3d6e"}
+
+## Holding prior listening constant {.smaller}
+
+```{r lm-prior, echo=TRUE}
+model_prior <- lm(hours ~ smart_mix + prior_hours, data = smartmix_obs)
+coef_table(model_prior)
+```
+
+. . .
+
+::: keybox
+The Smart Mix coefficient drops from **9.3** to **4.9**: now the difference between adopters and non-adopters **with the same prior listening**. Part of the naive gap belonged to prior listening — and is now attributed to it.
+:::
+
+## More variables, same logic {.smaller}
+
+```{r lm-full, echo=TRUE}
+model_full <- lm(hours ~ smart_mix + prior_hours + tenure + premium + device, data = smartmix_obs)
+coef_table(model_full)
+```
+
+::: keybox
+Each coefficient: the association with the outcome **holding all other variables in the model constant**. Tenure, Premium and device change little: ≈ **4.5 hours**.
+:::
+
+## Naive, adjusted — and the truth {.midsize}
+
+```{r est, fig.width=10, fig.height=4}
+fig_estimates(base_size = 12)
+```
+
+::: keybox
+Adjustment removed ~75% of the bias — **not all of it**. We adjusted for a *proxy* of enthusiasm, not for enthusiasm. Regression removes exactly the confounding your variables capture.
+:::
+
+## Live demo: how good must a proxy be? {.midsize}
+
+::: columns
+::: {.column width="55%"}
+Course book, §5.4 — set the **quality of the proxy** and the **strength of confounding**.
+
+`r paste0("[", book_url, "#sec-obs-adjust](", book_url, "#sec-obs-adjust)")`
+
+::: {style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 1.5em; text-align: center; color: #58585a; margin-top: 0.6em;"}
+*Screenshot placeholder: the proxy widget*\
+`img/ch05/widget_proxy.png`
+:::
+:::
+
+::: {.column width="45%"}
+::: discussion
+With a 50% proxy, how much of the bias is left? And what happens at 0%?
+:::
+:::
+:::
+
+::: notes
+50%: half the bias remains. 0%: the "adjusted" estimate equals the naive one — adjusting for noise does nothing. Point out the deeper message: no data set can tell you whether you have adjusted for enough.
+:::
+
+## Two warnings {.midsize}
+
+::: columns
+::: {.column width="50%"}
+::: keybox
+**Adjusting for the wrong variable makes it worse.** A **mediator** (on the causal path) absorbs part of the effect you want. Only **confounders** — determined *before* the treatment, affecting treatment *and* outcome — belong in the model.
+:::
+:::
+
+::: {.column width="50%"}
+::: keybox
+**"Enough" is untestable.** The assumption of no unobserved confounders cannot be checked in the data. Report *what* you adjusted for — and what you plausibly could not.
+:::
+:::
+:::
+
+::: notes
+Example for the mediator warning: if Smart Mix works by making users discover new artists, adjusting for "new artists discovered" hides exactly that effect. Collinearity (VIF) is in the book's box: it makes coefficients imprecise, not biased.
+:::
+
+## Your turn (5 min) {.midsize}
+
+::: discussion
+Add **`age`** to the full model. Does the Smart Mix coefficient change? Why (not)?
+
+```r
+model_age <- lm(hours ~ smart_mix + prior_hours + tenure + premium + device + age,
+                data = smartmix_obs)
+coef_table(model_age)
+```
+
+Then: which variable in the data set should you **never** adjust for when estimating the effect of Smart Mix on listening — and why?
+:::
+
+::: notes
+Age barely changes anything: it is not related to adoption in these data, so it is not a confounder. The variable NOT to adjust for: churn — it is determined after listening (and partly by it); adjusting for a consequence of the outcome is "bad control". Let one pair report.
+:::
+
+# 5.5 Categorical predictors {.divider background-color="#0a3d6e"}
+
+## Dummies and the reference category {.smaller}
+
+```{r cat, echo=TRUE}
+coef(model_full)[c("premium", "deviceAndroid", "deviceDesktop")]
+```
+
+::: columns
+::: {.column width="50%"}
+-   **0/1 variable** (`premium`): coefficient = difference between the two groups, other variables held constant
+-   **Several categories** (`device`): R picks a **reference** (first level: iOS) and creates one **dummy** per other category
+-   Each dummy = difference to the **reference**
+:::
+
+::: {.column width="50%"}
+::: keybox
+Android users: **1.5 hours less** than iOS users; Desktop: **2.5 hours less** — holding everything else constant. *p*-values compare each category with the reference; "does device matter at all?" → `anova(model_without, model_full)` (the ANOVA of Chapter 4).
+:::
+:::
+:::
+
+::: notes
+Reference category is convenience, not substance: relevel(device, ref = "Android") changes the comparisons, not the model. Reminder from Chapter 2: set factor levels yourself, otherwise alphabetical.
+:::
+
+# 5.6 Prediction vs. explanation {.divider background-color="#0a3d6e"}
+
+## Predicting listening time for new users {.smaller}
+
+::: columns
+::: {.column width="50%"}
+```{r pred-code, echo=TRUE}
+set.seed(42)
+train_ids <- sample(nrow(smartmix_obs), 1500)
+train <- smartmix_obs[train_ids, ]
+test  <- smartmix_obs[-train_ids, ]
+model_pred <- lm(hours ~ prior_hours + tenure + premium +
+                   device + smart_mix, data = train)
+test$predicted <- predict(model_pred, newdata = test)
+sqrt(mean((test$hours - test$predicted)^2))   # RMSE
+```
+:::
+
+::: {.column width="50%"}
+```{r pred-fig, fig.width=5.5, fig.height=3.8}
+fig_prediction(base_size = 11)
+```
+:::
+:::
+
+::: keybox
+For **prediction**, it does not matter *why* a variable is associated with the outcome — only how well the predictions hold up on **data the model has not seen**.
+:::
+
+## Two questions, two rules {.midsize}
+
+::: columns
+::: {.column width="50%"}
+::: keybox
+**Explanation** (causal question): include confounders, exclude mediators, state what is unobserved. The **coefficient** matters; R² is secondary.
+:::
+:::
+
+::: {.column width="50%"}
+::: keybox
+**Prediction**: include whatever predicts; judge by **out-of-sample errors**. Coefficients are not interpreted; the **predictions** matter.
+:::
+:::
+:::
+
+. . .
+
+::: discussion
+A model can be a **good predictor and a bad explainer** at the same time. Where in your company would each mistake — reading causal effects off a prediction model, or judging a causal model by its R² — cost money?
+:::
+
+::: notes
+Overfitting, adjusted R² and AIC: book box. The mistake in practice: "our churn model has R² = 0.6, so the variables in it are the drivers of churn" — no.
+:::
+
+## Learning check (Part I) {.smaller}
+
+1.  Slope of hours on prior hours = 0.73. Interpret — and why is it not causal?
+2.  Adding a variable can increase, decrease, or leave the Smart Mix coefficient unchanged. When does each happen?
+3.  `planFamily` = 4.2 with reference "Free". Interpret. How do you test whether the plan matters at all?
+4.  R² = 0.71 for predicting next month's spending with 25 predictors on 300 customers. What do you ask?
+
+::: notes
+(1) Users with one more hour before the launch listen 0.73 more hours after it, on average; both are driven by the same enthusiasm — association, not effect. (2) Decrease: the variable is a confounder associated with adoption and hours in the same direction; unchanged: unrelated to adoption; increase: associated in opposite directions (suppression). (3) Family-plan users listen 4.2 hours more than Free users, other variables constant; anova() with and without plan. (4) Out-of-sample performance (test set); 25 predictors for 300 cases invites overfitting.
+:::
+
+## Next session {.midsize}
+
+**Observational data II** — beyond the straight line, and a quasi-experiment
+
+-   Functional form: when a line is wrong — **elasticities**
+-   Yes/no outcomes: logistic regression
+-   The three diagnostics that change decisions
+-   **Difference-in-differences** with real playlist data
+
+::: keybox
+Before next session: work through §5.1–5.6 on the course site. **Debrief of Assignment 2** at the start of the session.
+:::
+
+# Part 2 · Observational data II {.divider background-color="#0a3d6e"}
+
+## Before we start {.midsize}
+
+::: columns
+::: {.column width="50%"}
+**Debrief Assignment 2** — analyzing experiments *(10 min)*
+
+-   Three short paper questions about *your* results
+-   Closed book, no laptop
+:::
+
+::: {.column width="50%"}
+**Paper quiz on Chapter 5, Part I** *(§5.1–5.6, 8 min)*
+
+-   Individual, closed book
+-   Counts toward participation
+:::
+:::
+
+# 5.7 Functional form: when the line is wrong {.divider background-color="#0a3d6e"}
+
+## Diminishing returns {.smaller}
+
+```{r fits, fig.width=11.5, fig.height=4.2}
+fig_campaign_fits(base_size = 12)
+```
+
+::: keybox
+500 promotion campaigns: the first euros buy many streams, later euros fewer. A straight line cannot bend — on **log scales**, the cloud becomes a line again.
+:::
+
+## The log-log model: elasticities {.smaller}
+
+```{r loglog, echo=TRUE}
+model_loglog <- lm(log(streams) ~ log(spend) + log(followers) + placements + genre, data = campaigns)
+coef_table(model_loglog)
+```
+
+::: keybox
+`log(spend)` = **0.33**: a 1% increase in spend goes with 0.33% more streams; +10% spend → **+3.3% streams** — the same *percentage* at every budget. Elasticities have no units and are **comparable**: followers (0.51) matter more than the budget.
+:::
+
+## Four ways to combine levels and logs {.smaller}
+
+```{r forms, fig.width=11, fig.height=2.6}
+fig_functional_forms(base_size = 11)
+```
+
+| Model | Equation | Reading $\beta_1$ |
+|---|---|---|
+| Level-level | $y = \beta_0 + \beta_1 x$ | +1 unit $x$ → $\beta_1$ units of $y$ |
+| Log-level | $\log y = \beta_0 + \beta_1 x$ | +1 unit $x$ → ≈ $100\beta_1$% of $y$ (exact: $100(e^{\beta_1}-1)$%) |
+| Level-log | $y = \beta_0 + \beta_1 \log x$ | +1% $x$ → ≈ $\beta_1/100$ units of $y$ |
+| Log-log | $\log y = \beta_0 + \beta_1 \log x$ | +1% $x$ → ≈ $\beta_1$% of $y$ (**elasticity**) |
+
+::: notes
+In our model, `placements` is a log-level term: 0.12 → about 12% more streams per placement (exact: 12.8%). For coefficients up to ~0.1 the approximation is fine; beyond that use exp(β) − 1 (β = 0.5 → 65%, not 50%). Zeros: log(x + 1) — book box.
+:::
+
+## Your turn (5 min) {.midsize}
+
+::: discussion
+From the log-log model:
+
+1.  `genreHipHop/Rap` = 0.20. By what percentage do HipHop/Rap campaigns differ from Pop campaigns (the reference) — approximately and exactly?
+2.  A marketing manager proposes to double the promotion budget of every campaign. By roughly what percentage would streams increase, according to the model? Is this a causal claim?
+:::
+
+::: notes
+(1) ≈ 20%; exact: exp(0.20) − 1 = 22%. (2) Doubling = +100%; with constant elasticity: 2^0.33 − 1 ≈ 26% (the rule of thumb 0.33 × 100 = 33% overshoots for such a large change — a good moment to show that the % rule is a local approximation). Causal? Only if spend is not confounded with unobserved campaign quality — probably it is (bigger budgets go to more promising releases).
+:::
+
+## Live demo: linear or log-log? {.midsize}
+
+::: columns
+::: {.column width="55%"}
+Course book, §5.7 — move the **true elasticity**.
+
+`r paste0("[", book_url, "#sec-obs-form](", book_url, "#sec-obs-form)")`
+
+::: {style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 1.5em; text-align: center; color: #58585a; margin-top: 0.6em;"}
+*Screenshot placeholder: the functional-form widget*\
+`img/ch05/widget_loglog.png`
+:::
+:::
+
+::: {.column width="45%"}
+::: keybox
+Elasticity **< 1**: diminishing returns, the line misses at both ends. **= 1**: proportional. **> 1**: increasing returns (rare — network effects).
+:::
+:::
+:::
+
+# 5.8 Yes/no outcomes: logistic regression {.divider background-color="#0a3d6e"}
+
+## Why not a straight line? {.midsize}
+
+::: columns
+::: {.column width="55%"}
+```{r logit-fig, fig.width=6.5, fig.height=4}
+fig_logistic(base_size = 12)
+```
+:::
+
+::: {.column width="45%"}
+-   Outcome: **churn** (cancelled within 3 months), `r round(100 * mean(smartmix_obs$churn))`% of users
+-   A line produces probabilities **below 0** for heavy listeners
+-   The **logistic** curve stays between 0 and 1 — and bends where it matters
+
+```{r glm, echo=TRUE, eval=FALSE}
+model_churn <- glm(churn ~ hours + premium + tenure + smart_mix,
+                   family = binomial, data = smartmix_obs)
+```
+:::
+:::
+
+## Reading the coefficients: through probabilities {.smaller}
+
+```{r glm2, echo=TRUE}
+model_churn <- glm(churn ~ hours + premium + tenure + smart_mix, family = binomial, data = smartmix_obs)
+coef_table(model_churn)
+```
+
+::: columns
+::: {.column width="50%"}
+```{r glm-pred, echo=TRUE}
+typical_user <- data.frame(hours = c(10, 20, 30), premium = 0,
+                           tenure = 24, smart_mix = 0)
+predict(model_churn, newdata = typical_user, type = "response")
+```
+:::
+
+::: {.column width="50%"}
+::: keybox
+Read **sign** and **significance** directly; read **size** through **predicted probabilities**: 10 vs. 30 hours → churn probability 31% vs. 12%. Differences are effects in **percentage points**. Odds ratios: book box.
+:::
+:::
+:::
+
+# 5.9 The diagnostics that change decisions {.divider background-color="#0a3d6e"}
+
+## Three checks worth doing every time {.smaller}
+
+```{r diag3, fig.width=13, fig.height=3.3}
+(fig_residuals_form(base_size = 10) + plot_layout(widths = c(1, 1))) | fig_influence(base_size = 10) | fig_heteroskedasticity(base_size = 10)
+```
+
+::: columns
+::: {.column width="33%"}
+**1. Is the line the right shape?** Curved residuals → change the functional form (log) or add a predictor.
+:::
+
+::: {.column width="33%"}
+**2. Does one observation drive the result?** `plot(model, which = 5)`; refit without it — if the conclusion changes, say so.
+:::
+
+::: {.column width="34%"}
+**3. Is the uncertainty right?** A funnel → **robust standard errors**: `coeftest(model, vcov = vcovHC(model))`.
+:::
+:::
+
+::: notes
+Not on the list: normality of residuals (CLT; glance at the Q-Q plot for extreme outliers only) and multicollinearity (precision, not validity). Both in the book's box.
+:::
+
+# 5.10 A quasi-experiment: difference-in-differences {.divider background-color="#0a3d6e"}
+
+## Playlist listings as a natural experiment {.smaller}
+
+::: columns
+::: {.column width="60%"}
+```{r did-trends, fig.width=7.5, fig.height=4}
+fig_did_trends(base_size = 11)
+```
+:::
+
+::: {.column width="40%"}
+-   **Real data:** `r n_distinct(playlist$song_id)` songs × 21 weeks
+-   March 19, 2018: **`r n_distinct(playlist$song_id[playlist$treated == 1])` songs** added to a major playlist; `r n_distinct(playlist$song_id[playlist$treated == 0])` control songs
+-   Treated songs start **higher** → levels not comparable
+-   Before the listing: both groups move in **parallel**
+-   At the listing: the treated group **jumps**
+:::
+:::
+
+::: source
+Data: WU-RDS research project (github.com/WU-RDS/did).
+:::
+
+## Two differences, one estimate {.midsize}
+
+::: columns
+::: {.column width="50%"}
+```{r did-four, fig.width=5.5, fig.height=3.8}
+fig_did_four(base_size = 11)
+```
+:::
+
+::: {.column width="50%"}
+$$
+\text{DiD} = (\bar{y}_{T,\text{after}} - \bar{y}_{T,\text{before}}) - (\bar{y}_{C,\text{after}} - \bar{y}_{C,\text{before}})
+$$
+
+(10.09 − 9.85) − (9.72 − 9.76) = **0.28** log points
+
+::: keybox
+The control group's change estimates what would have happened to the treated songs **without** the listing — the counterfactual (dotted).
+:::
+:::
+:::
+
+## The DiD regression {.smaller}
+
+```{r did-lm, echo=TRUE}
+did_data <- playlist |>
+  filter(week != as.Date("2018-03-19")) |>          # drop the listing week
+  mutate(log_streams = log(streams + 1))
+model_did <- lm(log_streams ~ treated * post, data = did_data)
+coef_table(model_did)
+```
+
+| Coefficient | Meaning |
+|---|---|
+| `(Intercept)` 9.76 | Control, before: baseline |
+| `treated` 0.09 | Treated, before: the **level difference** |
+| `post` −0.05 | Control, after − before: the **common time trend** |
+| `treated:post` **0.28** | The extra change of the treated songs: the **DiD effect** → ≈ **+32% streams** |
+
+::: notes
+`treated * post` = treated + post + treated:post. Advantages over the four means: standard errors, and easy extensions (controls, fixed effects — book box). The interaction term in its general role: Chapter 6.
+:::
+
+## The assumption: parallel trends {.smaller}
+
+::: columns
+::: {.column width="55%"}
+```{r placebo, echo=TRUE}
+placebo_data <- did_data |>
+  filter(post == 0) |>
+  mutate(fake_post = ifelse(week >= as.Date("2018-02-12"), 1, 0))
+coef_table(lm(log_streams ~ treated * fake_post,
+                data = placebo_data))["treated:fake_post", ]
+```
+:::
+
+::: {.column width="45%"}
+::: keybox
+Without the listing, the treated songs would have followed the **same trend** as the controls. **Untestable** — but the pre-period makes it plausible: a fake listing in the pre-period shows **no effect**.
+:::
+
+Live demo: course book, §5.10
+
+`r paste0("[", book_url, "#sec-obs-did](", book_url, "#sec-obs-did)")`
+:::
+:::
+
+::: notes
+Failure case: the editors picked songs that were already taking off — a rising pre-trend would be attributed to the listing. Show in the widget: a differential trend produces a biased estimate, and the pre-period lines diverge.
+:::
+
+## Your turn (5 min) {.midsize}
+
+::: discussion
+Add `major_label` as a control variable to the DiD regression:
+
+```r
+coef_table(lm(log_streams ~ treated * post + major_label, data = did_data))
+```
+
+Does the effect change? Then: name one situation in which the parallel-trends assumption would **fail** for playlist listings.
+:::
+
+::: notes
+Effect essentially unchanged — a control variable can improve precision but does not change the DiD logic. Failure: editors select songs with upward momentum; or treated songs get simultaneous radio/marketing pushes that controls don't.
+:::
+
+# What observational data can and cannot tell you {.divider background-color="#0a3d6e"}
+
+## Two strategies, one honest report {.midsize}
+
+::: incremental
+-   **Adjustment** handles confounders you can **measure** — only as good as your proxies; "enough" is untestable
+-   **Difference-in-differences** handles confounders **constant over time** — needs parallel trends, plausible but never proven
+-   **Prediction** needs no causal assumptions — a good predictor is valuable even if no coefficient is an effect
+:::
+
+. . .
+
+::: keybox
+Report effect + uncertainty + **assumptions**: "Adjusting for prior listening, tenure, Premium and device, adopters listen ≈ 4.5 hours more (95% CI 3.6–5.3), assuming no further differences affect listening — the experiment (3.2) suggests this is not fully met."
+:::
+
+## Assignment 3: analyzing observational data {.midsize}
+
+::: columns
+::: {.column width="55%"}
+-   Your **personal** data (based on your student ID): an opt-in feature, promotion campaigns, and a small panel with a listing
+-   Tasks: naive vs. adjusted · categorical predictor · elasticity · logistic regression · DiD
+-   **Deadline:** Group A Sun, Nov 22 · Group B Wed, Nov 25
+-   **Debrief** at the start of the following session
+:::
+
+::: {.column width="45%"}
+::: keybox
+**10 points:** report 7 + debrief 3. State your **assumptions** — the best answers say what the data *cannot* show.
+:::
+:::
+:::
+
+## Learning check (Part II) {.smaller}
+
+1.  Log-log coefficient of ad spend = 0.15. Interpret. The level model says 0.8 sales per euro — why might the two disagree about doubling the budget?
+2.  Log-level model, dummy "promotion week" = 0.35. Percentage difference in sales — approximate and exact?
+3.  Residual plot shows a funnel. Consequence for coefficients, for *p*-values — and the simplest fix?
+4.  A DiD of a price promotion in treated stores: which assumption, and how can the pre-period help?
+
+::: notes
+(1) +1% spend → +0.15% sales; doubling: 2^0.15 − 1 ≈ 11%, while the linear model extrapolates constant returns. (2) ≈ 35%; exact 42%. (3) Coefficients unbiased, SEs/p-values wrong; robust SEs. (4) Parallel trends; placebo test / visual pre-trends.
+:::
+
+## Next session
+
+**Module 6 · Mechanisms & heterogeneity** — *Why, and for whom, does it work?*
+
+-   Interaction effects: when the effect differs between groups (moderation)
+-   Mediation: through which mechanism an effect works
+-   In experiments and observational data — and in your group project
