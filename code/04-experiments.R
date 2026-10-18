@@ -1,111 +1,102 @@
 # ======================================================================
 # Marketing Analytics — Chapter 4: Learning from Experiments
-# Companion code to Chapter 4 of the course book. The chapter explains
-# every step in detail; this script collects the code in one place.
+# The tests of Chapter 4 in R. The chapter on the course website explains
+# the logic, the simulations, and the interpretation; this script only
+# contains the code you need to run the tests on your own data.
 # ======================================================================
 
 
 # ----------------------------------------------------------------------
-# 0. Setup
+# 0. Setup and data
 # ----------------------------------------------------------------------
 
 library(tidyverse)
-options(scipen = 999)
+library(psych)        # cohen.d()
+options(scipen = 5, digits = 4)
+
+base_url <- "https://raw.githubusercontent.com/wu-rds/MA2026/main/data/"
+
+# The Smart Mix A/B test: 400 users, randomly split; listening hours in four weeks
+ab_test <- read_csv(paste0(base_url, "ab_test.csv")) |>
+  mutate(group = factor(group, levels = c("Smart Mix", "Control")))
+
+# Three versions of Smart Mix: 150 users each
+mix_test <- read_csv(paste0(base_url, "mix_test.csv")) |>
+  mutate(version = factor(version, levels = c("No mix", "Weekly mix", "Daily mix")))
+
+# The search-design test: 60 users, each tried both designs (seconds per search)
+search_test <- read_csv(paste0(base_url, "search_test.csv"))
 
 
 # ======================================================================
-# 4.1 Back to the A/B test
+# 4.1–4.3 Two groups: the t-test
 # ======================================================================
 
-# The Smart Mix A/B test from Chapter 3 (simulated data):
-# 400 users, randomly split; outcome: listening hours in four weeks
-set.seed(31)
-ab_test <- tibble(
-  group = factor(rep(c("Control", "Smart Mix"), each = 200), levels = c("Smart Mix", "Control")),
-  hours = c(rgamma(200, shape = 2, scale = 10), rgamma(200, shape = 2, scale = 11.5))
-)
-
+# Always start with the group summaries you will report
 ab_test |>
   group_by(group) |>
   summarise(n = n(), mean = mean(hours), sd = sd(hours))
 
-# Where Chapter 3 ended: the group means with their 95% confidence intervals
-ab_test |>
-  group_by(group) |>
-  summarise(n = n(), mean = mean(hours), se = sd(hours) / sqrt(n),
-            lower = mean - qt(0.975, n - 1) * se, upper = mean + qt(0.975, n - 1) * se) |>
-  ggplot(aes(x = group, y = mean)) +
-  geom_col(width = 0.55, fill = "#0f5da8") +
-  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.15) +
-  labs(x = NULL, y = "Mean listening hours (95% CI)") +
-  theme_minimal()
-
-
-# ======================================================================
-# 4.2 The difference between two means
-# ======================================================================
-
-# The standard error of the difference — computed once by hand
-stats <- ab_test |> group_by(group) |> summarise(mean = mean(hours), sd = sd(hours), n = n())
-difference <- stats$mean[1] - stats$mean[2]
-se_diff    <- sqrt(stats$sd[1]^2 / stats$n[1] + stats$sd[2]^2 / stats$n[2])
-c(difference = difference, se = se_diff, t = difference / se_diff)
-
-# 95% confidence interval of the difference: estimate +/- t * SE
-df_approx <- sum(stats$n) - 2
-difference + c(-1, 1) * qt(0.975, df_approx) * se_diff
-
-# A world without any effect: 10,000 simulated A/B tests
-set.seed(1)
-null_diffs <- replicate(10000, mean(rgamma(200, 2, scale = 10.75)) - mean(rgamma(200, 2, scale = 10.75)))
-mean(abs(null_diffs) >= abs(difference))   # share at least as extreme as observed
-
-
-# ======================================================================
-# 4.3 Testing a hypothesis
-# ======================================================================
-
+# Welch t-test (R's default: equal variances not assumed)
 t.test(hours ~ group, data = ab_test)
 
-# Only the confidence interval of the difference, or only the p-value
-t.test(hours ~ group, data = ab_test)$conf.int
-t.test(hours ~ group, data = ab_test)$p.value
+# Pieces of the output you may want separately
+t_result <- t.test(hours ~ group, data = ab_test)
+t_result$estimate    # the two group means
+t_result$conf.int    # 95% confidence interval of the difference
+t_result$p.value
 
-# Your turn: the same test with only the first 50 users per group
-t.test(hours ~ group, data = ab_test |> group_by(group) |> slice_head(n = 50))
+# One-sided test (only if decided before seeing the data)
+t.test(hours ~ group, data = ab_test, alternative = "greater")
 
 
 # ======================================================================
-# 4.4 How large is the effect?
+# 4.4 The same people in both conditions: the paired t-test
 # ======================================================================
 
-# Relative effect (in % of the control group)
-100 * difference / stats$mean[2]
+# Between-subjects design (each person in ONE condition)  -> Welch t-test, as above
+# Within-subjects design  (each person in ALL conditions) -> paired t-test
+
+# The search-design test: one row per user, one column per design
+head(search_test)
+
+# The paired t-test: tests whether the mean of the within-user differences is zero
+t.test(search_test$new_design, search_test$old_design, paired = TRUE)
+
+# The same data analyzed as if they were two independent groups (ignores the pairing):
+# same difference, but a much larger p-value — comparing different people adds uncertainty
+t.test(search_test$new_design, search_test$old_design)
+
+# Your turn: a paired t-test is a one-sample t-test of the differences
+t.test(search_test$new_design - search_test$old_design)
+
+
+# ======================================================================
+# 4.5 How large is the effect?
+# ======================================================================
+
+# Relative effect in % of the control group
+group_means <- ab_test |> group_by(group) |> summarise(mean = mean(hours))
+100 * diff(rev(group_means$mean)) / group_means$mean[group_means$group == "Control"]
 
 # Cohen's d with the psych package (the sign reflects the order of the groups)
-library(psych)
 cohen.d(ab_test$hours, ab_test$group)$cohen.d
 
 
 # ======================================================================
-# 4.6 Comparing shares
+# 4.7 Two shares: the test of proportions
 # ======================================================================
 
-# Premium trial offer: 131 of 2,000 vs. 104 of 2,000 users upgrade
-p1 <- 131 / 2000
-p2 <- 104 / 2000
-
-# Standard error and 95% confidence interval of the difference by hand
-se_p <- sqrt(p1 * (1 - p1) / 2000 + p2 * (1 - p2) / 2000)
-(p1 - p2) + c(-1, 1) * 1.96 * se_p
-
-# The same with prop.test() (slightly wider: continuity correction)
+# Premium trial offer: 131 of 2,000 vs. 104 of 2,000 users upgraded
 prop.test(x = c(131, 104), n = c(2000, 2000))
+
+# With a data set instead of counts: successes and group sizes from the data
+# prop.test(x = c(sum(upgraded[group == "A"]), sum(upgraded[group == "B"])),
+#           n = c(sum(group == "A"), sum(group == "B")))
 
 # The same as a chi-square test on the 2 x 2 table
 upgrades <- matrix(c(131, 2000 - 131, 104, 2000 - 104), nrow = 2, byrow = TRUE,
                    dimnames = list(c("Trial offer", "Standard page"), c("upgraded", "not upgraded")))
-upgrades
 chisq.test(upgrades)
 
 # Your turn: Jon (200 of 300) vs. Mark (100 of 300)
@@ -113,117 +104,57 @@ prop.test(x = c(200, 100), n = c(300, 300))
 
 
 # ======================================================================
-# 4.7 Errors, power, and sample size
+# 4.8 Power and sample size — decide BEFORE the experiment
 # ======================================================================
 
-# Planning: power of an experiment with 200 users per group for an ASSUMED
-# effect of d = 0.22 (power analysis belongs before the experiment;
-# "post-hoc power" with the observed effect adds no information)
-power.t.test(n = 200, delta = 0.22, sd = 1)
-
-# Users per group needed for 80% power (e.g., for a follow-up experiment)
+# Means: users per group for 80% power to detect an assumed effect of d = 0.22
 power.t.test(delta = 0.22, sd = 1, sig.level = 0.05, power = 0.80)
 
-# Shares: from 5% to 6%
+# Means: power of a planned experiment with 200 users per group
+power.t.test(n = 200, delta = 0.22, sd = 1, sig.level = 0.05)
+
+# Shares: users per group to detect an increase from 5% to 6%
 power.prop.test(p1 = 0.05, p2 = 0.06, sig.level = 0.05, power = 0.80)
 
-# Online advertising: click-through rate from 0.50% to 0.55% (+10%)
-power.prop.test(p1 = 0.005, p2 = 0.0055, power = 0.80)
+# Shares: a click-through rate from 0.50% to 0.55% (+10%)
+power.prop.test(p1 = 0.005, p2 = 0.0055, sig.level = 0.05, power = 0.80)
 
-# Your group project: smallest detectable effect with 60 per group
-power.t.test(n = 60, sd = 1, power = 0.80)
+# Group project: smallest detectable effect with 60 respondents per group
+power.t.test(n = 60, sd = 1, sig.level = 0.05, power = 0.80)
 
 # Your turn: newsletter click-through rate 2% -> 2.2% and 2% -> 2.5%
-power.prop.test(p1 = 0.02, p2 = 0.022, power = 0.80)
-power.prop.test(p1 = 0.02, p2 = 0.025, power = 0.80)
+power.prop.test(p1 = 0.02, p2 = 0.022, sig.level = 0.05, power = 0.80)
+power.prop.test(p1 = 0.02, p2 = 0.025, sig.level = 0.05, power = 0.80)
 
 
 # ======================================================================
-# 4.8 Other designs and tests
+# 4.9 Other designs
 # ======================================================================
 
-# --- More than two groups: ANOVA ------------------------------------------
-set.seed(14)
-mix_test <- tibble(
-  version = factor(rep(c("No mix", "Weekly mix", "Daily mix"), each = 150),
-                   levels = c("No mix", "Weekly mix", "Daily mix")),
-  hours   = c(rgamma(150, 2, scale = 10), rgamma(150, 2, scale = 10.8), rgamma(150, 2, scale = 12))
-)
-
-mix_test |> group_by(version) |> summarise(n = n(), mean = mean(hours), sd = sd(hours))
-
-# The quantities the ANOVA compares: group means with their confidence intervals
+# --- Three or more groups: ANOVA ---------------------------------------
 mix_test |>
   group_by(version) |>
-  summarise(n = n(), mean = mean(hours), se = sd(hours) / sqrt(n),
-            lower = mean - qt(0.975, n - 1) * se, upper = mean + qt(0.975, n - 1) * se) |>
-  ggplot(aes(x = version, y = mean)) +
-  geom_col(width = 0.55, fill = "#0f5da8") +
-  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.15) +
-  labs(x = NULL, y = "Mean listening hours (95% CI)") +
-  theme_minimal()
+  summarise(n = n(), mean = mean(hours), sd = sd(hours))
 
-# Why not several t-tests? Family-wise error rate with k tests
-k <- c(1, 3, 10, 20)
-1 - 0.95^k
-
-# Step 1: is there any difference? (H0: all means equal)
+# Step 1: do the groups differ at all?
 mix_aov <- aov(hours ~ version, data = mix_test)
 summary(mix_aov)
-
-# Effect size eta squared: share of the variation explained by the version
-ss <- summary(mix_aov)[[1]]$`Sum Sq`
-ss[1] / sum(ss)
 
 # Welch ANOVA (does not assume equal variances)
 oneway.test(hours ~ version, data = mix_test)
 
-# Step 2: which groups differ? Pairwise comparisons, corrected
+# Step 2: which groups differ? Corrected pairwise comparisons
 pairwise.t.test(mix_test$hours, mix_test$version, p.adjust.method = "bonferroni")
 pairwise.t.test(mix_test$hours, mix_test$version)   # default: Holm correction
 TukeyHSD(mix_aov)
 
-# The ANOVA as a regression: same F test (last line of the output)
-summary(lm(hours ~ version, data = mix_test))
-
-# --- Same people in both conditions: paired t-test ---------------------
-set.seed(4)
-skill <- rnorm(60, 0, 8)
-search_test <- tibble(
-  old_design = round(40 + skill + rnorm(60, 0, 3), 1),
-  new_design = round(38 + skill + rnorm(60, 0, 3), 1)
-)
-
-head(search_test)                                          # one row per user, one column per design
-search_test$new_design - search_test$old_design            # the within-user differences
-
-t.test(search_test$new_design, search_test$old_design, paired = TRUE)   # tests the mean difference
-t.test(search_test$new_design, search_test$old_design)                  # wrong test for this design
-
-# --- Non-parametric alternatives -----------------------------------------
+# --- Non-parametric alternatives ---------------------------------------
 # Two independent groups: Wilcoxon rank-sum test (Mann-Whitney U test)
 wilcox.test(hours ~ group, data = ab_test)
-ab_test |> group_by(group) |> summarise(median = median(hours))
 
 # Same people, two conditions: Wilcoxon signed-rank test
 wilcox.test(search_test$new_design, search_test$old_design, paired = TRUE)
-median(search_test$new_design - search_test$old_design)
 
 # Three or more independent groups: Kruskal-Wallis test + corrected pairs
 kruskal.test(hours ~ version, data = mix_test)
 pairwise.wilcox.test(mix_test$hours, mix_test$version, p.adjust.method = "bonferroni")
-
-
-# ======================================================================
-# 4.9 Using p-values responsibly: the danger of peeking
-# ======================================================================
-
-# 200 A/B tests WITHOUT any effect, checked after every 20 users per group
-set.seed(2024)
-looks <- seq(20, 1000, by = 20)
-ever_significant <- replicate(200, {
-  a <- rnorm(1000); b <- rnorm(1000)
-  p <- sapply(looks, function(n) t.test(a[1:n], b[1:n])$p.value)
-  any(p < 0.05)
-})
-mean(ever_significant)   # far more than 5%
