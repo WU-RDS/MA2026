@@ -1,0 +1,361 @@
+respondent,source,disclosure,creativity
+1,Human,Revealed,48
+2,Human,Revealed,78
+3,Human,Revealed,67
+4,Human,Revealed,79
+5,Human,Revealed,52
+6,Human,Revealed,38
+7,Human,Revealed,45
+8,Human,Revealed,80
+9,Human,Revealed,78
+10,Human,Revealed,53
+11,Human,Revealed,53
+12,Human,Revealed,54
+13,Human,Revealed,64
+14,Human,Revealed,58
+15,Human,Revealed,96
+16,Human,Revealed,65
+17,Human,Revealed,63
+18,Human,Revealed,60
+19,Human,Revealed,83
+20,Human,Revealed,60
+21,Human,Revealed,51
+22,Human,Revealed,85
+23,Human,Revealed,88
+24,Human,Revealed,69
+25,Human,Revealed,52
+26,Human,Revealed,62
+27,Human,Revealed,56
+28,Human,Revealed,64
+29,Human,Revealed,46
+30,Human,Revealed,48
+31,Human,Revealed,80
+32,Human,Revealed,69
+33,Human,Revealed,60
+34,Human,Revealed,59
+35,Human,Revealed,53
+36,Human,Revealed,57
+37,Human,Revealed,78
+38,Human,Revealed,52
+39,Human,Revealed,47
+40,Human,Revealed,68
+41,Human,Revealed,39
+42,Human,Revealed,44
+43,Human,Revealed,79
+44,Human,Revealed,79
+45,Human,Revealed,53
+46,Human,Revealed,92
+47,Human,Revealed,42
+48,Human,Revealed,82
+49,Human,Revealed,68
+50,Human,Revealed,64
+51,Human,Revealed,79
+52,Human,Revealed,44
+53,Human,Revealed,45
+54,Human,Revealed,32
+55,Human,Revealed,56
+56,Human,Revealed,71
+57,Human,Revealed,45
+58,Human,Revealed,67
+59,Human,Revealed,66
+60,Human,Revealed,43
+61,Human,Not revealed,53
+62,Human,Not revealed,58
+63,Human,Not revealed,64
+64,Human,Not revealed,51
+65,Human,Not revealed,58
+66,Human,Not revealed,55
+67,Human,Not revealed,38
+68,Human,Not revealed,45
+69,Human,Not revealed,38
+70,Human,Not revealed,72
+71,Human,Not revealed,32
+72,Human,Not revealed,40
+73,Human,Not revealed,61
+74,Human,Not revealed,40
+75,Human,Not revealed,69
+76,Human,Not revealed,49
+77,Human,Not revealed,74
+78,Human,Not revealed,45
+79,Human,Not revealed,39
+80,Human,Not revealed,58
+81,Human,Not revealed,68
+82,Human,Not revealed,54
+83,Human,Not revealed,51
+84,Human,Not revealed,26
+85,Human,Not revealed,70
+86,Human,Not revealed,57
+87,Human,Not revealed,56
+88,Human,Not revealed,41
+89,Human,Not revealed,80
+90,Human,Not revealed,42
+91,Human,Not revealed,47
+92,Human,Not revealed,53
+93,Human,Not revealed,26
+94,Human,Not revealed,46
+95,Human,Not revealed,50
+96,Human,Not revealed,40
+97,Human,Not revealed,51
+98,Human,Not revealed,57
+99,Human,Not revealed,87
+100,Human,Not revealed,64
+101,Human,Not revealed,68
+102,Human,Not revealed,61
+103,Human,Not revealed,51
+104,Human,Not revealed,69
+105,Human,Not revealed,37
+106,Human,Not revealed,49
+107,Human,Not revealed,20
+108,Human,Not revealed,44
+109,Human,Not revealed,50
+110,Human,Not revealed,71
+111,Human,Not revealed,43
+112,Human,Not revealed,49
+113,Human,Not revealed,48
+114,Human,Not revealed,69
+115,Human,Not revealed,37
+116,Human,Not revealed,61
+117,Human,Not revealed,39
+118,Human,Not revealed,50
+119,Human,Not revealed,38
+120,Human,Not revealed,69
+121,AI,Revealed,8
+122,AI,Revealed,52
+123,AI,Revealed,52
+124,AI,Revealed,58
+125,AI,Revealed,54
+126,AI,Revealed,54
+127,AI,Revealed,74
+128,AI,Revealed,44
+129,AI,Revealed,51
+130,AI,Revealed,38
+131,AI,Revealed,25
+132,AI,Revealed,67
+133,AI,Revealed,62
+134,AI,Revealed,40
+135,AI,Revealed,49
+136,AI,Revealed,56
+137,AI,Revealed,46
+138,AI,Revealed,65
+139,AI,Revealed,24
+140,AI,Revealed,71
+141,AI,Revealed,56
+142,AI,Revealed,52
+143,AI,Revealed,45
+144,AI,Revealed,53
+145,AI,Revealed,55
+146,AI,Revealed,33
+147,AI,Revealed,80
+148,AI,Revealed,59
+149,AI,Revealed,49
+150,AI,Revealed,91
+151,AI,Revealed,38
+152,AI,Revealed,52
+153,AI,Revealed,40
+154,AI,Revealed,40
+155,AI,Revealed,58
+156,AI,Revealed,52
+157,AI,Revealed,23
+158,AI,Revealed,46
+159,AI,Revealed,65
+160,AI,Revealed,51
+161,AI,Revealed,35
+162,AI,Revealed,40
+163,AI,Revealed,40
+164,AI,Revealed,35
+165,AI,Revealed,52
+166,AI,Revealed,55
+167,AI,Revealed,32
+168,AI,Revealed,53
+169,AI,Revealed,57
+170,AI,Revealed,44
+171,AI,Revealed,51
+172,AI,Revealed,14
+173,AI,Revealed,26
+174,AI,Revealed,64
+175,AI,Revealed,54
+176,AI,Revealed,47
+177,AI,Revealed,62
+178,AI,Revealed,31
+179,AI,Revealed,31
+180,AI,Revealed,45
+181,AI,Not revealed,49
+182,AI,Not revealed,48
+183,AI,Not revealed,41
+184,AI,Not revealed,49
+185,AI,Not revealed,65
+186,AI,Not revealed,43
+187,AI,Not revealed,79
+188,AI,Not revealed,84
+189,AI,Not revealed,70
+190,AI,Not revealed,75
+191,AI,Not revealed,86
+192,AI,Not revealed,33
+193,AI,Not revealed,62
+194,AI,Not revealed,72
+195,AI,Not revealed,43
+196,AI,Not revealed,64
+197,AI,Not revealed,68
+198,AI,Not revealed,71
+199,AI,Not revealed,75
+200,AI,Not revealed,53
+201,AI,Not revealed,53
+202,AI,Not revealed,40
+203,AI,Not revealed,60
+204,AI,Not revealed,68
+205,AI,Not revealed,64
+206,AI,Not revealed,74
+207,AI,Not revealed,59
+208,AI,Not revealed,88
+209,AI,Not revealed,38
+210,AI,Not revealed,77
+211,AI,Not revealed,53
+212,AI,Not revealed,59
+213,AI,Not revealed,56
+214,AI,Not revealed,47
+215,AI,Not revealed,66
+216,AI,Not revealed,75
+217,AI,Not revealed,70
+218,AI,Not revealed,44
+219,AI,Not revealed,66
+220,AI,Not revealed,41
+221,AI,Not revealed,60
+222,AI,Not revealed,69
+223,AI,Not revealed,74
+224,AI,Not revealed,65
+225,AI,Not revealed,44
+226,AI,Not revealed,76
+227,AI,Not revealed,76
+228,AI,Not revealed,37
+229,AI,Not revealed,80
+230,AI,Not revealed,88
+231,AI,Not revealed,67
+232,AI,Not revealed,44
+233,AI,Not revealed,53
+234,AI,Not revealed,44
+235,AI,Not revealed,59
+236,AI,Not revealed,64
+237,AI,Not revealed,47
+238,AI,Not revealed,89
+239,AI,Not revealed,40
+240,AI,Not revealed,46
+241,Human + AI,Revealed,49
+242,Human + AI,Revealed,44
+243,Human + AI,Revealed,12
+244,Human + AI,Revealed,43
+245,Human + AI,Revealed,50
+246,Human + AI,Revealed,65
+247,Human + AI,Revealed,16
+248,Human + AI,Revealed,37
+249,Human + AI,Revealed,51
+250,Human + AI,Revealed,68
+251,Human + AI,Revealed,47
+252,Human + AI,Revealed,49
+253,Human + AI,Revealed,43
+254,Human + AI,Revealed,35
+255,Human + AI,Revealed,31
+256,Human + AI,Revealed,6
+257,Human + AI,Revealed,22
+258,Human + AI,Revealed,47
+259,Human + AI,Revealed,38
+260,Human + AI,Revealed,45
+261,Human + AI,Revealed,46
+262,Human + AI,Revealed,40
+263,Human + AI,Revealed,35
+264,Human + AI,Revealed,57
+265,Human + AI,Revealed,45
+266,Human + AI,Revealed,66
+267,Human + AI,Revealed,42
+268,Human + AI,Revealed,34
+269,Human + AI,Revealed,29
+270,Human + AI,Revealed,42
+271,Human + AI,Revealed,42
+272,Human + AI,Revealed,43
+273,Human + AI,Revealed,44
+274,Human + AI,Revealed,64
+275,Human + AI,Revealed,39
+276,Human + AI,Revealed,36
+277,Human + AI,Revealed,41
+278,Human + AI,Revealed,49
+279,Human + AI,Revealed,43
+280,Human + AI,Revealed,27
+281,Human + AI,Revealed,57
+282,Human + AI,Revealed,73
+283,Human + AI,Revealed,63
+284,Human + AI,Revealed,64
+285,Human + AI,Revealed,45
+286,Human + AI,Revealed,47
+287,Human + AI,Revealed,37
+288,Human + AI,Revealed,34
+289,Human + AI,Revealed,47
+290,Human + AI,Revealed,17
+291,Human + AI,Revealed,59
+292,Human + AI,Revealed,50
+293,Human + AI,Revealed,38
+294,Human + AI,Revealed,52
+295,Human + AI,Revealed,21
+296,Human + AI,Revealed,53
+297,Human + AI,Revealed,11
+298,Human + AI,Revealed,57
+299,Human + AI,Revealed,70
+300,Human + AI,Revealed,56
+301,Human + AI,Not revealed,69
+302,Human + AI,Not revealed,60
+303,Human + AI,Not revealed,81
+304,Human + AI,Not revealed,38
+305,Human + AI,Not revealed,60
+306,Human + AI,Not revealed,44
+307,Human + AI,Not revealed,64
+308,Human + AI,Not revealed,52
+309,Human + AI,Not revealed,79
+310,Human + AI,Not revealed,64
+311,Human + AI,Not revealed,59
+312,Human + AI,Not revealed,50
+313,Human + AI,Not revealed,66
+314,Human + AI,Not revealed,76
+315,Human + AI,Not revealed,54
+316,Human + AI,Not revealed,61
+317,Human + AI,Not revealed,37
+318,Human + AI,Not revealed,64
+319,Human + AI,Not revealed,35
+320,Human + AI,Not revealed,65
+321,Human + AI,Not revealed,63
+322,Human + AI,Not revealed,66
+323,Human + AI,Not revealed,65
+324,Human + AI,Not revealed,59
+325,Human + AI,Not revealed,57
+326,Human + AI,Not revealed,60
+327,Human + AI,Not revealed,74
+328,Human + AI,Not revealed,38
+329,Human + AI,Not revealed,36
+330,Human + AI,Not revealed,64
+331,Human + AI,Not revealed,58
+332,Human + AI,Not revealed,71
+333,Human + AI,Not revealed,54
+334,Human + AI,Not revealed,71
+335,Human + AI,Not revealed,61
+336,Human + AI,Not revealed,42
+337,Human + AI,Not revealed,59
+338,Human + AI,Not revealed,74
+339,Human + AI,Not revealed,80
+340,Human + AI,Not revealed,61
+341,Human + AI,Not revealed,93
+342,Human + AI,Not revealed,44
+343,Human + AI,Not revealed,68
+344,Human + AI,Not revealed,71
+345,Human + AI,Not revealed,55
+346,Human + AI,Not revealed,56
+347,Human + AI,Not revealed,55
+348,Human + AI,Not revealed,61
+349,Human + AI,Not revealed,75
+350,Human + AI,Not revealed,70
+351,Human + AI,Not revealed,56
+352,Human + AI,Not revealed,72
+353,Human + AI,Not revealed,72
+354,Human + AI,Not revealed,70
+355,Human + AI,Not revealed,74
+356,Human + AI,Not revealed,64
+357,Human + AI,Not revealed,53
+358,Human + AI,Not revealed,83
+359,Human + AI,Not revealed,57
+360,Human + AI,Not revealed,82
