@@ -89,6 +89,40 @@ t.test(hours ~ group, data = ab_test)
 Where Chapter 3 ended: two means with their **intervals** — and a test output with numbers we have not decoded yet.
 :::
 
+## Before any test: look at the data {.smaller}
+
+::: columns
+::: {.column width="55%"}
+```{r ab-box, fig.width=6, fig.height=4, out.width="100%"}
+ggplot(ab_test, aes(x = group, y = hours)) +
+  geom_boxplot(fill = "#dbe7f3", outlier.shape = NA) +
+  geom_jitter(width = 0.15, height = 0, alpha = 0.3) +
+  stat_summary(fun = mean, geom = "point", color = "#b03a2e", size = 3) +
+  labs(x = NULL, y = "Listening hours (four weeks)") +
+  theme_minimal(base_size = 13)
+```
+:::
+
+::: {.column width="45%"}
+**Boxplot + the actual users** (jitter): the first chart in any analysis.
+
+-   **How many?** 200 dots per group
+-   **How spread out?** Boxes (middle 50%) overlap almost completely
+-   **Outliers?** A few heavy listeners on the right in both groups; the mean (red) sits above the median (box line)
+-   **Comparable groups?** Same shape, similar spread → the *t*-test's assumptions look fine
+
+```r
+ggplot(ab_test, aes(x = group, y = hours)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(width = 0.15, alpha = 0.3)
+```
+:::
+:::
+
+::: notes
+Three lines of code, and you learn more than from any test output: sample size, spread, skew, outliers, whether the groups look comparable. The bar chart with intervals (previous slide) is the report chart; this is the analyst's chart. In the R script this is "Step 1" of every analysis.
+:::
+
 ## Three questions for the product team {.midsize}
 
 ::: incremental
@@ -378,6 +412,37 @@ Same data, same means, same 2 seconds — but ***p* = 0.14** and the interval in
 
 ::: notes
 Before/after without a control group is not an experiment: anything else that changed in between is confounded with the treatment. Your turn (if time): run t.test(new − old) as a one-sample test against zero — identical output; a paired t-test IS a one-sample t-test of the differences.
+:::
+
+## Your turn: QuickBite (15 min) {.smaller}
+
+::: columns
+::: {.column width="50%"}
+**A food-delivery app — two experiments, two data sets** (`04-experiments.R`, section "Your turn"):
+
+**(1) The free-delivery voucher.** 300 new customers, randomly split: 150 got a voucher for their first four weeks, 150 did not. Outcome: order value in euros.
+
+-   Look at the data (boxplot + jitter)
+-   Summarise the groups and draw the chart with intervals
+-   Run the **appropriate** *t*-test
+-   Report the result in one sentence: effect, uncertainty, test
+:::
+
+::: {.column width="50%"}
+**(2) The routing app.** 40 couriers delivered with the old app **and** the new one (random order). Outcome: minutes per delivery.
+
+-   Draw the chart that shows the within-courier comparison
+-   Run the **appropriate** *t*-test and report the result
+-   Run the test for a *between-subjects* design on the same two columns — what changes, and why?
+
+::: keybox
+First question for both: **which design is this** — and therefore which test?
+:::
+:::
+:::
+
+::: notes
+(1) Between-subjects → Welch: 74.5 vs. 63.7 euros, +10.8 (95% CI 0.7–20.8), t(260) = 2.10, p = .036 — significant, but a wide interval. Data are right-skewed with a few big orders; n = 150 per group is fine for the t-test. (2) Within-subjects → paired: new app saves 1.2 min (CI 0.7–1.7), t(39) = −4.49, p < .001. Independent test on the same columns: p = 0.25 — courier speed (SD ≈ 5 min) dominates; the paired test uses the within-courier differences (SD ≈ 2 min). Solutions: 04-your-turn-solutions.R.
 :::
 
 # 4.5 How large is the effect? {.divider background-color="#0a3d6e"}

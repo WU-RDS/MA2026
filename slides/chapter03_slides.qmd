@@ -464,7 +464,7 @@ Course book, §3.4 — move the sliders for **n** and **σ**.
 
 `r paste0("[", book_url, "#sec-unc-se](", book_url, "#sec-unc-se)")`
 
-![](../img/ch03/se_widget.png){width="100%"}
+![](../img/ch03/se_widget.png){.nostretch width="100%"}
 :::
 
 ::: {.column width="45%"}

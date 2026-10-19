@@ -32,22 +32,43 @@ search_test <- read_csv(paste0(base_url, "search_test.csv"))
 # 4.1–4.3 Two groups: the t-test
 # ======================================================================
 
-# Always start with the group summaries you will report
-ab_test |>
-  group_by(group) |>
-  summarise(n = n(), mean = mean(hours), sd = sd(hours))
+# --- Step 1: look at the data ---------------------------------------------
+# Boxplot with the individual users on top: how many, how spread out, outliers?
+ggplot(ab_test, aes(x = group, y = hours)) +
+  geom_boxplot(fill = "#dbe7f3", outlier.shape = NA) +
+  geom_jitter(width = 0.15, height = 0, alpha = 0.3) +
+  stat_summary(fun = mean, geom = "point", color = "#b03a2e", size = 3) +    # red dot = mean
+  labs(x = NULL, y = "Listening hours (four weeks)") +
+  theme_minimal()
 
-# The chart that goes with the test: group means with 95% confidence intervals
-ab_test |>
+# --- Step 2: the group summaries you will report --------------------------
+ab_summary <- ab_test |>
   group_by(group) |>
-  summarise(mean = mean(hours), se = sd(hours) / sqrt(n()), n = n()) |>
-  mutate(lower = mean - qt(0.975, n - 1) * se, upper = mean + qt(0.975, n - 1) * se) |>
-  ggplot(aes(x = group, y = mean)) +
+  summarise(n = n(), mean = mean(hours), sd = sd(hours), se = sd / sqrt(n)) |>
+  mutate(lower = mean - qt(0.975, n - 1) * se,       # 95% confidence interval
+         upper = mean + qt(0.975, n - 1) * se)
+ab_summary
+
+# --- Step 3: the chart that goes with the test ----------------------------
+# Group means with their 95% confidence intervals
+ggplot(ab_summary, aes(x = group, y = mean)) +
   geom_col(width = 0.55, fill = "#0f5da8") +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.15) +
   labs(x = NULL, y = "Mean listening hours (95% CI)") +
   theme_minimal()
 
+# (The same in one pipe — handy for a quick look, but keep the summary
+#  as a separate object when you need it for a table or a report.)
+ab_test |>
+  group_by(group) |>
+  summarise(n = n(), mean = mean(hours), se = sd(hours) / sqrt(n)) |>
+  mutate(lower = mean - qt(0.975, n - 1) * se, upper = mean + qt(0.975, n - 1) * se) |>
+  ggplot(aes(x = group, y = mean)) +
+  geom_col(width = 0.55, fill = "#0f5da8") +
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.15) +
+  theme_minimal()
+
+# --- Step 4: the test -------------------------------------------------------
 # Welch t-test (R's default: equal variances not assumed)
 t.test(hours ~ group, data = ab_test)
 
@@ -71,53 +92,92 @@ t.test(hours ~ group, data = ab_test, alternative = "greater")
 # The search-design test: one row per user, one column per design
 head(search_test)
 
-# The chart that goes with the test: one line per user, old -> new design
-search_test |>
+# --- The data in "long" format: one row per user AND design -----------------
+search_long <- search_test |>
   pivot_longer(c(old_design, new_design), names_to = "design", values_to = "seconds") |>
-  mutate(design = factor(design, levels = c("old_design", "new_design"))) |>
-  ggplot(aes(x = design, y = seconds, group = user_id)) +
+  mutate(design = factor(design, levels = c("old_design", "new_design")))
+head(search_long)
+
+# --- The chart that goes with the test: one line per user, old -> new ---------
+ggplot(search_long, aes(x = design, y = seconds, group = user_id)) +
   geom_line(alpha = 0.4, color = "grey50") +
   geom_point(alpha = 0.6) +
   stat_summary(aes(group = 1), fun = mean, geom = "line", color = "#b03a2e", linewidth = 1.5) +
   labs(x = NULL, y = "Seconds to find a song") +
   theme_minimal()
 
-# The usual report chart: the two condition means with 95% confidence intervals.
-# NOTE: these intervals reflect the differences BETWEEN users (the vertical spread
-# in the chart above) and overlap a lot — they are not the uncertainty the paired
+# --- The usual report chart: the two condition means with 95% CIs --------------
+# NOTE: these intervals reflect the differences BETWEEN users (the vertical
+# spread above) and overlap a lot — they are not the uncertainty the paired
 # test uses. Always add the paired test result to the caption.
-search_test |>
-  pivot_longer(c(old_design, new_design), names_to = "design", values_to = "seconds") |>
-  mutate(design = factor(design, levels = c("old_design", "new_design"))) |>
+search_summary <- search_long |>
   group_by(design) |>
-  summarise(mean = mean(seconds), se = sd(seconds) / sqrt(n()), n = n()) |>
-  mutate(lower = mean - qt(0.975, n - 1) * se, upper = mean + qt(0.975, n - 1) * se) |>
-  ggplot(aes(x = design, y = mean)) +
+  summarise(n = n(), mean = mean(seconds), se = sd(seconds) / sqrt(n)) |>
+  mutate(lower = mean - qt(0.975, n - 1) * se, upper = mean + qt(0.975, n - 1) * se)
+search_summary
+
+ggplot(search_summary, aes(x = design, y = mean)) +
   geom_col(width = 0.55, fill = "#0f5da8") +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.15) +
   labs(x = NULL, y = "Mean seconds to find a song (95% CI)") +
   theme_minimal()
 
-# The chart that matches the paired test: the mean difference with its 95% CI
+# --- The paired t-test: the mean of the within-user differences vs. zero -------
 paired_result <- t.test(search_test$new_design, search_test$old_design, paired = TRUE)
-tibble(what = "New − old design", estimate = paired_result$estimate,
-       lower = paired_result$conf.int[1], upper = paired_result$conf.int[2]) |>
-  ggplot(aes(x = what, y = estimate)) +
+paired_result
+
+# The chart that matches the paired test: the mean difference with its 95% CI
+difference_summary <- tibble(what = "New - old design",
+                             estimate = paired_result$estimate,
+                             lower = paired_result$conf.int[1], upper = paired_result$conf.int[2])
+ggplot(difference_summary, aes(x = what, y = estimate)) +
   geom_col(width = 0.4, fill = "#0f5da8") +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.12) +
   geom_hline(yintercept = 0, linetype = "dashed") +
   labs(x = NULL, y = "Mean within-user difference in seconds (95% CI)") +
   theme_minimal()
 
-# The paired t-test: tests whether the mean of the within-user differences is zero
-t.test(search_test$new_design, search_test$old_design, paired = TRUE)
-
 # The same data analyzed as if they were two independent groups (ignores the pairing):
 # same difference, but a much larger p-value — comparing different people adds uncertainty
 t.test(search_test$new_design, search_test$old_design)
 
-# Your turn: a paired t-test is a one-sample t-test of the differences
+# A paired t-test is nothing but a one-sample t-test of the within-user differences
+# (compare the output with paired_result above: identical)
 t.test(search_test$new_design - search_test$old_design)
+
+
+# ======================================================================
+# YOUR TURN: QuickBite, a food-delivery app (two tests on new data)
+# ======================================================================
+# The solutions are in 04-your-turn-solutions.R — try it yourself first.
+
+# (1) BETWEEN-SUBJECTS: 300 new customers were randomly split; 150 received a
+#     free-delivery voucher for their first four weeks, 150 did not.
+#     Outcome: total order value (euros) in these four weeks.
+delivery_voucher <- read_csv(paste0(base_url, "delivery_voucher.csv")) |>
+  mutate(group = factor(group, levels = c("Voucher", "No voucher")))
+head(delivery_voucher)
+
+# Tasks: (a) look at the data (boxplot + jitter); (b) summarise the groups
+#        (n, mean, SD, 95% CI) and draw the bar chart with intervals;
+#        (c) run the appropriate t-test; (d) report the result in one sentence:
+#        effect, uncertainty, test.
+
+# your code here
+
+
+# (2) WITHIN-SUBJECTS: 40 couriers delivered with the old routing app AND with
+#     the new one (same type of shift, random order).
+#     Outcome: average minutes per delivery with each app.
+delivery_routes <- read_csv(paste0(base_url, "delivery_routes.csv"))
+head(delivery_routes)
+
+# Tasks: (a) draw the chart that shows the within-courier comparison;
+#        (b) run the appropriate t-test and report the result;
+#        (c) run the test you would use for a between-subjects design on the
+#            same two columns — what changes, and why?
+
+# your code here
 
 
 # ======================================================================
@@ -194,16 +254,14 @@ power.prop.test(p1 = 0.02, p2 = 0.025, sig.level = 0.05, power = 0.80)
 # ======================================================================
 
 # --- Three or more groups: ANOVA ---------------------------------------
-mix_test |>
+mix_summary <- mix_test |>
   group_by(version) |>
-  summarise(n = n(), mean = mean(hours), sd = sd(hours))
+  summarise(n = n(), mean = mean(hours), sd = sd(hours), se = sd / sqrt(n)) |>
+  mutate(lower = mean - qt(0.975, n - 1) * se, upper = mean + qt(0.975, n - 1) * se)
+mix_summary
 
 # The chart that goes with the test: the group means the ANOVA compares, with 95% CIs
-mix_test |>
-  group_by(version) |>
-  summarise(mean = mean(hours), se = sd(hours) / sqrt(n()), n = n()) |>
-  mutate(lower = mean - qt(0.975, n - 1) * se, upper = mean + qt(0.975, n - 1) * se) |>
-  ggplot(aes(x = version, y = mean)) +
+ggplot(mix_summary, aes(x = version, y = mean)) +
   geom_col(width = 0.55, fill = "#0f5da8") +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.15) +
   labs(x = NULL, y = "Mean listening hours (95% CI)") +
