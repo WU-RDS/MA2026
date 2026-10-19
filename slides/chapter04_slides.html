@@ -4826,11 +4826,11 @@ display:block!important;
 <ul>
 <li><strong>Original unit:</strong> +3.2 hours in four weeks</li>
 <li><strong>Relative:</strong> +16% vs. control (20.0 hours)</li>
-<li><strong>Standardized:</strong> Cohen’s <span class="math inline">d</span></li>
+<li><strong>Standardized:</strong> Cohen’s <span class="math inline">d</span> — the difference in units of the spread of <strong>individuals</strong></li>
 </ul>
 <p><span class="math display">
 d = \frac{\bar{x}_1 - \bar{x}_2}{s_{\text{pooled}}}, \qquad
-s_{\text{pooled}} = \sqrt{\frac{(n_1 - 1)\, s_1^2 + (n_2 - 1)\, s_2^2}{n_1 + n_2 - 2}}
+s_{\text{pooled}} = \sqrt{\frac{s_1^2 + s_2^2}{2}}
 </span></p>
 <p>Smart Mix: <span class="math inline">s_{\text{pooled}}</span> = √((16.2² + 13.7²)/2) = 15.0 hours → <span class="math inline">d</span> = 3.2 / 15.0 = <strong>0.22</strong></p>
 <div class="cell">
@@ -4840,10 +4840,10 @@ s_{\text{pooled}} = \sqrt{\frac{(n_1 - 1)\, s_1^2 + (n_2 - 1)\, s_2^2}{n_1 + n_2
 [1,] -0.4131497 -0.2167113 -0.02000216</code></pre>
 </div>
 </div>
-<p><em>(Sign = order of the groups; size ≈ 0.22)</em></p>
+<p><em>(Sign = order of the groups; size ≈ 0.22. For unequal group sizes, R weights the two variances by group size — still no √n anywhere.)</em></p>
 </div><div class="column" style="width:45%;">
 <div class="keybox">
-<p><strong><span class="math inline">t</span> vs. <span class="math inline">d</span> — same numerator, different denominator.</strong> <span class="math inline">t</span> divides by the <strong>standard error</strong> (shrinks with √n → grows with the sample). <span class="math inline">d</span> divides by the <strong>SD of individuals</strong> (no <em>n</em> anywhere → the same at 400 or 40,000 users). <em>t</em> says how <em>detectable</em> the effect is; <em>d</em> how <em>large</em>.</p>
+<p><strong><span class="math inline">t</span> vs. <span class="math inline">d</span> — same numerator, different denominator.</strong> <span class="math inline">t</span> divides by the <strong>standard error</strong> <span class="math inline">s_{\text{pooled}}\sqrt{2/n}</span>, which shrinks with √n → <span class="math inline">t</span> grows with the sample. <span class="math inline">d</span> divides by <span class="math inline">s_{\text{pooled}}</span> itself → the same at 400 or 40,000 users. <em>t</em> says how <em>detectable</em> the effect is; <em>d</em> how <em>large</em>.</p>
 </div>
 <p><strong>Conventions</strong> (Cohen, 1992): 0.2 small · 0.5 medium · 0.8 large — a starting point, not a verdict: +16% listening time can be worth a lot.</p>
 </div></div>
