@@ -453,11 +453,11 @@ First question for both: **which design is this** — and therefore which test?
 ::: {.column width="55%"}
 -   **Original unit:** +3.2 hours in four weeks
 -   **Relative:** +16% vs. control (20.0 hours)
--   **Standardized:** Cohen's $d$
+-   **Standardized:** Cohen's $d$ — the difference in units of the spread of **individuals**
 
 $$
 d = \frac{\bar{x}_1 - \bar{x}_2}{s_{\text{pooled}}}, \qquad
-s_{\text{pooled}} = \sqrt{\frac{(n_1 - 1)\, s_1^2 + (n_2 - 1)\, s_2^2}{n_1 + n_2 - 2}}
+s_{\text{pooled}} = \sqrt{\frac{s_1^2 + s_2^2}{2}}
 $$
 
 Smart Mix: $s_{\text{pooled}}$ = √((16.2² + 13.7²)/2) = 15.0 hours → $d$ = 3.2 / 15.0 = **0.22**
@@ -466,12 +466,12 @@ Smart Mix: $s_{\text{pooled}}$ = √((16.2² + 13.7²)/2) = 15.0 hours → $d$ =
 psych::cohen.d(ab_test$hours, ab_test$group)$cohen.d
 ```
 
-*(Sign = order of the groups; size ≈ 0.22)*
+*(Sign = order of the groups; size ≈ 0.22. For unequal group sizes, R weights the two variances by group size — still no √n anywhere.)*
 :::
 
 ::: {.column width="45%"}
 ::: keybox
-**$t$ vs. $d$ — same numerator, different denominator.** $t$ divides by the **standard error** (shrinks with √n → grows with the sample). $d$ divides by the **SD of individuals** (no *n* anywhere → the same at 400 or 40,000 users). *t* says how *detectable* the effect is; *d* how *large*.
+**$t$ vs. $d$ — same numerator, different denominator.** $t$ divides by the **standard error** $s_{\text{pooled}}\sqrt{2/n}$, which shrinks with √n → $t$ grows with the sample. $d$ divides by $s_{\text{pooled}}$ itself → the same at 400 or 40,000 users. *t* says how *detectable* the effect is; *d* how *large*.
 :::
 
 **Conventions** (Cohen, 1992): 0.2 small · 0.5 medium · 0.8 large — a starting point, not a verdict: +16% listening time can be worth a lot.
