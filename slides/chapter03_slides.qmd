@@ -464,7 +464,7 @@ Course book, §3.4 — move the sliders for **n** and **σ**.
 
 `r paste0("[", book_url, "#sec-unc-se](", book_url, "#sec-unc-se)")`
 
-![](../img/ch03/se_widget.png){.nostretch width="100%"}
+![](../img/ch03/se_widget.png){width="100%"}
 :::
 
 ::: {.column width="45%"}
@@ -472,9 +472,10 @@ Course book, §3.4 — move the sliders for **n** and **σ**.
 Your sample of **100 students** gives a standard error of **1 hour** per month. Your boss wants **half an hour**. How many students do you need?
 :::
 :::
+:::
 
 ::: notes
-Answer: 400 — four times as many. Ask what that means for the budget: precision is expensive.
+Answer: 400 — four times as many (square-root law). Demo path: set n = 100 and read "standard error = 1.00 hours" and "to halve the standard error, you would need n = 400"; move to 400 and watch the blue cloud halve; then 200 — the usual guess — shrinks it only to about 70%. Ask what that means for the budget: precision is expensive.
 :::
 
 ## Standard deviation vs. standard error {.midsize}
