@@ -31,9 +31,11 @@ execute:
 library(tidyverse)
 source("../R/ch03-figures.R")
 source("../R/ch04-figures.R")
-options(scipen = 999, width = 90)
+options(scipen = 5, digits = 4, width = 90)
 ab_test   <- ab_data()
 mix_test  <- mix3_data()
+newsletter <- readr::read_csv("../data/newsletter_test.csv", show_col_types = FALSE)
+price_page <- readr::read_csv("../data/price_page.csv", show_col_types = FALSE)
 book_url  <- "https://wu-rds.github.io/MA2026/04-experiments.html"
 ```
 
@@ -57,8 +59,8 @@ book_url  <- "https://wu-rds.github.io/MA2026/04-experiments.html"
 **Experiments II** *(session 4)*
 
 4.7 The difference between two shares\
-4.8 Errors, power, and sample size\
-4.9 Other designs and tests\
+4.8 How many users do we need?\
+4.9 More than two groups and other tests\
 4.10 Using *p*-values responsibly
 
 ::: keybox
@@ -506,17 +508,25 @@ The chart that goes with the paragraph: means, their intervals, and the test res
 
 ::: columns
 ::: {.column width="50%"}
-**Debrief Assignment 1** *(10 min)*
+**Debrief A1 + quiz Chapter 3** *(15 min, one sheet)*
 
--   Three short paper questions about *your* results
+-   Page 1: debrief of **Assignment 1** (3 assignment points)
+-   Page 2: quiz on **Chapter 3** (participation)
 -   Closed book, no laptop
+
+**Assignment 2** is handed out today (end of session).
 :::
 
 ::: {.column width="50%"}
-**Paper quiz on Chapter 3** *(10 min)*
+**New: devices only when we code**
 
--   Individual, closed book
--   Counts toward participation
+-   **Input blocks:** laptops closed, phones away — follow the slides and the live examples
+-   **Coding blocks** (2 × 25 min): laptops open, work **alone or with your neighbor**
+-   At the end of each block, **one group presents its results**
+
+::: keybox
+Today: shares → sample size → **coding block 1** → ANOVA → **coding block 2** → non-parametric tests → *p*-values.
+:::
 :::
 :::
 
@@ -594,9 +604,61 @@ Example after McDonnell Feit & McCullough, *Business Experiments*.
 prop.test(c(200, 100), c(300, 300)): 66.7% vs 33.3%, difference 33.3 points, CI roughly [25; 42], p < .001. Part 2 is the real lesson: who assigned the customers? If Jon got the warm leads, this is a confounded comparison (§1.4) — significance says nothing about causality without randomization.
 :::
 
-# 4.8 Errors, power, and sample size {.divider background-color="#0a3d6e"}
+# 4.8 How many users do we need? {.divider background-color="#0a3d6e"}
 
-## Two ways to be wrong {.smaller}
+## Sample size: decide before you start {.smaller}
+
+::: columns
+::: {.column width="50%"}
+**Means** — Smart Mix, $d$ = 0.22, 80% power:
+
+```{r pw-t, echo=TRUE}
+power.t.test(delta = 0.22, sd = 1, power = 0.80)$n
+```
+
+**Shares** — Premium test, 5% → 6%:
+
+```{r pw-p, echo=TRUE}
+power.prop.test(p1 = 0.05, p2 = 0.06, power = 0.80)$n
+```
+:::
+
+::: {.column width="50%"}
+::: keybox
+Start from the **smallest effect that would still matter** for the decision — not from the effect you hope for.
+:::
+
+-   Smart Mix: ~330 per group (not 200)
+-   Premium test: **> 8,000** per group (not 2,000)
+-   Omit `power` and give `n` instead → the power of the test you ran
+:::
+:::
+
+## Why online advertising needs huge experiments {.smaller}
+
+::: columns
+::: {.column width="55%"}
+```{r nreq, fig.width=6.5, fig.height=3.8}
+fig_n_required(base_size = 12)
+```
+:::
+
+::: {.column width="45%"}
+-   CTR 0.50% → 0.55% (+10%): **> 300,000 users per group**
+-   Lewis & Rao (2015), *The Unfavorable Economics of Measuring the Returns to Advertising*: even experiments with **millions** of users are often too imprecise to tell whether ads pay off
+-   Remember eBay (§1.2): the whole US market
+
+::: keybox
+Low baseline rates + small lifts = **enormous samples**.
+:::
+:::
+:::
+
+::: source
+Lewis & Rao (2015), "The Unfavorable Economics of Measuring the Returns to Advertising", *Quarterly Journal of Economics*, 130(4), 1941–1973.
+:::
+
+## What the 80% means: two ways to be wrong {.smaller}
 
 |  | **No effect in reality** ($H_0$ true) | **Effect in reality** ($H_0$ false) |
 |---|---|---|
@@ -605,12 +667,46 @@ prop.test(c(200, 100), c(300, 300)): 66.7% vs 33.3%, difference 33.3 points, CI 
 
 . . .
 
--   $\alpha$ = 5%: one in twenty tests of a useless feature is "significant" anyway
--   Power = probability of detecting a real effect; common target: **80%**
--   Lower $\alpha$ → lower power. Fewer errors of **both** kinds → only with **larger samples**
+-   $\alpha$ = 5% (`sig.level`): one in twenty tests of a useless feature is "significant" anyway
+-   **Power** = probability of detecting a real effect of the assumed size (`power = 0.80`): one in five real effects of that size is still missed
+-   Fewer errors of **both** kinds → only with **larger samples** — which is exactly what `power.t.test()` / `power.prop.test()` compute
 
 ::: notes
 Interactive visualization for discussion: rpsychologist.com/d3/NHST/ (optional).
+:::
+
+## Live demo: how many users does a conversion test need? {.midsize}
+
+::: columns
+::: {.column width="55%"}
+Course book, §4.8 — baseline rate, lift, and traffic per day.
+
+`r paste0("[", book_url, "#sec-exp-power](", book_url, "#sec-exp-power)")`
+
+![](../img/ch04/widget_nconversion.png){width="50%"}
+
+:::
+
+::: {.column width="45%"}
+::: keybox
+**Your group project:** ~60 per condition → only $d \gtrsim 0.5$ detectable with 80% power (small effects: < 20% power). **Make your manipulation strong.**
+:::
+:::
+:::
+
+## Your turn (5 min) {.midsize}
+
+::: discussion
+A newsletter has a click-through rate of **2%**. A new subject line should be tested.
+
+1.  How many recipients per version for detecting **+10%** (2.0% → 2.2%) with 80% power?
+2.  And if only **+25%** matters?
+
+Use `power.prop.test()`.
+:::
+
+::: notes
+(1) power.prop.test(p1 = 0.02, p2 = 0.022, power = 0.8): ~80,700 per version. (2) p2 = 0.025: ~13,800 per version. 2.5x the lift → ~6x fewer recipients.
 :::
 
 ## Type I and II errors in everyday life {.smaller}
@@ -675,93 +771,80 @@ In the widget, you **set** the true effect — in practice, you never know it (o
 :::
 :::
 
-## Sample size: decide before you start {.smaller}
+## Coding block 1: a newsletter A/B test (25 min) {.smaller}
 
 ::: columns
 ::: {.column width="50%"}
-**Means** — Smart Mix, $d$ = 0.22, 80% power:
+**The case.** A streaming service tests a new **subject line** for its weekly newsletter: 8,000 subscribers, randomly split — 4,000 get the old subject line, 4,000 the new one. Outcome: did the subscriber **click** (1) or not (0)?
 
-```{r pw-t, echo=TRUE}
-power.t.test(delta = 0.22, sd = 1, power = 0.80)$n
-```
+Data: `newsletter_test.csv` — section "Coding block 1" in `04-experiments.R`
 
-**Shares** — Premium test, 5% → 6%:
-
-```{r pw-p, echo=TRUE}
-power.prop.test(p1 = 0.05, p2 = 0.06, power = 0.80)$n
-```
+**Laptops open — alone or with your neighbor.**
 :::
 
 ::: {.column width="50%"}
-::: keybox
-Start from the **smallest effect that would still matter** for the decision — not from the effect you hope for.
-:::
+**Tasks** *(same steps as the Premium example)*
 
--   Smart Mix: ~330 per group (not 200)
--   Premium test: **> 8,000** per group (not 2,000)
--   Omit `power` and give `n` instead → the power of the test you ran
-:::
-:::
-
-## Why online advertising needs huge experiments {.smaller}
-
-::: columns
-::: {.column width="55%"}
-```{r nreq, fig.width=6.5, fig.height=3.8}
-fig_n_required(base_size = 12)
-```
-:::
-
-::: {.column width="45%"}
--   CTR 0.50% → 0.55% (+10%): **> 300,000 users per group**
--   Lewis & Rao (2015), *The Unfavorable Economics of Measuring the Returns to Advertising*: even experiments with **millions** of users are often too imprecise to tell whether ads pay off
--   Remember eBay (§1.2): the whole US market
+1.  Compute the **click rate** per version with its 95% confidence interval, and draw the **bar chart with intervals**
+2.  Run `prop.test()`: is the difference significant? Report it in one sentence — effect, uncertainty, test
+3.  **Sample size:** with the old click rate as the baseline, how many subscribers per version would a follow-up test need to detect a **10% relative** increase with 80% power?
 
 ::: keybox
-Low baseline rates + small lifts = **enormous samples**.
+At the end: one group presents its numbers.
 :::
 :::
-:::
-
-::: source
-Lewis & Rao (2015), "The Unfavorable Economics of Measuring the Returns to Advertising", *Quarterly Journal of Economics*, 130(4), 1941–1973.
-:::
-
-## Live demo: how many users does a conversion test need? {.midsize}
-
-::: columns
-::: {.column width="55%"}
-Course book, §4.8 — baseline rate, lift, and traffic per day.
-
-`r paste0("[", book_url, "#sec-exp-power](", book_url, "#sec-exp-power)")`
-
-![](../img/ch04/widget_nconversion.png){width="50%"}
-
-:::
-
-::: {.column width="45%"}
-::: keybox
-**Your group project:** ~60 per condition → only $d \gtrsim 0.5$ detectable with 80% power (small effects: < 20% power). **Make your manipulation strong.**
-:::
-:::
-:::
-
-## Your turn (5 min) {.midsize}
-
-::: discussion
-A newsletter has a click-through rate of **2%**. A new subject line should be tested.
-
-1.  How many recipients per version for detecting **+10%** (2.0% → 2.2%) with 80% power?
-2.  And if only **+25%** matters?
-
-Use `power.prop.test()`.
 :::
 
 ::: notes
-(1) power.prop.test(p1 = 0.02, p2 = 0.022, power = 0.8): ~80,700 per version. (2) p2 = 0.025: ~13,800 per version. 2.5x the lift → ~6x fewer recipients.
+Solutions (04-your-turn-solutions.R): old 4.25% [3.6; 4.9], new 5.38% [4.7; 6.1]; +1.1 points (+26%), 95% CI [0.2; 2.1] points, X² = 5.28, p = .022 (prop.test with counts 215 vs. 170 of 4,000). Sample size for 4.25% → 4.675%: about 37,000 per version — the current test could only detect much larger lifts.
 :::
 
-# 4.9 Other designs and tests {.divider background-color="#0a3d6e"}
+# 4.9 More than two groups and other tests {.divider background-color="#0a3d6e"}
+
+## More than two groups: the setup {.midsize}
+
+::: columns
+::: {.column width="55%"}
+**Three versions of Smart Mix**, tested at once:
+
+-   **No mix** (control) · **Weekly mix** (updated once a week) · **Daily mix** (updated every day)
+-   **450 users**, randomly assigned: **150 per version** → a **between-subjects** design with three groups
+-   Outcome: **listening hours** in four weeks
+:::
+
+::: {.column width="45%"}
+::: discussion
+The product team asks: does the **update frequency** matter — and if so, **which** version is better than which?
+:::
+:::
+:::
+
+::: notes
+Same data structure as the A/B test (one row per user, a group variable), only with three groups instead of two. The question has two parts — that is exactly the two-step logic of the ANOVA.
+:::
+
+## Before any test: look at the data {.smaller}
+
+::: columns
+::: {.column width="55%"}
+```{r three-points, fig.width=6, fig.height=4, out.width="100%"}
+fig_three_groups_points(base_size = 12)
+```
+:::
+
+::: {.column width="45%"}
+-   **150 users** per version
+-   Large overlap; the **means** (red) rise from no mix to daily mix
+-   Right-skewed in all groups, a few heavy listeners; similar spread
+-   Same three lines of code as for two groups:
+
+```r
+ggplot(mix_test, aes(x = version, y = hours)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(width = 0.15, alpha = 0.3)
+```
+:::
+:::
 
 ## More than two groups: why not several *t*-tests? {.midsize}
 
@@ -785,6 +868,34 @@ $$
 **Two steps:** (1) Is there **any** difference? → ANOVA. (2) **Which** groups differ? → **corrected** pairwise comparisons.
 :::
 :::
+:::
+
+## Where the *F* comes from: three sums of squares {.smaller}
+
+::: columns
+::: {.column width="100%"}
+```{r ss, fig.width=12, fig.height=3.5, out.width="100%"}
+fig_sum_of_squares(base_size = 11)
+```
+:::
+:::
+
+::: columns
+::: {.column width="50%"}
+**Total** = **model** + **residual**: $SS_T = SS_M + SS_R$
+
+135,122 = 3,367 + 131,755
+:::
+
+::: {.column width="50%"}
+::: keybox
+$F = \dfrac{SS_M / (k - 1)}{SS_R / (N - k)} = \dfrac{3{,}367 / 2}{131{,}755 / 447} = 5.71$ · $\eta^2 = SS_M / SS_T$ = **2.5%**
+:::
+:::
+:::
+
+::: notes
+Left: how far each user is from the overall (grand) mean — the total variation. Middle: how far the group means are from the grand mean — the part the version explains (signal). Right: how far each user is from their own group mean — what the version does not explain (noise). The chart shows 20 users per version for readability; the sums are over all 450 users. Degrees of freedom: 3 − 1 = 2 for the model (three means, one constraint), 450 − 3 = 447 for the residual (one mean estimated per group).
 :::
 
 ## Step 1: the ANOVA {.smaller}
@@ -818,26 +929,86 @@ $F(2, 447)$ = 5.71, *p* = .004 — at least one version differs; but the version
 
 ## Step 2: corrected pairwise comparisons {.smaller}
 
-```{r posthoc, echo=TRUE}
-pairwise.t.test(mix_test$hours, mix_test$version, p.adjust.method = "bonferroni")
-```
-
 ::: columns
 ::: {.column width="50%"}
--   **Bonferroni:** each *p* × number of comparisons (conservative)
--   **Holm:** R's default — equally safe, more powerful
--   **Tukey's HSD:** `TukeyHSD(mix_aov)` — with family-wise CIs
+**Uncorrected** (each test at 5%):
+
+```{r posthoc-raw, echo=TRUE}
+pairwise.t.test(mix_test$hours, mix_test$version,
+                p.adjust.method = "none")$p.value
+```
+
+**Bonferroni-corrected:**
+
+```{r posthoc, echo=TRUE}
+pairwise.t.test(mix_test$hours, mix_test$version,
+                p.adjust.method = "bonferroni")$p.value
+```
 :::
 
 ::: {.column width="50%"}
+**Bonferroni, step by step:** 3 comparisons, family-wise $\alpha$ = 5%
+
+-   Test each comparison at $\alpha / k$ = 0.05 / 3 = **0.0167** …
+-   … or, equivalently, multiply each *p* by $k$ = 3 and compare with **0.05** (R does this)
+-   Daily vs. weekly: raw *p* = 0.042 → × 3 = **0.125** — not significant any more
+
 ::: keybox
-Only **daily vs. no mix** differs. Unequal variances → Welch ANOVA: `oneway.test()`. The same *F* test appears in `lm(hours ~ version)` → Module 5.
+Only **daily vs. no mix** differs (*p* = .003). Alternatives: **Holm** (R's default, equally safe, more powerful), **Tukey's HSD** (`TukeyHSD(mix_aov)`).
 :::
 :::
 :::
 
 ::: notes
-Regression and multiple comparisons: the overall F test in lm() is a single joint test — no inflation. The individual coefficient t-tests (each group vs. the reference group) are NOT corrected. Degrees of freedom count estimated parameters (each group uses one), which affects the estimate of the residual variance, not the family-wise error rate. If several coefficients are interpreted, correct with p.adjust().
+Why divide by k: three tests at 0.0167 each give a family-wise error rate of at most 3 × 0.0167 = 5%. Conservative — it errs on the side of missing effects. Unequal variances → Welch ANOVA: oneway.test(). Regression and multiple comparisons: the overall F test in lm() is a single joint test — no inflation; the individual coefficient tests are NOT corrected.
+:::
+
+## Reporting an ANOVA {.smaller}
+
+::: columns
+::: {.column width="55%"}
+> Mean listening time differed between the three versions of Smart Mix (no mix: 19.1 hours, weekly mix: 21.7, daily mix: 25.7; one-way ANOVA: *F*(2, 447) = 5.71, *p* = .004, $\eta^2$ = .025). Bonferroni-corrected pairwise comparisons showed that users with the daily mix listened 6.6 hours more than users without a mix (*p* = .003); the weekly mix did not differ significantly from either of the other versions (both *p* > .12).
+
+::: keybox
+Means first, then the overall test with **df**, *p* and **effect size**, then **which** groups differ (corrected).
+:::
+:::
+
+::: {.column width="45%"}
+```{r anova-bars, fig.width=5, fig.height=3.8, out.width="100%"}
+fig_three_groups_bars(base_size = 11)
+```
+:::
+:::
+
+## Coding block 2: three versions of a price page (25 min) {.smaller}
+
+::: columns
+::: {.column width="50%"}
+**The case.** An online shop tests three versions of its checkout page: **Standard**, **Discount banner**, **Bundle offer**. 360 customers, randomly assigned (120 per version). Outcome: **order value** in euros.
+
+Data: `price_page.csv` — section "Coding block 2" in `04-experiments.R`
+
+**Laptops open — alone or with your neighbor.**
+:::
+
+::: {.column width="50%"}
+**Tasks** *(same steps as the Smart Mix example)*
+
+1.  **Look at the data:** boxplot with jitter
+2.  Summarise the versions (n, mean, SD, 95% CI) and draw the **bar chart with intervals**
+3.  Run the **ANOVA**: do the versions differ at all?
+4.  **Bonferroni** pairwise comparisons: which versions differ?
+5.  Report the result in two sentences
+
+::: keybox
+At the end: one group presents its numbers.
+:::
+:::
+:::
+
+::: notes
+Solutions (04-your-turn-solutions.R): means 42.3 / 46.8 / 54.0 euros; F(2, 357) = 5.53, p = .004, eta² = .030. Bonferroni: bundle vs. standard p = .003; discount vs. standard p = .63; bundle vs. discount p = .127 (raw p = .042 — the Bonferroni lesson again). Kruskal–Wallis as a robustness check (skewed order values): p = .014.
 :::
 
 ## Non-parametric tests: ranks instead of values {.smaller}

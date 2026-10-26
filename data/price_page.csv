@@ -1,0 +1,361 @@
+customer_id,version,order_value
+1,Standard,17.76
+2,Standard,49.62
+3,Standard,58.28
+4,Standard,39.67
+5,Standard,19.22
+6,Standard,76.66
+7,Standard,18.01
+8,Standard,28.29
+9,Standard,91.58
+10,Standard,12.1
+11,Standard,34.91
+12,Standard,16.69
+13,Standard,49.9
+14,Standard,7.75
+15,Standard,25.66
+16,Standard,17.5
+17,Standard,45.65
+18,Standard,18.57
+19,Standard,27.57
+20,Standard,45.15
+21,Standard,17.14
+22,Standard,32.46
+23,Standard,18.48
+24,Standard,30.11
+25,Standard,52.63
+26,Standard,30.82
+27,Standard,53.94
+28,Standard,35.73
+29,Standard,98.66
+30,Standard,22.02
+31,Standard,37.5
+32,Standard,31.91
+33,Standard,31.02
+34,Standard,58.73
+35,Standard,54.51
+36,Standard,13.68
+37,Standard,45.28
+38,Standard,53.68
+39,Standard,35.17
+40,Standard,20.13
+41,Standard,90.14
+42,Standard,105.76
+43,Standard,46.69
+44,Standard,46.69
+45,Standard,101.51
+46,Standard,37.93
+47,Standard,29.43
+48,Standard,22.52
+49,Standard,75.47
+50,Standard,43.45
+51,Standard,33.47
+52,Standard,17.43
+53,Standard,70.38
+54,Standard,49.03
+55,Standard,24.51
+56,Standard,51.34
+57,Standard,25.45
+58,Standard,48.33
+59,Standard,36.95
+60,Standard,21.27
+61,Standard,19.81
+62,Standard,63.26
+63,Standard,29.8
+64,Standard,61.88
+65,Standard,49.36
+66,Standard,40.24
+67,Standard,34.49
+68,Standard,10.14
+69,Standard,48.95
+70,Standard,41.53
+71,Standard,51.7
+72,Standard,7.37
+73,Standard,37.81
+74,Standard,20.57
+75,Standard,49.58
+76,Standard,25.73
+77,Standard,76.2
+78,Standard,56.95
+79,Standard,67.55
+80,Standard,23.78
+81,Standard,22.16
+82,Standard,21.33
+83,Standard,62.34
+84,Standard,61.92
+85,Standard,48.19
+86,Standard,113.26
+87,Standard,36.24
+88,Standard,23.56
+89,Standard,14.71
+90,Standard,48.37
+91,Standard,58.76
+92,Standard,21.61
+93,Standard,24.44
+94,Standard,27.32
+95,Standard,30.31
+96,Standard,43.29
+97,Standard,27.44
+98,Standard,60.51
+99,Standard,44.6
+100,Standard,40.8
+101,Standard,72.44
+102,Standard,23.06
+103,Standard,27.88
+104,Standard,44.8
+105,Standard,21.11
+106,Standard,32.87
+107,Standard,68.9
+108,Standard,42.07
+109,Standard,81.34
+110,Standard,50.72
+111,Standard,44.09
+112,Standard,64.33
+113,Standard,96.62
+114,Standard,63.4
+115,Standard,7.95
+116,Standard,14.6
+117,Standard,15.6
+118,Standard,26.89
+119,Standard,73.53
+120,Standard,107.22
+121,Discount banner,58.75
+122,Discount banner,51.85
+123,Discount banner,39.05
+124,Discount banner,88.46
+125,Discount banner,49.67
+126,Discount banner,56.55
+127,Discount banner,25.34
+128,Discount banner,30.91
+129,Discount banner,48.77
+130,Discount banner,87.31
+131,Discount banner,30.51
+132,Discount banner,44.91
+133,Discount banner,64.03
+134,Discount banner,24.49
+135,Discount banner,53.4
+136,Discount banner,68.94
+137,Discount banner,21.72
+138,Discount banner,7.36
+139,Discount banner,27.03
+140,Discount banner,52.85
+141,Discount banner,39.08
+142,Discount banner,22.06
+143,Discount banner,32.43
+144,Discount banner,51.29
+145,Discount banner,26.7
+146,Discount banner,47.55
+147,Discount banner,37.45
+148,Discount banner,25.18
+149,Discount banner,59.92
+150,Discount banner,11.91
+151,Discount banner,7.48
+152,Discount banner,54.28
+153,Discount banner,35.55
+154,Discount banner,31.62
+155,Discount banner,81.49
+156,Discount banner,7.55
+157,Discount banner,44.42
+158,Discount banner,73.65
+159,Discount banner,45.47
+160,Discount banner,34.42
+161,Discount banner,123.82
+162,Discount banner,44.08
+163,Discount banner,53.12
+164,Discount banner,108.39
+165,Discount banner,96.66
+166,Discount banner,69.84
+167,Discount banner,48.21
+168,Discount banner,29.47
+169,Discount banner,49.71
+170,Discount banner,25.4
+171,Discount banner,34.09
+172,Discount banner,52.68
+173,Discount banner,51.48
+174,Discount banner,14.96
+175,Discount banner,28.06
+176,Discount banner,40.49
+177,Discount banner,10.07
+178,Discount banner,77.33
+179,Discount banner,12.84
+180,Discount banner,12.72
+181,Discount banner,80.63
+182,Discount banner,24.77
+183,Discount banner,17.63
+184,Discount banner,67.97
+185,Discount banner,17.19
+186,Discount banner,41.08
+187,Discount banner,30.07
+188,Discount banner,75.78
+189,Discount banner,29.17
+190,Discount banner,45.45
+191,Discount banner,8.15
+192,Discount banner,32.16
+193,Discount banner,31.15
+194,Discount banner,16.06
+195,Discount banner,38.17
+196,Discount banner,18.79
+197,Discount banner,63.5
+198,Discount banner,58.75
+199,Discount banner,17.42
+200,Discount banner,18.21
+201,Discount banner,108.12
+202,Discount banner,47.54
+203,Discount banner,19.09
+204,Discount banner,19.88
+205,Discount banner,43.08
+206,Discount banner,45.62
+207,Discount banner,42.42
+208,Discount banner,81.9
+209,Discount banner,83.61
+210,Discount banner,54.87
+211,Discount banner,34.92
+212,Discount banner,81.79
+213,Discount banner,103.19
+214,Discount banner,25.28
+215,Discount banner,43.49
+216,Discount banner,28.32
+217,Discount banner,49.4
+218,Discount banner,65.69
+219,Discount banner,27.41
+220,Discount banner,92.82
+221,Discount banner,35.95
+222,Discount banner,39.11
+223,Discount banner,13.42
+224,Discount banner,90.93
+225,Discount banner,84.05
+226,Discount banner,116.77
+227,Discount banner,45.88
+228,Discount banner,58.62
+229,Discount banner,94.09
+230,Discount banner,22.45
+231,Discount banner,51.5
+232,Discount banner,16.97
+233,Discount banner,77.42
+234,Discount banner,36.64
+235,Discount banner,24.85
+236,Discount banner,38.54
+237,Discount banner,55.96
+238,Discount banner,29.91
+239,Discount banner,57.98
+240,Discount banner,107.46
+241,Bundle offer,39.8
+242,Bundle offer,81.15
+243,Bundle offer,20.12
+244,Bundle offer,16.33
+245,Bundle offer,52.42
+246,Bundle offer,11.85
+247,Bundle offer,93.05
+248,Bundle offer,27.26
+249,Bundle offer,27.81
+250,Bundle offer,119.89
+251,Bundle offer,40.38
+252,Bundle offer,42.02
+253,Bundle offer,36.83
+254,Bundle offer,55.82
+255,Bundle offer,48.57
+256,Bundle offer,23.99
+257,Bundle offer,84.78
+258,Bundle offer,65.62
+259,Bundle offer,48.68
+260,Bundle offer,55
+261,Bundle offer,34.16
+262,Bundle offer,47.34
+263,Bundle offer,8.35
+264,Bundle offer,23.43
+265,Bundle offer,80.16
+266,Bundle offer,25.83
+267,Bundle offer,82.84
+268,Bundle offer,104.07
+269,Bundle offer,28.16
+270,Bundle offer,121.32
+271,Bundle offer,12.33
+272,Bundle offer,17.15
+273,Bundle offer,27.8
+274,Bundle offer,73.83
+275,Bundle offer,15.08
+276,Bundle offer,27.57
+277,Bundle offer,34.46
+278,Bundle offer,27.17
+279,Bundle offer,71.42
+280,Bundle offer,52.64
+281,Bundle offer,8.54
+282,Bundle offer,70.77
+283,Bundle offer,49.32
+284,Bundle offer,53.02
+285,Bundle offer,23.63
+286,Bundle offer,69.12
+287,Bundle offer,35.8
+288,Bundle offer,56.17
+289,Bundle offer,87.75
+290,Bundle offer,35.72
+291,Bundle offer,53.56
+292,Bundle offer,18.24
+293,Bundle offer,81.52
+294,Bundle offer,21.09
+295,Bundle offer,52.31
+296,Bundle offer,113.67
+297,Bundle offer,118.03
+298,Bundle offer,69.25
+299,Bundle offer,32.34
+300,Bundle offer,58.93
+301,Bundle offer,57.38
+302,Bundle offer,73.05
+303,Bundle offer,21.37
+304,Bundle offer,34.41
+305,Bundle offer,68.51
+306,Bundle offer,48.89
+307,Bundle offer,35.77
+308,Bundle offer,153.79
+309,Bundle offer,62.68
+310,Bundle offer,29.02
+311,Bundle offer,81.1
+312,Bundle offer,65.64
+313,Bundle offer,54.88
+314,Bundle offer,54.77
+315,Bundle offer,38.85
+316,Bundle offer,37.19
+317,Bundle offer,111.33
+318,Bundle offer,70.04
+319,Bundle offer,32.51
+320,Bundle offer,34.03
+321,Bundle offer,118.59
+322,Bundle offer,63.37
+323,Bundle offer,62.98
+324,Bundle offer,73.07
+325,Bundle offer,88.64
+326,Bundle offer,30.22
+327,Bundle offer,25.8
+328,Bundle offer,63.38
+329,Bundle offer,48.31
+330,Bundle offer,36.93
+331,Bundle offer,176.13
+332,Bundle offer,69.7
+333,Bundle offer,42.09
+334,Bundle offer,32.74
+335,Bundle offer,46.68
+336,Bundle offer,31.77
+337,Bundle offer,103.77
+338,Bundle offer,57.04
+339,Bundle offer,117.78
+340,Bundle offer,28.01
+341,Bundle offer,23.72
+342,Bundle offer,33.4
+343,Bundle offer,66
+344,Bundle offer,28.74
+345,Bundle offer,21.73
+346,Bundle offer,37.02
+347,Bundle offer,31.5
+348,Bundle offer,41.36
+349,Bundle offer,63
+350,Bundle offer,37.07
+351,Bundle offer,77.65
+352,Bundle offer,27.61
+353,Bundle offer,95.09
+354,Bundle offer,29.52
+355,Bundle offer,95.25
+356,Bundle offer,14.53
+357,Bundle offer,56.2
+358,Bundle offer,118.19
+359,Bundle offer,23.34
+360,Bundle offer,62.01

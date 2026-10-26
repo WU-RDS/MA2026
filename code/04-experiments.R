@@ -226,7 +226,7 @@ prop.test(x = c(200, 100), n = c(300, 300))
 
 
 # ======================================================================
-# 4.8 Power and sample size — decide BEFORE the experiment
+# 4.8 How many users do we need? Sample size — decide BEFORE the experiment
 # ======================================================================
 
 # Means: users per group for 80% power to detect an assumed effect of d = 0.22
@@ -250,10 +250,45 @@ power.prop.test(p1 = 0.02, p2 = 0.025, sig.level = 0.05, power = 0.80)
 
 
 # ======================================================================
-# 4.9 Other designs
+# CODING BLOCK 1: a newsletter A/B test (25 min)
+# ======================================================================
+# A streaming service tests a new subject line for its weekly newsletter:
+# 8,000 subscribers, randomly split (4,000 per version).
+# Outcome: clicked (1) or not (0). Solutions: 04-your-turn-solutions.R
+
+newsletter <- read_csv(paste0(base_url, "newsletter_test.csv")) |>
+  mutate(version = factor(version, levels = c("New subject line", "Old subject line")))
+head(newsletter)
+
+# Tasks:
+# (1) Compute the click rate per version with its 95% confidence interval,
+#     and draw the bar chart with intervals (same steps as the Premium example)
+# (2) Run prop.test(): is the difference significant? Report it in one
+#     sentence: effect, uncertainty, test
+# (3) Sample size: with the old click rate as the baseline, how many
+#     subscribers per version would a follow-up test need to detect a 10%
+#     relative increase with 80% power? (power.prop.test)
+
+# your code here
+
+
+# ======================================================================
+# 4.9 More than two groups and other tests
 # ======================================================================
 
 # --- Three or more groups: ANOVA ---------------------------------------
+# Three versions of Smart Mix (no mix / weekly / daily), 150 users each,
+# randomly assigned; outcome: listening hours in four weeks
+
+# Step 0: look at the data — boxplot with the individual users on top
+ggplot(mix_test, aes(x = version, y = hours)) +
+  geom_boxplot(fill = "#dbe7f3", outlier.shape = NA) +
+  geom_jitter(width = 0.15, height = 0, alpha = 0.3) +
+  stat_summary(fun = mean, geom = "point", color = "#b03a2e", size = 3) +    # red dot = mean
+  labs(x = NULL, y = "Listening hours (four weeks)") +
+  theme_minimal()
+
+# The group summaries you will report
 mix_summary <- mix_test |>
   group_by(version) |>
   summarise(n = n(), mean = mean(hours), sd = sd(hours), se = sd / sqrt(n)) |>
@@ -271,13 +306,44 @@ ggplot(mix_summary, aes(x = version, y = mean)) +
 mix_aov <- aov(hours ~ version, data = mix_test)
 summary(mix_aov)
 
+# Effect size eta squared: share of the variation explained by the version
+ss <- summary(mix_aov)[[1]]$`Sum Sq`
+ss[1] / sum(ss)
+
 # Welch ANOVA (does not assume equal variances)
 oneway.test(hours ~ version, data = mix_test)
 
 # Step 2: which groups differ? Corrected pairwise comparisons
+# Uncorrected: each comparison tested at 5%
+pairwise.t.test(mix_test$hours, mix_test$version, p.adjust.method = "none")
+# Bonferroni: each p-value x number of comparisons (here 3), compared with 0.05
+# (= each comparison tested at 0.05 / 3 = 0.0167)
 pairwise.t.test(mix_test$hours, mix_test$version, p.adjust.method = "bonferroni")
 pairwise.t.test(mix_test$hours, mix_test$version)   # default: Holm correction
 TukeyHSD(mix_aov)
+
+
+# ======================================================================
+# CODING BLOCK 2: three versions of a price page (25 min)
+# ======================================================================
+# An online shop tests three versions of its checkout page: Standard,
+# Discount banner, Bundle offer. 360 customers, randomly assigned (120 each).
+# Outcome: order value in euros. Solutions: 04-your-turn-solutions.R
+
+price_page <- read_csv(paste0(base_url, "price_page.csv")) |>
+  mutate(version = factor(version, levels = c("Standard", "Discount banner", "Bundle offer")))
+head(price_page)
+
+# Tasks:
+# (1) Look at the data: boxplot with jitter
+# (2) Summarise the versions (n, mean, SD, 95% CI) and draw the bar chart
+#     with intervals
+# (3) Run the ANOVA: do the versions differ at all?
+# (4) Bonferroni-corrected pairwise comparisons: which versions differ?
+# (5) Report the result in two sentences
+
+# your code here
+
 
 # --- Non-parametric alternatives ---------------------------------------
 # Rank-based tests compare the typical value, not the mean: the chart that goes

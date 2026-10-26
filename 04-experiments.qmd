@@ -14,7 +14,7 @@ code-fold: false
 #| message: false
 source("R/ch03-figures.R")
 source("R/ch04-figures.R")
-options(scipen = 999)
+options(scipen = 5, digits = 4)
 ```
 
 *Driving question: **Did it work?***
@@ -650,9 +650,108 @@ The trial offer increased the upgrade rate by 1.35 percentage points, or about 2
 Two sales agents, Jon and Mark, each talk to 300 customers. Jon gets 200 of them to buy, Mark 100. Is Jon's conversion rate significantly higher? Use `prop.test()` and report the difference with its 95% confidence interval. Then: does this comparison tell you that Jon is the better salesperson? Think about how customers were assigned to the two agents. *(Example after McDonnell Feit & McCullough's* Business Experiments *course.)*
 :::
 
-## Errors, power, and sample size {#sec-exp-power}
+## How many users do we need? {#sec-exp-power}
 
-### Two ways to be wrong
+### Determining the sample size in advance
+
+How many users does an experiment need? The question has to be answered **before** the experiment starts — based on the smallest effect that would still matter for the business decision. A test that is too small can miss a real effect (as the Premium test in @sec-exp-shares probably did); a test that is too large wastes time and traffic. R's `power.t.test()` does the computation. It asks for the assumed effect, the significance level (5%), and the desired **power** — the probability of detecting the effect if it exists, conventionally 80%; @sec-exp-errors explains what these two numbers mean. For Smart Mix, with the standardized effect $d$ = 0.22 and the conventional 80% power:
+
+```{r}
+power.t.test(delta = 0.22, sd = 1, sig.level = 0.05, power = 0.80)
+```
+
+About 330 users per group (`n` is per group) — rather than the 200 the team used. Here we used the effect size observed in the first experiment as the assumption for planning a *follow-up* experiment; for a first experiment, you would start from the smallest effect that matters. The same function answers the reverse question for the planning stage: with `n = 200` instead of `power = 0.80`, it returns the power that an experiment with 200 users per group would have for the assumed effect.
+
+For **shares**, `power.prop.test()` works the same way. How many users would the Premium test have needed to reliably detect an increase from 5% to 6%?
+
+```{r}
+power.prop.test(p1 = 0.05, p2 = 0.06, sig.level = 0.05, power = 0.80)
+```
+
+More than 8,000 users per group — four times as many as in the test that was actually run.
+
+### Why online advertising needs huge experiments
+
+Experiments on shares need large samples when the baseline rate is low and the effect is small — which is exactly the situation in online advertising. Click-through rates are often below 1%, purchase rates after an ad exposure even lower, and a successful campaign may lift them by only a few percent. @fig-n-required shows how quickly the required sample size grows.
+
+```{r}
+#| label: fig-n-required
+#| echo: false
+#| fig-width: 8
+#| fig-height: 4.2
+#| fig-cap: "Users needed per group to detect a relative lift with 80% power (α = 5%), for three baseline rates. Note the logarithmic scale."
+fig_n_required()
+```
+
+To detect a 10% lift in a click-through rate of 0.5% (from 0.50% to 0.55%), an experiment needs more than 300,000 users *per group*. In their paper *The Unfavorable Economics of Measuring the Returns to Advertising*, @lewis2015 analyze 25 large field experiments on advertising effectiveness at major US firms and show that even experiments with millions of users are often too imprecise to tell whether a campaign pays off — the effect of advertising on an individual's purchases is tiny compared with how much purchases vary anyway. Remember the eBay experiments from @sec-ebay: they needed the entire US market to reach a clear answer.
+
+::: {.callout-tip title="Try it: how many users does a conversion test need?" icon="false"}
+
+Set the **baseline conversion rate** (the rate without the change) and the **relative lift** you want to be able to detect. The widget computes the users needed per group for 80% power at α = 5%.
+
+::: {.unc-widget}
+```{ojs}
+//| echo: false
+viewof e4_base = Inputs.range([0.1, 30], {value: 5, step: 0.1, label: "Baseline rate (%)", transform: Math.log, invert: Math.exp})
+```
+
+```{ojs}
+//| echo: false
+viewof e4_lift = Inputs.range([1, 50], {value: 10, step: 1, label: "Relative lift to detect (%)"})
+```
+
+```{ojs}
+//| echo: false
+viewof e4_traffic = Inputs.range([100, 1000000], {value: 10000, step: 100, label: "Users per day (both groups)", transform: Math.log, invert: Math.exp})
+```
+:::
+
+```{ojs}
+//| echo: false
+e4 = {
+  const za = qnorm(0.975), zb = qnorm(0.8);
+  const nfun = (p1, lift) => {
+    const p2 = p1 * (1 + lift), pb = (p1 + p2) / 2;
+    return Math.ceil((za * Math.sqrt(2 * pb * (1 - pb)) + zb * Math.sqrt(p1 * (1 - p1) + p2 * (1 - p2))) ** 2 / (p2 - p1) ** 2);
+  };
+  const p1 = e4_base / 100, lift = e4_lift / 100;
+  const n = nfun(p1, lift);
+  const curve = d3.range(1, 51).map(l => ({lift: l, n: nfun(p1, l / 100)}));
+  const days = Math.ceil(2 * n / Math.round(e4_traffic));
+  return {n, curve, days, p1, p2: p1 * (1 + lift)};
+}
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 760, height: 280, marginLeft: 70,
+  x: {label: "Relative lift to detect (%)", domain: [1, 50]},
+  y: {label: "Users per group", type: "log", grid: true, tickFormat: "~s"},
+  marks: [
+    Plot.line(e4.curve, {x: "lift", y: "n", stroke: "#0f5da8", strokeWidth: 2}),
+    Plot.dot([{lift: e4_lift, n: e4.n}], {x: "lift", y: "n", r: 6, fill: "#0a3d6e"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+html`<div class="unc-stats">To detect an increase from <b>${(100 * e4.p1).toFixed(2)}%</b> to <b>${(100 * e4.p2).toFixed(2)}%</b>,
+you need about <b>${e4.n.toLocaleString("en")}</b> users per group (${(2 * e4.n).toLocaleString("en")} in total) —
+at ${Math.round(e4_traffic).toLocaleString("en")} users per day, the test runs about <b>${e4.days.toLocaleString("en")} days</b>.</div>`
+```
+:::
+
+::: {.callout-important title="What this means for your group project"}
+With about 120 respondents split into two conditions, each group has about 60 people. At 80% power, such an experiment can only reliably detect **medium-to-large effects** ($d \approx 0.5$ or more): `power.t.test(n = 60, sd = 1, power = 0.80)` returns a detectable effect of $d$ = 0.52. For a small effect ($d$ = 0.2), the power would be below 20%. Design your manipulation to be **strong** — a subtle wording change will probably not produce a detectable effect — and interpret non-significant results with the corresponding caution.
+:::
+
+::: {.callout-tip title="Your turn (5 min)"}
+A retailer's newsletter has a click-through rate of 2%. The marketing team wants to test a new subject line and considers a 10% relative increase (to 2.2%) worth detecting. (a) How many recipients per version do they need for 80% power? (b) How does the answer change if they only care about a 25% increase? Use `power.prop.test()`.
+:::
+
+### What the 80% means: two ways to be wrong {#sec-exp-errors}
 
 Every test decision can be wrong in two ways (@tbl-errors):
 
@@ -769,112 +868,34 @@ In the widget, you *set* the true effect — a luxury you never have in practice
 What you should *not* do is compute the power **after** the experiment using the effect you observed ("post-hoc power" or "observed power"). This number adds no information: it is a direct transformation of the *p*-value — a non-significant result always has low "observed power". Power analysis belongs to the planning stage; after the experiment, the confidence interval tells you what the data can and cannot rule out.
 :::
 
-### Determining the sample size in advance
+::: {.callout-tip title="Coding block 1: a newsletter A/B test (25 min)"}
+A streaming service tests a new **subject line** for its weekly newsletter: 8,000 subscribers are randomly split — 4,000 get the old subject line, 4,000 the new one. The outcome is whether a subscriber **clicked** (1) or not (0). The data are in `newsletter_test.csv` (section "Coding block 1" in the chapter's R script).
 
-Because power depends on the sample size, the sample size of an experiment should be determined **before** it starts — based on the smallest effect that would still matter for the business decision. R's `power.t.test()` does the computation. For Smart Mix, with the standardized effect $d$ = 0.22 and the conventional 80% power:
+1.  Compute the **click rate** per version with its 95% confidence interval, and draw the **bar chart with intervals**.
+2.  Run `prop.test()`: is the difference significant? Report it in one sentence — effect, uncertainty, test.
+3.  **Sample size:** with the old click rate as the baseline, how many subscribers per version would a follow-up test need to detect a **10% relative** increase with 80% power?
 
-```{r}
-power.t.test(delta = 0.22, sd = 1, sig.level = 0.05, power = 0.80)
-```
-
-About 330 users per group (`n` is per group) — rather than the 200 the team used. Here we used the effect size observed in the first experiment as the assumption for planning a *follow-up* experiment; for a first experiment, you would start from the smallest effect that matters. The same function answers the reverse question for the planning stage: with `n = 200` instead of `power = 0.80`, it returns the power that an experiment with 200 users per group would have for the assumed effect.
-
-For **shares**, `power.prop.test()` works the same way. How many users would the Premium test have needed to reliably detect an increase from 5% to 6%?
-
-```{r}
-power.prop.test(p1 = 0.05, p2 = 0.06, sig.level = 0.05, power = 0.80)
-```
-
-More than 8,000 users per group — four times as many as in the test that was actually run.
-
-### Why online advertising needs huge experiments
-
-Experiments on shares need large samples when the baseline rate is low and the effect is small — which is exactly the situation in online advertising. Click-through rates are often below 1%, purchase rates after an ad exposure even lower, and a successful campaign may lift them by only a few percent. @fig-n-required shows how quickly the required sample size grows.
-
-```{r}
-#| label: fig-n-required
-#| echo: false
-#| fig-width: 8
-#| fig-height: 4.2
-#| fig-cap: "Users needed per group to detect a relative lift with 80% power (α = 5%), for three baseline rates. Note the logarithmic scale."
-fig_n_required()
-```
-
-To detect a 10% lift in a click-through rate of 0.5% (from 0.50% to 0.55%), an experiment needs more than 300,000 users *per group*. In their paper *The Unfavorable Economics of Measuring the Returns to Advertising*, @lewis2015 analyze 25 large field experiments on advertising effectiveness at major US firms and show that even experiments with millions of users are often too imprecise to tell whether a campaign pays off — the effect of advertising on an individual's purchases is tiny compared with how much purchases vary anyway. Remember the eBay experiments from @sec-ebay: they needed the entire US market to reach a clear answer.
-
-::: {.callout-tip title="Try it: how many users does a conversion test need?" icon="false"}
-
-Set the **baseline conversion rate** (the rate without the change) and the **relative lift** you want to be able to detect. The widget computes the users needed per group for 80% power at α = 5%.
-
-::: {.unc-widget}
-```{ojs}
-//| echo: false
-viewof e4_base = Inputs.range([0.1, 30], {value: 5, step: 0.1, label: "Baseline rate (%)", transform: Math.log, invert: Math.exp})
-```
-
-```{ojs}
-//| echo: false
-viewof e4_lift = Inputs.range([1, 50], {value: 10, step: 1, label: "Relative lift to detect (%)"})
-```
-
-```{ojs}
-//| echo: false
-viewof e4_traffic = Inputs.range([100, 1000000], {value: 10000, step: 100, label: "Users per day (both groups)", transform: Math.log, invert: Math.exp})
-```
+The solutions are in `04-your-turn-solutions.R`.
 :::
 
-```{ojs}
-//| echo: false
-e4 = {
-  const za = qnorm(0.975), zb = qnorm(0.8);
-  const nfun = (p1, lift) => {
-    const p2 = p1 * (1 + lift), pb = (p1 + p2) / 2;
-    return Math.ceil((za * Math.sqrt(2 * pb * (1 - pb)) + zb * Math.sqrt(p1 * (1 - p1) + p2 * (1 - p2))) ** 2 / (p2 - p1) ** 2);
-  };
-  const p1 = e4_base / 100, lift = e4_lift / 100;
-  const n = nfun(p1, lift);
-  const curve = d3.range(1, 51).map(l => ({lift: l, n: nfun(p1, l / 100)}));
-  const days = Math.ceil(2 * n / Math.round(e4_traffic));
-  return {n, curve, days, p1, p2: p1 * (1 + lift)};
-}
-```
-
-```{ojs}
-//| echo: false
-Plot.plot({
-  width: 760, height: 280, marginLeft: 70,
-  x: {label: "Relative lift to detect (%)", domain: [1, 50]},
-  y: {label: "Users per group", type: "log", grid: true, tickFormat: "~s"},
-  marks: [
-    Plot.line(e4.curve, {x: "lift", y: "n", stroke: "#0f5da8", strokeWidth: 2}),
-    Plot.dot([{lift: e4_lift, n: e4.n}], {x: "lift", y: "n", r: 6, fill: "#0a3d6e"})
-  ]
-})
-```
-
-```{ojs}
-//| echo: false
-html`<div class="unc-stats">To detect an increase from <b>${(100 * e4.p1).toFixed(2)}%</b> to <b>${(100 * e4.p2).toFixed(2)}%</b>,
-you need about <b>${e4.n.toLocaleString("en")}</b> users per group (${(2 * e4.n).toLocaleString("en")} in total) —
-at ${Math.round(e4_traffic).toLocaleString("en")} users per day, the test runs about <b>${e4.days.toLocaleString("en")} days</b>.</div>`
-```
-:::
-
-::: {.callout-important title="What this means for your group project"}
-With about 120 respondents split into two conditions, each group has about 60 people. At 80% power, such an experiment can only reliably detect **medium-to-large effects** ($d \approx 0.5$ or more): `power.t.test(n = 60, sd = 1, power = 0.80)` returns a detectable effect of $d$ = 0.52. For a small effect ($d$ = 0.2), the power would be below 20%. Design your manipulation to be **strong** — a subtle wording change will probably not produce a detectable effect — and interpret non-significant results with the corresponding caution.
-:::
-
-::: {.callout-tip title="Your turn (5 min)"}
-A retailer's newsletter has a click-through rate of 2%. The marketing team wants to test a new subject line and considers a 10% relative increase (to 2.2%) worth detecting. (a) How many recipients per version do they need for 80% power? (b) How does the answer change if they only care about a 25% increase? Use `power.prop.test()`.
-:::
-
-## Beyond two groups: other designs and tests {#sec-exp-other}
+## More than two groups and other tests {#sec-exp-other}
 
 The two-group comparison is the workhorse of experimentation, but not every experiment fits it. This section gives a short tour of the most common variations — the logic stays the same, only the R function changes.
 
 ### More than two groups: analysis of variance (ANOVA)
 
-Suppose the product team tests three versions: no mix, a mix updated weekly, and a mix updated daily — 150 users each (@fig-three-groups).
+**The setup.** The product team wants to know whether the *update frequency* of Smart Mix matters. It tests three versions at once: **no mix** (the control), a mix **updated weekly**, and a mix **updated daily**. 450 users are randomly assigned, 150 per version — a between-subjects design with three groups instead of two. The outcome is again listening hours in four weeks. The question has two parts: does the frequency matter at all — and if so, which version is better than which?
+
+As always, the first step is to look at the data (@fig-three-groups-points): the three groups overlap strongly, all are right-skewed with a few heavy listeners, and the means rise from no mix to daily mix. The bar chart with confidence intervals (@fig-three-groups) shows the quantities the test will compare.
+
+```{r}
+#| label: fig-three-groups-points
+#| echo: false
+#| fig-width: 7
+#| fig-height: 4
+#| fig-cap: "The three-group experiment, user by user: boxplots with every user as a grey dot, and the group means in red."
+fig_three_groups_points()
+```
 
 ```{r}
 #| label: fig-three-groups
@@ -917,6 +938,27 @@ $$
 
 If the versions make no difference, the group means differ only by chance, and $F$ is close to 1; the larger $F$, the stronger the evidence that at least one version differs.
 
+**Where the numbers come from: three sums of squares.** @fig-sum-of-squares makes the split visible. The **total** variation (left) adds up the squared distances of every user from the *grand mean* of all 450 users. The **model** variation (middle) replaces each user by their group mean and adds up the squared distances of the *group means* from the grand mean — the part of the variation that the version explains. The **residual** variation (right) adds up the squared distances of every user from *their own group mean* — what the version does not explain. The three are linked by a simple identity:
+
+$$
+\underbrace{SS_T}_{\text{total}} = \underbrace{SS_M}_{\text{model}} + \underbrace{SS_R}_{\text{residual}}, \qquad 135{,}122 = 3{,}367 + 131{,}755
+$$
+
+```{r}
+#| label: fig-sum-of-squares
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.4
+#| fig-cap: "The three sums of squares of the Smart Mix experiment. Dashed line: grand mean; thick lines: group means; thin lines: the deviations that are squared and summed. For readability, 20 users per version are shown; the sums are over all 450 users."
+fig_sum_of_squares()
+```
+
+Dividing each sum by its degrees of freedom turns it into an average ("mean square"): the model has $k - 1$ = 2 degrees of freedom (three group means, one constraint), the residual $N - k$ = 447 (one mean estimated per group). The ratio of the two averages is the *F* statistic:
+
+$$
+F = \frac{SS_M / (k - 1)}{SS_R / (N - k)} = \frac{3{,}367 / 2}{131{,}755 / 447} = \frac{1{,}683}{295} = 5.71
+$$
+
 ```{r}
 mix_aov <- aov(hours ~ version, data = mix_test)
 summary(mix_aov)
@@ -931,13 +973,14 @@ ss[1] / sum(ss)    # eta squared: share of variation explained by the version
 
 The versions explain only 2.5% of the variation in listening times: users differ far more among themselves than the versions differ from each other — a small effect, even though it is significant.
 
-**Step 2: Which groups differ?** The ANOVA tells us *that* the groups differ, not *which*. **Post-hoc tests** compare all pairs of groups, while correcting the *p*-values for the number of comparisons so that the family-wise error rate stays at 5%. The simplest correction, **Bonferroni**, multiplies each *p*-value by the number of comparisons (equivalently: it tests each comparison at $\alpha / k$):
+**Step 2: Which groups differ?** The ANOVA tells us *that* the groups differ, not *which*. **Post-hoc tests** compare all pairs of groups, while correcting the *p*-values for the number of comparisons so that the family-wise error rate stays at 5%. The simplest correction is **Bonferroni**. With $k$ comparisons, it tests each one at the stricter level $\alpha / k$ — here 0.05 / 3 = 0.0167 — so that the whole family of three tests together has a false-alarm rate of at most 3 × 0.0167 = 5%. Equivalently, and this is what R reports, it multiplies each *p*-value by $k$ and compares the result with the usual 0.05. Compare the uncorrected and the corrected *p*-values:
 
 ```{r}
+pairwise.t.test(mix_test$hours, mix_test$version, p.adjust.method = "none")
 pairwise.t.test(mix_test$hours, mix_test$version, p.adjust.method = "bonferroni")
 ```
 
-Only the daily mix differs clearly from no mix (corrected *p* = .003); the weekly mix lies in between and cannot be distinguished from either. The Bonferroni correction is conservative — it errs on the side of missing effects. R's default for `pairwise.t.test()`, the **Holm** correction, is slightly more powerful and equally safe; **Tukey's HSD** test, `TukeyHSD(mix_aov)`, is a classic alternative designed specifically for all pairwise comparisons after an ANOVA and reports the differences with family-wise confidence intervals.
+Daily vs. weekly mix has an uncorrected *p*-value of 0.042 — "significant" on its own — but 3 × 0.042 = 0.125 after the correction. Only the daily mix differs clearly from no mix (corrected *p* = .003); the weekly mix lies in between and cannot be distinguished from either. The Bonferroni correction is conservative — it errs on the side of missing effects. R's default for `pairwise.t.test()`, the **Holm** correction, is slightly more powerful and equally safe; **Tukey's HSD** test, `TukeyHSD(mix_aov)`, is a classic alternative designed specifically for all pairwise comparisons after an ANOVA and reports the differences with family-wise confidence intervals.
 
 ::: {.callout-note collapse="true" title="Under the hood: assumptions of the ANOVA"}
 The ANOVA shares the assumptions of the *t*-test: independent observations, an approximately normal sampling distribution of the group means (guaranteed by the central limit theorem for reasonably large groups), and a metric outcome. In addition, the classic ANOVA assumes **similar variances in all groups**. If the group standard deviations differ considerably, use the **Welch ANOVA**, which does not require this assumption — just as R's default *t*-test does:
@@ -959,6 +1002,24 @@ summary(lm(hours ~ version, data = mix_test))
 The last line reports exactly the same $F$ test as the ANOVA ($F$ = 5.71 on 2 and 447 degrees of freedom). The coefficients have a direct interpretation: the intercept is the mean of the reference group (no mix, 19.07 hours), and each further coefficient is the difference between a group and the reference group (weekly: +2.60 hours; daily: +6.65 hours).
 
 What about multiple comparisons in a regression? The **overall F test** in the last line is a single test of all groups together, so it has no multiple-comparison problem — just like the ANOVA. The **individual coefficient tests**, however, are ordinary *t*-tests and are **not** corrected: each compares one group with the reference group at $\alpha$ = 5%. The degrees of freedom do not change this. Each group adds one coefficient and uses up one degree of freedom, which affects how precisely the noise (the residual variance) is estimated — but not the chance of a false alarm across several comparisons. Note also that the coefficients only compare each group with the reference group, not all pairs. If you interpret several group comparisons from a regression, the same corrections apply (e.g., `p.adjust(p_values, method = "holm")`).
+:::
+
+**Reporting an ANOVA.** As for two groups: the means first, then the overall test with its degrees of freedom, *p*-value and effect size, then the corrected comparisons that say which groups differ:
+
+> Mean listening time differed between the three versions of Smart Mix (no mix: 19.1 hours, weekly mix: 21.7, daily mix: 25.7; one-way ANOVA: *F*(2, 447) = 5.71, *p* = .004, $\eta^2$ = .025). Bonferroni-corrected pairwise comparisons showed that users with the daily mix listened 6.6 hours more than users without a mix (*p* = .003); the weekly mix did not differ significantly from either of the other versions (both *p* > .12).
+
+The chart that goes with it is @fig-three-groups: the group means with their confidence intervals.
+
+::: {.callout-tip title="Coding block 2: three versions of a price page (25 min)"}
+An online shop tests three versions of its checkout page: **Standard**, **Discount banner**, and **Bundle offer**. 360 customers are randomly assigned, 120 per version; the outcome is the **order value** in euros. The data are in `price_page.csv` (section "Coding block 2" in the chapter's R script).
+
+1.  **Look at the data:** boxplot with jitter.
+2.  Summarise the versions (n, mean, SD, 95% CI) and draw the **bar chart with intervals**.
+3.  Run the **ANOVA**: do the versions differ at all?
+4.  Run **Bonferroni**-corrected pairwise comparisons: which versions differ?
+5.  Report the result in two sentences.
+
+The solutions are in `04-your-turn-solutions.R`.
 :::
 
 ### Non-parametric tests: when the mean is not the right summary
