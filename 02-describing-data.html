@@ -1808,23 +1808,119 @@ Figure&nbsp;2.4: The same data, two impressions: a truncated axis exaggerates a 
 <section id="sec-lc-02" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="sec-lc-02">Learning check</h2>
 <p><strong>(LC2.1)</strong> A colleague sends you a CSV file exported from a German version of Excel. After <code>read_csv("file.csv")</code>, the data frame has only one column. What is the most likely reason, and which function should you use instead?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A German Excel export separates the columns with <strong>semicolons</strong> (because the comma is the decimal separator), while <code>read_csv()</code> expects commas. R therefore finds no column separator and reads every line into a single column. Use <code>read_csv2()</code>, which expects semicolons as separators and commas as decimal marks. Afterwards, check the result with <code>glimpse()</code>: the right number of columns, and numbers read as numbers.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC2.2)</strong> Classify the level of measurement of each variable: (a) customer ID, (b) satisfaction (“very dissatisfied” … “very satisfied”), (c) price in euros, (d) payment method, (e) year of first purchase.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Answers: (a) <strong>Nominal</strong>: the ID is a number, but only a label; its mean or order means nothing. (b) <strong>Ordinal</strong>: the categories have a natural order, but the distances between them are not defined. (c) <strong>Ratio</strong>: zero means “no price”, so ratios are meaningful (twice as expensive). (d) <strong>Nominal</strong>: categories without an order. (e) <strong>Interval</strong>: differences between years are meaningful, but the zero point of the calendar is arbitrary, so ratios are not (“years since first purchase” would be a ratio variable).</p>
+</div>
+</div>
+</div>
 <p><strong>(LC2.3)</strong> The mean revenue per customer is €480, the median €95. What does this tell you about the distribution — and which number would you report as the “typical” customer’s revenue?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The distribution is strongly <strong>right-skewed</strong>: most customers spend little, and a few customers with very high revenues pull the mean far above the median. The <strong>median</strong> (€95) describes the typical customer: half of the customers spend less, half more. The mean is still useful for other questions — for example, total revenue is the mean times the number of customers.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC2.4)</strong> What does the following code return?</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
 <span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(label_type <span class="sc">==</span> <span class="st">"Major"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(genre) <span class="sc">|&gt;</span></span>
 <span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">share_explicit =</span> <span class="fu">mean</span>(explicit <span class="sc">==</span> <span class="st">"explicit"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A table with <strong>one row per genre</strong>, restricted to tracks released by <strong>major labels</strong>. The column <code>n</code> contains the number of major-label tracks in each genre, and <code>share_explicit</code> the share of these tracks with explicit lyrics: <code>explicit == "explicit"</code> is <code>TRUE</code> or <code>FALSE</code> for each track, and the mean of a logical variable is the share of <code>TRUE</code> values.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC2.5)</strong> A loyalty-program data set contains only customers who are still active. An analyst finds that, among these customers, those who received few discounts buy particularly often. Why might this pattern be misleading?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The data contain only the <strong>“survivors”</strong> of a selection process: customers who left are missing. Customers who received few discounts and bought little are likely to have churned and are therefore not in the data; those who stayed despite few discounts are the especially loyal ones, who buy often anyway. The selection itself creates the pattern — it can appear even if discounts have no effect, or a positive one, on purchases. Before interpreting the pattern, ask how the data came to be and who is missing.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC2.6)</strong> Which of the following statements are correct?</p>
 <ul class="task-list">
 <li><label><input type="checkbox">If <code>read_csv2()</code> runs without an error message, the data were imported correctly</label></li>
-<li><label><input type="checkbox">A variable stored as a number in R can be a nominal variable</label></li>
+<li><label><input type="checkbox" checked="">A variable stored as a number in R can be a nominal variable</label></li>
 <li><label><input type="checkbox">Outliers should always be removed before computing summary statistics</label></li>
-<li><label><input type="checkbox">For a strongly right-skewed variable, the median describes the typical observation better than the mean</label></li>
-<li><label><input type="checkbox">The y-axis of a bar chart should start at zero</label></li>
+<li><label><input type="checkbox" checked="">For a strongly right-skewed variable, the median describes the typical observation better than the mean</label></li>
+<li><label><input type="checkbox" checked="">The y-axis of a bar chart should start at zero</label></li>
 <li><label><input type="checkbox">A value of zero in a data set always means that the quantity was zero</label></li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Correct: statements 2, 4, and 5. Statement 1 is wrong: an import can run without errors and still be wrong (e.g., decimal commas read as thousands separators, or all values in one column) — always inspect the result. Statement 3 is wrong: outliers must be checked, not removed automatically; they can be data errors, but also the most important observations (the hits in the chart data). Statement 6 is wrong: a zero can be a disguised missing value (e.g., zero YouTube views for a track whose views were simply not recorded). Statement 2 is correct because the storage type says nothing about the level of measurement (e.g., an artist ID or a postal code). Statement 5 is correct because bars encode values by their length; a truncated axis exaggerates differences.</p>
+</div>
+</div>
+</div>
 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4em;">
 <p><img src="img/logo_wu.jpg" class="img-fluid" width="150"></p>
 <p><img src="img/logo_rds.png" class="img-fluid" width="150"></p>
