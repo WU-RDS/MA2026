@@ -16,16 +16,35 @@ options(scipen = 5, digits = 4)
 
 base_url <- "https://raw.githubusercontent.com/wu-rds/MA2026/main/data/"
 
-# The Smart Mix A/B test: 400 users, randomly split; listening hours in four weeks
+# All data sets of this chapter (one row per user or customer):
+
+# 4.1–4.3  The Smart Mix A/B test: 400 users, randomly split; listening hours in four weeks
 ab_test <- read_csv(paste0(base_url, "ab_test.csv")) |>
   mutate(group = factor(group, levels = c("Smart Mix", "Control")))
 
-# Three versions of Smart Mix: 150 users each
+# 4.4  The search-design test: 60 users, each tried both designs (seconds per search)
+search_test <- read_csv(paste0(base_url, "search_test.csv"))
+
+# Your turn (QuickBite): free-delivery voucher (between) and routing app (within)
+delivery_voucher <- read_csv(paste0(base_url, "delivery_voucher.csv")) |>
+  mutate(group = factor(group, levels = c("Voucher", "No voucher")))
+delivery_routes <- read_csv(paste0(base_url, "delivery_routes.csv"))
+
+# 4.7  The Premium trial offer: 4,000 users, randomly split; upgraded (1) or not (0)
+premium_trial <- read_csv(paste0(base_url, "premium_trial.csv")) |>
+  mutate(group = factor(group, levels = c("Trial offer", "Standard page")))
+
+# Coding block 1: newsletter subject-line test; clicked (1) or not (0)
+newsletter <- read_csv(paste0(base_url, "newsletter_test.csv")) |>
+  mutate(version = factor(version, levels = c("New subject line", "Old subject line")))
+
+# 4.9  Three versions of Smart Mix: 150 users each
 mix_test <- read_csv(paste0(base_url, "mix_test.csv")) |>
   mutate(version = factor(version, levels = c("No mix", "Weekly mix", "Daily mix")))
 
-# The search-design test: 60 users, each tried both designs (seconds per search)
-search_test <- read_csv(paste0(base_url, "search_test.csv"))
+# Coding block 2: three versions of a price page; order value in euros
+price_page <- read_csv(paste0(base_url, "price_page.csv")) |>
+  mutate(version = factor(version, levels = c("Standard", "Discount banner", "Bundle offer")))
 
 
 # ======================================================================
@@ -154,9 +173,7 @@ t.test(search_test$new_design - search_test$old_design)
 # (1) BETWEEN-SUBJECTS: 300 new customers were randomly split; 150 received a
 #     free-delivery voucher for their first four weeks, 150 did not.
 #     Outcome: total order value (euros) in these four weeks.
-delivery_voucher <- read_csv(paste0(base_url, "delivery_voucher.csv")) |>
-  mutate(group = factor(group, levels = c("Voucher", "No voucher")))
-head(delivery_voucher)
+head(delivery_voucher)      # loaded at the top
 
 # Tasks: (a) look at the data (boxplot + jitter); (b) summarise the groups
 #        (n, mean, SD, 95% CI) and draw the bar chart with intervals;
@@ -169,8 +186,7 @@ head(delivery_voucher)
 # (2) WITHIN-SUBJECTS: 40 couriers delivered with the old routing app AND with
 #     the new one (same type of shift, random order).
 #     Outcome: average minutes per delivery with each app.
-delivery_routes <- read_csv(paste0(base_url, "delivery_routes.csv"))
-head(delivery_routes)
+head(delivery_routes)       # loaded at the top
 
 # Tasks: (a) draw the chart that shows the within-courier comparison;
 #        (b) run the appropriate t-test and report the result;
@@ -196,10 +212,14 @@ cohen.d(ab_test$hours, ab_test$group)$cohen.d
 # 4.7 Two shares: the test of proportions
 # ======================================================================
 
-# Premium trial offer: 131 of 2,000 vs. 104 of 2,000 users upgraded
-upgrade_rates <- tibble(group = factor(c("Trial offer", "Standard page"), levels = c("Trial offer", "Standard page")),
-                        upgrades = c(131, 104), n = c(2000, 2000)) |>
-  mutate(rate = upgrades / n, se = sqrt(rate * (1 - rate) / n),
+# Premium trial offer: one row per user, upgraded = 1 if the user upgraded
+head(premium_trial)
+
+# The summaries you will report: upgrades, group size, rate, 95% confidence interval
+upgrade_rates <- premium_trial |>
+  group_by(group) |>
+  summarise(upgrades = sum(upgraded), n = n(), rate = upgrades / n) |>
+  mutate(se = sqrt(rate * (1 - rate) / n),
          lower = rate - 1.96 * se, upper = rate + 1.96 * se)
 upgrade_rates
 
@@ -210,18 +230,14 @@ ggplot(upgrade_rates, aes(x = group, y = 100 * rate)) +
   labs(x = NULL, y = "Upgrade rate (%) with 95% CI") +
   theme_minimal()
 
-prop.test(x = c(131, 104), n = c(2000, 2000))
+# The test of proportions: number of successes and group sizes per group
+prop.test(x = upgrade_rates$upgrades, n = upgrade_rates$n)
 
-# With a data set instead of counts: successes and group sizes from the data
-# prop.test(x = c(sum(upgraded[group == "A"]), sum(upgraded[group == "B"])),
-#           n = c(sum(group == "A"), sum(group == "B")))
+# The same as a chi-square test on the 2 x 2 table (group x upgraded)
+table(premium_trial$group, premium_trial$upgraded)
+chisq.test(table(premium_trial$group, premium_trial$upgraded))
 
-# The same as a chi-square test on the 2 x 2 table
-upgrades <- matrix(c(131, 2000 - 131, 104, 2000 - 104), nrow = 2, byrow = TRUE,
-                   dimnames = list(c("Trial offer", "Standard page"), c("upgraded", "not upgraded")))
-chisq.test(upgrades)
-
-# Your turn: Jon (200 of 300) vs. Mark (100 of 300)
+# Your turn: Jon (200 of 300) vs. Mark (100 of 300) — counts given in the task
 prop.test(x = c(200, 100), n = c(300, 300))
 
 
@@ -256,9 +272,7 @@ power.prop.test(p1 = 0.02, p2 = 0.025, sig.level = 0.05, power = 0.80)
 # 8,000 subscribers, randomly split (4,000 per version).
 # Outcome: clicked (1) or not (0). Solutions: 04-your-turn-solutions.R
 
-newsletter <- read_csv(paste0(base_url, "newsletter_test.csv")) |>
-  mutate(version = factor(version, levels = c("New subject line", "Old subject line")))
-head(newsletter)
+head(newsletter)            # loaded at the top
 
 # Tasks:
 # (1) Compute the click rate per version with its 95% confidence interval,
@@ -330,9 +344,7 @@ TukeyHSD(mix_aov)
 # Discount banner, Bundle offer. 360 customers, randomly assigned (120 each).
 # Outcome: order value in euros. Solutions: 04-your-turn-solutions.R
 
-price_page <- read_csv(paste0(base_url, "price_page.csv")) |>
-  mutate(version = factor(version, levels = c("Standard", "Discount banner", "Bundle offer")))
-head(price_page)
+head(price_page)            # loaded at the top
 
 # Tasks:
 # (1) Look at the data: boxplot with jitter
