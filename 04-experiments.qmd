@@ -640,7 +640,7 @@ For the Premium test: $(0.0655 - 0.0520) \pm 1.96 \times 0.0074$, i.e., from −
 prop.test(x = c(131, 104), n = c(2000, 2000))
 ```
 
-The trial offer increased the upgrade rate by 1.35 percentage points, or about 26% in relative terms. But the test is not significant (*p* = 0.08), and the 95% confidence interval for the difference runs from −0.16 to +2.86 percentage points (slightly wider than our hand calculation, because `prop.test()` applies a small correction for the fact that counts are whole numbers): the data are compatible with no effect, but also with a substantial one. The correct conclusion is not "the trial offer does not work" but "**this experiment was too small to tell**" — with 2,000 users per group, a difference of about one percentage point is hard to distinguish from chance. How large the experiment would have needed to be is the subject of @sec-exp-power.
+The trial offer increased the upgrade rate by 1.35 percentage points, or about 26% in relative terms. But the test is not significant (*p* = 0.08), and the 95% confidence interval for the difference runs from −0.16 to +2.86 percentage points. This is slightly wider than our hand calculation (−0.11 to +2.81), and the *p*-value slightly larger, because `prop.test()` applies a **continuity correction** by default: counts are whole numbers, while the test uses the continuous normal distribution, so it treats each count as covering ± half a unit. This widens the interval by ½ × (1/2,000 + 1/2,000) = 0.05 percentage points on each side and makes the test slightly more conservative. `prop.test(x = c(131, 104), n = c(2000, 2000), correct = FALSE)` reproduces the hand calculation exactly (−0.11 to +2.81 points, *p* = 0.07); with samples of this size, both versions lead to the same conclusion: the data are compatible with no effect, but also with a substantial one. The correct conclusion is not "the trial offer does not work" but "**this experiment was too small to tell**" — with 2,000 users per group, a difference of about one percentage point is hard to distinguish from chance. How large the experiment would have needed to be is the subject of @sec-exp-power.
 
 ::: {.callout-note collapse="true" title="Under the hood: prop.test and the chi-square test"}
 `prop.test()` is a version of the **chi-square test** of independence for a 2 × 2 table (group × outcome). The chi-square test compares the observed counts in each cell with the counts we would expect if the outcome were independent of the group. It also works for more than two groups or more than two outcome categories: `chisq.test(table(data$group, data$outcome))`. For two groups and a yes/no outcome, `prop.test()` gives the same *p*-value and, in addition, the confidence interval of the difference.
@@ -958,6 +958,26 @@ Dividing each sum by its degrees of freedom turns it into an average ("mean squa
 $$
 F = \frac{SS_M / (k - 1)}{SS_R / (N - k)} = \frac{3{,}367 / 2}{131{,}755 / 447} = \frac{1{,}683}{295} = 5.71
 $$
+
+**How large can $\eta^2$ get?** The share of the total variation that lies between the group means — $\eta^2 = SS_M / SS_T$ — depends on two things: how far apart the group means are, and how much users differ *within* the groups. @fig-ss-strong and @fig-ss-none show the same design with different (simulated) data. In the first, the group means are far apart (9.7, 22.1 and 34.1 hours) and users within each group are similar: most of the variation lies between the groups, $\eta^2$ = 44,550 / 55,075 = 81%, and *F*(2, 447) = 946. In the second, the group means are almost identical to the grand mean (22.1, 20.8 and 22.2 hours): the model panel is nearly empty, the residual sum of squares is almost the total, $\eta^2$ = 0.2%, and *F*(2, 447) = 0.43 with *p* = .65. The Smart Mix experiment, with $\eta^2$ = 2.5%, lies between these two worlds — much closer to the second, which is typical for marketing experiments: even effects that matter for the business usually explain only a small share of how differently individual customers behave.
+
+```{r}
+#| label: fig-ss-strong
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.4
+#| fig-cap: "Same design, different data: group means far apart, users within a group similar. Most of the total variation is explained by the version (eta squared = 81%)."
+fig_sum_of_squares(ss_data("strong"))
+```
+
+```{r}
+#| label: fig-ss-none
+#| echo: false
+#| fig-width: 12
+#| fig-height: 4.4
+#| fig-cap: "Same design, different data: group means almost equal to the grand mean. The version explains almost none of the variation (eta squared = 0.2%)."
+fig_sum_of_squares(ss_data("none"))
+```
 
 ```{r}
 mix_aov <- aov(hours ~ version, data = mix_test)

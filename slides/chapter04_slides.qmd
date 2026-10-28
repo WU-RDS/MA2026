@@ -568,7 +568,7 @@ $$
 
 ::: {.column width="50%"}
 ::: keybox
-Same intuition as for means: **more variation within the groups and smaller groups → more uncertain difference.** Premium test: 1.35 ± 1.96 × 0.74 points.
+Same intuition as for means: **more variation within the groups and smaller groups → more uncertain difference.** Premium test: 1.35 ± 1.96 × 0.74 = **[−0.11; 2.81]** points.
 :::
 :::
 :::
@@ -579,6 +579,10 @@ Same intuition as for means: **more variation within the groups and smaller grou
 -   +1.35 percentage points (+26% relative) — but **p = 0.08**
 -   95% CI of the difference: **−0.16 to +2.86** points
 -   Compatible with no effect — **and** with a substantial one
+:::
+
+::: {style="font-size: 0.75em; color: #58585a;"}
+Why not [−0.11; 2.81] as on the previous slide? `prop.test()` applies a **continuity correction** by default (counts are whole numbers): the interval widens by ½ × (1/2,000 + 1/2,000) = 0.05 points on each side, and *p* rises from 0.07 to 0.08. `prop.test(..., correct = FALSE)` reproduces the hand calculation exactly.
 :::
 
 . . .
@@ -896,6 +900,54 @@ $F = \dfrac{SS_M / (k - 1)}{SS_R / (N - k)} = \dfrac{3{,}367 / 2}{131{,}755 / 44
 
 ::: notes
 Left: how far each user is from the overall (grand) mean — the total variation. Middle: how far the group means are from the grand mean — the part the version explains (signal). Right: how far each user is from their own group mean — what the version does not explain (noise). The chart shows 20 users per version for readability; the sums are over all 450 users. Degrees of freedom: 3 − 1 = 2 for the model (three means, one constraint), 450 − 3 = 447 for the residual (one mean estimated per group).
+:::
+
+## Same formula, another world: the version explains a lot {.smaller}
+
+::: columns
+::: {.column width="100%"}
+```{r ss-strong, fig.width=12, fig.height=3.5, out.width="100%"}
+fig_sum_of_squares(ss_data("strong"), base_size = 11)
+```
+:::
+:::
+
+::: columns
+::: {.column width="50%"}
+Group means far apart (9.7 / 22.1 / 34.1 hours), users **within** a group similar → most of the total variation lies **between** the groups.
+:::
+
+::: {.column width="50%"}
+::: keybox
+$\eta^2$ = 44,550 / 55,075 = **81%** · *F*(2, 447) = 946, *p* < .001
+:::
+:::
+:::
+
+## … and a world where it explains nothing {.smaller}
+
+::: columns
+::: {.column width="100%"}
+```{r ss-none, fig.width=12, fig.height=3.5, out.width="100%"}
+fig_sum_of_squares(ss_data("none"), base_size = 11)
+```
+:::
+:::
+
+::: columns
+::: {.column width="50%"}
+Group means (almost) equal to the grand mean (22.1 / 20.8 / 22.2 hours) → the model panel is (almost) empty: $SS_R \approx SS_T$.
+:::
+
+::: {.column width="50%"}
+::: keybox
+$\eta^2$ = 200 / 104,549 = **0.2%** · *F*(2, 447) = 0.43, *p* = .65 — no evidence that the version matters
+:::
+:::
+:::
+
+::: notes
+Three worlds, one formula: Smart Mix (eta² = 2.5%) sits between these two extremes. The comparison shows what eta² measures — the share of the total variation that lies between the group means — and that F grows with that share (and with the sample size).
 :::
 
 ## Step 1: the ANOVA {.smaller}

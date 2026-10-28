@@ -399,3 +399,83 @@ fig_sum_of_squares <- function(d = mix3_data(), show_per_group = 20, base_size =
     base(sprintf("Residual: users vs. their\ngroup mean: SS_R = %s", fmt(ss_r))) + guides(color = "none")
   (p1 | p2 | p3) + plot_layout(guides = "collect") & theme(legend.position = "bottom")
 }
+
+
+# ------------------------------------------------------------------
+# Additions to R/ch04-figures.R (October 2026, part 2): ANOVA figures
+# ------------------------------------------------------------------
+
+# --- 4.9: the three-group data, user by user (boxplot + jitter + mean) -------
+fig_three_groups_points <- function(d = mix3_data(), base_size = 13) {
+  ggplot(d, aes(x = version, y = hours)) +
+    geom_boxplot(fill = wu_light, outlier.shape = NA, width = 0.55) +
+    geom_jitter(width = 0.15, height = 0, alpha = 0.3, size = 1.2, color = wu_grey) +
+    stat_summary(fun = mean, geom = "point", color = wu_red, size = 3.5) +
+    labs(x = NULL, y = "Listening hours (four weeks)",
+         subtitle = "Box: middle 50% and median · grey dots: users · red dot: mean") +
+    theme_course(base_size)
+}
+
+# --- 4.9: the three sums of squares, drawn from the data ---------------------
+fig_sum_of_squares <- function(d = mix3_data(), show_per_group = 20, base_size = 12) {
+  # Sums of squares over ALL users; for readability, the chart shows a
+  # random subset of users per version (the means are those of all users)
+  grand <- mean(d$hours)
+  d <- d |> mutate(group_mean = mean(hours), .by = version)
+  ss_t <- sum((d$hours - grand)^2); ss_m <- sum((d$group_mean - grand)^2); ss_r <- sum((d$hours - d$group_mean)^2)
+  set.seed(1)
+  s <- d |> slice_sample(n = show_per_group, by = version) |> arrange(version) |> mutate(obs = row_number())
+  gm <- s |> group_by(version) |> summarise(x0 = min(obs) - 0.4, x1 = max(obs) + 0.4, group_mean = first(group_mean), .groups = "drop")
+  fmt <- function(x) format(round(x), big.mark = ",")
+  cols <- c(`No mix` = wu_grey, `Weekly mix` = wu_orange, `Daily mix` = wu_blue)
+  base <- function(title) {
+    list(geom_hline(yintercept = grand, linetype = "dashed", color = "black"),
+         scale_color_manual(values = cols, name = NULL),
+         coord_cartesian(ylim = c(0, 90)),
+         labs(title = title, x = sprintf("%d users per version (sorted by version)", show_per_group), y = "Listening hours"),
+         theme_course(base_size),
+         theme(axis.text.x = element_blank(), panel.grid.major.x = element_blank()))
+  }
+  means_layer <- geom_segment(data = gm, aes(x = x0, xend = x1, y = group_mean, yend = group_mean, color = version),
+                              linewidth = 1.5, inherit.aes = FALSE)
+  p1 <- ggplot(s, aes(obs, hours, color = version)) +
+    geom_segment(aes(xend = obs, yend = grand), alpha = 0.5) +
+    geom_point(size = 1.6) +
+    base(sprintf("Total: users vs.\ngrand mean: SS_T = %s", fmt(ss_t)))
+  p2 <- ggplot(s, aes(obs, group_mean, color = version)) +
+    geom_segment(aes(xend = obs, yend = grand), alpha = 0.5) +
+    means_layer +
+    base(sprintf("Model: group means vs.\ngrand mean: SS_M = %s", fmt(ss_m))) + guides(color = "none")
+  p3 <- ggplot(s, aes(obs, hours, color = version)) +
+    geom_segment(aes(xend = obs, yend = group_mean), alpha = 0.5) +
+    geom_point(size = 1.6) +
+    means_layer +
+    base(sprintf("Residual: users vs. their\ngroup mean: SS_R = %s", fmt(ss_r))) + guides(color = "none")
+  (p1 | p2 | p3) + plot_layout(guides = "collect") & theme(legend.position = "bottom")
+}
+
+
+# --- 4.9: two contrasting worlds for the sums of squares -----------------------
+# Same design (three versions, 150 users each), different data:
+# "strong": the group means are far apart and users within a group are similar
+#           -> most of the variation is between groups (high eta squared)
+# "none":   the group means are (almost) identical -> the version explains
+#           (almost) nothing (eta squared close to 0)
+ss_data <- function(type = c("strong", "none")) {
+  type <- match.arg(type)
+  lv <- c("No mix", "Weekly mix", "Daily mix")
+  if (type == "strong") {
+    set.seed(11)
+    hours <- pmax(rnorm(450, mean = rep(c(10, 22, 34), each = 150), sd = 5), 0)
+  } else {
+    set.seed(23)
+    hours <- rgamma(450, shape = 2, scale = 11)
+  }
+  tibble::tibble(version = factor(rep(lv, each = 150), levels = lv), hours = hours)
+}
+
+eta_squared <- function(d) {
+  grand <- mean(d$hours)
+  gm <- ave(d$hours, d$version)
+  sum((gm - grand)^2) / sum((d$hours - grand)^2)
+}
