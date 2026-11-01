@@ -215,11 +215,7 @@ $$
 
 `r paste0("[", book_url, "#sec-obs-line](", book_url, "#sec-obs-line)")`
 
-::: {style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 1em; text-align: center; color: #58585a; margin-top: 0.5em;"}
-*Screenshot placeholder: the line-fitting widget*\
 ![](../img/ch05/widget_line.png){width="10%"}
-:::
-:::
 :::
 
 # 5.3 Reading a regression {.divider background-color="#0a3d6e"}
@@ -341,10 +337,7 @@ Course book, §5.4 — set the **quality of the proxy** and the **strength of co
 
 `r paste0("[", book_url, "#sec-obs-adjust](", book_url, "#sec-obs-adjust)")`
 
-::: {style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 1.5em; text-align: center; color: #58585a; margin-top: 0.6em;"}
-*Screenshot placeholder: the proxy widget*\
 ![](../img/ch05/widget_proxy.png){width="50%"}
-:::
 :::
 
 ::: {.column width="45%"}
@@ -669,10 +662,7 @@ Course book, §5.7 — move the **true elasticity**.
 
 `r paste0("[", book_url, "#sec-obs-form](", book_url, "#sec-obs-form)")`
 
-::: {style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 1.5em; text-align: center; color: #58585a; margin-top: 0.6em;"}
-*Screenshot placeholder: the functional-form widget*\
 ![](../img/ch05/widget_loglog.png){width="50%"}
-:::
 :::
 
 ::: {.column width="45%"}
