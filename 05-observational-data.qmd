@@ -17,6 +17,7 @@ options(scipen = 5, digits = 4)
 smartmix_obs <- load_smartmix()
 campaigns    <- load_campaigns()
 playlist     <- load_playlist()
+free_users <- filter(smartmix_obs, premium == 0)
 m_naive <- lm(hours ~ smart_mix, data = smartmix_obs)
 m_prior <- lm(hours ~ smart_mix + prior_hours, data = smartmix_obs)
 m_full  <- lm(hours ~ smart_mix + prior_hours + tenure + premium + device, data = smartmix_obs)
@@ -68,6 +69,7 @@ smartmix_obs <- load_smartmix()
 | `device` | Main device: iOS, Android, or Desktop |
 | `age` | Age in years |
 | `churn` | 1 if the user cancelled within three months after the launch |
+| `upgraded` | 1 if a free user upgraded to Premium within three months (NA for Premium users) |
 
 : The observational Smart Mix data (simulated) {#tbl-smartmix-vars .striped}
 
@@ -108,9 +110,47 @@ In an experiment, randomization cuts the dashed arrows. Without an experiment, w
 
 ## From correlation to a line {#sec-obs-line}
 
-### Two variables, one line
+### The correlation coefficient
 
-Regression starts with a question you can answer by looking: how does one variable change with another? @fig-scatter-prior plots listening hours after the launch against listening hours before it. The cloud slopes upward: users who listened a lot before also listen a lot now. The **correlation coefficient** $r$ = `r round(cor(smartmix_obs$prior_hours, smartmix_obs$hours), 2)` summarizes this in one number between −1 and +1: the sign gives the direction, the size the strength of the *linear* association (you met it in @sec-foundations, where it showed what correlation cannot tell you).
+Regression starts with a question you can answer by looking: how does one variable change with another? @fig-scatter-prior plots listening hours after the launch against listening hours before it. The cloud slopes upward: users who listened a lot before also listen a lot now. The **correlation coefficient** $r$ summarizes this in one number. It is the covariance of the two variables, standardized by their standard deviations:
+
+$$
+r = \frac{\sum_i (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_i (x_i - \bar{x})^2} \sqrt{\sum_i (y_i - \bar{y})^2}}
+$$
+
+The numerator adds up, over all users $i$, the product of the two deviations from the means: it is positive when users above the mean in $x$ tend to be above the mean in $y$ as well, negative when they tend to be below, and close to zero when the two deviations are unrelated. The denominator removes the units, so that $r$ always lies between **−1 and +1** (@fig-correlation-panels):
+
+- the **sign** gives the direction: positive, the variables move together; negative, one goes up when the other goes down;
+- the **size** gives the strength of the linear association: $r$ = ±1 means that all points lie exactly on a straight line, $r$ = 0 means no linear association; as a rough convention, values around 0.1, 0.3, and 0.5 are called small, medium, and large associations;
+- $r$ has **no units** and does not change when the variables are rescaled (hours or minutes, euros or cents), which makes correlations comparable across variables and studies.
+
+```{r}
+#| label: fig-correlation-panels
+#| echo: false
+#| fig-width: 9
+#| fig-height: 5
+#| fig-cap: "Simulated data with correlation coefficients from −0.9 to +0.95: the sign gives the direction, the size the tightness of the cloud around a straight line."
+fig_correlation_panels()
+```
+
+Two caveats. First, $r$ measures *linear* association only: @fig-correlation-nonlinear shows a clear relationship with a correlation of almost zero, because the relationship is not a straight line. Always look at the scatter plot. Second, $r$ is symmetric and says nothing about causation — you met this in @sec-foundations: two variables can be correlated because one causes the other, because a third variable drives both, or by selection.
+
+```{r}
+#| label: fig-correlation-nonlinear
+#| echo: false
+#| fig-width: 6
+#| fig-height: 3.6
+#| fig-cap: "A strong but non-linear relationship. The correlation coefficient is close to zero, and so is the slope of the fitted line."
+fig_correlation_nonlinear()
+```
+
+For the Smart Mix data, $r$ = `r round(cor(smartmix_obs$prior_hours, smartmix_obs$hours), 2)`: a large positive association between listening before and after the launch.
+
+```{r}
+cor(smartmix_obs$prior_hours, smartmix_obs$hours)
+```
+
+### Two variables, one line
 
 ```{r}
 #| label: fig-scatter-prior
@@ -124,10 +164,10 @@ fig_scatter_prior()
 A correlation says *that* the variables move together; the **regression line** says *how much*. It describes the average listening time after the launch as a straight-line function of the listening time before:
 
 $$
-\text{hours} = \beta_0 + \beta_1 \times \text{prior hours} + \varepsilon
+\text{hours}_i = \beta_0 + \beta_1 \, \text{prior hours}_i + \varepsilon_i
 $$
 
-$\beta_0$ is the **intercept** (the predicted value when the predictor is zero), $\beta_1$ the **slope** (by how much the outcome changes when the predictor increases by one unit), and $\varepsilon$ the **residual** — everything the line does not explain about an individual user. In R:
+The index $i$ stands for a user: the equation holds for every one of the 2,000 users, with the same $\beta_0$ and $\beta_1$ for all of them and a different $\varepsilon_i$ for each. $\beta_0$ is the **intercept** (the predicted value when the predictor is zero), $\beta_1$ the **slope** (by how much the outcome changes when the predictor increases by one unit), and $\varepsilon_i$ the **error term** or **residual** — everything the line does not explain about user $i$. In R:
 
 ```{r}
 coef(lm(hours ~ prior_hours, data = smartmix_obs))
@@ -137,7 +177,13 @@ Every additional hour of listening before the launch goes with `r round(coef(lm(
 
 ### Which line? The least-squares idea
 
-Many lines could run through a cloud of points. The regression line is the one that makes the **sum of the squared residuals** — the squared vertical distances between the points and the line — as small as possible (@fig-least-squares). Squaring makes large misses count much more than small ones and treats misses above and below the line alike. This is the **method of least squares**, and it is what `lm()` ("linear model") computes.
+Many lines could run through a cloud of points. The regression line is the one that makes the **sum of the squared residuals** — the squared vertical distances between the points and the line — as small as possible (@fig-least-squares). Formally, the **ordinary least squares (OLS)** estimator chooses the intercept and the slope that minimize
+
+$$
+\sum_{i=1}^{n} \hat{\varepsilon}_i^2 = \sum_{i=1}^{n} \left( y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i \right)^2
+$$
+
+where $y_i$ is user $i$'s listening time after the launch and $x_i$ before it, and the hats mark estimates computed from the data. Squaring makes large misses count much more than small ones and treats misses above and below the line alike. This is what `lm()` ("linear model") computes — and what you minimize by hand in the widget below.
 
 ```{r}
 #| label: fig-least-squares
@@ -261,25 +307,18 @@ Two observations connect this to what you already know. First, with a single 0/1
 confint(model_naive)
 ```
 
-R's output shows *p*-values in scientific notation when they are very small. For reporting, journals round estimates and write small *p*-values as "< 0.001". The small helper `coef_table()` — defined in the R script of this chapter — does this, and we use it for the coefficient tables from here on:
+**R² — the share of explained variation.** You met this idea in @sec-experiments: the ANOVA splits the total variation of the outcome into the part explained by the groups and the residual part, and $\eta^2$ is the explained share. R² is the same quantity for a regression line, $R^2 = SS_M / SS_T$: the share of the variation in $y$ that the line explains, between 0 and 1. For the naive model it is `r round(summary(m_naive)$r.squared, 3)` — whether a user has Smart Mix explains `r round(100 * summary(m_naive)$r.squared)`% of how differently users listen; for the line through prior listening it is `r round(summary(lm(hours ~ prior_hours, smartmix_obs))$r.squared, 2)`. @fig-r2-panels shows what the number means: the same line, with less and less scatter around it.
 
 ```{r}
-coef_table <- function(model, digits = 3) {
-  tab <- coef(summary(model))
-  out <- data.frame(
-    Estimate     = round(tab[, 1], digits),
-    `Std. Error` = round(tab[, 2], digits),
-    statistic    = round(tab[, 3], 2),
-    `p-value`    = ifelse(tab[, 4] < 0.001, "< 0.001", sprintf("%.3f", tab[, 4])),
-    check.names = FALSE
-  )
-  names(out)[3] <- colnames(tab)[3]
-  rownames(out) <- rownames(tab)
-  out
-}
-
-coef_table(model_naive)
+#| label: fig-r2-panels
+#| echo: false
+#| fig-width: 11
+#| fig-height: 3.2
+#| fig-cap: "The same regression line with different amounts of scatter around it (simulated data). The orange segments are the residuals; the less of the variation is left in them, the higher R²."
+fig_r2_panels()
 ```
+
+R² describes how well the line fits; it says nothing about whether the slope is a causal effect, and a small R² does not make an effect unimportant (Smart Mix explains 14% of the variation, yet 9 hours is a large difference). For reporting, round the coefficient table to three decimals: `round(coef(summary(model_naive)), 3)`.
 
 ::: {.callout-note collapse="true" title="Under the hood: R², the F-test, and standardized coefficients"}
 **R²** compares the residuals of the model with the residuals of the most basic model, which predicts the mean for everybody: $R^2 = 1 - \text{SS}_\text{residual} / \text{SS}_\text{total}$. A value of 0.14 means that the model's predictions are 14% "better" (in squared error) than simply guessing the mean. R² never decreases when you add a predictor, even a useless one; the **adjusted R²** reported next to it includes a small penalty for each predictor and is the better number for comparing models with different numbers of predictors.
@@ -287,6 +326,16 @@ coef_table(model_naive)
 The **F-test** asks whether the model as a whole explains more than chance — the same logic as the ANOVA in @sec-experiments: variation explained by the model per degree of freedom, divided by unexplained variation per degree of freedom. With one predictor, it is equivalent to the *t*-test of that predictor.
 
 **Standardized coefficients** express each effect in standard deviations ("one SD more prior listening goes with 0.6 SD more listening now"). They make coefficients of variables with different units comparable in size. You get them by standardizing the variables before the regression, e.g., `lm(scale(hours) ~ scale(prior_hours), data = smartmix_obs)`.
+:::
+
+::: {.callout-tip title="Coding block 1: podcast promotion (25 min)"}
+A podcast network tracks 400 episodes: the promotion spend for the episode (`promo_spend`, euros), the host's followers (`host_followers`), and the downloads in the release week (`downloads`). The data are in `podcast_promo.csv` (section "Coding block 1" in the chapter's R script).
+
+1.  Draw a **scatter plot** of downloads (y) against promotion spend (x), and compute the **correlation**. Describe the relationship in one sentence.
+2.  Fit the **regression** of downloads on promotion spend with `lm()` and look at `summary()`: interpret the slope in words, and read off the **R²**.
+3.  Is the slope a **causal** effect of promotion? What would you need to argue?
+
+The solutions will be available after the session.
 :::
 
 ## Adjusting for confounders {#sec-obs-adjust}
@@ -402,6 +451,24 @@ A multiple regression does not literally compare users with identical prior list
 This also explains why **correlated predictors** are a problem: if two predictors move almost in lockstep, little independent variation is left for either, and both coefficients become imprecise (large standard errors). The *variance inflation factor* (VIF) quantifies this; `car::vif(model_full)` computes it, and values above about 5 deserve attention. Collinearity does not bias the coefficients — it makes them uncertain.
 :::
 
+### The assumption behind adjustment: exogeneity
+
+The whole of this section rests on one assumption, and it is worth stating it formally, because it tells you *why* adjustment worked only partly. In the regression
+
+$$
+\text{hours}_i = \beta_0 + \beta_1 \, \text{smart mix}_i + \beta_2 \, \text{prior hours}_i + \dots + \varepsilon_i
+$$
+
+the error term $\varepsilon_i$ collects everything about user $i$ that the model does not contain: mood, taste, time, and — in our case — music enthusiasm. The coefficient $\beta_1$ is the causal effect of Smart Mix only if the treatment is unrelated to this leftover:
+
+$$
+\text{Cov}(\text{smart mix}_i, \varepsilon_i) = 0
+$$
+
+This condition is called **exogeneity**: the variable of interest is determined "from outside" the model, not by the same forces that sit in the error term. In an experiment, randomization guarantees it — a coin flip is unrelated to everything. In the opt-in data, it fails: enthusiasm drives adoption *and* is part of $\varepsilon_i$, so Smart Mix is **endogenous**, and $\beta_1$ absorbs part of the enthusiasm effect. Every adjustment variable we add moves a piece of the error term into the model: `prior_hours` took most of the enthusiasm out of $\varepsilon_i$, which is why the estimate dropped from 9.3 to 4.5 hours; what is left in the error term still correlates with adoption, which is why 4.5 is still above 3.
+
+The uncomfortable part: exogeneity **cannot be tested** in the data. The residuals of a fitted regression are uncorrelated with the predictors by construction — least squares makes them so — so the data always "look" exogenous. Whether the assumption holds has to be argued from outside the data: from theory, from what you know about how the data came to be (who chose the treatment, and why), and from the data-generating process you can draw as a DAG (@sec-foundations). This is the regression version of the lesson of @sec-foundations: the no-unobserved-confounders assumption is a claim about the world, not a property of the data set.
+
 ## Categorical predictors {#sec-obs-categorical}
 
 The model above already contains two categorical predictors, and their coefficients deserve a closer look. A **0/1 variable** such as `premium` enters the model directly: its coefficient (`r round(coef(m_full)["premium"], 1)`) is the difference in listening hours between Premium subscribers and free users, holding everything else constant.
@@ -416,6 +483,17 @@ Each dummy coefficient is the difference between its category and the reference 
 
 ::: {.callout-note collapse="true" title="Under the hood: choosing the reference category"}
 The reference category is a matter of convenience, not of substance; the model is the same regardless of which category serves as the baseline. Choose the category that makes the comparisons you care about: `smartmix_obs$device <- relevel(smartmix_obs$device, ref = "Android")` makes Android the reference, so that the coefficients compare iOS and Desktop with Android. A variable stored as text (`"iOS"`, `"Android"`, …) is converted to a factor automatically, with the levels in alphabetical order — which is why it pays to set the levels yourself (@sec-describing).
+:::
+
+::: {.callout-tip title="Coding block 2: a loyalty program (25 min)"}
+An online shop lets customers **opt into** its loyalty program. The data set `loyalty_program.csv` contains 1,500 customers: membership (`member`, 1/0), spending this year (`spending`, euros), spending in the previous year (`spend_prev`), tenure in years, and the main device (`device`).
+
+1.  **Naive comparison:** regress `spending` on `member`. Interpret the coefficient — and say why it is probably not the causal effect of the program.
+2.  **Adjustment:** add `spend_prev`, `tenure`, and `device`. How does the `member` coefficient change, and what does it mean now? Report it with its 95% confidence interval.
+3.  Interpret the coefficient of `device`.
+4.  Is membership **exogenous** after adjustment? Argue from the data-generating process: who joins a loyalty program, and is everything that drives this in the model?
+
+The solutions will be available after the session.
 :::
 
 ## Prediction vs. explanation {#sec-obs-prediction}
@@ -489,11 +567,21 @@ fig_campaign_fits()
 
 ### The log-log model and elasticities
 
-Taking logarithms of both the outcome and the predictor gives the **log-log model**:
+Diminishing returns are what a **multiplicative** model produces. Instead of adding up the contributions of the predictors, it multiplies them:
 
 $$
-\log(\text{streams}) = \beta_0 + \beta_1 \log(\text{spend}) + \varepsilon
+\text{streams}_i = e^{\beta_0} \cdot \text{spend}_i^{\,\beta_1} \cdot \text{followers}_i^{\,\beta_2} \cdot e^{\varepsilon_i}
 $$
+
+Each additional euro of spend now adds a *percentage* of the current streams rather than a fixed number — a power smaller than one bends the curve exactly as in @fig-campaign-fits. Taking the logarithm of both sides turns the product into a sum, and the model becomes a linear regression again, the **log-log model**:
+
+$$
+\log(\text{streams}_i) = \beta_0 + \beta_1 \log(\text{spend}_i) + \beta_2 \log(\text{followers}_i) + \varepsilon_i
+$$
+
+::: {.callout-note collapse="true" title="Under the hood: the log rules behind the log-log model"}
+Three rules of logarithms do the work: $\log(a \cdot b) = \log a + \log b$ (a product becomes a sum), $\log(a^b) = b \log a$ (a power becomes a factor), and $\log(e^x) = x$. Applied to the multiplicative model: $\log(e^{\beta_0} \cdot \text{spend}^{\beta_1} \cdot \text{followers}^{\beta_2} \cdot e^{\varepsilon})$ = $\beta_0 + \beta_1 \log(\text{spend}) + \beta_2 \log(\text{followers}) + \varepsilon$. Compare the two worlds: in the additive level-level model, $\text{streams}_i = \beta_0 + \beta_1 \text{spend}_i + \dots$, each euro adds $\beta_1$ streams regardless of anything else; in the multiplicative model, the effect of spend is *scaled* by the followers and by the current level of streams. The log transformation is what lets `lm()` estimate the multiplicative model: we fit a straight line to the logged variables and read the coefficients as powers of the original ones.
+:::
 
 ```{r}
 model_loglog <- lm(log(streams) ~ log(spend) + log(followers) + placements + genre, data = campaigns)
@@ -587,38 +675,106 @@ linear slope: <b>${r3.lin.b.toFixed(1)}</b> streams per euro, the same at every 
 **What to look for.** Below an elasticity of 1, returns diminish and the linear line misses the curve at both ends. At exactly 1, the relationship is proportional and both models agree. Above 1, returns increase — rare in marketing, but it happens with network effects.
 :::
 
+::: {.callout-tip title="Coding block 3: podcast promotion, revisited (25 min)"}
+Back to `podcast_promo.csv` from coding block 1.
+
+1.  Draw the scatter plot of downloads against promotion spend again, now with **both axes logged**. What has changed?
+2.  Fit the **log-log model** of downloads on promotion spend and host followers. Interpret both coefficients as **elasticities**: what does a 10% increase in spend do to downloads?
+3.  Compare the **R²** of the log-log model with the linear model from block 1. Which model would you use to advise the network on its promotion budget?
+
+The solutions will be available after the session.
+:::
+
 ## Yes/no outcomes: logistic regression {#sec-obs-logistic}
 
 ### Why not a straight line?
 
-Many outcomes are yes/no: did the user churn, click, buy, upgrade? The variable `churn` in the Smart Mix data records whether a user cancelled within three months after the launch; `r round(100 * mean(smartmix_obs$churn), 1)`% did. A regression of such a 0/1 outcome on listening hours fits a straight line through a cloud of zeros and ones (@fig-logistic, orange). It can be read as a model of the *probability* of churn — but a straight line produces probabilities below zero for heavy listeners and would exceed one at the other end, and it cannot capture that the effect of one more hour is larger for users at risk than for users who are safe anyway.
+Many outcomes are yes/no: did the user churn, click, buy, upgrade? The Smart Mix data record for every **free user** whether they **upgraded to Premium** within three months after the launch (`upgraded`); `r round(100 * mean(free_users$upgraded), 1)`% did. Does listening time predict an upgrade? A regression of such a 0/1 outcome on listening hours fits a straight line through a cloud of zeros and ones (@fig-logistic, orange). It can be read as a model of the *probability* of an upgrade, but it produces probabilities **below zero** for light listeners and **above one** for heavy listeners — impossible values — and it misses the shape of the data: the share of upgrades (dark dots) rises slowly at first, steeply in the middle, and flattens out near 100% at the top.
 
 ```{r}
 #| label: fig-logistic
 #| echo: false
 #| fig-width: 7
-#| fig-height: 4
-#| fig-cap: "Churn and listening hours: a linear probability model (orange) and a logistic model (blue). Dark dots are the observed churn rates per 10-hour bin."
-fig_logistic()
+#| fig-height: 4.2
+#| fig-cap: "Upgrades and listening hours among free users: a linear probability model (orange) and a logistic model (blue). Dark dots are the observed upgrade shares per 5-hour bin."
+fig_logistic_upgrade()
 ```
 
-**Logistic regression** fixes this with an S-shaped curve that stays between 0 and 1. It models the probability of the outcome as a function of the predictors — the same predictors, the same idea of holding others constant, only a different link between the predictors and the outcome. In R, `glm()` with `family = binomial`:
+### The logistic function
+
+Instead of a straight line, we need a function that only takes values between 0 and 1. The **logistic function** does this:
+
+$$
+P(y_i = 1) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x_i)}}
+$$
+
+where $e$ is the base of the natural logarithm. For very negative values of $\beta_0 + \beta_1 x_i$ the denominator is huge and the probability is close to 0; for very positive values it is close to 1; in between, the function traces the S-curve of @fig-logistic. The function is derived from the **log-odds**: the **odds** of an event are the probability of the event divided by the probability of the non-event, $P / (1 - P)$ — a probability of 0.2 corresponds to odds of 0.25, or "1 to 4". Logistic regression assumes that the *logarithm* of the odds is a linear function of the predictors,
+
+$$
+\log \left( \frac{P(y_i = 1)}{1 - P(y_i = 1)} \right) = \beta_0 + \beta_1 x_i
+$$
+
+Exponentiating both sides gives the odds, $\frac{P(y_i = 1)}{1 - P(y_i = 1)} = e^{\beta_0 + \beta_1 x_i}$, and solving for $P$ gives the logistic function above. The logarithm stretches the odds over the whole number line, so that a linear function can never produce impossible probabilities. **Logistic regression** is this model with the same ingredients as before — one or more predictors, the idea of holding the others constant — and a different link between the predictors and the outcome. In R, `glm()` ("generalized linear model") with `family = binomial`:
+
+```{r}
+free_users <- filter(smartmix_obs, premium == 0)
+model_upgrade <- glm(upgraded ~ hours, family = binomial, data = free_users)
+summary(model_upgrade)
+```
+
+::: {.callout-note collapse="true" title="Under the hood: maximum likelihood"}
+There is no line and no residual to square, so logistic regression cannot use least squares. It uses **maximum likelihood** instead: for given coefficients, the model assigns every user a probability of upgrading, $P_i$; the *likelihood* of the data is the probability of observing exactly the upgrades and non-upgrades we saw, $\prod_i P_i^{\,y_i} (1 - P_i)^{\,1 - y_i}$ — users who upgraded contribute $P_i$, users who did not contribute $1 - P_i$. The estimates $\hat{\beta}_0$ and $\hat{\beta}_1$ are the values that make this product (or, more conveniently, its logarithm) as large as possible: the coefficients under which the observed data would have been most likely. There is no formula for the maximum; `glm()` finds it by iteration, which is why the output reports a number of "Fisher Scoring iterations". The standard errors, *z*-values, and *p*-values in the output are read like those of `lm()`; the *t*-distribution is replaced by the normal distribution.
+:::
+
+### Reading the coefficients
+
+```{r}
+#| echo: false
+b_up <- coef(model_upgrade)
+p_at <- function(h) predict(model_upgrade, newdata = data.frame(hours = h), type = "response")
+```
+
+The coefficient of `hours`, `r round(b_up["hours"], 3)`, is the change in the **log-odds** of an upgrade per additional listening hour — a scale nobody has an intuition for. Three things can be read directly, however: the **sign** (positive: more listening, higher probability), the **significance** (*p* < 0.001), and, after exponentiating, the **odds ratio**:
+
+```{r}
+exp(coef(model_upgrade))
+```
+
+$e^{\hat{\beta}_1}$ = `r round(exp(b_up["hours"]), 2)`: for each additional listening hour, the **odds** of an upgrade are `r round(exp(b_up["hours"]), 2)` times as high, i.e., they increase by `r round(100 * (exp(b_up["hours"]) - 1))`% — and this factor is the same everywhere on the curve. Odds ratios are common in research reports, but they are easily misread as ratios of probabilities (they are not, unless the event is rare).
+
+For managers, **probabilities** are the better language, and `predict()` with `type = "response"` returns them for any value of the predictor:
+
+```{r}
+predict(model_upgrade, newdata = data.frame(hours = c(10, 11, 20, 21, 30, 31, 40, 41)), type = "response")
+```
+
+A free user who listens 10 hours a month has an upgrade probability of about `r round(100 * p_at(10))`%; at 30 hours it is `r round(100 * p_at(30))`%. Now compare each value with the value **one hour later** (@fig-logistic-steps): from 10 to 11 hours, the probability rises by `r round(100 * (p_at(11) - p_at(10)), 1)` percentage points; from 20 to 21 by `r round(100 * (p_at(21) - p_at(20)), 1)`; from 30 to 31 by `r round(100 * (p_at(31) - p_at(30)), 1)`; from 40 to 41 by `r round(100 * (p_at(41) - p_at(40)), 1)`. The **same** coefficient — the same odds ratio of `r round(exp(b_up["hours"]), 2)` — translates into a **different** change in probability depending on where on the curve the user is: small at the flat ends, largest in the steep middle, around a probability of 50%. This is the characteristic property of the logistic model, and the reason why "the effect of one more hour" has no single answer in percentage points.
+
+```{r}
+#| label: fig-logistic-steps
+#| echo: false
+#| fig-width: 7
+#| fig-height: 4.2
+#| fig-cap: "The predicted probability of an upgrade, and the change from one more listening hour at four points on the curve. The odds ratio is the same everywhere; the change in probability is not."
+fig_logistic_steps()
+```
+
+Three ways to report the size of an effect, then: the **odds ratio** (one number, constant, but hard to interpret), **predicted probabilities at chosen values** (e.g., 10 vs. 30 hours), and the **average effect** across all users — the mean difference in predicted probabilities when the variable is changed by one unit for everybody. As with `lm()`, `confint()` gives confidence intervals for the coefficients; exponentiating them gives intervals for the odds ratios:
+
+```{r}
+exp(confint(model_upgrade))
+```
+
+### Several predictors
+
+Everything extends to several predictors exactly as in @sec-obs-adjust: each coefficient describes the association with the log-odds, holding the other variables constant. For example, `churn` records whether a user cancelled within three months after the launch (`r round(100 * mean(smartmix_obs$churn), 1)`% did):
 
 ```{r}
 model_churn <- glm(churn ~ hours + premium + tenure + smart_mix, family = binomial, data = smartmix_obs)
 summary(model_churn)
 ```
 
-### Reading the coefficients
-
-The coefficients are on a transformed scale (log-odds), which makes them hard to read directly. Two things can be read without any transformation: the **sign** (negative: the variable reduces the probability of churn) and the **significance** (listening hours, Premium, and tenure clearly matter; Smart Mix adoption does not, once the others are held constant). For the **size** of the effects, the most useful approach is to translate them into probabilities. R's `predict()` does this for any combination of predictor values:
-
-```{r}
-typical_user <- data.frame(hours = c(10, 20, 30), premium = 0, tenure = 24, smart_mix = 0)
-predict(model_churn, newdata = typical_user, type = "response")
-```
-
-A free user with two years of tenure who listens 10 hours a month has a churn probability of about `r round(100 * predict(model_churn, newdata = data.frame(hours = 10, premium = 0, tenure = 24, smart_mix = 0), type = "response"))`%; at 30 hours, it falls to about `r round(100 * predict(model_churn, newdata = data.frame(hours = 30, premium = 0, tenure = 24, smart_mix = 0), type = "response"))`%. Differences between such predicted probabilities are effects in **percentage points**, the unit managers understand. A convenient summary is the **average effect** of a variable across all users — for example, of Premium status:
+Listening hours, Premium, and tenure clearly matter; Smart Mix adoption does not, once the others are held constant. The average effect of Premium status in percentage points:
 
 ```{r}
 p_free    <- predict(model_churn, newdata = mutate(smartmix_obs, premium = 0), type = "response")
@@ -626,12 +782,10 @@ p_premium <- predict(model_churn, newdata = mutate(smartmix_obs, premium = 1), t
 mean(p_premium - p_free)
 ```
 
-Premium subscribers are about `r abs(round(100 * mean(predict(model_churn, newdata = mutate(smartmix_obs, premium = 1), type = "response") - predict(model_churn, newdata = mutate(smartmix_obs, premium = 0), type = "response")), 1))` percentage points less likely to churn than otherwise identical free users. (Whether this is a *causal* effect of the subscription is, of course, the same question as in @sec-obs-adjust.)
+Premium subscribers are about `r abs(round(100 * mean(predict(model_churn, newdata = mutate(smartmix_obs, premium = 1), type = "response") - predict(model_churn, newdata = mutate(smartmix_obs, premium = 0), type = "response")), 1))` percentage points less likely to churn than otherwise identical free users. (Whether this is a *causal* effect of the subscription is, of course, the same question as in @sec-obs-adjust: exogeneity is required here too.)
 
-::: {.callout-note collapse="true" title="Under the hood: odds, log-odds, and odds ratios"}
-Logistic regression models the **log-odds** of the outcome as a linear function of the predictors: $\log\frac{p}{1-p} = \beta_0 + \beta_1 x_1 + \dots$. The odds $p / (1-p)$ compare the probability of the event with the probability of the non-event (a probability of 0.2 corresponds to odds of 0.25, or "1 to 4"); the logarithm stretches them over the whole number line, so that a linear function can never produce impossible probabilities. The S-shaped curve in @fig-logistic is the inverse of this transformation.
-
-Exponentiating a coefficient gives an **odds ratio**: `exp(coef(model_churn))`. An odds ratio of `r round(exp(coef(model_churn)["premium"]), 2)` for Premium means that the odds of churning are `r round(100 * (1 - exp(coef(model_churn)["premium"])))`% lower for Premium subscribers. Odds ratios are common in research reports, but they are easily misread as ratios of probabilities (they are not, unless the event is rare). For communication, predicted probabilities and percentage-point differences are usually the better choice.
+::: {.callout-note collapse="true" title="Under the hood: how good is the model? Pseudo-R²"}
+There is no R² for a logistic regression, because there are no squared residuals. The usual substitute is **McFadden's pseudo-R²**, which compares the log-likelihood of the model with that of a model without predictors: $1 - \log L_{\text{model}} / \log L_{\text{null}}$ — in R, `1 - model_upgrade$deviance / model_upgrade$null.deviance`. Values are much lower than those of a linear R²; 0.2 to 0.4 already indicates a good fit. For prediction, the share of correctly classified users (with a cutoff of 0.5) or the area under the ROC curve are the more practical measures.
 :::
 
 ## The diagnostics that change decisions {#sec-obs-diagnostics}
@@ -690,6 +844,16 @@ Often, the funnel disappears when the outcome is logged — another reason why t
 **Influence** is measured by **Cook's distance**, which combines how far an observation lies from the others in the predictors with how badly the model fits it: `cooks.distance(model)`; values far above the others (a common rule: above 4/*n*, or above 1) deserve a look. **Heteroskedasticity** can be tested formally with the Breusch–Pagan test, `lmtest::bptest(model)`, but the robust standard errors are the practical answer either way — many analysts use them by default.
 
 Two classic diagnostics are *not* on the list above. **Normality of the residuals** matters little with the sample sizes of this course, thanks to the central limit theorem (@sec-uncertainty); a Q-Q plot (`plot(model, which = 2)`) is worth a glance for extreme outliers, not for its own sake. And **multicollinearity** affects the precision of coefficients, not their validity (@sec-obs-adjust); it is a problem only when the coefficients of the correlated variables are what you need.
+:::
+
+::: {.callout-tip title="Coding block 4: winning back users (25 min)"}
+1,200 users who uninstalled the app received a win-back offer with a **randomly assigned discount** of 0% to 60%. The data set `app_reinstall.csv` records the discount (`discount`), the user's sessions in the month before uninstalling (`prior_use`), and whether the user **reinstalled** the app within 30 days (`reinstalled`, 1/0).
+
+1.  Compute the **share of reinstalls per discount level** and plot it against the discount. Describe the shape.
+2.  Fit a **logistic regression** of `reinstalled` on `discount` and `prior_use`. Interpret the sign and the **odds ratio** of the discount.
+3.  Predict the reinstall probability for a user with 10 prior sessions at a discount of **10%, 11%, 40%, and 41%**. By how many percentage points does one more point of discount change the probability in each case — and why do the two answers differ?
+
+The solutions will be available after the session.
 :::
 
 ## A quasi-experiment: difference-in-differences {#sec-obs-did}
@@ -775,8 +939,10 @@ By hand: (`r round(dd4$m[4], 2)` − `r round(dd4$m[3], 2)`) − (`r round(dd4$m
 The same estimate comes out of a regression with three terms — the treatment group dummy, the post-period dummy, and their product:
 
 $$
-\log(\text{streams}) = \beta_0 + \beta_1 \, \text{treated} + \beta_2 \, \text{post} + \beta_3 \, (\text{treated} \times \text{post}) + \varepsilon
+\log(\text{streams}_{it}) = \beta_0 + \beta_1 \, \text{treated}_i + \beta_2 \, \text{post}_t + \beta_3 \, (\text{treated}_i \times \text{post}_t) + \varepsilon_{it}
 $$
+
+Here $i$ indexes the song and $t$ the week: `treated` varies between songs, `post` between weeks, and the outcome and the error term vary over both.
 
 ```{r}
 model_did <- lm(log_streams ~ treated * post, data = did_data)
@@ -805,7 +971,7 @@ placebo_data <- did_data |>
   filter(post == 0) |>                                  # pre-period only
   mutate(fake_post = ifelse(week >= as.Date("2018-02-12"), 1, 0))
 
-coef_table(lm(log_streams ~ treated * fake_post, data = placebo_data))["treated:fake_post", ]
+round(coef(summary(lm(log_streams ~ treated * fake_post, data = placebo_data)))["treated:fake_post", ], 3)
 ```
 
 The placebo effect is close to zero and not significant — the pre-trends are parallel. Had the treated songs been on a rising trend before the listing (say, because they were already becoming hits, which is why the playlist editors picked them), the DiD would attribute that trend to the listing.
@@ -874,7 +1040,7 @@ The simple regression above treats the two groups and the two periods as homogen
 
 This chapter equipped you with two strategies for causal questions without randomization, and with a tool that is useful regardless of causality. (For a deeper, still readable treatment of these strategies, @angrist2009 remains the standard reference.)
 
-- **Adjustment** (@sec-obs-adjust) handles confounders you can **measure**. It is only as good as your variables: with a perfect proxy for the confounder, it recovers the truth; with no proxy, it changes nothing. The assumption that nothing important is left unmeasured can never be tested in the data.
+- **Adjustment** (@sec-obs-adjust) handles confounders you can **measure**. It is only as good as your variables: with a perfect proxy for the confounder, it recovers the truth; with no proxy, it changes nothing. The assumption behind it — **exogeneity**, the treatment is uncorrelated with everything left in the error term — can never be tested in the data; it has to be argued from theory and from how the data came to be.
 - **Difference-in-differences** (@sec-obs-did) handles confounders that are **constant over time**, measured or not — but it requires parallel trends, which the pre-period can make plausible but never prove.
 - **Prediction** (@sec-obs-prediction) needs no causal assumptions at all. A regression that predicts well is valuable even if none of its coefficients can be interpreted as an effect.
 

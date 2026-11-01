@@ -324,3 +324,104 @@ coef_table <- function(model, digits = 3) {
   rownames(out) <- rownames(tab)
   out
 }
+
+
+
+# ------------------------------------------------------------------
+# Additions to R/ch05-figures.R (November 2026): correlation, R-squared,
+# logistic function. Paste at the end of ch05-figures.R.
+# ------------------------------------------------------------------
+
+# --- 5.2: what the correlation coefficient looks like --------------------------
+fig_correlation_panels <- function(base_size = 12) {
+  set.seed(7)
+  rs <- c(-0.9, -0.5, 0, 0.3, 0.6, 0.95)
+  d <- bind_rows(lapply(rs, function(r) {
+    x <- rnorm(150); y <- r * x + sqrt(1 - r^2) * rnorm(150)
+    data.frame(r = sprintf("r = %.2f", cor(x, y)), target = r, x, y)
+  }))
+  d$r <- factor(d$r, levels = unique(d$r))
+  ggplot(d, aes(x, y)) +
+    geom_point(alpha = 0.5, color = wu_blue, size = 1.2) +
+    facet_wrap(~r, nrow = 2) +
+    labs(x = "x", y = "y") +
+    theme_course(base_size) + theme(axis.text = element_blank())
+}
+
+fig_correlation_nonlinear <- function(base_size = 12) {
+  set.seed(8)
+  x <- runif(200, -3, 3); y <- 4 - x^2 + rnorm(200, 0, 0.8)
+  d <- data.frame(x, y)
+  ggplot(d, aes(x, y)) +
+    geom_point(alpha = 0.5, color = wu_blue, size = 1.2) +
+    geom_smooth(method = "lm", se = FALSE, color = wu_orange, linewidth = 1) +
+    labs(x = "x", y = "y", subtitle = sprintf("A clear relationship, but r = %.2f: the correlation only measures linear association", cor(x, y))) +
+    theme_course(base_size) + theme(axis.text = element_blank())
+}
+
+# --- 5.3: the same line, different amounts of scatter -> different R-squared -----
+fig_r2_panels <- function(base_size = 12) {
+  set.seed(9)
+  targets <- c(0.05, 0.3, 0.6, 0.9)
+  d <- bind_rows(lapply(targets, function(r2) {
+    x <- runif(120, 0, 10); signal <- 2 + 0.8 * x
+    noise_sd <- sqrt(var(signal) * (1 - r2) / r2)
+    y <- signal + rnorm(120, 0, noise_sd)
+    fit <- lm(y ~ x)
+    data.frame(panel = sprintf("R\u00b2 = %.2f", summary(fit)$r.squared), x, y, fitted = fitted(fit))
+  }))
+  d$panel <- factor(d$panel, levels = unique(d$panel))
+  ggplot(d, aes(x, y)) +
+    geom_segment(aes(xend = x, yend = fitted), color = wu_orange, alpha = 0.35) +
+    geom_point(alpha = 0.6, color = wu_grey, size = 1.1) +
+    geom_line(aes(y = fitted), color = wu_blue, linewidth = 1.1) +
+    facet_wrap(~panel, nrow = 1, scales = "free_y") +
+    labs(x = "x", y = "y") +
+    theme_course(base_size) + theme(axis.text = element_blank())
+}
+
+# --- 5.8: the logistic function for upgrades (free users) -----------------------
+load_free_users <- function() load_smartmix() |> filter(premium == 0)
+
+fig_logistic_upgrade <- function(d = load_free_users(), base_size = 13) {
+  lp <- lm(upgraded ~ hours, d)
+  lg <- glm(upgraded ~ hours, family = binomial, d)
+  grid <- data.frame(hours = seq(0, 70, length.out = 300))
+  grid$`Linear model` <- predict(lp, grid)
+  grid$`Logistic model` <- predict(lg, grid, type = "response")
+  long <- pivot_longer(grid, -hours, names_to = "model", values_to = "p")
+  bins <- d |> mutate(bin = cut(hours, breaks = seq(0, 70, 5), include.lowest = TRUE)) |>
+    group_by(bin) |> summarise(hours = mean(hours), share = mean(upgraded), n = n()) |> filter(n >= 8)
+  ggplot() +
+    geom_jitter(data = d, aes(hours, upgraded), width = 0, height = 0.03, alpha = 0.08, color = wu_grey, size = 1) +
+    geom_point(data = bins, aes(hours, share), color = wu_dark, size = 3) +
+    geom_line(data = long, aes(hours, p, color = model), linewidth = 1.2) +
+    geom_hline(yintercept = c(0, 1), linetype = "dotted", color = "grey50") +
+    scale_color_manual(values = c(`Linear model` = wu_orange, `Logistic model` = wu_blue), name = NULL) +
+    coord_cartesian(xlim = c(0, 70), ylim = c(-0.15, 1.15)) +
+    labs(x = "Listening hours", y = "Upgraded to Premium (0 = no, 1 = yes)",
+         subtitle = "Free users · dark dots: share of upgrades per 5-hour bin") +
+    theme_course(base_size)
+}
+
+# The predicted probabilities at a few listening times: one more hour changes the
+# probability by different amounts, while the odds ratio stays the same
+fig_logistic_steps <- function(d = load_free_users(), at = c(10, 20, 30, 40), base_size = 13) {
+  lg <- glm(upgraded ~ hours, family = binomial, d)
+  grid <- data.frame(hours = seq(0, 70, length.out = 300)); grid$p <- predict(lg, grid, type = "response")
+  pts <- data.frame(hours = c(at, at + 1)); pts$p <- predict(lg, pts, type = "response")
+  steps <- data.frame(x = at, p0 = predict(lg, data.frame(hours = at), type = "response"),
+                      p1 = predict(lg, data.frame(hours = at + 1), type = "response"))
+  steps$label <- sprintf("%d \u2192 %d h: %+.1f points", at, at + 1, 100 * (steps$p1 - steps$p0))
+  ggplot(grid, aes(hours, p)) +
+    geom_line(color = wu_blue, linewidth = 1.2) +
+    geom_segment(data = steps, aes(x = x, xend = x + 1, y = p0, yend = p0), color = wu_red) +
+    geom_segment(data = steps, aes(x = x + 1, xend = x + 1, y = p0, yend = p1), color = wu_red, linewidth = 1.2) +
+    geom_point(data = pts, aes(hours, p), color = wu_dark, size = 2.2) +
+    geom_text(data = steps, aes(x = x + 1.5, y = p0 + 0.03, label = label), hjust = 0, size = base_size / 3.6, color = wu_red) +
+    coord_cartesian(xlim = c(0, 60), ylim = c(0, 1)) +
+    labs(x = "Listening hours", y = "Predicted probability of an upgrade",
+         subtitle = "One more hour: the same odds ratio everywhere, a different change in probability") +
+    theme_course(base_size)
+}
+

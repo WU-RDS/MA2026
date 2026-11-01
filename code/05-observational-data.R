@@ -1,50 +1,51 @@
 # ======================================================================
 # Marketing Analytics — Chapter 5: Learning from Observational Data
-# Companion code to Chapter 5 of the course book. The chapter explains
-# every step in detail; this script collects the code in one place.
+# The regressions of Chapter 5 in R. The chapter on the course website
+# explains the logic, the simulations, and the interpretation; this
+# script contains the code you need to run the models on your own data.
 # ======================================================================
 
 
 # ----------------------------------------------------------------------
-# 0. Setup
+# 0. Setup and data
 # ----------------------------------------------------------------------
 
 library(tidyverse)
+library(sandwich)     # robust standard errors (section 5.9)
+library(lmtest)       # coeftest()
 options(scipen = 5, digits = 4)
 
 base_url <- "https://raw.githubusercontent.com/wu-rds/MA2026/main/data/"
 
-# --- A small helper: tidy coefficient tables -------------------------------
-# Rounds estimates, standard errors and test statistics, and formats
-# p-values the way journals report them (three decimals, "< 0.001").
-coef_table <- function(model, digits = 3) {
-  tab <- coef(summary(model))
-  out <- data.frame(
-    Estimate     = round(tab[, 1], digits),
-    `Std. Error` = round(tab[, 2], digits),
-    statistic    = round(tab[, 3], 2),
-    `p-value`    = ifelse(tab[, 4] < 0.001, "< 0.001", sprintf("%.3f", tab[, 4])),
-    check.names = FALSE
-  )
-  names(out)[3] <- colnames(tab)[3]
-  rownames(out) <- rownames(tab)
-  out
-}
+# All data sets of this chapter:
 
-
-
-# ======================================================================
-# 5.1 Smart Mix without randomization
-# ======================================================================
-
-# 2,000 users of the streaming service; Smart Mix was launched as an
-# opt-in feature (simulated data; true effect: +3 hours)
+# 5.1–5.6, 5.8  Smart Mix as an opt-in feature: 2,000 users (simulated; true effect +3 hours)
 smartmix_obs <- read_csv(paste0(base_url, "smartmix_obs.csv")) |>
   mutate(device = factor(device, levels = c("iOS", "Android", "Desktop")))
 
-glimpse(smartmix_obs)
+# Coding blocks 1 and 3  Podcast promotion: 400 episodes
+podcast_promo <- read_csv(paste0(base_url, "podcast_promo.csv"))
 
-# The naive comparison: adopters vs. non-adopters
+# Coding block 2  Loyalty program of an online shop: 1,500 customers (opt-in)
+loyalty_program <- read_csv(paste0(base_url, "loyalty_program.csv")) |>
+  mutate(device = factor(device, levels = c("Desktop", "Mobile")))
+
+# 5.7, 5.9  Promotion campaigns for new releases: 500 campaigns (simulated)
+campaigns <- read_csv(paste0(base_url, "campaigns.csv")) |>
+  mutate(genre = factor(genre, levels = c("Pop", "HipHop/Rap", "Rock", "Electro/Dance")))
+
+# Coding block 4  Win-back offers: 1,200 users who uninstalled the app
+app_reinstall <- read_csv(paste0(base_url, "app_reinstall.csv"))
+
+# 5.10  Playlist listings: 290 songs x 21 weeks (real data, WU-RDS research project)
+playlist <- read_csv(paste0(base_url, "playlist_did.csv")) |>
+  mutate(week = as.Date(week))
+
+
+# ======================================================================
+# 5.1 The naive comparison
+# ======================================================================
+
 smartmix_obs |>
   group_by(smart_mix) |>
   summarise(n = n(), hours = mean(hours), prior_hours = mean(prior_hours))
@@ -56,16 +57,19 @@ smartmix_obs |>
 # 5.2 From correlation to a line
 # ======================================================================
 
+# The correlation coefficient
 cor(smartmix_obs$prior_hours, smartmix_obs$hours)
 
+# Scatter plot with the regression line
 ggplot(smartmix_obs, aes(prior_hours, hours)) +
   geom_point(alpha = 0.25) +
   geom_smooth(method = "lm", se = FALSE) +
   labs(x = "Listening hours before the launch", y = "Listening hours after the launch") +
   theme_minimal()
 
-# The regression line: intercept and slope
-coef(lm(hours ~ prior_hours, data = smartmix_obs))
+# The regression line (OLS): intercept and slope
+model_line <- lm(hours ~ prior_hours, data = smartmix_obs)
+coef(model_line)
 
 
 # ======================================================================
@@ -73,11 +77,31 @@ coef(lm(hours ~ prior_hours, data = smartmix_obs))
 # ======================================================================
 
 model_naive <- lm(hours ~ smart_mix, data = smartmix_obs)
-summary(model_naive)
-confint(model_naive)
+summary(model_naive)                       # the full output
+confint(model_naive)                       # confidence intervals of the coefficients
+round(coef(summary(model_naive)), 3)       # the coefficient table, rounded (for reports)
+summary(model_naive)$r.squared             # R-squared
 
 # With one 0/1 predictor, the regression is the comparison of two means
 t.test(hours ~ smart_mix, data = smartmix_obs, var.equal = TRUE)
+
+
+# ======================================================================
+# CODING BLOCK 1: podcast promotion (25 min)
+# ======================================================================
+# 400 episodes: promotion spend (euros), host followers, downloads in the
+# release week. Solutions: 05-your-turn-solutions.R
+
+head(podcast_promo)                        # loaded at the top
+
+# Tasks:
+# (1) Scatter plot of downloads (y) against promo_spend (x); compute the
+#     correlation; describe the relationship in one sentence
+# (2) Regression of downloads on promo_spend: summary(); interpret the slope
+#     in words; read off R-squared
+# (3) Is the slope a causal effect of promotion? What would you need to argue?
+
+# your code here
 
 
 # ======================================================================
@@ -94,13 +118,9 @@ summary(model_full)
 confint(model_full)["smart_mix", ]
 
 # Compare: naive 9.3 -> adjusted 4.5 -> experiment (Chapter 4) 3.2 -> truth 3.0
-
-# Your turn: does age change anything? (Is age a confounder here?)
-model_age <- lm(hours ~ smart_mix + prior_hours + tenure + premium + device + age, data = smartmix_obs)
-coef_table(model_age)["smart_mix", ]
-
-# Multicollinearity check: variance inflation factors (values > 5 deserve attention)
-car::vif(model_full)
+# The assumption behind adjustment: exogeneity, Cov(smart_mix, error) = 0 —
+# it cannot be tested in the data; it has to be argued from theory and from
+# how the data came to be (who adopted Smart Mix, and why)
 
 
 # ======================================================================
@@ -122,6 +142,27 @@ smartmix_obs |>
 
 
 # ======================================================================
+# CODING BLOCK 2: a loyalty program (25 min)
+# ======================================================================
+# 1,500 customers of an online shop; membership in the loyalty program is
+# opt-in. Solutions: 05-your-turn-solutions.R
+
+head(loyalty_program)                      # loaded at the top
+
+# Tasks:
+# (1) Naive comparison: regress spending on member; interpret the coefficient
+#     and say why it is probably not the causal effect of the program
+# (2) Adjustment: add spend_prev, tenure and device; how does the member
+#     coefficient change, and what does it mean now? Report it with its 95% CI
+# (3) Interpret the coefficient of device
+# (4) Is membership exogenous after adjustment? Argue from the data-generating
+#     process: who joins a loyalty program, and is everything that drives this
+#     in the model?
+
+# your code here
+
+
+# ======================================================================
 # 5.6 Prediction vs. explanation
 # ======================================================================
 
@@ -136,25 +177,18 @@ test$predicted <- predict(model_pred, newdata = test)
 
 sqrt(mean((test$hours - test$predicted)^2))   # typical prediction error (RMSE)
 
-# In-sample comparison of model size: adjusted R-squared and AIC
-summary(model_pred)$adj.r.squared
-AIC(model_pred)
-
 
 # ======================================================================
 # 5.7 Functional form: when the straight line is wrong
 # ======================================================================
 
-# 500 promotion campaigns (simulated): spend, playlist placements,
-# artist followers, and streams in the first four weeks
-campaigns <- read_csv(paste0(base_url, "campaigns.csv")) |>
-  mutate(genre = factor(genre, levels = c("Pop", "HipHop/Rap", "Rock", "Electro/Dance")))
-
+# Promotion campaigns: streams vs. spend on the original scale ...
 ggplot(campaigns, aes(spend, streams)) +
   geom_point(alpha = 0.3) +
   geom_smooth(method = "lm", se = FALSE) +
   theme_minimal()
 
+# ... and with both axes logged
 ggplot(campaigns, aes(log(spend), log(streams))) +
   geom_point(alpha = 0.3) +
   geom_smooth(method = "lm", se = FALSE) +
@@ -172,30 +206,66 @@ summary(model_loglog)
 # Exact percentage change for a log-level coefficient
 100 * (exp(coef(model_loglog)["placements"]) - 1)
 
-# Your turn: what does doubling the spend do to streams, according to the model?
+# What does doubling the spend do to streams, according to the model?
 100 * (2^coef(model_loglog)["log(spend)"] - 1)
+
+
+# ======================================================================
+# CODING BLOCK 3: podcast promotion, revisited (25 min)
+# ======================================================================
+# Back to podcast_promo. Solutions: 05-your-turn-solutions.R
+
+# Tasks:
+# (1) Scatter plot of downloads against promo_spend with both axes logged:
+#     what has changed?
+# (2) Log-log model of downloads on promo_spend and host_followers; interpret
+#     both coefficients as elasticities: what does +10% spend do to downloads?
+# (3) Compare R-squared with the linear model from block 1; which model would
+#     you use to advise the network on its promotion budget?
+
+# your code here
 
 
 # ======================================================================
 # 5.8 Yes/no outcomes: logistic regression
 # ======================================================================
 
-mean(smartmix_obs$churn)   # share of users who cancelled within three months
+# Upgrades to Premium among free users: a full S-curve in listening hours
+free_users <- filter(smartmix_obs, premium == 0)
+mean(free_users$upgraded)                  # share of upgrades
 
+# Look at the data: share of upgrades per 5-hour bin
+free_users |>
+  mutate(bin = cut(hours, breaks = seq(0, 70, 5))) |>
+  group_by(bin) |>
+  summarise(n = n(), share_upgraded = mean(upgraded)) |>
+  filter(n >= 8)
+
+# Logistic regression: glm() with family = binomial
+model_upgrade <- glm(upgraded ~ hours, family = binomial, data = free_users)
+summary(model_upgrade)
+
+# Odds ratios: exp(coefficient); the odds of an upgrade per additional hour
+exp(coef(model_upgrade))
+exp(confint(model_upgrade))
+
+# Predicted probabilities at chosen values of the predictor ...
+predict(model_upgrade, newdata = data.frame(hours = c(10, 20, 30, 40)), type = "response")
+
+# ... and one hour later: the same odds ratio, a different change in probability
+predict(model_upgrade, newdata = data.frame(hours = c(11, 21, 31, 41)), type = "response")
+
+# Several predictors: churn (cancelled within three months)
 model_churn <- glm(churn ~ hours + premium + tenure + smart_mix, family = binomial, data = smartmix_obs)
 summary(model_churn)
-
-# Predicted probabilities for chosen predictor values
-typical_user <- data.frame(hours = c(10, 20, 30), premium = 0, tenure = 24, smart_mix = 0)
-predict(model_churn, newdata = typical_user, type = "response")
 
 # Average effect of Premium status in percentage points
 p_free    <- predict(model_churn, newdata = mutate(smartmix_obs, premium = 0), type = "response")
 p_premium <- predict(model_churn, newdata = mutate(smartmix_obs, premium = 1), type = "response")
 mean(p_premium - p_free)
 
-# Odds ratios (see the "Under the hood" box in the chapter)
-exp(coef(model_churn))
+# McFadden's pseudo R-squared
+1 - model_upgrade$deviance / model_upgrade$null.deviance
 
 
 # ======================================================================
@@ -208,23 +278,35 @@ plot(model_loglog, which = 1)
 
 # 2. Influence: residuals vs. leverage, with Cook's distance
 plot(model_loglog, which = 5)
-head(sort(cooks.distance(model_loglog), decreasing = TRUE))
 
 # 3. Uncertainty: robust standard errors when the residuals form a funnel
-library(sandwich)
-library(lmtest)
 coeftest(model_linear, vcov = vcovHC(model_linear, type = "HC1"))
-bptest(model_linear)   # Breusch-Pagan test for heteroskedasticity
+
+
+# ======================================================================
+# CODING BLOCK 4: winning back users (25 min)
+# ======================================================================
+# 1,200 users who uninstalled the app received a win-back offer with a
+# randomly assigned discount (0-60%). Solutions: 05-your-turn-solutions.R
+
+head(app_reinstall)                        # loaded at the top
+
+# Tasks:
+# (1) Share of reinstalls per discount level, plotted against the discount:
+#     describe the shape
+# (2) Logistic regression of reinstalled on discount and prior_use: interpret
+#     the sign and the odds ratio of the discount
+# (3) Predict the reinstall probability for a user with 10 prior sessions at a
+#     discount of 10, 11, 40 and 41 percent; by how many percentage points does
+#     one more point of discount change the probability in each case, and why
+#     do the two answers differ?
+
+# your code here
 
 
 # ======================================================================
 # 5.10 A quasi-experiment: difference-in-differences
 # ======================================================================
-
-# Real data: weekly streams of 290 songs; 53 were added to a major
-# playlist on March 19, 2018 (WU-RDS research project)
-playlist <- read_csv(paste0(base_url, "playlist_did.csv")) |>
-  mutate(week = as.Date(week))
 
 # Mean log streams by group and week
 playlist |>
@@ -255,7 +337,7 @@ summary(model_did)
 placebo_data <- did_data |>
   filter(post == 0) |>
   mutate(fake_post = ifelse(week >= as.Date("2018-02-12"), 1, 0))
-coef_table(lm(log_streams ~ treated * fake_post, data = placebo_data))["treated:fake_post", ]
+round(coef(summary(lm(log_streams ~ treated * fake_post, data = placebo_data)))["treated:fake_post", ], 3)
 
 # Your turn: add a control variable
-coef_table(lm(log_streams ~ treated * post + major_label, data = did_data))
+summary(lm(log_streams ~ treated * post + major_label, data = did_data))
