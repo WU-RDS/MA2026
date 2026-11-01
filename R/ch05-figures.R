@@ -355,7 +355,7 @@ fig_correlation_nonlinear <- function(base_size = 12) {
   ggplot(d, aes(x, y)) +
     geom_point(alpha = 0.5, color = wu_blue, size = 1.2) +
     geom_smooth(method = "lm", se = FALSE, color = wu_orange, linewidth = 1) +
-    labs(x = "x", y = "y", subtitle = sprintf("A clear relationship, but r = %.2f: the correlation only measures linear association", cor(x, y))) +
+    labs(x = "x", y = "y", subtitle = sprintf("A clear relationship, but r = %.2f", cor(x, y))) +
     theme_course(base_size) + theme(axis.text = element_blank())
 }
 
