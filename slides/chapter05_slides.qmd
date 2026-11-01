@@ -64,58 +64,6 @@ Today: correlation and the regression line → **coding block 1** → adjustment
 :::
 :::
 
-## Leftovers from Chapter 4: what a *p*-value is — and what it is not {.midsize}
-
-::: columns
-::: {.column width="50%"}
-**p = P(data | H₀)**
-
-"If there were no effect, how likely would data like ours be?"
-
-**Not:** P(H₀ | data)
-
-*P(runny nose | cold) ≠ P(cold | runny nose)*
-:::
-
-::: {.column width="50%"}
-::: discussion
-*p* = 0.031. True or false?
-
-1.  3.1% probability that Smart Mix has no effect
-2.  96.9% probability that Smart Mix works
-3.  The effect is important
-:::
-:::
-:::
-
-::: notes
-All three false. (1) reverses the conditional; (2) is the same mistake turned around; (3) p says nothing about size. Correct: if Smart Mix had no effect, a difference of at least 3.2 hours would occur in about 3.1% of experiments of this size.
-:::
-
-## Leftovers from Chapter 4: significance, size, and peeking {.midsize}
-
-::: columns
-::: {.column width="50%"}
-::: keybox
-**Significant ≠ important.** With millions of users, a two-minute difference is "significant". Whether it matters: effect size and business case.
-
-**Not significant ≠ no effect.** The Premium test: *p* = 0.08, CI [−0.2; +2.9] points — too small to tell.
-:::
-:::
-
-::: {.column width="50%"}
-::: keybox
-**Peeking.** A *p*-value checked every morning dips below 0.05 at some point even without any effect. Fix the sample size **before** the test, evaluate **once**.
-
-**Many metrics.** 20 comparisons, no effect: 64% chance of "something significant". Pre-register what you will test.
-:::
-:::
-:::
-
-::: notes
-Then: go through the quiz questions (5 minutes). The full section 4.10 is on the website.
-:::
-
 ## Today's session {.midsize}
 
 ::: columns
@@ -269,7 +217,7 @@ $$
 
 ::: {style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 1em; text-align: center; color: #58585a; margin-top: 0.5em;"}
 *Screenshot placeholder: the line-fitting widget*\
-`img/ch05/widget_line.png`
+![](../img/ch05/widget_line.png){width="10%"}
 :::
 :::
 :::
@@ -395,7 +343,7 @@ Course book, §5.4 — set the **quality of the proxy** and the **strength of co
 
 ::: {style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 1.5em; text-align: center; color: #58585a; margin-top: 0.6em;"}
 *Screenshot placeholder: the proxy widget*\
-`img/ch05/widget_proxy.png`
+![](../img/ch05/widget_proxy.png){width="50%"}
 :::
 :::
 
@@ -723,7 +671,7 @@ Course book, §5.7 — move the **true elasticity**.
 
 ::: {style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 1.5em; text-align: center; color: #58585a; margin-top: 0.6em;"}
 *Screenshot placeholder: the functional-form widget*\
-`img/ch05/widget_loglog.png`
+![](../img/ch05/widget_loglog.png){width="50%"}
 :::
 :::
 
