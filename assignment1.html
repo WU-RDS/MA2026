@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -245,8 +280,21 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#setup-the-personal-data-set" id="toc-setup-the-personal-data-set" class="nav-link active" data-scroll-target="#setup-the-personal-data-set">Setup: the personal data set</a></li>
+  <li><a href="#task-1-variables-and-levels-of-measurement-1-point" id="toc-task-1-variables-and-levels-of-measurement-1-point" class="nav-link" data-scroll-target="#task-1-variables-and-levels-of-measurement-1-point">Task 1: Variables and levels of measurement (1 point)</a></li>
+  <li><a href="#task-2-data-handling-1.5-points" id="toc-task-2-data-handling-1.5-points" class="nav-link" data-scroll-target="#task-2-data-handling-1.5-points">Task 2: Data handling (1.5 points)</a></li>
+  <li><a href="#task-3-not-trusting-your-data-too-early-1-point" id="toc-task-3-not-trusting-your-data-too-early-1-point" class="nav-link" data-scroll-target="#task-3-not-trusting-your-data-too-early-1-point">Task 3: Not trusting your data too early (1 point)</a></li>
+  <li><a href="#task-4-summarizing-data-1.5-points" id="toc-task-4-summarizing-data-1.5-points" class="nav-link" data-scroll-target="#task-4-summarizing-data-1.5-points">Task 4: Summarizing data (1.5 points)</a></li>
+  <li><a href="#task-5-visualizing-data-1.5-points" id="toc-task-5-visualizing-data-1.5-points" class="nav-link" data-scroll-target="#task-5-visualizing-data-1.5-points">Task 5: Visualizing data (1.5 points)</a></li>
+  <li><a href="#task-6-from-description-to-insight-0.5-points" id="toc-task-6-from-description-to-insight-0.5-points" class="nav-link" data-scroll-target="#task-6-from-description-to-insight-0.5-points">Task 6: From description to insight (0.5 points)</a></li>
+  <li><a href="#in-class-debrief-3-points" id="toc-in-class-debrief-3-points" class="nav-link" data-scroll-target="#in-class-debrief-3-points">In-class debrief (3 points)</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -270,21 +318,731 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled" title="Contents follow soon">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This page shows the tasks of Assignment 1 with <strong>one possible solution</strong> and the <strong>grading hints</strong> we used. Click on a blue box to expand it.</p>
+<p>The solution was computed for the example student ID <strong>12345678</strong>. Since every student worked with a personal random sample of the data and a personal focus genre, <strong>your numbers differ</strong> from the ones shown here — what matters is the approach, the code, and the interpretation. Other correct solutions (e.g., different code, different chart styling) received full points.</p>
+</div>
+</div>
+</div>
+<p><strong>Points:</strong> 7 for the report, 3 for the in-class debrief (10 in total). Unless stated otherwise, half of the points of a sub-task were given if the approach was right but the execution contained an error (e.g., a wrong variable or a missing sorting step).</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Task</th>
+<th>Topic</th>
+<th style="text-align: center;">Points</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Variables and levels of measurement</td>
+<td style="text-align: center;">1.0</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Data handling</td>
+<td style="text-align: center;">1.5</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Not trusting your data too early</td>
+<td style="text-align: center;">1.0</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Summarizing data</td>
+<td style="text-align: center;">1.5</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Visualizing data</td>
+<td style="text-align: center;">1.5</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>From description to insight</td>
+<td style="text-align: center;">0.5</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Report</strong></td>
+<td style="text-align: center;"><strong>7</strong></td>
+</tr>
+<tr class="even">
+<td>—</td>
+<td>In-class debrief (3 questions)</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Total</strong></td>
+<td style="text-align: center;"><strong>10</strong></td>
+</tr>
+</tbody>
+</table>
+<section id="setup-the-personal-data-set" class="level2">
+<h2 class="anchored" data-anchor-id="setup-the-personal-data-set">Setup: the personal data set</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>music_raw <span class="ot">&lt;-</span> <span class="fu">read_csv2</span>(<span class="st">"https://raw.githubusercontent.com/wu-rds/MA2026/main/data/music_data_fin.csv"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Personal version of the data, based on the student ID</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>student_id <span class="ot">&lt;-</span> <span class="st">"12345678"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">D"</span>, <span class="st">""</span>, student_id)))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>focus_genre <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Pop"</span>, <span class="st">"HipHop/Rap"</span>, <span class="st">"Rock"</span>, <span class="st">"Electro/Dance"</span>, <span class="st">"R&amp;B"</span>), <span class="dv">1</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>music_data  <span class="ot">&lt;-</span> <span class="fu">slice_sample</span>(music_raw, <span class="at">prop =</span> <span class="fl">0.75</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Example data set for student ID <strong>12345678</strong>: <strong>50,097</strong> tracks; focus genre: <strong>R&amp;B</strong>.</p>
+</section>
+<section id="task-1-variables-and-levels-of-measurement-1-point" class="level2">
+<h2 class="anchored" data-anchor-id="task-1-variables-and-levels-of-measurement-1-point">Task 1: Variables and levels of measurement (1 point)</h2>
+<p><strong>1a) (0.75 points)</strong> Convert the following variables in <code>music_data</code> to appropriate R types: <code>genre</code> and <code>label</code> (factors); <code>explicit</code> and <code>top10</code> (factors with meaningful labels instead of 0/1); <code>artist_id</code> (an identifier, not a number); <code>expert_rating</code> (an ordered factor with the categories poor &lt; fair &lt; good &lt; excellent &lt; masterpiece). Use <code>glimpse()</code> to show that the conversion worked.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 1a">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Contents follow soon
+<span class="screen-reader-only">Note</span>Solution and grading: 1a
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The solution to Assignment 1 will be posted here after the in-class debrief (Group A: Tue, Oct 27 · Group B: Thu, Oct 29).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="ot">&lt;-</span> music_data <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">genre         =</span> <span class="fu">as.factor</span>(genre),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">label         =</span> <span class="fu">as.factor</span>(label),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">explicit      =</span> <span class="fu">factor</span>(explicit, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"not explicit"</span>, <span class="st">"explicit"</span>)),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">top10         =</span> <span class="fu">factor</span>(top10, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"yes"</span>)),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">artist_id     =</span> <span class="fu">as.character</span>(artist_id),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">expert_rating =</span> <span class="fu">factor</span>(expert_rating,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                           <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"poor"</span>, <span class="st">"fair"</span>, <span class="st">"good"</span>, <span class="st">"excellent"</span>, <span class="st">"masterpiece"</span>),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                           <span class="at">ordered =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(<span class="fu">select</span>(music_data, genre, label, explicit, top10, artist_id, expert_rating, release_date))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 50,097
+Columns: 7
+$ genre         &lt;fct&gt; HipHop/Rap, Rock, Rock, Pop, Electro/Dance, Electro/Danc…
+$ label         &lt;fct&gt; Sony Music, Independent, Universal Music, Universal Musi…
+$ explicit      &lt;fct&gt; not explicit, explicit, not explicit, explicit, explicit…
+$ top10         &lt;fct&gt; no, no, no, no, no, no, no, no, no, yes, no, no, no, no,…
+$ artist_id     &lt;chr&gt; "853511", "4584", "4312", "111452", "14806", "5211", "20…
+$ expert_rating &lt;ord&gt; good, poor, excellent, good, good, poor, fair, fair, fai…
+$ release_date  &lt;date&gt; 2018-03-15, 2020-08-21, 2018-11-30, 2019-06-06, 2017-01…</code></pre>
+</div>
+</div>
+<p><strong>Grading:</strong> <code>expert_rating</code> as an <strong>ordered</strong> factor with the levels in the correct order (0.25) — without <code>ordered = TRUE</code> or with alphabetical levels: 0 for this part. The other five variables (0.5): all correct 0.5; one or two missing or wrong 0.25; more 0. <code>release_date</code> is already read as a date by <code>read_csv2()</code>; no conversion needed.</p>
+</div>
+</div>
+</div>
+<p><strong>1b) (0.25 points)</strong> Complete the table: what is the level of measurement of each variable, and which summary statistic is appropriate?</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Level of measurement</th>
+<th>Appropriate summary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>genre</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>expert_rating</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>release year</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>streams</code></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 1b">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 1b
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Level of measurement</th>
+<th>Appropriate summary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>genre</code></td>
+<td>nominal</td>
+<td>frequencies / mode</td>
+</tr>
+<tr class="even">
+<td><code>expert_rating</code></td>
+<td>ordinal</td>
+<td>frequencies, median</td>
+</tr>
+<tr class="odd">
+<td>release year</td>
+<td>interval</td>
+<td>mean, standard deviation (or median, range)</td>
+</tr>
+<tr class="even">
+<td><code>streams</code></td>
+<td>ratio</td>
+<td>median (skewed!), quantiles; mean and SD possible</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Grading:</strong> 0.25 points if at least three of the four rows are correct.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="task-2-data-handling-1.5-points" class="level2">
+<h2 class="anchored" data-anchor-id="task-2-data-handling-1.5-points">Task 2: Data handling (1.5 points)</h2>
+<p><strong>2a) (0.75 points)</strong> Show the <strong>ten most-streamed tracks of your focus genre</strong>. Create a new variable <code>streams_mio</code> (streams in millions), sort the tracks in descending order, and show only the columns <code>artistName</code>, <code>trackName</code>, and <code>streams_mio</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 2a">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 2a
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(genre <span class="sc">==</span> focus_genre) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">streams_mio =</span> streams <span class="sc">/</span> <span class="fl">1e6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(streams_mio)) <span class="sc">|&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(artistName, trackName, streams_mio) <span class="sc">|&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   artistName                                 trackName              streams_mio
+   &lt;chr&gt;                                      &lt;chr&gt;                        &lt;dbl&gt;
+ 1 KAROL G feat. Nicki Minaj                  Tusa                          757.
+ 2 Daddy Yankee feat. Snow                    Con Calma                     642.
+ 3 Doja Cat                                   Say So                        507.
+ 4 Jhay Cortez feat. J Balvin feat. Bad Bunny No Me Conoce - Remix          487.
+ 5 J Balvin feat. Bad Bunny                   LA CANCIÓN                    470.
+ 6 Khalid feat. Normani                       Love Lies (with Norma…        449.
+ 7 The Weeknd feat. Daft Punk                 Starboy                       439.
+ 8 The Weeknd feat. Daft Punk                 I Feel It Coming              421.
+ 9 Chris Brown feat. Drake                    No Guidance (feat. Dr…        367.
+10 Childish Gambino                           Redbone                       361.</code></pre>
+</div>
+</div>
+<p><strong>Grading:</strong> filter on the focus genre (0.25); new variable <code>streams_mio</code> and correct sorting (0.25); only the three requested columns and ten rows (0.25).</p>
+</div>
+</div>
+</div>
+<p><strong>2b) (0.75 points)</strong> For each <strong>label</strong>, compute the number of tracks, the total number of streams, the median number of streams, and the share of tracks that reached the top 10. Sort the result by the total number of streams (descending).</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 2b">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 2b
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(label) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_tracks       =</span> <span class="fu">n</span>(),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_streams  =</span> <span class="fu">sum</span>(streams),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">median_streams =</span> <span class="fu">median</span>(streams),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">share_top10    =</span> <span class="fu">mean</span>(top10 <span class="sc">==</span> <span class="st">"yes"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_streams))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 5
+  label           n_tracks total_streams median_streams share_top10
+  &lt;fct&gt;              &lt;int&gt;         &lt;dbl&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+1 Universal Music    16198  148725731060        438106.      0.114 
+2 Sony Music          9302   81456746471        349509       0.110 
+3 Independent        16966   72408555218        245342       0.0806
+4 Warner Music        7631   66836894115        350713       0.102 </code></pre>
+</div>
+</div>
+<p><strong>Grading:</strong> number of tracks and total streams per label (0.25); median and share of top-10 hits (0.25); sorting by total streams (0.25). The share of top-10 hits can also be computed via <code>count()</code> and division — full points if correct.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="task-3-not-trusting-your-data-too-early-1-point" class="level2">
+<h2 class="anchored" data-anchor-id="task-3-not-trusting-your-data-too-early-1-point">Task 3: Not trusting your data too early (1 point)</h2>
+<p><strong>3a) (0.25 points)</strong> Check the data for missing values. Then compute, for <code>youtube_views</code>, <code>tiktok_counts</code>, and <code>shazam_counts</code>, the share of tracks with a value of <strong>zero</strong>. What do you conclude?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 3a">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 3a
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(music_data))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">zero_youtube =</span> <span class="fu">mean</span>(youtube_views <span class="sc">==</span> <span class="dv">0</span>),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">zero_tiktok  =</span> <span class="fu">mean</span>(tiktok_counts <span class="sc">==</span> <span class="dv">0</span>),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">zero_shazam  =</span> <span class="fu">mean</span>(shazam_counts <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  zero_youtube zero_tiktok zero_shazam
+         &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+1        0.579       0.539       0.437</code></pre>
+</div>
+</div>
+<p>The data contain no missing values (<code>NA</code>), but a large share of zeros: about 58% of the tracks have zero YouTube views, 54% zero TikTok uses, and 44% zero Shazam searches. For charting tracks, most of these zeros are implausible and most likely mean “no data available” (disguised missing values).</p>
+<p><strong>Grading:</strong> 0.25 for the shares of zeros <strong>and</strong> their interpretation as likely missing information (checking for <code>NA</code> is expected but not graded separately). Shares without interpretation: 0.1.</p>
+</div>
+</div>
+</div>
+<p><strong>3b) (0.5 points)</strong> Check the data for <strong>implausible values</strong>: release dates after the end of 2021 (when the data were collected), a tempo of zero, and extremely short or long songs (choose and state reasonable thresholds). Report how many tracks are affected. Then create a logical flag variable <code>plausible</code> that is <code>TRUE</code> for all tracks without such problems — <strong>do not delete</strong> any rows.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 3b">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 3b
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_future_release =</span> <span class="fu">sum</span>(release_date <span class="sc">&gt;</span> <span class="fu">as.Date</span>(<span class="st">"2021-12-31"</span>)),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_tempo_zero     =</span> <span class="fu">sum</span>(tempo <span class="sc">==</span> <span class="dv">0</span>),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_very_short     =</span> <span class="fu">sum</span>(song_length <span class="sc">&lt;</span> <span class="fl">0.5</span>),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_very_long      =</span> <span class="fu">sum</span>(song_length <span class="sc">&gt;</span> <span class="dv">15</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+  n_future_release n_tempo_zero n_very_short n_very_long
+             &lt;int&gt;        &lt;int&gt;        &lt;int&gt;       &lt;int&gt;
+1                1            2            1          10</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="ot">&lt;-</span> music_data <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">plausible =</span> release_date <span class="sc">&lt;=</span> <span class="fu">as.Date</span>(<span class="st">"2021-12-31"</span>) <span class="sc">&amp;</span> tempo <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                     song_length <span class="sc">&gt;=</span> <span class="fl">0.5</span> <span class="sc">&amp;</span> song_length <span class="sc">&lt;=</span> <span class="dv">15</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(music_data, plausible)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  plausible     n
+  &lt;lgl&gt;     &lt;int&gt;
+1 FALSE        13
+2 TRUE      50084</code></pre>
+</div>
+</div>
+<p><strong>Grading:</strong> identifying the impossible release dates <strong>and</strong> at least one other implausible value such as a tempo of 0 or extreme song lengths (0.25; since each data set is a random sample, a few students may have no future release dates — then a correct statement that there are none is fine); creating a flag variable instead of deleting rows (0.25). The thresholds for song length are a judgment call — any reasonable, stated threshold is fine.</p>
+</div>
+</div>
+</div>
+<p><strong>3c) (0.25 points)</strong> Is the ISRC (<code>isrc</code>) a unique identifier in your data, i.e., does each row represent a different recording? Show how you checked it.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 3c">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 3c
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">n_rows =</span> <span class="fu">n</span>(), <span class="at">n_distinct_isrc =</span> <span class="fu">n_distinct</span>(isrc))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  n_rows n_distinct_isrc
+   &lt;int&gt;           &lt;int&gt;
+1  50097           44349</code></pre>
+</div>
+</div>
+<p>No: there are 5,748 more rows than distinct ISRCs, so one row is not always one unique recording.</p>
+<p><strong>Grading:</strong> 0.25 for the comparison of rows and distinct ISRCs <strong>and</strong> the correct conclusion.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="task-4-summarizing-data-1.5-points" class="level2">
+<h2 class="anchored" data-anchor-id="task-4-summarizing-data-1.5-points">Task 4: Summarizing data (1.5 points)</h2>
+<p><strong>4a) (0.75 points)</strong> Compare the number of streams of the tracks in <strong>your focus genre</strong> with <strong>all other tracks</strong>: compute the number of tracks, mean, median, standard deviation, and interquartile range for both groups. Which statistic describes the “typical” track better — the mean or the median? Explain why, and report the typical number of streams in your focus genre in your answer <strong>using inline code</strong>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 4a">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 4a
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">if_else</span>(genre <span class="sc">==</span> focus_genre, focus_genre, <span class="st">"All other genres"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(group) <span class="sc">|&gt;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n      =</span> <span class="fu">n</span>(),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean   =</span> <span class="fu">mean</span>(streams),</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">median =</span> <span class="fu">median</span>(streams),</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd     =</span> <span class="fu">sd</span>(streams),</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">iqr    =</span> <span class="fu">IQR</span>(streams)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  group                n      mean  median        sd      iqr
+  &lt;chr&gt;            &lt;int&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 All other genres 48715  7125386. 332255  40150361. 2091064.
+2 R&amp;B               1382 16146697. 597690. 56880419. 4384260.</code></pre>
+</div>
+</div>
+<p>The typical R&amp;B track has 597,690 streams (median). The mean is far above the median in both groups: the distribution of streams is strongly right-skewed, and a few mega-hits pull the mean up. The <strong>median</strong> therefore describes the typical track better.</p>
+<p><strong>Grading:</strong> correct table with location <strong>and</strong> dispersion measures for both groups (0.25); the median named as the appropriate statistic <strong>with</strong> the reason — skewed distribution / outliers (0.25); the median of the focus genre reported in the text <strong>with inline code</strong> (0.25).</p>
+</div>
+</div>
+</div>
+<p><strong>4b) (0.5 points)</strong> Describe the distribution of the <strong>expert ratings</strong> within your focus genre: absolute and relative frequencies of each category, and the median category.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 4b">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 4b
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>focus_ratings <span class="ot">&lt;-</span> music_data <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(genre <span class="sc">==</span> focus_genre) <span class="sc">|&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(expert_rating) <span class="sc">|&gt;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">share =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n))</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>focus_ratings</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  expert_rating     n  share
+  &lt;ord&gt;         &lt;int&gt;  &lt;dbl&gt;
+1 poor            103 0.0745
+2 fair            263 0.190 
+3 good            479 0.347 
+4 excellent       495 0.358 
+5 masterpiece      42 0.0304</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>focus_tracks <span class="ot">&lt;-</span> <span class="fu">filter</span>(music_data, genre <span class="sc">==</span> focus_genre)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(focus_tracks<span class="sc">$</span>expert_rating)[<span class="fu">ceiling</span>(<span class="fu">nrow</span>(focus_tracks) <span class="sc">/</span> <span class="dv">2</span>)]   <span class="co"># median category</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] good
+Levels: poor &lt; fair &lt; good &lt; excellent &lt; masterpiece</code></pre>
+</div>
+</div>
+<p><strong>Grading:</strong> absolute and relative frequencies (0.25); median category (0.25). Computing a <em>mean</em> of the ratings (e.g., after converting them to numbers 1–5): no points for this part — the variable is ordinal.</p>
+</div>
+</div>
+</div>
+<p><strong>4c) (0.25 points)</strong> Compute the <strong>share of explicit tracks</strong> for each genre.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 4c">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 4c
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(genre) <span class="sc">|&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">share_explicit =</span> <span class="fu">mean</span>(explicit <span class="sc">==</span> <span class="st">"explicit"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(share_explicit))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 3
+   genre             n share_explicit
+   &lt;fct&gt;         &lt;int&gt;          &lt;dbl&gt;
+ 1 Electro/Dance  2012         0.343 
+ 2 German Folk     391         0.292 
+ 3 Classics/Jazz    59         0.203 
+ 4 Rock           3156         0.170 
+ 5 Pop           22612         0.155 
+ 6 Soundtrack      253         0.126 
+ 7 Reggae           88         0.0909
+ 8 R&amp;B            1382         0.0803
+ 9 other          3893         0.0786
+10 HipHop/Rap    15870         0.0512
+11 Country         381         0.0210</code></pre>
+</div>
+</div>
+<p><strong>Grading:</strong> 0.25 for the correct conditional shares (sorting is not required).</p>
+</div>
+</div>
+</div>
+</section>
+<section id="task-5-visualizing-data-1.5-points" class="level2">
+<h2 class="anchored" data-anchor-id="task-5-visualizing-data-1.5-points">Task 5: Visualizing data (1.5 points)</h2>
+<p>For all charts, <strong>meaningful axis titles</strong> are required (with units where applicable). Missing or default axis titles (e.g., <code>fct_infreq(label)</code>) cost 0.1 points per chart.</p>
+<p><strong>5a) (0.25 points)</strong> Create a bar chart of the <strong>number of tracks per label</strong>, with the bars sorted by frequency.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 5a">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 5a
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(music_data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_infreq</span>(label))) <span class="sc">+</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">fill =</span> <span class="st">"#0f5da8"</span>) <span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Label"</span>, <span class="at">y =</span> <span class="st">"Number of tracks"</span>) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="assignment1_files/figure-html/task5a-1.png" class="img-fluid figure-img" width="1400"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Grading:</strong> 0.25 for a bar chart sorted by frequency; unsorted: 0.1.</p>
+</div>
+</div>
+</div>
+<p><strong>5b) (0.5 points)</strong> Create a histogram of the <strong>number of streams</strong> of the tracks in <strong>your focus genre</strong>. Choose a scale on which the shape of the distribution is visible, and label it accordingly.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 5b">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 5b
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(genre <span class="sc">==</span> focus_genre) <span class="sc">|&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> streams)) <span class="sc">+</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">40</span>, <span class="at">fill =</span> <span class="st">"#0f5da8"</span>) <span class="sc">+</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_number</span>(<span class="at">scale_cut =</span> scales<span class="sc">::</span><span class="fu">cut_short_scale</span>())) <span class="sc">+</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Streams (log scale)"</span>, <span class="at">y =</span> <span class="st">"Number of tracks"</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="fu">paste</span>(<span class="st">"Streams of"</span>, focus_genre, <span class="st">"tracks"</span>)) <span class="sc">+</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="assignment1_files/figure-html/task5b-1.png" class="img-fluid figure-img" width="1400"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Grading:</strong> histogram of the focus genre (0.25); log scale <strong>and</strong> labeled as such in the axis title (0.25).</p>
+</div>
+</div>
+</div>
+<p><strong>5c) (0.25 points)</strong> Create a chart that compares the distribution of <strong>energy</strong> across the five genres Pop, HipHop/Rap, Rock, Electro/Dance, and R&amp;B.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 5c">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 5c
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(genre <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Pop"</span>, <span class="st">"HipHop/Rap"</span>, <span class="st">"Rock"</span>, <span class="st">"Electro/Dance"</span>, <span class="st">"R&amp;B"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_reorder</span>(genre, energy, <span class="at">.fun =</span> median), <span class="at">y =</span> energy)) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"#dbe7f3"</span>) <span class="sc">+</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Energy (0-100)"</span>) <span class="sc">+</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="assignment1_files/figure-html/task5c-1.png" class="img-fluid figure-img" width="1400"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Grading:</strong> boxplots (or another suitable chart for categorical × continuous, e.g., violin plots) for the five genres (0.25). Bar chart of mean energy only: 0.1 (hides the distribution).</p>
+</div>
+</div>
+</div>
+<p><strong>5d) (0.5 points)</strong> Create a scatter plot of <strong>danceability</strong> (x-axis) and <strong>valence</strong> (y-axis) for all tracks. Take care that the plot remains readable despite the large number of points. Describe the relationship in one sentence.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 5d">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 5d
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(music_data, <span class="fu">aes</span>(<span class="at">x =</span> danceability, <span class="at">y =</span> valence)) <span class="sc">+</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.05</span>, <span class="at">color =</span> <span class="st">"#0f5da8"</span>) <span class="sc">+</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Danceability (0-100)"</span>, <span class="at">y =</span> <span class="st">"Valence (0-100)"</span>) <span class="sc">+</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="assignment1_files/figure-html/task5d-1.png" class="img-fluid figure-img" width="1200"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(music_data<span class="sc">$</span>danceability, music_data<span class="sc">$</span>valence)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.351</code></pre>
+</div>
+</div>
+<p>Danceability and valence are positively associated (correlation ≈ 0.35): more danceable tracks tend to sound more positive — but the cloud is wide, so the association is moderate.</p>
+<p><strong>Grading:</strong> scatter plot with transparency or another measure against overplotting (0.25); one sentence of correct, <em>descriptive</em> interpretation (0.25).</p>
+</div>
+</div>
+</div>
+</section>
+<section id="task-6-from-description-to-insight-0.5-points" class="level2">
+<h2 class="anchored" data-anchor-id="task-6-from-description-to-insight-0.5-points">Task 6: From description to insight (0.5 points)</h2>
+<p>The head of A&amp;R asks: <em>“In your focus genre, do tracks with explicit lyrics perform worse?”</em> Compare the median number of streams of explicit and non-explicit tracks in your focus genre. Then write <strong>two to three sentences</strong> for the head of A&amp;R: state what the data show (with numbers), and explain what the comparison can and cannot tell us.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: Task 6">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: Task 6
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>music_data <span class="sc">|&gt;</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(genre <span class="sc">==</span> focus_genre) <span class="sc">|&gt;</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(explicit) <span class="sc">|&gt;</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">median_streams =</span> <span class="fu">median</span>(streams))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  explicit         n median_streams
+  &lt;fct&gt;        &lt;int&gt;          &lt;dbl&gt;
+1 not explicit  1271         609275
+2 explicit       111         453664</code></pre>
+</div>
+</div>
+<p><strong>Example answer:</strong> “Among the R&amp;B tracks in our chart data, tracks with explicit lyrics have a lower median number of streams than tracks without explicit lyrics (about 454,000 vs.&nbsp;609,000). This comparison is descriptive: the tracks differ in more than their lyrics — for example in label or artist popularity — and the data contain only tracks that made the charts.”</p>
+<p><strong>Grading:</strong> correct numbers in a descriptive statement <strong>without causal language</strong> (0.25); naming at least one plausible confounder (label, artist popularity, …) <strong>or</strong> the selection into the charts (0.25). Causal wording (“explicit lyrics reduce streams”): no points for the first part.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="in-class-debrief-3-points" class="level2">
+<h2 class="anchored" data-anchor-id="in-class-debrief-3-points">In-class debrief (3 points)</h2>
+<p>The debrief at the start of the session after the deadline (page 1 of the combined sheet with the Chapter 3 quiz) consisted of three short questions about each student’s own results:</p>
+<ol type="1">
+<li><strong>Your focus genre</strong> (1 point): which focus genre did your personal data contain?</li>
+<li><strong>Danceability and valence</strong> (1 point): what was the relationship in your scatter plot — positive, negative, or no relationship?</li>
+<li><strong>Explicit lyrics</strong> (0.5 + 0.5 points): (a) in your focus genre, which tracks had more streams (median) — explicit or non-explicit tracks? (b) What can you conclude from this comparison?</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Expected answers">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Expected answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>The focus genre of the student’s own data version (it depends on the student ID).</li>
+<li><strong>Positive</strong> — in every data version (correlation about 0.35, see Task 5d).</li>
+<li><ol type="a">
+<li><strong>Non-explicit tracks</strong> have the higher median number of streams — in every data version. (b) The two groups differ in their streams, but the comparison <strong>cannot show that the lyrics cause</strong> this difference: it is a descriptive comparison of tracks that differ in more than their lyrics (e.g., label, artist popularity, target audience), and the data contain only tracks that made the charts (see Task 6).</li>
+</ol></li>
+</ol>
+</div>
 </div>
 </div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
