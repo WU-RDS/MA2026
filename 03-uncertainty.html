@@ -1929,25 +1929,158 @@ attr(,"conf.level")
 <section id="sec-lc-03" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="sec-lc-03">Learning check</h2>
 <p><strong>(LC3.1)</strong> In the Smart Mix A/B test, users with the new feature listened about 3 hours more than users without it. Explain why this difference alone does not tell the product team whether Smart Mix increases listening among <em>all</em> users — and what additional information they need.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The 400 users are a <strong>sample</strong>; the decision concerns <strong>all users</strong> (the population). Another random sample of 400 users would have produced a different difference — the 3 hours are an <strong>estimate</strong> that varies from sample to sample (random error), and part of it could be the luck of the draw. To judge the 3 hours, the team needs to know <strong>how much the difference would vary from sample to sample</strong>: its <strong>standard error</strong>, or a <strong>confidence interval</strong> for the difference (or, equivalently, a test). Because the users were randomly assigned, the comparison is fair (no self-selection) — the open question is only its precision.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC3.2)</strong> A poll of 1,000 voters reports a margin of error of ± 3.1 percentage points. (a) Show how this number is calculated. (b) Name one source of error that the margin of error does <em>not</em> cover.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Part (a): the margin of error is 1.96 standard errors of a share, computed at the most conservative share of 50%: <span class="math inline">\(1.96 \times \sqrt{0.5 \times 0.5 / 1{,}000} = 1.96 \times 0.0158 = 0.031\)</span>, i.e., ± 3.1 percentage points. Pollsters use 50% because the standard error of a share is largest there, so the stated margin holds for every share in the poll.</p>
+<p>Part (b): the margin of error covers only <strong>random</strong> sampling error. It does not cover <strong>systematic</strong> errors, for example: people who refuse to answer differ from those who answer (non-response), some groups are not reached at all (under-coverage), respondents do not tell the truth or change their minds before the election, or the question wording steers the answers.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC3.3)</strong> You double the sample size of your customer survey from 400 to 800 respondents. By what factor does the standard error of the mean change?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The standard error is <span class="math inline">\(s / \sqrt{n}\)</span>, so it shrinks with the <strong>square root</strong> of the sample size: <span class="math inline">\(\sqrt{400 / 800} = 1 / \sqrt{2} \approx 0.71\)</span>. Doubling the sample reduces the standard error by only about <strong>29%</strong>, not by half. To halve the standard error, you would need four times the sample (1,600 respondents).</p>
+</div>
+</div>
+</div>
 <p><strong>(LC3.4)</strong> As a marketing manager at a streaming service, you want to know the average weekly listening time of your users. In a random sample of 180 users, the mean listening time is 7.34 hours per week and the standard deviation is 6.87 hours. Compute the 95% confidence interval (use 1.96 as the critical value).</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Standard error: <span class="math inline">\(SE = 6.87 / \sqrt{180} = 6.87 / 13.42 = 0.512\)</span> hours. Margin: <span class="math inline">\(1.96 \times 0.512 = 1.00\)</span> hours. 95% confidence interval: <span class="math inline">\(7.34 \pm 1.00\)</span>, i.e., <strong>from 6.34 to 8.34 hours per week</strong>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> <span class="fl">6.87</span> <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">180</span>)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">lower =</span> <span class="fl">7.34</span> <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se, <span class="at">upper =</span> <span class="fl">7.34</span> <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
 <p><strong>(LC3.5)</strong> Which statements about the standard deviation (SD) and the standard error (SE) are correct?</p>
 <ul class="task-list">
 <li><label><input type="checkbox">The SE describes how much individual customers differ from each other</label></li>
-<li><label><input type="checkbox">The SE of the mean decreases as the sample size increases</label></li>
+<li><label><input type="checkbox" checked="">The SE of the mean decreases as the sample size increases</label></li>
 <li><label><input type="checkbox">The SD of the data decreases as the sample size increases</label></li>
-<li><label><input type="checkbox">The SE of the mean increases as the SD in the population increases</label></li>
+<li><label><input type="checkbox" checked="">The SE of the mean increases as the SD in the population increases</label></li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Correct: statements 2 and 4. Statement 1 is wrong: how much individual customers differ is described by the <strong>standard deviation</strong>; the standard error describes how much the <strong>sample mean</strong> would vary from sample to sample. Statement 3 is wrong: the SD of the data estimates the spread in the population and does not systematically shrink with a larger sample — it just gets estimated more precisely. Statement 2 follows from <span class="math inline">\(SE = SD / \sqrt{n}\)</span>; statement 4 as well: the more individuals differ, the more the sample mean depends on which individuals happen to be drawn.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC3.6)</strong> Which statement is the correct interpretation of a 95% confidence interval?</p>
 <ul class="task-list">
 <li><label><input type="checkbox">There is a 95% probability that the true mean lies within this particular interval</label></li>
 <li><label><input type="checkbox">95% of the individuals in the population have values within the interval</label></li>
-<li><label><input type="checkbox">If we repeated the study many times, about 95% of the intervals constructed this way would contain the true mean</label></li>
+<li><label><input type="checkbox" checked="">If we repeated the study many times, about 95% of the intervals constructed this way would contain the true mean</label></li>
 <li><label><input type="checkbox">The true mean lies within the interval, because the interval was computed from a random sample</label></li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Correct: statement 3. The “95%” describes the <strong>procedure</strong>: in the long run, 95% of the intervals computed this way contain the true mean (as in the widget with 100 samples). Statement 1 is the most common misreading: once an interval has been computed, the true mean either lies in it or not — the 95% does not apply to one particular interval. Statement 2 confuses the interval for the <em>mean</em> with the spread of <em>individuals</em>, which is much wider. Statement 4 is wrong because about 5% of the intervals miss the true mean.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC3.7)</strong> The revenue per customer in your online shop is strongly right-skewed. Can you still compute a confidence interval for the <em>average</em> revenue per customer using the methods of this chapter? Explain, and state what the answer depends on.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Yes — as long as the sample is <strong>large enough</strong>. The confidence interval does not require the revenues themselves to be normally distributed, but the <strong>sample mean</strong> to be approximately normally distributed, and the <strong>central limit theorem</strong> ensures this for large samples, even for skewed data. How large is “large enough” depends on <strong>how skewed</strong> the data are: for moderately skewed data, a few dozen observations may suffice; for strongly skewed data with extreme outliers (a few customers with very high revenue), several hundred may be needed. With a small sample and extreme skew, the interval is unreliable. In addition, ask whether the <em>mean</em> is the right summary at all: it answers questions about total revenue, while the median describes the typical customer.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC3.8)</strong> An online survey on your website, which anyone can answer, collects 20,000 responses on customer satisfaction. The 95% confidence interval for the mean satisfaction is very narrow. Why might it still be misleading?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The narrow interval reflects only the small <strong>random</strong> error of a large sample. But the sample is <strong>self-selected</strong> (voluntary response): customers who choose to answer — often the very satisfied or the very dissatisfied — are not representative of all customers. This <strong>systematic</strong> error (bias) does not shrink with the sample size: a large biased sample gives a precise estimate of the wrong number. The confidence interval says nothing about this kind of error — “more confidently wrong”.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
