@@ -624,6 +624,10 @@ round(coef(summary(model_loglog)), 3)
 `log(spend)` = **0.33**: a 1% increase in spend goes with 0.33% more streams; +10% spend → **+3.3% streams** — the same *percentage* at every budget. Elasticities have no units and are **comparable**: followers (0.51) matter more than the budget.
 :::
 
+::: keybox
+This is a **marketing mix model** in miniature: sales on the marketing inputs, log-log form → an **elasticity per channel** → reallocate the budget toward the channels where a euro buys the largest percentage gain. Real MMMs add carryover (adstock) and saturation — and share this chapter's problem: budgets are not set at random, so spend is **endogenous**. Companies therefore calibrate MMMs with experiments.
+:::
+
 ## Four ways to combine levels and logs {.smaller}
 
 ```{r forms, fig.width=11, fig.height=2.6}
