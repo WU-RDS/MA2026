@@ -215,7 +215,8 @@ $$
 
 `r paste0("[", book_url, "#sec-obs-line](", book_url, "#sec-obs-line)")`
 
-![](../img/ch05/widget_line.png){width="10%"}
+![](../img/ch05/widget_line.png){width="25%"}
+:::
 :::
 
 # 5.3 Reading a regression {.divider background-color="#0a3d6e"}
