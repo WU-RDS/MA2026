@@ -425,3 +425,75 @@ fig_logistic_steps <- function(d = load_free_users(), at = c(10, 20, 30, 40), ba
     theme_course(base_size)
 }
 
+
+
+# ------------------------------------------------------------------
+# Additions to R/ch05-figures.R (November 5, 2026): endogeneity figures.
+# Paste at the end of ch05-figures.R.
+# ------------------------------------------------------------------
+
+# --- 5.4: observed variation = exogenous + endogenous variation ---------------
+# Simulated: demand falls with price (the causal effect), but weather raises
+# both price and demand. The observed cloud mixes the two components.
+fig_variation_components <- function(base_size = 11) {
+  set.seed(12)
+  n <- 150
+  weather <- rnorm(n)                                # unobserved
+  price_exo <- rnorm(n, 0, 0.8)                      # price variation unrelated to weather
+  price <- 10 + 1.5 * weather + price_exo
+  demand <- 50 - 2.0 * (price - 10) + 6.0 * weather + rnorm(n, 0, 1.2)
+  d <- tibble(price, demand, weather, price_exo)
+  p_obs <- ggplot(d, aes(price, demand)) + geom_point(color = wu_blue, alpha = 0.7, size = 1.3) +
+    geom_smooth(method = "lm", se = FALSE, color = wu_grey, linewidth = 0.9, formula = y ~ x) +
+    labs(title = "Observed variation", subtitle = "The data: higher prices, higher demand?", x = "Price", y = "Demand") +
+    theme_course(base_size) + theme(axis.text = element_blank())
+  # exogenous part: price moves for reasons unrelated to weather -> demand responds causally
+  d_exo <- d |> mutate(price = 10 + price_exo, demand = 50 - 2.0 * price_exo + rnorm(n, 0, 1.2))
+  p_exo <- ggplot(d_exo, aes(price, demand)) + geom_point(color = wu_blue, alpha = 0.7, size = 1.3) +
+    geom_smooth(method = "lm", se = FALSE, color = wu_grey, linewidth = 0.9, formula = y ~ x) +
+    labs(title = "Exogenous variation", subtitle = "Price moves for its own reasons: the causal effect", x = "Price", y = "Demand") +
+    theme_course(base_size) + theme(axis.text = element_blank())
+  # endogenous part: price and demand both move with the weather
+  d_end <- d |> mutate(price = 10 + 1.5 * weather, demand = 50 - 2.0 * (price - 10) + 6.0 * weather + rnorm(n, 0, 1.2))
+  p_end <- ggplot(d_end, aes(price, demand)) + geom_point(color = wu_orange, alpha = 0.7, size = 1.3) +
+    geom_smooth(method = "lm", se = FALSE, color = wu_grey, linewidth = 0.9, formula = y ~ x) +
+    labs(title = "Endogenous variation", subtitle = "Weather moves price AND demand: not the effect", x = "Price", y = "Demand") +
+    theme_course(base_size) + theme(axis.text = element_blank())
+  p_obs | (p_exo / p_end)
+}
+
+# --- 5.4: a generic confounder DAG with custom labels ---------------------------
+fig_confounder_dag <- function(x = "Price\n(cause, X)", y = "Sales\n(outcome, Y)", u = "Weather\n(unobserved confounder)", base_size = 13) {
+  nodes <- data.frame(name = c(u, x, y), x = c(1.5, 0, 3), y = c(1, 0, 0))
+  edges <- data.frame(x = c(1.25, 1.75, 0.55), y = c(0.85, 0.85, 0), xend = c(0.35, 2.65, 2.45), yend = c(0.2, 0.2, 0),
+                      type = c("confounding", "confounding", "effect"))
+  ggplot() +
+    geom_segment(data = edges, aes(x, y, xend = xend, yend = yend, color = type, linetype = type),
+                 arrow = arrow(length = unit(0.3, "cm"), type = "closed"), linewidth = 1) +
+    geom_label(data = nodes, aes(x, y, label = name), size = base_size / 3, fill = "white",
+               label.padding = unit(0.5, "lines"), lineheight = 0.9) +
+    scale_color_manual(values = c(confounding = wu_red, effect = wu_blue), guide = "none") +
+    scale_linetype_manual(values = c(confounding = "dashed", effect = "solid"), guide = "none") +
+    coord_cartesian(xlim = c(-0.6, 3.6), ylim = c(-0.4, 1.4)) +
+    theme_void()
+}
+
+# --- 5.4: adjusting for a mediator blocks part of the effect ---------------------
+fig_mediator_dag <- function(base_size = 12) {
+  one <- function(title, blocked) {
+    nodes <- data.frame(name = c("Smart Mix\n(X)", "New artists\ndiscovered (M)", "Listening\nhours (Y)"), x = c(0, 1.5, 3), y = c(0, 1, 0))
+    col_ind <- if (blocked) "grey70" else wu_blue
+    ggplot() +
+      annotate("segment", x = 0.45, xend = 1.05, y = 0.25, yend = 0.8, arrow = arrow(length = unit(0.25, "cm"), type = "closed"), color = col_ind, linewidth = 1) +
+      annotate("segment", x = 1.95, xend = 2.55, y = 0.8, yend = 0.25, arrow = arrow(length = unit(0.25, "cm"), type = "closed"), color = col_ind, linewidth = 1) +
+      annotate("segment", x = 0.5, xend = 2.5, y = 0, yend = 0, arrow = arrow(length = unit(0.25, "cm"), type = "closed"), color = wu_blue, linewidth = 1) +
+      annotate("text", x = 1.5, y = -0.22, label = if (blocked) "only the direct part remains" else "direct part", size = base_size / 3.4, color = wu_blue) +
+      annotate("text", x = 1.5, y = 1.38, label = if (blocked) "indirect part: blocked" else "indirect part", size = base_size / 3.4, color = col_ind) +
+      geom_label(data = nodes, aes(x, y, label = name), size = base_size / 3.2, fill = ifelse(nodes$name == "New artists\ndiscovered (M)" & blocked, "#fde9c9", "white"),
+                 label.padding = unit(0.45, "lines"), lineheight = 0.9, inherit.aes = FALSE) +
+      coord_cartesian(xlim = c(-0.6, 3.6), ylim = c(-0.45, 1.6)) +
+      labs(title = title) + theme_void(base_size) + theme(plot.title = element_text(face = "bold", hjust = 0.5))
+  }
+  one("Total effect of Smart Mix", FALSE) | one("Adjusting for the mediator", TRUE)
+}
+

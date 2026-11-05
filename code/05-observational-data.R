@@ -87,24 +87,6 @@ t.test(hours ~ smart_mix, data = smartmix_obs, var.equal = TRUE)
 
 
 # ======================================================================
-# CODING BLOCK 1: podcast promotion (25 min)
-# ======================================================================
-# 400 episodes: promotion spend (euros), host followers, downloads in the
-# release week. Solutions: 05-your-turn-solutions.R
-
-head(podcast_promo)                        # loaded at the top
-
-# Tasks:
-# (1) Scatter plot of downloads (y) against promo_spend (x); compute the
-#     correlation; describe the relationship in one sentence
-# (2) Regression of downloads on promo_spend: summary(); interpret the slope
-#     in words; read off R-squared
-# (3) Is the slope a causal effect of promotion? What would you need to argue?
-
-# your code here
-
-
-# ======================================================================
 # 5.4 Adjusting for confounders
 # ======================================================================
 
@@ -142,8 +124,42 @@ smartmix_obs |>
 
 
 # ======================================================================
-# CODING BLOCK 2: a loyalty program (25 min)
+# 5.6 Prediction vs. explanation
 # ======================================================================
+
+# Train/test split: fit on 1,500 users, evaluate on the other 500
+set.seed(42)
+train_ids <- sample(nrow(smartmix_obs), 1500)
+train <- smartmix_obs[train_ids, ]
+test  <- smartmix_obs[-train_ids, ]
+
+model_pred <- lm(hours ~ prior_hours + tenure + premium + device + smart_mix, data = train)
+test$predicted <- predict(model_pred, newdata = test)
+
+sqrt(mean((test$hours - test$predicted)^2))   # typical prediction error (RMSE)
+
+
+# ======================================================================
+# CODING BLOCK (session 5): two cases, 40 min
+# ======================================================================
+# Solutions: 05-your-turn-solutions.R (released after the session)
+
+# --- Case 1: podcast promotion -----------------------------------------
+# 400 episodes: promotion spend (euros), host followers, downloads in the
+# release week. Solutions: 05-your-turn-solutions.R
+
+head(podcast_promo)                        # loaded at the top
+
+# Tasks:
+# (1) Scatter plot of downloads (y) against promo_spend (x); compute the
+#     correlation; describe the relationship in one sentence
+# (2) Regression of downloads on promo_spend: summary(); interpret the slope
+#     in words; read off R-squared
+# (3) Is the slope a causal effect of promotion? What would you need to argue?
+
+# your code here
+
+# --- Case 2: a loyalty program -----------------------------------------
 # 1,500 customers of an online shop; membership in the loyalty program is
 # opt-in. Solutions: 05-your-turn-solutions.R
 
@@ -160,22 +176,6 @@ head(loyalty_program)                      # loaded at the top
 #     in the model?
 
 # your code here
-
-
-# ======================================================================
-# 5.6 Prediction vs. explanation
-# ======================================================================
-
-# Train/test split: fit on 1,500 users, evaluate on the other 500
-set.seed(42)
-train_ids <- sample(nrow(smartmix_obs), 1500)
-train <- smartmix_obs[train_ids, ]
-test  <- smartmix_obs[-train_ids, ]
-
-model_pred <- lm(hours ~ prior_hours + tenure + premium + device + smart_mix, data = train)
-test$predicted <- predict(model_pred, newdata = test)
-
-sqrt(mean((test$hours - test$predicted)^2))   # typical prediction error (RMSE)
 
 
 # ======================================================================
@@ -208,22 +208,6 @@ summary(model_loglog)
 
 # What does doubling the spend do to streams, according to the model?
 100 * (2^coef(model_loglog)["log(spend)"] - 1)
-
-
-# ======================================================================
-# CODING BLOCK 3: podcast promotion, revisited (25 min)
-# ======================================================================
-# Back to podcast_promo. Solutions: 05-your-turn-solutions.R
-
-# Tasks:
-# (1) Scatter plot of downloads against promo_spend with both axes logged:
-#     what has changed?
-# (2) Log-log model of downloads on promo_spend and host_followers; interpret
-#     both coefficients as elasticities: what does +10% spend do to downloads?
-# (3) Compare R-squared with the linear model from block 1; which model would
-#     you use to advise the network on its promotion budget?
-
-# your code here
 
 
 # ======================================================================
@@ -284,27 +268,6 @@ coeftest(model_linear, vcov = vcovHC(model_linear, type = "HC1"))
 
 
 # ======================================================================
-# CODING BLOCK 4: winning back users (25 min)
-# ======================================================================
-# 1,200 users who uninstalled the app received a win-back offer with a
-# randomly assigned discount (0-60%). Solutions: 05-your-turn-solutions.R
-
-head(app_reinstall)                        # loaded at the top
-
-# Tasks:
-# (1) Share of reinstalls per discount level, plotted against the discount:
-#     describe the shape
-# (2) Logistic regression of reinstalled on discount and prior_use: interpret
-#     the sign and the odds ratio of the discount
-# (3) Predict the reinstall probability for a user with 10 prior sessions at a
-#     discount of 10, 11, 40 and 41 percent; by how many percentage points does
-#     one more point of discount change the probability in each case, and why
-#     do the two answers differ?
-
-# your code here
-
-
-# ======================================================================
 # 5.10 A quasi-experiment: difference-in-differences
 # ======================================================================
 
@@ -341,3 +304,41 @@ round(coef(summary(lm(log_streams ~ treated * fake_post, data = placebo_data)))[
 
 # Your turn: add a control variable
 summary(lm(log_streams ~ treated * post + major_label, data = did_data))
+
+
+# ======================================================================
+# CODING BLOCK (session 6): two cases, 40 min
+# ======================================================================
+# Solutions: 05-your-turn-solutions.R (released after the session)
+
+# --- Case 3: podcast promotion, revisited ------------------------------
+# Back to podcast_promo. Solutions: 05-your-turn-solutions.R
+
+# Tasks:
+# (1) Scatter plot of downloads against promo_spend with both axes logged:
+#     what has changed?
+# (2) Log-log model of downloads on promo_spend and host_followers; interpret
+#     both coefficients as elasticities: what does +10% spend do to downloads?
+# (3) Compare R-squared with the linear model from block 1; which model would
+#     you use to advise the network on its promotion budget?
+
+# your code here
+
+# --- Case 4: winning back users ----------------------------------------
+# 1,200 users who uninstalled the app received a win-back offer with a
+# randomly assigned discount (0-60%). Solutions: 05-your-turn-solutions.R
+
+head(app_reinstall)                        # loaded at the top
+
+# Tasks:
+# (1) Share of reinstalls per discount level, plotted against the discount:
+#     describe the shape
+# (2) Logistic regression of reinstalled on discount and prior_use: interpret
+#     the sign and the odds ratio of the discount
+# (3) Predict the reinstall probability for a user with 10 prior sessions at a
+#     discount of 10, 11, 40 and 41 percent; by how many percentage points does
+#     one more point of discount change the probability in each case, and why
+#     do the two answers differ?
+
+# your code here
+

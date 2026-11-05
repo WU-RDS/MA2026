@@ -150,6 +150,18 @@ For the Smart Mix data, $r$ = `r round(cor(smartmix_obs$prior_hours, smartmix_ob
 cor(smartmix_obs$prior_hours, smartmix_obs$hours)
 ```
 
+**Correlation and regression are not the same tool.** The table summarizes the difference that the rest of the chapter builds on:
+
+| | Correlation | Regression |
+|---|---|---|
+| Estimated coefficient | $r$, bounded between −1 and +1, no units | $\beta_1$, a priori not bounded, in units of $y$ per unit of $x$ |
+| Interpretation | Linear association between two variables; bidirectional ($r_{xy} = r_{yx}$) | (Linear) relation of one or more predictors to an outcome; directional ($x$ explains $y$) |
+| Role of theory | Neither required nor testable | Required (which variable is the outcome, which predictors belong in the model) and testable |
+
+: Correlation vs. regression {#tbl-corr-vs-reg .striped}
+
+A correlation says *that* and *how tightly* two variables move together. A regression says *how much* $y$ changes with $x$ — which presupposes a direction, and that is where theory, and the assumptions of @sec-obs-adjust, come in.
+
 ### Two variables, one line
 
 ```{r}
@@ -288,7 +300,7 @@ model_naive <- lm(hours ~ smart_mix, data = smartmix_obs)
 summary(model_naive)
 ```
 
-@tbl-lm-output walks through the parts that matter.
+@tbl-lm-output walks through the parts that matter. The two coefficients are read as follows: the **intercept** (`r round(coef(m_naive)[1], 2)`) is the predicted listening time when all predictors are zero — here the mean of the non-adopters; the coefficient of `smart_mix` (`r round(coef(m_naive)[2], 2)`) is the change in listening time for a **one-unit increase** in the predictor, which for a 0/1 variable is the step from 0 to 1: adopters minus non-adopters. The general rule holds for every regression in this chapter: *a coefficient is the change in the outcome when its predictor increases by one unit and nothing else changes* — for a continuous predictor such as `prior_hours` (0.73 hours per additional prior hour), for a dummy (the difference between the two groups), and, with several predictors, "holding the other variables in the model constant" (@sec-obs-adjust).
 
 | Output | Meaning |
 |---|---|
@@ -326,16 +338,6 @@ R² describes how well the line fits; it says nothing about whether the slope is
 The **F-test** asks whether the model as a whole explains more than chance — the same logic as the ANOVA in @sec-experiments: variation explained by the model per degree of freedom, divided by unexplained variation per degree of freedom. With one predictor, it is equivalent to the *t*-test of that predictor.
 
 **Standardized coefficients** express each effect in standard deviations ("one SD more prior listening goes with 0.6 SD more listening now"). They make coefficients of variables with different units comparable in size. You get them by standardizing the variables before the regression, e.g., `lm(scale(hours) ~ scale(prior_hours), data = smartmix_obs)`.
-:::
-
-::: {.callout-tip title="Coding block 1: podcast promotion (25 min)"}
-A podcast network tracks 400 episodes: the promotion spend for the episode (`promo_spend`, euros), the host's followers (`host_followers`), and the downloads in the release week (`downloads`). The data are in `podcast_promo.csv` (section "Coding block 1" in the chapter's R script).
-
-1.  Draw a **scatter plot** of downloads (y) against promotion spend (x), and compute the **correlation**. Describe the relationship in one sentence.
-2.  Fit the **regression** of downloads on promotion spend with `lm()` and look at `summary()`: interpret the slope in words, and read off the **R²**.
-3.  Is the slope a **causal** effect of promotion? What would you need to argue?
-
-The solutions will be available after the session.
 :::
 
 ## Adjusting for confounders {#sec-obs-adjust}
@@ -442,7 +444,16 @@ Plot.plot({
 
 Two further warnings belong here:
 
-- **Adjusting for the wrong variables makes things worse.** If a variable lies *on the causal path* from treatment to outcome — a mediator (@sec-foundations) — adjusting for it removes part of the effect you want to measure. Had Smart Mix increased listening by making users discover new artists, adjusting for "number of new artists discovered" would hide exactly this effect. Only confounders — variables that influence *both* the treatment and the outcome, and are determined *before* the treatment — belong in the adjustment set.
+- **Adjusting for the wrong variables makes things worse.** If a variable lies *on the causal path* from treatment to outcome — a mediator (@sec-foundations) — adjusting for it removes part of the effect you want to measure. @fig-mediator-dag shows why. Suppose Smart Mix increases listening partly by making users discover new artists. In the regression of hours on Smart Mix alone, both paths are open and the coefficient is the *total* effect. Adding "number of new artists discovered" as a control compares adopters and non-adopters who discovered the *same* number of artists — the indirect path is blocked, and the coefficient shows only the direct part. Only confounders — variables that influence *both* the treatment and the outcome, and are determined *before* the treatment — belong in the adjustment set. (@sec-mechanisms uses this blocking deliberately, to measure the indirect part.)
+
+```{r}
+#| label: fig-mediator-dag
+#| echo: false
+#| fig-width: 11
+#| fig-height: 3.4
+#| fig-cap: "Adjusting for a mediator blocks the indirect part of the effect: the coefficient of Smart Mix then measures only the direct part."
+fig_mediator_dag()
+```
 - **No data set can tell you whether you have adjusted for enough.** The assumption that there are no unobserved confounders left is untestable (@sec-foundations). The honest way to present an adjusted estimate is therefore with a statement of what was adjusted for, and what plausibly was not.
 
 ::: {.callout-note collapse="true" title="Under the hood: how a regression holds variables constant"}
@@ -451,23 +462,53 @@ A multiple regression does not literally compare users with identical prior list
 This also explains why **correlated predictors** are a problem: if two predictors move almost in lockstep, little independent variation is left for either, and both coefficients become imprecise (large standard errors). The *variance inflation factor* (VIF) quantifies this; `car::vif(model_full)` computes it, and values above about 5 deserve attention. Collinearity does not bias the coefficients — it makes them uncertain.
 :::
 
-### The assumption behind adjustment: exogeneity
+### Where the unobserved variable goes
 
-The whole of this section rests on one assumption, and it is worth stating it formally, because it tells you *why* adjustment worked only partly. In the regression
-
-$$
-\text{hours}_i = \beta_0 + \beta_1 \, \text{smart mix}_i + \beta_2 \, \text{prior hours}_i + \dots + \varepsilon_i
-$$
-
-the error term $\varepsilon_i$ collects everything about user $i$ that the model does not contain: mood, taste, time, and — in our case — music enthusiasm. The coefficient $\beta_1$ is the causal effect of Smart Mix only if the treatment is unrelated to this leftover:
+The whole of this section rests on one assumption, and it is worth seeing exactly where it comes from. Take the simplest version of the problem, with a cause, an outcome, and one unobserved variable — the price of a product, its sales, and the weather, which lowers prices in slow seasons and raises sales in good ones (@fig-confounder-dag). The *true* model has three ingredients:
 
 $$
-\text{Cov}(\text{smart mix}_i, \varepsilon_i) = 0
+\text{sales}_i = \beta_0 + \beta_1 \, \text{price}_i + \beta_2 \, \text{weather}_i + \phi_i
 $$
 
-This condition is called **exogeneity**: the variable of interest is determined "from outside" the model, not by the same forces that sit in the error term. In an experiment, randomization guarantees it — a coin flip is unrelated to everything. In the opt-in data, it fails: enthusiasm drives adoption *and* is part of $\varepsilon_i$, so Smart Mix is **endogenous**, and $\beta_1$ absorbs part of the enthusiasm effect. Every adjustment variable we add moves a piece of the error term into the model: `prior_hours` took most of the enthusiasm out of $\varepsilon_i$, which is why the estimate dropped from 9.3 to 4.5 hours; what is left in the error term still correlates with adoption, which is why 4.5 is still above 3.
+where $\phi_i$ collects everything else. If the weather is not in the data, we can only estimate
 
-The uncomfortable part: exogeneity **cannot be tested** in the data. The residuals of a fitted regression are uncorrelated with the predictors by construction — least squares makes them so — so the data always "look" exogenous. Whether the assumption holds has to be argued from outside the data: from theory, from what you know about how the data came to be (who chose the treatment, and why), and from the data-generating process you can draw as a DAG (@sec-foundations). This is the regression version of the lesson of @sec-foundations: the no-unobserved-confounders assumption is a claim about the world, not a property of the data set.
+$$
+\text{sales}_i = \beta_0 + \beta_1 \, \text{price}_i + \varepsilon_i, \qquad \varepsilon_i = \beta_2 \, \text{weather}_i + \phi_i
+$$
+
+The omitted variable does not disappear: it moves **into the error term**. That alone would be harmless — error terms are full of omitted things. The problem is that the weather *also drives the price*, so the error term is now **correlated with the regressor**. Least squares cannot tell the two apart and attributes the weather's effect on sales to the price: $\hat{\beta}_1$ is biased, and it stays biased however large the sample becomes. This is the omitted-variable bias of @sec-foundations, written as an equation.
+
+```{r}
+#| label: fig-confounder-dag
+#| echo: false
+#| fig-width: 6
+#| fig-height: 3
+#| fig-cap: "The structure behind omitted-variable bias: the unobserved variable drives both the cause and the outcome."
+fig_confounder_dag()
+```
+
+@fig-variation-components shows the same idea in a scatter plot. The observed variation in price has two components. Part of it is **exogenous**: prices that moved for reasons unrelated to the weather (a cost change, a pricing experiment), and the demand response to *that* part is the causal effect — downward. Part of it is **endogenous**: prices that moved *with* the weather, together with demand — upward, but not because of the price. The observed cloud mixes the two, and the fitted line is a mixture too. Everything this chapter does — adjustment here, difference-in-differences in @sec-obs-did — and everything @sec-experiments did with randomization amounts to isolating the exogenous part of the variation.
+
+```{r}
+#| label: fig-variation-components
+#| echo: false
+#| fig-width: 10
+#| fig-height: 5
+#| fig-cap: "Observed variation = exogenous + endogenous variation (simulated data). Only the exogenous part identifies the causal effect of price on demand; the endogenous part comes from the weather moving both."
+fig_variation_components()
+```
+
+### The assumption: exogeneity
+
+In general form, with $y_i = \beta_0 + \beta_1 x_i + \varepsilon_i$, the coefficient $\beta_1$ is the causal effect of $x$ only if the regressor is unrelated to the error term:
+
+$$
+\text{Cov}(x_i, \varepsilon_i) = 0
+$$
+
+This condition is called **exogeneity** — the variable of interest is determined "from outside" the model, not by the same forces that sit in the error term. It is the most important assumption of the linear model when the goal is an effect rather than a prediction. If it fails, $x$ is **endogenous**, the estimate is biased and *inconsistent* (more data do not cure it), and $\beta_1$ cannot be read as causal. In an experiment, randomization guarantees exogeneity: a coin flip is unrelated to everything. In the opt-in data, it fails: enthusiasm drives adoption *and* is part of $\varepsilon_i$. Every adjustment variable we add moves a piece of the error term into the model: `prior_hours` took most of the enthusiasm out of $\varepsilon_i$, which is why the estimate dropped from 9.3 to 4.5 hours; what is left in the error term still correlates with adoption, which is why 4.5 is still above 3.
+
+The uncomfortable part: exogeneity **cannot be tested** in the data. The residuals of a fitted regression are uncorrelated with the predictors by construction — least squares makes them so — so the data always "look" exogenous. Whether the assumption holds has to be argued from outside the data: from theory, from what you know about how the data came to be (who chose the treatment, and why), and from the data-generating process you can draw as a DAG. The remedies are the ones of this course: include the uncontrolled factor or a good proxy for it, randomize, or find a quasi-experiment (@sec-obs-did). Instrumental variables, the econometrician's further tool for endogenous regressors, are beyond this course.
 
 ## Categorical predictors {#sec-obs-categorical}
 
@@ -483,17 +524,6 @@ Each dummy coefficient is the difference between its category and the reference 
 
 ::: {.callout-note collapse="true" title="Under the hood: choosing the reference category"}
 The reference category is a matter of convenience, not of substance; the model is the same regardless of which category serves as the baseline. Choose the category that makes the comparisons you care about: `smartmix_obs$device <- relevel(smartmix_obs$device, ref = "Android")` makes Android the reference, so that the coefficients compare iOS and Desktop with Android. A variable stored as text (`"iOS"`, `"Android"`, …) is converted to a factor automatically, with the levels in alphabetical order — which is why it pays to set the levels yourself (@sec-describing).
-:::
-
-::: {.callout-tip title="Coding block 2: a loyalty program (25 min)"}
-An online shop lets customers **opt into** its loyalty program. The data set `loyalty_program.csv` contains 1,500 customers: membership (`member`, 1/0), spending this year (`spending`, euros), spending in the previous year (`spend_prev`), tenure in years, and the main device (`device`).
-
-1.  **Naive comparison:** regress `spending` on `member`. Interpret the coefficient — and say why it is probably not the causal effect of the program.
-2.  **Adjustment:** add `spend_prev`, `tenure`, and `device`. How does the `member` coefficient change, and what does it mean now? Report it with its 95% confidence interval.
-3.  Interpret the coefficient of `device`.
-4.  Is membership **exogenous** after adjustment? Argue from the data-generating process: who joins a loyalty program, and is everything that drives this in the model?
-
-The solutions will be available after the session.
 :::
 
 ## Prediction vs. explanation {#sec-obs-prediction}
@@ -534,6 +564,23 @@ Mixing the two — reading causal effects off a model built for prediction, or j
 
 ::: {.callout-note collapse="true" title="Under the hood: overfitting, adjusted R², and information criteria"}
 A model with many predictors fits its training data better and better, because it learns not only the patterns but also the noise of that particular sample. Its errors on new data then get *worse*: this is **overfitting**, and it is why predictive models are judged out of sample. Within the training data, **adjusted R²** and information criteria such as the **AIC** (`AIC(model)`) penalize each additional predictor and help to compare models of different size — the model with the lowest AIC balances fit and parsimony. They are useful for a first comparison, but they do not replace a test set.
+:::
+
+::: {.callout-tip title="Coding block (session 5): two cases"}
+**Case 1: podcast promotion.** A podcast network tracks 400 episodes: the promotion spend for the episode (`promo_spend`, euros), the host's followers (`host_followers`), and the downloads in the release week (`downloads`). The data are in `podcast_promo.csv` (section "Coding block 1" in the chapter's R script).
+
+1.  Draw a **scatter plot** of downloads (y) against promotion spend (x), and compute the **correlation**. Describe the relationship in one sentence.
+2.  Fit the **regression** of downloads on promotion spend with `lm()` and look at `summary()`: interpret the slope in words, and read off the **R²**.
+3.  Is the slope a **causal** effect of promotion? What would you need to argue?
+
+**Case 2: a loyalty program.** An online shop lets customers **opt into** its loyalty program. The data set `loyalty_program.csv` contains 1,500 customers: membership (`member`, 1/0), spending this year (`spending`, euros), spending in the previous year (`spend_prev`), tenure in years, and the main device (`device`).
+
+1.  **Naive comparison:** regress `spending` on `member`. Interpret the coefficient — and say why it is probably not the causal effect of the program.
+2.  **Adjustment:** add `spend_prev`, `tenure`, and `device`. How does the `member` coefficient change, and what does it mean now? Report it with its 95% confidence interval.
+3.  Interpret the coefficient of `device`.
+4.  Is membership **exogenous** after adjustment? Argue from the data-generating process: who joins a loyalty program, and is everything that drives this in the model?
+
+The solutions will be available after the session.
 :::
 
 ## Functional form: when the straight line is wrong {#sec-obs-form}
@@ -679,16 +726,6 @@ linear slope: <b>${r3.lin.b.toFixed(1)}</b> streams per euro, the same at every 
 ```
 
 **What to look for.** Below an elasticity of 1, returns diminish and the linear line misses the curve at both ends. At exactly 1, the relationship is proportional and both models agree. Above 1, returns increase — rare in marketing, but it happens with network effects.
-:::
-
-::: {.callout-tip title="Coding block 3: podcast promotion, revisited (25 min)"}
-Back to `podcast_promo.csv` from coding block 1.
-
-1.  Draw the scatter plot of downloads against promotion spend again, now with **both axes logged**. What has changed?
-2.  Fit the **log-log model** of downloads on promotion spend and host followers. Interpret both coefficients as **elasticities**: what does a 10% increase in spend do to downloads?
-3.  Compare the **R²** of the log-log model with the linear model from block 1. Which model would you use to advise the network on its promotion budget?
-
-The solutions will be available after the session.
 :::
 
 ## Yes/no outcomes: logistic regression {#sec-obs-logistic}
@@ -850,16 +887,6 @@ Often, the funnel disappears when the outcome is logged — another reason why t
 **Influence** is measured by **Cook's distance**, which combines how far an observation lies from the others in the predictors with how badly the model fits it: `cooks.distance(model)`; values far above the others (a common rule: above 4/*n*, or above 1) deserve a look. **Heteroskedasticity** can be tested formally with the Breusch–Pagan test, `lmtest::bptest(model)`, but the robust standard errors are the practical answer either way — many analysts use them by default.
 
 Two classic diagnostics are *not* on the list above. **Normality of the residuals** matters little with the sample sizes of this course, thanks to the central limit theorem (@sec-uncertainty); a Q-Q plot (`plot(model, which = 2)`) is worth a glance for extreme outliers, not for its own sake. And **multicollinearity** affects the precision of coefficients, not their validity (@sec-obs-adjust); it is a problem only when the coefficients of the correlated variables are what you need.
-:::
-
-::: {.callout-tip title="Coding block 4: winning back users (25 min)"}
-1,200 users who uninstalled the app received a win-back offer with a **randomly assigned discount** of 0% to 60%. The data set `app_reinstall.csv` records the discount (`discount`), the user's sessions in the month before uninstalling (`prior_use`), and whether the user **reinstalled** the app within 30 days (`reinstalled`, 1/0).
-
-1.  Compute the **share of reinstalls per discount level** and plot it against the discount. Describe the shape.
-2.  Fit a **logistic regression** of `reinstalled` on `discount` and `prior_use`. Interpret the sign and the **odds ratio** of the discount.
-3.  Predict the reinstall probability for a user with 10 prior sessions at a discount of **10%, 11%, 40%, and 41%**. By how many percentage points does one more point of discount change the probability in each case — and why do the two answers differ?
-
-The solutions will be available after the session.
 :::
 
 ## A quasi-experiment: difference-in-differences {#sec-obs-did}
@@ -1040,6 +1067,22 @@ bias: <b>${(r4.did - r4_effect).toFixed(2)}</b>${Math.abs(r4_trend) > 0 ? html` 
 
 ::: {.callout-note collapse="true" title="Under the hood: beyond the simple DiD"}
 The simple regression above treats the two groups and the two periods as homogeneous. Two extensions are standard in practice. **Control variables** (genre, label, playlist followers) can be added to the regression to improve precision — they do not change the logic. **Fixed effects** for songs and weeks (`lm(log_streams ~ treated:post + factor(song_id) + factor(week))`, or the `fixest` package) replace the `treated` and `post` dummies by one dummy per song and per week, which absorbs any song-specific level and any week-specific shock; with many songs and weeks, this is the usual specification. In addition, the standard errors should account for the fact that the weekly observations of the same song are not independent (clustered standard errors). Finally, when treatment happens at different times for different units, the simple DiD can be misleading; modern estimators (e.g., the `did` package based on @callaway2021) handle such *staggered* designs. For the two-group, one-date case here, the simple regression is enough.
+:::
+
+::: {.callout-tip title="Coding block (session 6): two cases"}
+**Case 3: podcast promotion, revisited.** Back to `podcast_promo.csv` from coding block 1.
+
+1.  Draw the scatter plot of downloads against promotion spend again, now with **both axes logged**. What has changed?
+2.  Fit the **log-log model** of downloads on promotion spend and host followers. Interpret both coefficients as **elasticities**: what does a 10% increase in spend do to downloads?
+3.  Compare the **R²** of the log-log model with the linear model from block 1. Which model would you use to advise the network on its promotion budget?
+
+**Case 4: winning back users.** 1,200 users who uninstalled the app received a win-back offer with a **randomly assigned discount** of 0% to 60%. The data set `app_reinstall.csv` records the discount (`discount`), the user's sessions in the month before uninstalling (`prior_use`), and whether the user **reinstalled** the app within 30 days (`reinstalled`, 1/0).
+
+1.  Compute the **share of reinstalls per discount level** and plot it against the discount. Describe the shape.
+2.  Fit a **logistic regression** of `reinstalled` on `discount` and `prior_use`. Interpret the sign and the **odds ratio** of the discount.
+3.  Predict the reinstall probability for a user with 10 prior sessions at a discount of **10%, 11%, 40%, and 41%**. By how many percentage points does one more point of discount change the probability in each case — and why do the two answers differ?
+
+The solutions will be available after the session.
 :::
 
 ## What observational data can and cannot tell you {#sec-obs-limits}
