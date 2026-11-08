@@ -1103,6 +1103,7 @@ did_data <- playlist |>
   mutate(log_streams = log(streams + 1))
 model_did <- lm(log_streams ~ treated * post, data = did_data)
 round(coef(summary(model_did)), 3)
+100 * (exp(coef(model_did)["treated:post"]) - 1)   # DiD effect in percent
 ```
 
 | Coefficient | Meaning |
@@ -1110,7 +1111,7 @@ round(coef(summary(model_did)), 3)
 | `(Intercept)` 9.76 | Control, before: baseline |
 | `treated` 0.09 | Treated, before: the **level difference** |
 | `post` −0.05 | Control, after − before: the **common time trend** |
-| `treated:post` **0.28** | The extra change of the treated songs: the **DiD effect** → ≈ **+32% streams** |
+| `treated:post` **0.28** | The extra change of the treated songs: the **DiD effect**, in log points. Logged outcome, dummy predictor → exact percentage $100 \cdot (e^{0.28} - 1)$ = **+32% streams** (the rule of thumb "100 · β = 28%" is off because 0.28 is not small) |
 
 ::: notes
 `treated * post` = treated + post + treated:post. Advantages over the four means: standard errors, and easy extensions (controls, fixed effects — book box). The interaction term in its general role: Chapter 6.
