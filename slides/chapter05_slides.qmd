@@ -8,6 +8,7 @@ date-format: "MMMM YYYY"
 format:
   revealjs:
     theme: [default, wu-theme.scss]
+    html-math-method: katex
     embed-resources: true
     width: 1280
     height: 720
@@ -662,10 +663,22 @@ Today: functional form and elasticities → logistic regression → diagnostics 
 
 # 5.7 Functional form: when the line is wrong {.divider background-color="#0a3d6e"}
 
-## Two assumptions of the linear model — and what relaxes them {.smaller}
+## Two assumptions of the linear model {.smaller}
 
 ::: columns
-::: {.column width="50%"}
+::: {.column width="40%"}
+```{r lin-scatter, fig.width=5, fig.height=3.9, out.width="100%"}
+ggplot(campaigns, aes(spend, streams)) +
+  geom_point(alpha = 0.3, color = wu_grey, size = 1.3) +
+  geom_smooth(method = "lm", se = FALSE, color = wu_orange, linewidth = 1.3, formula = y ~ x) +
+  scale_x_continuous(labels = scales::label_number(scale_cut = scales::cut_short_scale(), prefix = "€")) +
+  scale_y_continuous(labels = scales::label_number(scale_cut = scales::cut_short_scale())) +
+  labs(x = "Promotion spend", y = "Streams", subtitle = "The linear model: every euro adds the same number of streams") +
+  theme_course(11)
+```
+:::
+
+::: {.column width="60%"}
 $$
 y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \dots + \varepsilon_i
 $$
@@ -673,15 +686,9 @@ $$
 **Linearity:** a one-unit change in $x$ has the same effect at every level of $x$ — **constant marginal returns**. Ad spend 10 → 11 € adds as much as 100,000 → 100,001 €. No saturation.
 
 **Additivity:** the effect of one predictor does not depend on the others. Each playlist placement adds the same number of streams for an artist with 1,000 or a million followers.
-:::
 
-::: {.column width="50%"}
 ::: keybox
-**Where this course relaxes them:**
-
--   Linearity → the **multiplicative (log-log) model**, this section: diminishing returns built in
--   Additivity → the multiplicative model (effects scale each other) and **interaction terms**, Chapter 6
--   **Detecting** a wrong form → the residual plot, §5.9: curved residuals mean the straight line is wrong
+**Where this course relaxes them:** linearity → the **multiplicative (log-log) model** (this section: diminishing returns built in) · additivity → the multiplicative model (effects scale each other) and **interaction terms** (Chapter 6) · **detecting** a wrong form → the residual plot (§5.9)
 :::
 :::
 :::
@@ -735,23 +742,27 @@ fig_log_intuition(base_size = 10)
 Multiplicative model: equal **percentage** steps in $x$ → equal **percentage** steps in $y$ (doubling spend always adds +32% streams, but ever fewer streams). The logarithm turns percentages into distances — a doubling is always $\log 2$ — so the curve becomes a line with slope = elasticity.
 :::
 
-## Elasticity: linear vs. log-log model {.smaller .nostretch}
-
-```{r el-compare, fig.width=11, fig.height=2.5, out.width="100%"}
-fig_elasticity_compare(base_size = 10)
-```
+## Elasticity: linear vs. log-log model {.smaller}
 
 ::: columns
-::: {.column width="50%"}
-Elasticity $\eta_x = (\Delta y / y) / (\Delta x / x)$: % change in $y$ per % change in $x$
-
--   **Linear:** $\eta_x = \beta_1 \, x / y$ **rises** with $x$ — implausible
--   **Multiplicative:** $\eta_x = \beta_1$ **constant**; marginal returns fall
+::: {.column width="55%"}
+```{r el-compare, fig.width=6.5, fig.height=5, out.width="100%"}
+fig_elasticity_compare(base_size = 10)
+```
 :::
 
-::: {.column width="50%"}
+::: {.column width="45%"}
+Elasticity $\eta_x = (\Delta y / y) / (\Delta x / x)$: the % change in $y$ per % change in $x$
+
+-   **Linear:** $\eta_x = \beta_1 \, x / y$ **rises** with $x$ — advertising gets *relatively more* effective the more you spend: implausible
+-   **Multiplicative:** $\eta_x = \beta_1$ **constant**; the marginal returns fall
+
 ::: keybox
-Additive in **logs** = multiplicative in **levels**: the same *percentage* effect for every artist; the *number* of streams scales with the follower base.
+Additive in **logs** = multiplicative in **levels**: the same *percentage* effect for every artist; the *number* of streams it buys scales with the follower base.
+:::
+
+::: source
+After Hanssens, Parsons & Schultz (2001), Market Response Models.
 :::
 :::
 :::
@@ -759,20 +770,20 @@ Additive in **logs** = multiplicative in **levels**: the same *percentage* effec
 ## What the elasticity says about the shape {.smaller}
 
 ::: columns
-::: {.column width="55%"}
-```{r shapes, fig.width=7, fig.height=3.0, out.width="100%"}
-fig_power_shapes(base_size = 10)
+::: {.column width="50%"}
+```{r shapes, fig.width=6.5, fig.height=4.2, out.width="100%"}
+fig_power_shapes(base_size = 10) + theme(legend.position = "bottom") + guides(color = guide_legend(nrow = 2), linetype = guide_legend(nrow = 2))
 ```
 :::
 
-::: {.column width="45%"}
+::: {.column width="50%"}
 -   $\beta_1 < 0$: falls, flattening out — **price**
--   $0 < \beta_1 < 1$: **diminishing returns** — advertising, promotion; most marketing elasticities (usually < 0.5)
--   $\beta_1 = 1$: **proportional** — a straight line through the origin; the one case where the mean response is linear (no intercept, errors still multiplicative)
--   $\beta_1 > 1$: **increasing returns** — rare; network effects
+-   $0 < \beta_1 < 1$: **diminishing returns** — advertising, promotion; most marketing elasticities (< 0.5)
+-   $\beta_1 = 1$: **proportional** — a line through the origin; the one linear case
+-   $\beta_1 > 1$: **increasing returns** — each extra euro buys *more* than the last. Rare: **network effects** (a messaging app or marketplace gains value with every user), or a promotion that crosses a **threshold** and spreads by word of mouth
 
 ::: keybox
-Not defined at $x$ = 0, no minimum level of $y$. Linear model: optimum at zero (price) or infinity (advertising); multiplicative: a finite optimum from elasticities and costs.
+Not defined at $x$ = 0; no minimum level of $y$. Optimum: zero or infinity in the linear model, finite in the multiplicative one.
 :::
 :::
 :::
@@ -794,19 +805,19 @@ This is a **marketing mix model** in miniature: sales on the marketing inputs, l
 
 ## Four ways to combine levels and logs {.smaller}
 
-```{r forms, fig.width=11, fig.height=2.6}
-fig_functional_forms(base_size = 11)
-```
+| Model | Equation | Reading $\beta_1$ | Typical use |
+|---|---|---|---|
+| **Level-level** | $y = \beta_0 + \beta_1 x$ | +1 unit $x$ → $\beta_1$ units of $y$ | Constant effects; dummies |
+| **Log-level** | $\log y = \beta_0 + \beta_1 x$ | +1 unit $x$ → ≈ $100\beta_1$% of $y$ (exact: $100(e^{\beta_1}-1)$%) | Outcome that grows in percent: a placement adds 12% |
+| **Level-log** | $y = \beta_0 + \beta_1 \log x$ | +1% $x$ → ≈ $\beta_1/100$ units of $y$ | Diminishing returns in a predictor, outcome in units |
+| **Log-log** | $\log y = \beta_0 + \beta_1 \log x$ | +1% $x$ → ≈ $\beta_1$% of $y$ (**elasticity**) | Response to spend, price: the marketing default |
 
-| Model | Equation | Reading $\beta_1$ |
-|---|---|---|
-| Level-level | $y = \beta_0 + \beta_1 x$ | +1 unit $x$ → $\beta_1$ units of $y$ |
-| Log-level | $\log y = \beta_0 + \beta_1 x$ | +1 unit $x$ → ≈ $100\beta_1$% of $y$ (exact: $100(e^{\beta_1}-1)$%) |
-| Level-log | $y = \beta_0 + \beta_1 \log x$ | +1% $x$ → ≈ $\beta_1/100$ units of $y$ |
-| Log-log | $\log y = \beta_0 + \beta_1 \log x$ | +1% $x$ → ≈ $\beta_1$% of $y$ (**elasticity**) |
+::: keybox
+The transformation decides the **unit of the coefficient** — units, percent, or percent per percent. In our model: `log(spend)` and `log(followers)` are log-log terms (elasticities), `placements` and the genre dummies are log-level terms (percent per unit).
+:::
 
 ::: notes
-In our model, `placements` is a log-level term: 0.12 → about 12% more streams per placement (exact: 12.8%). For coefficients up to ~0.1 the approximation is fine; beyond that use exp(β) − 1 (β = 0.5 → 65%, not 50%). Zeros: log(x + 1) — book box.
+In our model, `placements` is a log-level term: 0.12 → about 12% more streams per placement (exact: 12.8%). For coefficients up to ~0.1 the approximation is fine; beyond that use exp(β) − 1 (β = 0.5 → 65%, not 50%). Zeros: log(x + 1) — book box. The shapes of the four forms are in the book (fig-forms); the log-log shape depends on the elasticity, see the previous slides.
 :::
 
 ## Your turn (5 min) {.midsize}
@@ -902,7 +913,7 @@ MLE in one sentence: for given coefficients, each user gets a probability P_i; t
 
 ::: columns
 ::: {.column width="58%"}
-```{r logit-slopes, fig.width=7, fig.height=3.3, out.width="100%"}
+```{r logit-slopes, fig.width=6.5, fig.height=4.6, out.width="100%"}
 fig_logistic_slopes(base_size = 10)
 ```
 :::
@@ -992,24 +1003,24 @@ Same logic as multiple regression: each coefficient holds the others constant. P
 
 ::: columns
 ::: {.column width="33%"}
-```{r diag-a, fig.width=4.2, fig.height=3.2, out.width="100%"}
-fig_residuals_form(base_size = 9) + plot_layout(ncol = 2)
+```{r diag-a, fig.width=4.5, fig.height=3.6, out.width="100%"}
+fig_residuals_linear(base_size = 10)
 ```
 
 **1. Is the line the right shape?** Curved residuals → change the functional form (log) or add a predictor.
 :::
 
 ::: {.column width="33%"}
-```{r diag-b, fig.width=4.2, fig.height=3.2, out.width="100%"}
-fig_influence(base_size = 9)
+```{r diag-b, fig.width=4.5, fig.height=3.6, out.width="100%"}
+fig_influence(base_size = 10)
 ```
 
 **2. Does one observation drive the result?** `plot(model, which = 5)`; refit without it — if the conclusion changes, say so.
 :::
 
 ::: {.column width="34%"}
-```{r diag-c, fig.width=4.2, fig.height=3.2, out.width="100%"}
-fig_heteroskedasticity(base_size = 9) + labs(subtitle = NULL)
+```{r diag-c, fig.width=4.5, fig.height=3.6, out.width="100%"}
+fig_heteroskedasticity(base_size = 10) + labs(subtitle = "A funnel: the spread grows with the fitted values")
 ```
 
 **3. Is the uncertainty right?** A funnel → **robust standard errors**: `coeftest(model, vcov = vcovHC(model))`.
@@ -1066,7 +1077,25 @@ The control group's change estimates what would have happened to the treated son
 :::
 :::
 
-## The DiD regression {.smaller}
+## The DiD regression: the model {.smaller}
+
+$$
+\log(\text{streams}_{it}) = \beta_0 + \beta_1 \, \text{treated}_i + \beta_2 \, \text{post}_t + \beta_3 \, (\text{treated}_i \times \text{post}_t) + \varepsilon_{it}
+$$
+
+$i$ = song, $t$ = week. What the model predicts for the four cells:
+
+| | **Before** (post = 0) | **After** (post = 1) | After − before |
+|---|---|---|---|
+| **Control** (treated = 0) | $\beta_0$ | $\beta_0 + \beta_2$ | $\beta_2$ — the common time trend |
+| **Treated** (treated = 1) | $\beta_0 + \beta_1$ | $\beta_0 + \beta_1 + \beta_2 + \beta_3$ | $\beta_2 + \beta_3$ |
+| Treated − control | $\beta_1$ — the level difference | $\beta_1 + \beta_3$ | $\beta_3$ — **the DiD effect** |
+
+::: keybox
+$\beta_3$ is the difference of the two differences: the change of the treated songs **minus** the change of the control songs. In R, `treated * post` expands to the three terms.
+:::
+
+## The DiD regression: the estimate {.smaller}
 
 ```{r did-lm, echo=TRUE}
 did_data <- playlist |>

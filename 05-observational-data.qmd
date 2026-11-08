@@ -717,7 +717,7 @@ The value of $\beta_1$ in the multiplicative model $y = e^{\beta_0} x^{\beta_1}$
 - **$\beta_1 < 0$**: $y$ falls with $x$, steeply at first and then ever more slowly — the typical shape of a price response.
 - **$0 < \beta_1 < 1$**: $y$ rises with **diminishing returns** — the typical shape for advertising, promotion, and distribution; most marketing elasticities lie here, usually well below 0.5.
 - **$\beta_1 = 1$**: $y$ is **proportional** to $x$ — doubling spend doubles streams. The response curve is then a straight line through the origin, so for this one value the multiplicative and the linear model describe the same mean response. The models still differ in everything else: the multiplicative model has no intercept (no sales without spend), its errors are multiplicative, and the other predictors scale the effect.
-- **$\beta_1 > 1$**: **increasing returns** — the curve bends upward. Rare in marketing; it occurs with network effects or threshold phenomena.
+- **$\beta_1 > 1$**: **increasing returns** — the curve bends upward: each additional euro buys *more* than the previous one. Rare in marketing. It occurs with **network effects**, where the product becomes more valuable the more people use it (a messaging app or a marketplace is worth little with ten users and a lot with ten million, so each new user is worth more than the last), and with **threshold phenomena**, where a promotion starts to spread by word of mouth once it has reached a critical mass.
 
 ```{r}
 #| label: fig-power-shapes

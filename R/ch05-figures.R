@@ -508,18 +508,21 @@ fig_elasticity_compare <- function(base_size = 11) {
   x <- seq(1, 10, length.out = 200)
   lin <- data.frame(x, y = 2 + 0.8 * x) |> mutate(el = 0.8 * x / y)
   mul <- data.frame(x, y = 2.5 * x^0.4) |> mutate(el = 0.4)
-  d <- bind_rows(mutate(lin, model = "Linear (level-level): y = b0 + b1 x"),
-                 mutate(mul, model = "Multiplicative (log-log): y = b0 * x^b1"))
+  d <- bind_rows(mutate(lin, model = "Linear model: y = b0 + b1 x"),
+                 mutate(mul, model = "Multiplicative model: y = b0 * x^b1"))
   d$model <- factor(d$model, levels = unique(d$model))
   long <- d |> pivot_longer(c(y, el), names_to = "what", values_to = "value") |>
-    mutate(what = factor(what, levels = c("y", "el"), labels = c("Sales y", "Elasticity of y w.r.t. x")))
+    mutate(what = factor(what, levels = c("y", "el"), labels = c("Sales y", "Elasticity of sales w.r.t. spend")),
+           panel = interaction(what, model, sep = "\n", lex.order = TRUE))
+  long$panel <- factor(long$panel, levels = c(paste("Sales y", levels(d$model)[1], sep = "\n"), paste("Sales y", levels(d$model)[2], sep = "\n"),
+                                              paste("Elasticity of sales w.r.t. spend", levels(d$model)[1], sep = "\n"), paste("Elasticity of sales w.r.t. spend", levels(d$model)[2], sep = "\n")))
   ggplot(long, aes(x, value, color = what)) +
-    geom_line(linewidth = 1.2) +
-    facet_grid(what ~ model, scales = "free_y", switch = "y") +
-    scale_color_manual(values = c(`Sales y` = wu_blue, `Elasticity of y w.r.t. x` = wu_orange), guide = "none") +
-    labs(x = "Advertising spend x", y = NULL,
-         subtitle = "Linear: constant marginal returns, rising elasticity. Multiplicative: diminishing returns, constant elasticity.") +
-    theme_course(base_size) + theme(axis.text = element_blank(), strip.placement = "outside", strip.text.y.left = element_text(angle = 90))
+    geom_line(linewidth = 1.3) +
+    facet_wrap(~panel, nrow = 2, scales = "free_y") +
+    scale_color_manual(values = c(`Sales y` = wu_blue, `Elasticity of sales w.r.t. spend` = wu_orange), guide = "none") +
+    scale_y_continuous(limits = c(0, NA)) +
+    labs(x = "Advertising spend x", y = NULL) +
+    theme_course(base_size) + theme(strip.text = element_text(size = rel(0.95), lineheight = 0.9))
 }
 
 # --- 5.7: what the multiplicative model looks like for different elasticities
@@ -583,4 +586,19 @@ fig_logistic_slopes <- function(base_size = 12) {
     labs(x = "Listening hours", y = "P(upgrade)",
          subtitle = "Same midpoint (P = 0.5 at 30 hours); the slope sets how sharply the curve separates the outcomes") +
     theme_course(base_size) + theme(legend.position = "bottom") + guides(color = guide_legend(nrow = 3))
+}
+
+
+# --- 5.9: one residual plot (the linear model) for the three-checks slide ----------
+fig_residuals_linear <- function(c2 = load_campaigns(), base_size = 11) {
+  lin <- lm(streams ~ spend + followers + placements, c2)
+  d <- data.frame(fitted = fitted(lin), resid = resid(lin))
+  ggplot(d, aes(fitted, resid)) +
+    geom_hline(yintercept = 0, color = wu_red, linetype = "dashed") +
+    geom_point(alpha = 0.3, color = wu_grey, size = 1.2) +
+    geom_smooth(se = FALSE, color = wu_blue, method = "loess", formula = y ~ x, linewidth = 1.2) +
+    scale_x_continuous(labels = scales::label_number(scale_cut = scales::cut_short_scale())) +
+    scale_y_continuous(labels = scales::label_number(scale_cut = scales::cut_short_scale())) +
+    labs(x = "Fitted values (linear model)", y = "Residuals", subtitle = "A curve in the residuals: the line has the wrong shape") +
+    theme_course(base_size)
 }
