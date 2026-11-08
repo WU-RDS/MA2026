@@ -2581,46 +2581,226 @@ Figure&nbsp;4.17: The distribution of more than one million <em>z</em>-values fr
 <section id="sec-lc-04" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="sec-lc-04">Learning check</h2>
 <p><strong>(LC4.1)</strong> Explain in your own words what the standard error of the difference between two group means measures, and why it gets smaller when the groups get larger.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-28-contents" aria-controls="callout-28" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-28" class="callout-28-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The standard error of the difference measures how much the observed difference between the two group means would <strong>vary from sample to sample</strong> if the experiment were repeated with new random groups: it is the standard deviation of the sampling distribution of the difference. It combines the uncertainty of both means — <span class="math inline">\(\sqrt{s_1^2 / n_1 + s_2^2 / n_2}\)</span> — because the variances of independent estimates add. It shrinks with larger groups because each group mean is estimated more precisely: more users average out more of the individual noise, and both terms under the root fall with <span class="math inline">\(n\)</span> (by the square-root law of Chapter 3: four times the users, half the standard error).</p>
+</div>
+</div>
+</div>
 <p><strong>(LC4.2)</strong> An A/B test of a new checkout page yields: difference in average order value +2.40 €, 95% CI [−0.30 €; 5.10 €], <em>p</em> = 0.08. (a) Is the result statistically significant at the 5% level? (b) Write one sentence for the head of e-commerce that describes the result correctly. (c) What would you recommend?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-29-contents" aria-controls="callout-29" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-29" class="callout-29-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Part (a): No.&nbsp;The <em>p</em>-value is above 0.05, and the confidence interval contains zero — the two always agree.</p>
+<p>Part (b): “Customers who saw the new checkout page spent on average 2.40 € more per order, but the data are compatible both with no difference and with an increase of up to about 5 €; the experiment was too small to tell whether the new page increases order value.”</p>
+<p>Part (c): Do not conclude that the page has no effect — “not significant” is not “no effect”. Decide which effect would matter for the business (e.g., +1 € per order), compute the sample size needed to detect it with 80% power, and run a larger test. If the test cannot be enlarged, report the interval and the decision made under uncertainty, not a verdict.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC4.3)</strong> Which of the following statements about <em>p</em> = 0.02 are correct?</p>
 <ul class="task-list">
 <li><label><input type="checkbox">The probability that the null hypothesis is true is 2%</label></li>
-<li><label><input type="checkbox">If there were no effect, a result at least this extreme would occur in 2% of experiments</label></li>
+<li><label><input type="checkbox" checked="">If there were no effect, a result at least this extreme would occur in 2% of experiments</label></li>
 <li><label><input type="checkbox">The effect is large</label></li>
-<li><label><input type="checkbox">With the same true effect, a smaller sample would probably have produced a larger <em>p</em>-value</label></li>
+<li><label><input type="checkbox" checked="">With the same true effect, a smaller sample would probably have produced a larger <em>p</em>-value</label></li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-30-contents" aria-controls="callout-30" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-30" class="callout-30-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Correct: statements 2 and 4. Statement 1 reverses the conditional: the <em>p</em>-value is computed <em>assuming</em> the null hypothesis, so it cannot be the probability of the null hypothesis (the runny-nose example: a cold almost always gives a runny nose, but a runny nose rarely means a cold). Statement 3 is wrong because the <em>p</em>-value says nothing about the size of an effect — a tiny effect is highly significant in a large enough sample. Statement 4 is correct because a smaller sample means a larger standard error and therefore a smaller test statistic for the same difference.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC4.4)</strong> A test of a new ad creative on 5 million users shows a significant increase in the click-through rate from 0.410% to 0.415% (<em>p</em> &lt; 0.001). Discuss whether the new creative should be rolled out.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-31-contents" aria-controls="callout-31" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-31" class="callout-31-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The result is statistically significant because the sample is enormous, not because the effect is large: +0.005 percentage points, about +1% relative. Whether to roll it out is a business question: 0.005 points on 5 million impressions are about 250 additional clicks — worth it if the creative costs nothing to switch, not worth a production budget. Significance tells you the effect is probably real; the <strong>effect size</strong> and its <strong>value</strong> tell you whether it matters. The confidence interval (likely from roughly +0.003 to +0.007 points) gives the range of plausible effects for the business case.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC4.5)</strong> A colleague runs an A/B test, checks the results every morning, and stops the test on the day the <em>p</em>-value falls below 0.05. Explain what is wrong with this approach and how the test should have been planned.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-32-contents" aria-controls="callout-32" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-32" class="callout-32-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>This is <strong>peeking</strong>, or optional stopping. The <em>p</em>-value wanders from day to day; if you stop as soon as it dips below 0.05, you catch it at a low point, and the chance of a false alarm rises far above 5% — with daily checks over a few weeks it can exceed 30% even when there is no effect at all. The test should have been planned in advance: decide the smallest effect that matters, compute the <strong>sample size</strong> needed to detect it with 80% power, run the test until that sample is reached, and evaluate it <strong>once</strong>. (If interim looks are needed, there are sequential testing procedures that adjust the thresholds — but not the naive daily check.)</p>
+</div>
+</div>
+</div>
 <p><strong>(LC4.6)</strong> Which test would you use? (a) Conversion rates of three different newsletter versions. (b) Satisfaction ratings (1–7) of the same 40 customers for two product prototypes. (c) Average basket size of customers who saw a discount banner vs.&nbsp;customers who did not (randomized, 3,000 customers per group).</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-33-contents" aria-controls="callout-33" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-33" class="callout-33-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Part (a): a yes/no outcome with three independent groups — the <strong>chi-square test</strong> (<code>chisq.test()</code> on the 3 × 2 table; <code>prop.test()</code> with three groups does the same), followed by corrected pairwise comparisons if the overall test is significant.</p>
+<p>Part (b): the same people rate both prototypes, so the measurements are paired, and the outcome is ordinal — the <strong>Wilcoxon signed-rank test</strong> (<code>wilcox.test(..., paired = TRUE)</code>). Many analysts treat a 7-point rating as metric and use the paired <em>t</em>-test; with 40 customers and a symmetric scale that is defensible, but the rank test is the safer choice.</p>
+<p>Part (c): a metric outcome, two independent randomized groups, large samples — the <strong><em>t</em>-test for two independent groups</strong> (Welch’s <em>t</em>-test, <code>t.test(basket ~ group)</code>).</p>
+</div>
+</div>
+</div>
 <p><strong>(LC4.7)</strong> Your group project experiment has two conditions with about 60 respondents each. What is the smallest standardized effect (<span class="math inline">\(d\)</span>) you can detect with 80% power — and what does this imply for the design of your manipulation?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-34-contents" aria-controls="callout-34" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-34" class="callout-34-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><code>power.t.test(n = 60, sd = 1, sig.level = 0.05, power = 0.80)</code> gives <span class="math inline">\(d \approx\)</span> 0.52 — a <strong>medium</strong> effect by Cohen’s conventions. Smaller true effects will most likely come out “not significant” even if they exist. Implications: make the manipulation <strong>strong and clear</strong> (two versions that differ unmistakably, not subtly), use a sensitive outcome measure (a multi-item scale rather than one yes/no question), keep the two conditions otherwise identical, and formulate the expectation before collecting data. And write the limitation into the report: with 60 per group, a non-significant result means “no evidence”, not “no effect”.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC4.8)</strong> Which of the following statements about the analysis of variance are correct?</p>
 <ul class="task-list">
 <li><label><input type="checkbox">A significant ANOVA shows that all group means differ from each other</label></li>
-<li><label><input type="checkbox">Comparing five groups with all ten pairwise <em>t</em>-tests without correction leads to a family-wise error rate far above 5%</label></li>
-<li><label><input type="checkbox">Post-hoc tests such as Bonferroni or Tukey’s HSD keep the family-wise error rate at the chosen level</label></li>
+<li><label><input type="checkbox" checked="">Comparing five groups with all ten pairwise <em>t</em>-tests without correction leads to a family-wise error rate far above 5%</label></li>
+<li><label><input type="checkbox" checked="">Post-hoc tests such as Bonferroni or Tukey’s HSD keep the family-wise error rate at the chosen level</label></li>
 <li><label><input type="checkbox">An <em>F</em> value close to 1 indicates large differences between the group means</label></li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-35-contents" aria-controls="callout-35" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-35" class="callout-35-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Correct: statements 2 and 3. Statement 1 is wrong: a significant ANOVA shows that <em>at least one</em> group differs from the others; which ones is the job of the post-hoc tests. Statement 2 is correct: ten independent tests at 5% give a family-wise error rate of <span class="math inline">\(1 - 0.95^{10}\)</span> = 40%. Statement 4 is wrong: <em>F</em> is the ratio of the variation <em>between</em> the groups to the variation <em>within</em> them, and under the null hypothesis it is about 1; large differences between the means produce a large <em>F</em>.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC4.9)</strong> A 95% confidence interval for the difference in average basket size between two versions of a product page is [−1.20 €; 4.50 €]. Which statements are correct?</p>
 <ul class="task-list">
 <li><label><input type="checkbox">The difference is significant at the 5% level</label></li>
-<li><label><input type="checkbox">The data are compatible with no difference between the versions</label></li>
+<li><label><input type="checkbox" checked="">The data are compatible with no difference between the versions</label></li>
 <li><label><input type="checkbox">The experiment proves that the two versions perform equally well</label></li>
-<li><label><input type="checkbox">The true difference could plausibly be as large as 4.50 €</label></li>
+<li><label><input type="checkbox" checked="">The true difference could plausibly be as large as 4.50 €</label></li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-36-contents" aria-controls="callout-36" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-36" class="callout-36-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Correct: statements 2 and 4. Statement 1 is wrong because the interval contains zero (equivalently, <em>p</em> &gt; 0.05). Statement 3 is wrong: a non-significant result does not prove equality — the interval also contains differences of 3 or 4 €, which may matter a lot for the business. Statement 2 and 4 describe the two ends of the same interval: no difference and a sizable difference are both plausible, which is exactly what “the experiment was too small to tell” means.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC4.10)</strong> Which statements about power are correct?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">Power is the probability of detecting an effect of a given size if it exists</label></li>
-<li><label><input type="checkbox">Increasing the sample size increases the power</label></li>
+<li><label><input type="checkbox" checked="">Power is the probability of detecting an effect of a given size if it exists</label></li>
+<li><label><input type="checkbox" checked="">Increasing the sample size increases the power</label></li>
 <li><label><input type="checkbox">Lowering the significance level from 5% to 1% increases the power</label></li>
 <li><label><input type="checkbox">Computing the power after an experiment, using the observed effect, shows whether a non-significant result can be trusted</label></li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-37-contents" aria-controls="callout-37" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-37" class="callout-37-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Correct: statements 1 and 2. Statement 3 is wrong: a stricter significance level makes it <em>harder</em> to reject the null hypothesis, so power falls — fewer false alarms, more missed effects; the only way to reduce both errors is a larger sample. Statement 4 describes <strong>post hoc power</strong>, which adds no information: it is a transformation of the <em>p</em>-value, so a non-significant result always comes out “underpowered”. Ask instead what effect the experiment could have detected (sensitivity) or how large the next one must be (planning).</p>
+</div>
+</div>
+</div>
 <p><strong>(LC4.11)</strong> Which statements about non-parametric tests are correct?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">They are based on the ranks of the observations rather than on the values themselves</label></li>
-<li><label><input type="checkbox">The Wilcoxon signed-rank test is the non-parametric counterpart of the paired <em>t</em>-test</label></li>
+<li><label><input type="checkbox" checked="">They are based on the ranks of the observations rather than on the values themselves</label></li>
+<li><label><input type="checkbox" checked="">The Wilcoxon signed-rank test is the non-parametric counterpart of the paired <em>t</em>-test</label></li>
 <li><label><input type="checkbox">They are always preferable to <em>t</em>-tests, because they need fewer assumptions</label></li>
-<li><label><input type="checkbox">They are suitable for ordinal outcomes such as ratings from “poor” to “excellent”</label></li>
+<li><label><input type="checkbox" checked="">They are suitable for ordinal outcomes such as ratings from “poor” to “excellent”</label></li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-38-contents" aria-controls="callout-38" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-38" class="callout-38-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Correct: statements 1, 2, and 4. Statement 3 is wrong: when the <em>t</em>-test’s assumptions are reasonable (metric outcome, large enough samples), it is more powerful than the rank test, and it answers the question about <em>means</em>, which is usually the business question; rank tests compare the typical observation, a different question. Non-parametric tests are the right choice for ordinal outcomes and for small samples with extreme skew or outliers — not a universal replacement.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
