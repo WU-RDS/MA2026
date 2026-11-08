@@ -513,19 +513,46 @@ test  <- smartmix_obs[-train_ids, ]
 model_pred <- lm(hours ~ prior_hours + tenure + premium +
                    device + smart_mix, data = train)
 test$predicted <- predict(model_pred, newdata = test)
-sqrt(mean((test$hours - test$predicted)^2))   # RMSE
+
+summary(model_pred)$r.squared        # in-sample R² (training data)
+cor(test$predicted, test$hours)^2    # out-of-sample R² (test data)
 ```
 :::
 
 ::: {.column width="50%"}
-```{r pred-fig, fig.width=5.5, fig.height=3.8}
+```{r pred-fig, fig.width=5.5, fig.height=3.6}
 fig_prediction(base_size = 11)
 ```
 :::
 :::
 
 ::: keybox
-For **prediction**, it does not matter *why* a variable is associated with the outcome — only how well the predictions hold up on **data the model has not seen**.
+**Fit on the training users, judge on the test users.** The in-sample R² flatters the model (it was fitted to these very users); the **out-of-sample R²** — the squared correlation between predicted and actual values in the test set — is the honest number. Close here (0.48 vs. 0.42): few predictors, many users. With many predictors and small samples, the gap is **overfitting** made visible.
+:::
+
+## How far off is a prediction? The RMSE {.smaller}
+
+::: columns
+::: {.column width="55%"}
+$$
+\text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} \left( y_i - \hat{y}_i \right)^2}
+$$
+
+1.  Each test user's **prediction error** $y_i - \hat{y}_i$
+2.  **Square** it: over- and under-predictions do not cancel, big misses count more
+3.  **Average** the squares
+4.  **Root**: back to the original unit (hours)
+
+```{r rmse, echo=TRUE}
+sqrt(mean((test$hours - test$predicted)^2))
+```
+:::
+
+::: {.column width="45%"}
+::: keybox
+The RMSE is the **standard deviation of the prediction errors**: a typical prediction for a new user misses by about **9.5 hours**. For a decision maker, that is more useful than a share of explained variation — it is in the unit of the decision.
+:::
+:::
 :::
 
 ## Two questions, two rules {.midsize}
@@ -635,6 +662,30 @@ Today: functional form and elasticities → logistic regression → diagnostics 
 
 # 5.7 Functional form: when the line is wrong {.divider background-color="#0a3d6e"}
 
+## Two assumptions of the linear model — and what relaxes them {.smaller}
+
+::: columns
+::: {.column width="50%"}
+$$
+y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \dots + \varepsilon_i
+$$
+
+**Linearity:** a one-unit change in $x$ has the same effect at every level of $x$ — **constant marginal returns**. Ad spend 10 → 11 € adds as much as 100,000 → 100,001 €. No saturation.
+
+**Additivity:** the effect of one predictor does not depend on the others. Each playlist placement adds the same number of streams for an artist with 1,000 or a million followers.
+:::
+
+::: {.column width="50%"}
+::: keybox
+**Where this course relaxes them:**
+
+-   Linearity → the **multiplicative (log-log) model**, this section: diminishing returns built in
+-   Additivity → the multiplicative model (effects scale each other) and **interaction terms**, Chapter 6
+-   **Detecting** a wrong form → the residual plot, §5.9: curved residuals mean the straight line is wrong
+:::
+:::
+:::
+
 ## Diminishing returns {.smaller}
 
 ```{r fits, fig.width=11.5, fig.height=4.2}
@@ -670,6 +721,58 @@ $\log(a^b) = b \log a$
 $\log(e^x) = x$
 
 Additive model: each euro adds $\beta_1$ streams, always. Multiplicative model: each euro adds a **percentage** of the current streams — diminishing returns built in.
+:::
+:::
+:::
+
+## Why the log transformation straightens the curve {.smaller}
+
+```{r log-intuition, fig.width=11.5, fig.height=3.5}
+fig_log_intuition(base_size = 10)
+```
+
+::: keybox
+Multiplicative model: equal **percentage** steps in $x$ → equal **percentage** steps in $y$ (doubling spend always adds +32% streams, but ever fewer streams). The logarithm turns percentages into distances — a doubling is always $\log 2$ — so the curve becomes a line with slope = elasticity.
+:::
+
+## Elasticity: linear vs. log-log model {.smaller .nostretch}
+
+```{r el-compare, fig.width=11, fig.height=2.5, out.width="100%"}
+fig_elasticity_compare(base_size = 10)
+```
+
+::: columns
+::: {.column width="50%"}
+Elasticity $\eta_x = (\Delta y / y) / (\Delta x / x)$: % change in $y$ per % change in $x$
+
+-   **Linear:** $\eta_x = \beta_1 \, x / y$ **rises** with $x$ — implausible
+-   **Multiplicative:** $\eta_x = \beta_1$ **constant**; marginal returns fall
+:::
+
+::: {.column width="50%"}
+::: keybox
+Additive in **logs** = multiplicative in **levels**: the same *percentage* effect for every artist; the *number* of streams scales with the follower base.
+:::
+:::
+:::
+
+## What the elasticity says about the shape {.smaller}
+
+::: columns
+::: {.column width="55%"}
+```{r shapes, fig.width=7, fig.height=3.0, out.width="100%"}
+fig_power_shapes(base_size = 10)
+```
+:::
+
+::: {.column width="45%"}
+-   $\beta_1 < 0$: falls, flattening out — **price**
+-   $0 < \beta_1 < 1$: **diminishing returns** — advertising, promotion; most marketing elasticities (usually < 0.5)
+-   $\beta_1 = 1$: **proportional** — a straight line through the origin; the one case where the mean response is linear (no intercept, errors still multiplicative)
+-   $\beta_1 > 1$: **increasing returns** — rare; network effects
+
+::: keybox
+Not defined at $x$ = 0, no minimum level of $y$. Linear model: optimum at zero (price) or infinity (advertising); multiplicative: a finite optimum from elasticities and costs.
 :::
 :::
 :::
@@ -767,7 +870,7 @@ $$
 P(y_i = 1) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x_i)}}
 $$
 
--   Very negative $\beta_0 + \beta_1 x_i$ → $P \approx 0$ · very positive → $P \approx 1$
+-   $\beta_0 + \beta_1 x_i$ is the familiar line — fed through a function that squeezes it into [0, 1]: line far **below** 0 → $P \approx 0$ · line = 0 → $P$ = 0.5 · line far **above** 0 → $P \approx 1$
 -   Derived from the **log-odds**: odds = $P / (1 - P)$ ("1 to 4" = 0.25)
 
 $$
@@ -793,6 +896,26 @@ round(coef(summary(model_upgrade)), 3)
 
 ::: notes
 MLE in one sentence: for given coefficients, each user gets a probability P_i; the likelihood of the data is the product of P_i for upgraders and (1 − P_i) for non-upgraders; glm() iterates to find the coefficients that maximize it ("Fisher Scoring iterations" in the output). Book box.
+:::
+
+## Weak vs. strong effects: the slope {.smaller}
+
+::: columns
+::: {.column width="58%"}
+```{r logit-slopes, fig.width=7, fig.height=3.3, out.width="100%"}
+fig_logistic_slopes(base_size = 10)
+```
+:::
+
+::: {.column width="42%"}
+-   $\beta_1$ **≈ 0**: almost flat — the predictor hardly **discriminates** between upgraders and non-upgraders
+-   $\beta_1$ **large**: an almost vertical step — listening time nearly determines who upgrades
+-   $\beta_0$ shifts the curve; **midpoint** ($P$ = 0.5) at $x = -\beta_0 / \beta_1$ ≈ **28 hours**
+
+::: keybox
+**Sign** = direction, **size** = how sharply the outcome responds — on the log-odds scale; "how much" in probabilities: next two slides.
+:::
+:::
 :::
 
 ## Reading the coefficients: odds ratios {.smaller}

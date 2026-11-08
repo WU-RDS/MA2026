@@ -136,7 +136,12 @@ test  <- smartmix_obs[-train_ids, ]
 model_pred <- lm(hours ~ prior_hours + tenure + premium + device + smart_mix, data = train)
 test$predicted <- predict(model_pred, newdata = test)
 
-sqrt(mean((test$hours - test$predicted)^2))   # typical prediction error (RMSE)
+# In-sample vs. out-of-sample fit
+summary(model_pred)$r.squared                  # in-sample R-squared (training data; flatters the model)
+cor(test$predicted, test$hours)^2              # out-of-sample R-squared (test data; the honest number)
+
+# The typical prediction error: RMSE = sqrt(mean of squared prediction errors), in hours
+sqrt(mean((test$hours - test$predicted)^2))
 
 
 # ======================================================================

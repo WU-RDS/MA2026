@@ -540,8 +540,33 @@ test  <- smartmix_obs[-train_ids, ]
 
 model_pred <- lm(hours ~ prior_hours + tenure + premium + device + smart_mix, data = train)
 test$predicted <- predict(model_pred, newdata = test)
+```
 
-sqrt(mean((test$hours - test$predicted)^2))   # typical prediction error (RMSE) in hours
+**In-sample vs. out-of-sample fit.** The R² reported by `summary()` is computed on the *training* data — the same users the line was fitted to — and therefore flatters the model. The honest counterpart is the **out-of-sample R²**: how much of the variation in the *test* users' listening time the predictions capture. The simplest version is the squared correlation between predicted and actual values in the test set:
+
+```{r}
+summary(model_pred)$r.squared                  # in-sample R-squared (training data)
+cor(test$predicted, test$hours)^2              # out-of-sample R-squared (test data)
+```
+
+```{r}
+#| echo: false
+r2_in  <- summary(model_pred)$r.squared
+r2_out <- cor(test$predicted, test$hours)^2
+```
+
+Here the two are close (`r round(r2_in, 2)` vs. `r round(r2_out, 2)`): the model has few predictors and 1,500 training users, so it has learned little noise. With many predictors or small samples, the gap widens — that is overfitting made visible.
+
+**The typical prediction error.** For a decision maker, a percentage of explained variation is less useful than the question "how far off is a prediction, in hours?". The **root mean squared error** answers it:
+
+$$
+\text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} \left( y_i - \hat{y}_i \right)^2}
+$$
+
+Take every test user's prediction error $y_i - \hat{y}_i$, square it (so that over- and under-predictions do not cancel, and large misses count more), average the squares, and take the root to return to the original unit. The RMSE is the standard deviation of the prediction errors: a typical prediction misses by about this much.
+
+```{r}
+sqrt(mean((test$hours - test$predicted)^2))   # RMSE: typical prediction error in hours
 ```
 
 ```{r}
@@ -584,6 +609,15 @@ The solutions will be available after the session.
 :::
 
 ## Functional form: when the straight line is wrong {#sec-obs-form}
+
+### Two assumptions of the linear model
+
+Every regression so far has been a **linear, additive** model, $y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \dots + \varepsilon_i$, and such a model makes two assumptions about how the predictors work:
+
+- **Linearity:** the effect of a one-unit change in a predictor is the same regardless of the predictor's level — *constant marginal returns*. An increase in advertising from 10 € to 11 € adds as many sales as an increase from 100,000 € to 100,001 €. There is no saturation.
+- **Additivity:** the effect of one predictor does not depend on the values of the other predictors. Each playlist placement adds the same number of streams whether the artist has 1,000 followers or a million.
+
+Both assumptions are convenient — the model is easy to estimate and to read — and both are questionable for most marketing relationships. This section relaxes the first with the **multiplicative (log-log) model**, which has diminishing returns built in; the same model also relaxes the second, because in it the effect of each predictor scales with the others. @sec-mechanisms relaxes additivity in a second way, with **interaction terms**, which let the effect of one variable depend explicitly on another. And @sec-obs-diagnostics shows how to *detect* a wrong functional form in the residuals of a fitted model.
 
 ### Diminishing returns
 
@@ -636,6 +670,76 @@ summary(model_loglog)
 ```
 
 The coefficient of `log(spend)` has a special interpretation: it is an **elasticity**. A 1% increase in promotion spend goes with a `r round(coef(model_loglog)["log(spend)"], 2)`% increase in streams; a 10% increase with about `r round(10 * coef(model_loglog)["log(spend)"], 1)`%. The elasticity is constant along the curve — which is exactly what makes the multiplicative model fit diminishing returns: 10% more spend always buys the same *percentage* of additional streams, but at a high budget 10% is a lot of money for the same percentage. Elasticities are the natural language of marketing response: they do not depend on units, and they are comparable across variables, markets, and studies. The followers elasticity of `r round(coef(model_loglog)["log(followers)"], 2)`, for example, says that the artist's existing audience matters more than the promotion budget.
+
+### Why the log transformation straightens the curve
+
+@fig-log-intuition shows the mechanics. In a multiplicative model, equal *percentage* steps in spend produce equal *percentage* steps in streams: doubling the budget (+100%) always adds the same +32% to streams (with an elasticity of 0.4, since $2^{0.4} = 1.32$), but at a higher budget that 32% is added to a larger base. On the original scale this traces a curve that flattens out. The logarithm turns multiplication into addition — a step of +100% in $x$ is always the same distance of $\log 2$ on the log axis, and a step of +32% in $y$ the same distance of $\log 1.32$ — so equal percentage steps become equal distances, and the curve becomes a straight line whose slope is the elasticity.
+
+```{r}
+#| label: fig-log-intuition
+#| echo: false
+#| fig-width: 11
+#| fig-height: 4.5
+#| fig-cap: "Why the log transformation works. Left: each doubling of spend adds the same percentage to streams, but fewer and fewer streams. Right: on log scales, equal percentage steps are equal distances — a straight line with slope 0.4."
+fig_log_intuition()
+```
+
+::: {.callout-note collapse="true" title="Under the hood: additive in logs, multiplicative in levels — is the additivity assumption relaxed or not?"}
+Both. The log-log model is *additive in the logarithms*: the percentage effect of spend does not depend on the number of followers — 10% more spend buys 3.3% more streams for a small and a large artist alike. But it is *multiplicative in the levels*: 3.3% of a large artist's streams is many more streams than 3.3% of a small artist's, so in absolute terms the effect of spend is scaled by the follower base (and by everything else in the model). Compared with the level-level model, in which each euro adds the same number of streams for everyone, the additivity assumption is relaxed in levels and kept in percentages. If you believe that *percentage* effects also depend on other variables — that promotion is relatively more effective for small artists, say — you need an interaction term in the log-log model, which is the subject of @sec-mechanisms.
+:::
+
+### Elasticities: constant in the log-log model, not in the linear one
+
+The **elasticity** of $y$ with respect to $x$ is the percentage change in $y$ per percent change in $x$:
+
+$$
+\eta_x = \frac{\Delta y / y}{\Delta x / x} = \frac{\Delta y}{\Delta x} \cdot \frac{x}{y}
+$$
+
+It is the unit-free way of stating how responsive sales are to a marketing instrument. The two models treat it very differently (@fig-elasticity-compare):
+
+- In the **linear model**, the marginal effect $\Delta y / \Delta x = \beta_1$ is constant, so the elasticity $\eta_x = \beta_1 \cdot x / y$ *rises* with $x$: advertising becomes relatively more effective the more of it you buy — the opposite of saturation, and implausible for most marketing instruments.
+- In the **multiplicative model**, $\Delta y / y = \beta_1 \cdot \Delta x / x$, so the elasticity is the constant $\beta_1$ and the marginal effect falls with $x$ — diminishing returns, which is what the campaign data show.
+
+```{r}
+#| label: fig-elasticity-compare
+#| echo: false
+#| fig-width: 10
+#| fig-height: 5
+#| fig-cap: "Sales and the elasticity of sales with respect to advertising in the two models. Linear: constant marginal returns, rising elasticity. Multiplicative: diminishing returns, constant elasticity."
+fig_elasticity_compare()
+```
+
+### What the elasticity tells you about the shape
+
+The value of $\beta_1$ in the multiplicative model $y = e^{\beta_0} x^{\beta_1}$ determines the shape of the response curve (@fig-power-shapes):
+
+- **$\beta_1 < 0$**: $y$ falls with $x$, steeply at first and then ever more slowly — the typical shape of a price response.
+- **$0 < \beta_1 < 1$**: $y$ rises with **diminishing returns** — the typical shape for advertising, promotion, and distribution; most marketing elasticities lie here, usually well below 0.5.
+- **$\beta_1 = 1$**: $y$ is **proportional** to $x$ — doubling spend doubles streams. The response curve is then a straight line through the origin, so for this one value the multiplicative and the linear model describe the same mean response. The models still differ in everything else: the multiplicative model has no intercept (no sales without spend), its errors are multiplicative, and the other predictors scale the effect.
+- **$\beta_1 > 1$**: **increasing returns** — the curve bends upward. Rare in marketing; it occurs with network effects or threshold phenomena.
+
+```{r}
+#| label: fig-power-shapes
+#| echo: false
+#| fig-width: 8
+#| fig-height: 4.2
+#| fig-cap: "The response curve of the multiplicative model for different values of the elasticity."
+fig_power_shapes()
+```
+
+Two further properties follow from the form. A multiplicative model is **not defined for $x$ = 0** (the logarithm of zero does not exist — see the box on zeros below), and it has **no minimum level** of the outcome: with zero spend it predicts zero streams, whereas the linear model's intercept acts as a baseline. The properties of the two models side by side:
+
+| | Linear (level-level) | Multiplicative (log-log) |
+|---|---|---|
+| Estimation | OLS directly | OLS after taking logs |
+| Marginal returns | Constant | Diminishing (for $0 < \beta_1 < 1$); saturation possible |
+| Elasticity | Rises with $x$ | Constant ($\beta_1$) — simple to communicate and to use for budget decisions |
+| Effects of several predictors | Add up | Scale each other (additive in logs) |
+| Baseline | Intercept = outcome at $x$ = 0 | No minimum level; not defined at $x$ = 0 |
+| Optimal level of the instrument | Zero (price) or infinite (advertising) | Finite, found by comparing elasticities with costs |
+
+: Properties of the linear and the multiplicative model {#tbl-lin-vs-mult .striped}
 
 ### Marketing mix models
 
@@ -751,7 +855,7 @@ $$
 P(y_i = 1) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x_i)}}
 $$
 
-where $e$ is the base of the natural logarithm. For very negative values of $\beta_0 + \beta_1 x_i$ the denominator is huge and the probability is close to 0; for very positive values it is close to 1; in between, the function traces the S-curve of @fig-logistic. The function is derived from the **log-odds**: the **odds** of an event are the probability of the event divided by the probability of the non-event, $P / (1 - P)$ — a probability of 0.2 corresponds to odds of 0.25, or "1 to 4". Logistic regression assumes that the *logarithm* of the odds is a linear function of the predictors,
+where $e$ is the base of the natural logarithm. The expression $\beta_0 + \beta_1 x_i$ is the familiar straight line — but instead of being the prediction itself, it is fed through the logistic function, which squeezes any number onto the interval between 0 and 1. When the line is far below zero (a light listener, in our example), $e^{-(\dots)}$ is huge and the probability is close to 0; when the line is exactly zero, the probability is exactly 0.5; when the line is far above zero, $e^{-(\dots)}$ vanishes and the probability is close to 1. In between, the function traces the S-curve of @fig-logistic. The function is derived from the **log-odds**: the **odds** of an event are the probability of the event divided by the probability of the non-event, $P / (1 - P)$ — a probability of 0.2 corresponds to odds of 0.25, or "1 to 4". Logistic regression assumes that the *logarithm* of the odds is a linear function of the predictors,
 
 $$
 \log \left( \frac{P(y_i = 1)}{1 - P(y_i = 1)} \right) = \beta_0 + \beta_1 x_i
@@ -768,6 +872,17 @@ summary(model_upgrade)
 ::: {.callout-note collapse="true" title="Under the hood: maximum likelihood"}
 There is no line and no residual to square, so logistic regression cannot use least squares. It uses **maximum likelihood** instead: for given coefficients, the model assigns every user a probability of upgrading, $P_i$; the *likelihood* of the data is the probability of observing exactly the upgrades and non-upgrades we saw, $\prod_i P_i^{\,y_i} (1 - P_i)^{\,1 - y_i}$ — users who upgraded contribute $P_i$, users who did not contribute $1 - P_i$. The estimates $\hat{\beta}_0$ and $\hat{\beta}_1$ are the values that make this product (or, more conveniently, its logarithm) as large as possible: the coefficients under which the observed data would have been most likely. There is no formula for the maximum; `glm()` finds it by iteration, which is why the output reports a number of "Fisher Scoring iterations". The standard errors, *z*-values, and *p*-values in the output are read like those of `lm()`; the *t*-distribution is replaced by the normal distribution.
 :::
+
+**Weak and strong effects.** The slope coefficient $\beta_1$ determines how *steep* the S-curve is, and therefore how well the predictor separates the two outcomes (@fig-logistic-slopes). A $\beta_1$ close to zero gives an almost flat curve: the probability of an upgrade is nearly the same for light and heavy listeners, and listening time tells us little about who upgrades. A large $\beta_1$ gives a curve that jumps from near 0 to near 1 within a few hours: knowing a user's listening time almost determines whether they upgrade — the predictor *discriminates* strongly between upgraders and non-upgraders. The intercept $\beta_0$ shifts the curve left or right; the midpoint, where the probability is 0.5, lies at $x = -\beta_0 / \beta_1$ (here about `r round(-coef(model_upgrade)[1] / coef(model_upgrade)[2])` hours).
+
+```{r}
+#| label: fig-logistic-slopes
+#| echo: false
+#| fig-width: 7.5
+#| fig-height: 4.6
+#| fig-cap: "Three logistic curves with the same midpoint and different slope coefficients: the larger the coefficient, the more sharply listening time separates upgraders from non-upgraders."
+fig_logistic_slopes()
+```
 
 ### Reading the coefficients
 

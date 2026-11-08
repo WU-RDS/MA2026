@@ -497,3 +497,90 @@ fig_mediator_dag <- function(base_size = 12) {
   one("Total effect of Smart Mix", FALSE) | one("Adjusting for the mediator", TRUE)
 }
 
+
+# ------------------------------------------------------------------
+# Additions to R/ch05-figures.R (November 8, 2026): functional form and
+# logistic-regression intuition. Paste at the end of ch05-figures.R.
+# ------------------------------------------------------------------
+
+# --- 5.7: linear vs. multiplicative model, with their elasticities ---------
+fig_elasticity_compare <- function(base_size = 11) {
+  x <- seq(1, 10, length.out = 200)
+  lin <- data.frame(x, y = 2 + 0.8 * x) |> mutate(el = 0.8 * x / y)
+  mul <- data.frame(x, y = 2.5 * x^0.4) |> mutate(el = 0.4)
+  d <- bind_rows(mutate(lin, model = "Linear (level-level): y = b0 + b1 x"),
+                 mutate(mul, model = "Multiplicative (log-log): y = b0 * x^b1"))
+  d$model <- factor(d$model, levels = unique(d$model))
+  long <- d |> pivot_longer(c(y, el), names_to = "what", values_to = "value") |>
+    mutate(what = factor(what, levels = c("y", "el"), labels = c("Sales y", "Elasticity of y w.r.t. x")))
+  ggplot(long, aes(x, value, color = what)) +
+    geom_line(linewidth = 1.2) +
+    facet_grid(what ~ model, scales = "free_y", switch = "y") +
+    scale_color_manual(values = c(`Sales y` = wu_blue, `Elasticity of y w.r.t. x` = wu_orange), guide = "none") +
+    labs(x = "Advertising spend x", y = NULL,
+         subtitle = "Linear: constant marginal returns, rising elasticity. Multiplicative: diminishing returns, constant elasticity.") +
+    theme_course(base_size) + theme(axis.text = element_blank(), strip.placement = "outside", strip.text.y.left = element_text(angle = 90))
+}
+
+# --- 5.7: what the multiplicative model looks like for different elasticities
+fig_power_shapes <- function(base_size = 12) {
+  x <- seq(0.3, 4, length.out = 200)
+  d <- bind_rows(
+    data.frame(x, y = 2 * x^-0.7, b = "b1 < 0 (e.g. price)"),
+    data.frame(x, y = 2 * x^0.4, b = "0 < b1 < 1 (diminishing returns)"),
+    data.frame(x, y = 2 * x^1, b = "b1 = 1 (proportional)"),
+    data.frame(x, y = 2 * x^1.6, b = "b1 > 1 (increasing returns)")
+  )
+  d$b <- factor(d$b, levels = unique(d$b))
+  ggplot(d, aes(x, y, color = b, linetype = b)) +
+    geom_line(linewidth = 1.2) +
+    scale_color_manual(values = c(wu_red, wu_blue, wu_grey, wu_orange), name = NULL) +
+    scale_linetype_manual(values = c("dotdash", "solid", "solid", "dotted"), name = NULL) +
+    coord_cartesian(ylim = c(0, 12)) +
+    labs(x = "x", y = "y = b0 * x^b1") +
+    theme_course(base_size) + theme(axis.text = element_blank(), legend.position = "right")
+}
+
+# --- 5.7: why the log transformation straightens the curve ----------------------
+# Equal PERCENTAGE steps in x (doublings) produce equal PERCENTAGE steps in y;
+# on log scales, equal percentage steps are equal distances -> a straight line
+fig_log_intuition <- function(base_size = 11) {
+  b0 <- 500; b1 <- 0.4
+  x <- seq(500, 32000, length.out = 300); curve <- data.frame(x, y = b0 * x^b1)
+  pts <- data.frame(x = 1000 * 2^(0:4)) |> mutate(y = b0 * x^b1)
+  steps <- pts |> mutate(x_next = lead(x), y_next = lead(y)) |> filter(!is.na(x_next))
+  p1 <- ggplot(curve, aes(x, y)) + geom_line(color = wu_blue, linewidth = 1.1) +
+    geom_segment(data = steps, aes(x = x, xend = x_next, y = y, yend = y), color = wu_orange, linewidth = 0.8) +
+    geom_segment(data = steps, aes(x = x_next, xend = x_next, y = y, yend = y_next), color = wu_orange, linewidth = 0.8) +
+    geom_point(data = pts, aes(x, y), color = wu_dark, size = 2.5) +
+    geom_text(data = steps, aes(x = x_next, y = (y + y_next) / 2, label = sprintf("+%.0f%%", 100 * (y_next / y - 1))), hjust = -0.15, size = base_size / 3.4, color = wu_orange) +
+    scale_x_continuous(labels = scales::label_number(scale_cut = scales::cut_short_scale(), prefix = "€")) +
+    scale_y_continuous(labels = scales::label_number(scale_cut = scales::cut_short_scale())) +
+    labs(title = "Original scale", subtitle = "Each doubling of spend (+100%) adds the same +32% to streams,\nbut a shrinking number of streams", x = "Promotion spend", y = "Streams") +
+    theme_course(base_size)
+  p2 <- ggplot(curve, aes(log(x), log(y))) + geom_line(color = wu_blue, linewidth = 1.1) +
+    geom_segment(data = steps, aes(x = log(x), xend = log(x_next), y = log(y), yend = log(y)), color = wu_orange, linewidth = 0.8) +
+    geom_segment(data = steps, aes(x = log(x_next), xend = log(x_next), y = log(y), yend = log(y_next)), color = wu_orange, linewidth = 0.8) +
+    geom_point(data = pts, aes(log(x), log(y)), color = wu_dark, size = 2.5) +
+    labs(title = "Both axes logged", subtitle = "Equal percentage steps become equal distances:\nthe curve is a straight line with slope 0.4", x = "log(promotion spend)", y = "log(streams)") +
+    theme_course(base_size)
+  p1 | p2
+}
+
+# --- 5.8: weak vs. strong effects in the logistic model ------------------------
+fig_logistic_slopes <- function(base_size = 12) {
+  x <- seq(0, 60, length.out = 300)
+  d <- bind_rows(
+    data.frame(x, p = plogis(0.02 * (x - 30)), b = "b1 = 0.02: weak effect, almost flat"),
+    data.frame(x, p = plogis(0.16 * (x - 30)), b = "b1 = 0.16: moderate effect (our model)"),
+    data.frame(x, p = plogis(0.60 * (x - 30)), b = "b1 = 0.60: strong effect, almost a step")
+  )
+  d$b <- factor(d$b, levels = unique(d$b))
+  ggplot(d, aes(x, p, color = b)) +
+    geom_line(linewidth = 1.2) +
+    geom_vline(xintercept = 30, linetype = "dotted", color = "grey50") +
+    scale_color_manual(values = c(wu_grey, wu_blue, wu_orange), name = NULL) +
+    labs(x = "Listening hours", y = "P(upgrade)",
+         subtitle = "Same midpoint (P = 0.5 at 30 hours); the slope sets how sharply the curve separates the outcomes") +
+    theme_course(base_size) + theme(legend.position = "bottom") + guides(color = guide_legend(nrow = 3))
+}
