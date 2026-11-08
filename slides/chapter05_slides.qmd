@@ -705,8 +705,6 @@ fig_campaign_fits(base_size = 12)
 
 ## The multiplicative model — and why logs make it linear {.smaller}
 
-::: columns
-::: {.column width="55%"}
 **Multiplicative:** each predictor *scales* the outcome
 
 $$
@@ -718,16 +716,22 @@ $$
 $$
 \log(\text{streams}_i) = \beta_0 + \beta_1 \log(\text{spend}_i) + \beta_2 \log(\text{followers}_i) + \varepsilon_i
 $$
-:::
 
+::: columns
 ::: {.column width="45%"}
 ::: keybox
 **Three log rules do the work:**
-$\log(a \cdot b) = \log a + \log b$
-$\log(a^b) = b \log a$
-$\log(e^x) = x$
 
-Additive model: each euro adds $\beta_1$ streams, always. Multiplicative model: each euro adds a **percentage** of the current streams — diminishing returns built in.
+-   $\log(a \cdot b) = \log a + \log b$ — a product becomes a sum
+-   $\log(a^b) = b \log a$ — a power becomes a factor
+-   $\log(e^x) = x$
+:::
+:::
+
+::: {.column width="55%"}
+::: keybox
+**Additive model:** each euro adds $\beta_1$ streams, always.
+**Multiplicative model:** each euro adds a **percentage** of the current streams — diminishing returns built in; and the effect of spend is *scaled* by the followers.
 :::
 :::
 :::
