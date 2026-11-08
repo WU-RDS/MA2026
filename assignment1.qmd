@@ -352,5 +352,5 @@ The debrief at the start of the session after the deadline (page 1 of the combin
 ::: {.callout-note collapse="true" title="Expected answers"}
 1. The focus genre of the student's own data version (it depends on the student ID).
 2. **Positive** — in every data version (correlation about 0.35, see Task 5d).
-3. (a) **Non-explicit tracks** have the higher median number of streams — in every data version. (b) The two groups differ in their streams, but the comparison **cannot show that the lyrics cause** this difference: it is a descriptive comparison of tracks that differ in more than their lyrics (e.g., label, artist popularity, target audience), and the data contain only tracks that made the charts (see Task 6).
+3. (a) In most data versions, **non-explicit tracks** have the higher median number of streams; in a few versions, the explicit tracks of the focus genre come out ahead. The answer was graded against each student's own data. (b) The two groups differ in their streams, but the comparison **cannot show that the lyrics cause** this difference: it is a descriptive comparison of tracks that differ in more than their lyrics (e.g., label, artist popularity, target audience), and the data contain only tracks that made the charts (see Task 6).
 :::
