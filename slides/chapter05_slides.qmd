@@ -705,6 +705,8 @@ fig_campaign_fits(base_size = 12)
 
 ## The multiplicative model — and why logs make it linear {.smaller}
 
+::: columns
+::: {.column width="55%"}
 **Multiplicative:** each predictor *scales* the outcome
 
 $$
@@ -716,22 +718,16 @@ $$
 $$
 \log(\text{streams}_i) = \beta_0 + \beta_1 \log(\text{spend}_i) + \beta_2 \log(\text{followers}_i) + \varepsilon_i
 $$
+:::
 
-::: columns
 ::: {.column width="45%"}
 ::: keybox
 **Three log rules do the work:**
+$\log(a \cdot b) = \log a + \log b$
+$\log(a^b) = b \log a$
+$\log(e^x) = x$
 
--   $\log(a \cdot b) = \log a + \log b$ — a product becomes a sum
--   $\log(a^b) = b \log a$ — a power becomes a factor
--   $\log(e^x) = x$
-:::
-:::
-
-::: {.column width="55%"}
-::: keybox
-**Additive model:** each euro adds $\beta_1$ streams, always.
-**Multiplicative model:** each euro adds a **percentage** of the current streams — diminishing returns built in; and the effect of spend is *scaled* by the followers.
+Additive model: each euro adds $\beta_1$ streams, always. Multiplicative model: each euro adds a **percentage** of the current streams — diminishing returns built in.
 :::
 :::
 :::
@@ -743,7 +739,7 @@ fig_log_intuition(base_size = 10)
 ```
 
 ::: keybox
-Multiplicative model: equal **percentage** steps in $x$ → equal **percentage** steps in $y$ (doubling spend always adds +32% streams, but ever fewer streams). The logarithm turns percentages into distances — a doubling is always $\log 2$ — so the curve becomes a line with slope = elasticity.
+Multiplicative model: equal **percentage** steps in $x$ → equal **percentage** steps in $y$ (each doubling of spend adds the same percentage of streams, but ever fewer streams). The logarithm turns percentages into distances — a doubling is always $\log 2$ — so the curve becomes a line with slope = elasticity.
 :::
 
 ## Elasticity: linear vs. log-log model {.smaller}
@@ -812,12 +808,12 @@ This is a **marketing mix model** in miniature: sales on the marketing inputs, l
 | Model | Equation | Reading $\beta_1$ | Typical use |
 |---|---|---|---|
 | **Level-level** | $y = \beta_0 + \beta_1 x$ | +1 unit $x$ → $\beta_1$ units of $y$ | Constant effects; dummies |
-| **Log-level** | $\log y = \beta_0 + \beta_1 x$ | +1 unit $x$ → ≈ $100\beta_1$% of $y$ (exact: $100(e^{\beta_1}-1)$%) | Outcome that grows in percent: a placement adds 12% |
-| **Level-log** | $y = \beta_0 + \beta_1 \log x$ | +1% $x$ → ≈ $\beta_1/100$ units of $y$ | Diminishing returns in a predictor, outcome in units |
-| **Log-log** | $\log y = \beta_0 + \beta_1 \log x$ | +1% $x$ → ≈ $\beta_1$% of $y$ (**elasticity**) | Response to spend, price: the marketing default |
+| **Log-level** | $\log y = \beta_0 + \beta_1 x$ | +1 unit $x$ → ≈ $100\beta_1$% of $y$ (exact: $100(e^{\beta_1}-1)$%): **semi-elasticity** | A placement adds 12% |
+| **Level-log** | $y = \beta_0 + \beta_1 \log x$ | +1% $x$ → ≈ $\beta_1/100$ units of $y$ | Diminishing returns, outcome in units |
+| **Log-log** | $\log y = \beta_0 + \beta_1 \log x$ | +1% $x$ → $\beta_1$% of $y$: **elasticity** | Spend, price: the marketing default |
 
 ::: keybox
-The transformation decides the **unit of the coefficient** — units, percent, or percent per percent. In our model: `log(spend)` and `log(followers)` are log-log terms (elasticities), `placements` and the genre dummies are log-level terms (percent per unit).
+The transformation decides the **unit of the coefficient**: units, percent, or percent per percent. In our model, `log(spend)` and `log(followers)` are elasticities; `placements` and the genre dummies are semi-elasticities (percent per unit).
 :::
 
 ::: notes
@@ -830,11 +826,11 @@ In our model, `placements` is a log-level term: 0.12 → about 12% more streams 
 From the log-log model:
 
 1.  `genreHipHop/Rap` = 0.20. By what percentage do HipHop/Rap campaigns differ from Pop campaigns (the reference) — approximately and exactly?
-2.  A marketing manager proposes to double the promotion budget of every campaign. By roughly what percentage would streams increase, according to the model? Is this a causal claim?
+2.  A marketing manager proposes to raise the promotion budget of every campaign by **10%**. By what percentage would streams increase, according to the model? Is this a causal claim?
 :::
 
 ::: notes
-(1) ≈ 20%; exact: exp(0.20) − 1 = 22%. (2) Doubling = +100%; with constant elasticity: 2^0.33 − 1 ≈ 26% (the rule of thumb 0.33 × 100 = 33% overshoots for such a large change — a good moment to show that the % rule is a local approximation). Causal? Only if spend is not confounded with unobserved campaign quality — probably it is (bigger budgets go to more promising releases).
+(1) ≈ 20%; exact: exp(0.20) − 1 = 22%. (2) Elasticity 0.33: +10% spend → about +3.3% streams (holding followers, placements and genre constant). Not causal: campaigns with bigger budgets differ in other ways (expected demand, label support, timing) — spend is endogenous.
 :::
 
 ## Live demo: linear or log-log? {.midsize}
@@ -1027,7 +1023,7 @@ fig_influence(base_size = 10)
 fig_heteroskedasticity(base_size = 10) + labs(subtitle = "A funnel: the spread grows with the fitted values")
 ```
 
-**3. Is the uncertainty right?** A funnel → **robust standard errors**: `coeftest(model, vcov = vcovHC(model))`.
+**3. Is the uncertainty right?** A funnel (test: `bptest(model)`) → **robust standard errors**: `coeftest(model, vcov = vcovHC(model))`.
 :::
 :::
 
@@ -1107,7 +1103,6 @@ did_data <- playlist |>
   mutate(log_streams = log(streams + 1))
 model_did <- lm(log_streams ~ treated * post, data = did_data)
 round(coef(summary(model_did)), 3)
-100 * (exp(coef(model_did)["treated:post"]) - 1)   # DiD effect in percent
 ```
 
 | Coefficient | Meaning |
@@ -1115,7 +1110,7 @@ round(coef(summary(model_did)), 3)
 | `(Intercept)` 9.76 | Control, before: baseline |
 | `treated` 0.09 | Treated, before: the **level difference** |
 | `post` −0.05 | Control, after − before: the **common time trend** |
-| `treated:post` **0.28** | The extra change of the treated songs: the **DiD effect**, in log points. Logged outcome, dummy predictor → exact percentage $100 \cdot (e^{0.28} - 1)$ = **+32% streams** (the rule of thumb "100 · β = 28%" is off because 0.28 is not small) |
+| `treated:post` **0.28** | The extra change of the treated songs: the **DiD effect** → ≈ **+32% streams** |
 
 ::: notes
 `treated * post` = treated + post + treated:post. Advantages over the four means: standard errors, and easy extensions (controls, fixed effects — book box). The interaction term in its general role: Chapter 6.
@@ -1230,13 +1225,13 @@ Report effect + uncertainty + **assumptions**: "Adjusting for prior listening, t
 
 ## Learning check (Part II) {.smaller}
 
-1.  Log-log coefficient of ad spend = 0.15. Interpret. The level model says 0.8 sales per euro — why might the two disagree about doubling the budget?
+1.  Log-log coefficient of ad spend = 0.15. Interpret. The level model says 0.8 sales per euro — why might the two disagree about a large budget increase?
 2.  Log-level model, dummy "promotion week" = 0.35. Percentage difference in sales — approximate and exact?
 3.  Residual plot shows a funnel. Consequence for coefficients, for *p*-values — and the simplest fix?
 4.  A DiD of a price promotion in treated stores: which assumption, and how can the pre-period help?
 
 ::: notes
-(1) +1% spend → +0.15% sales; doubling: 2^0.15 − 1 ≈ 11%, while the linear model extrapolates constant returns. (2) ≈ 35%; exact 42%. (3) Coefficients unbiased, SEs/p-values wrong; robust SEs. (4) Parallel trends; placebo test / visual pre-trends.
+(1) +1% spend → +0.15% sales (elasticity). The linear model assumes constant returns — every euro adds 0.8 sales, however large the budget — while the log-log model builds in diminishing returns; for a large increase the two models therefore predict very different gains. (2) ≈ 35%; exact 42%. (3) Coefficients unbiased, SEs/p-values wrong; robust SEs. (4) Parallel trends; placebo test / visual pre-trends.
 :::
 
 ## Next session

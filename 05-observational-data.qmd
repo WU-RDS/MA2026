@@ -673,7 +673,7 @@ The coefficient of `log(spend)` has a special interpretation: it is an **elastic
 
 ### Why the log transformation straightens the curve
 
-@fig-log-intuition shows the mechanics. In a multiplicative model, equal *percentage* steps in spend produce equal *percentage* steps in streams: doubling the budget (+100%) always adds the same +32% to streams (with an elasticity of 0.4, since $2^{0.4} = 1.32$), but at a higher budget that 32% is added to a larger base. On the original scale this traces a curve that flattens out. The logarithm turns multiplication into addition — a step of +100% in $x$ is always the same distance of $\log 2$ on the log axis, and a step of +32% in $y$ the same distance of $\log 1.32$ — so equal percentage steps become equal distances, and the curve becomes a straight line whose slope is the elasticity.
+@fig-log-intuition shows the mechanics. In a multiplicative model, equal *percentage* steps in spend produce equal *percentage* steps in streams: each doubling of the budget adds the same percentage to streams, but at a higher budget that percentage is added to a larger base, so the number of additional streams shrinks. On the original scale this traces a curve that flattens out. The logarithm turns multiplication into addition — a step of +100% in $x$ is always the same distance of $\log 2$ on the log axis, and a step of +32% in $y$ the same distance of $\log 1.32$ — so equal percentage steps become equal distances, and the curve becomes a straight line whose slope is the elasticity.
 
 ```{r}
 #| label: fig-log-intuition
@@ -754,7 +754,7 @@ Logging the outcome, a predictor, both, or neither gives four model types with f
 | Model | Equation | Interpretation of $\beta_1$ |
 |---|---|---|
 | **Level-level** | $y = \beta_0 + \beta_1 x$ | One more unit of $x$ → $\beta_1$ more units of $y$ |
-| **Log-level** | $\log(y) = \beta_0 + \beta_1 x$ | One more unit of $x$ → about $100 \cdot \beta_1$% more $y$ (exactly: $100 \cdot (e^{\beta_1} - 1)$%) |
+| **Log-level** | $\log(y) = \beta_0 + \beta_1 x$ | One more unit of $x$ → about $100 \cdot \beta_1$% more $y$ (exactly: $100 \cdot (e^{\beta_1} - 1)$%); a **semi-elasticity** |
 | **Level-log** | $y = \beta_0 + \beta_1 \log(x)$ | 1% more $x$ → about $\beta_1 / 100$ more units of $y$ |
 | **Log-log** | $\log(y) = \beta_0 + \beta_1 \log(x)$ | 1% more $x$ → about $\beta_1$% more $y$ (an **elasticity**) |
 
@@ -869,6 +869,19 @@ model_upgrade <- glm(upgraded ~ hours, family = binomial, data = free_users)
 summary(model_upgrade)
 ```
 
+The chart that goes with the model is the 0/1 outcome plotted against the predictor with the fitted logistic curve on top. `ggplot2` can fit the curve directly: `geom_smooth()` with `method = "glm"` and the binomial family draws exactly the curve that `glm()` estimates (@fig-logistic-ggplot).
+
+```{r}
+#| label: fig-logistic-ggplot
+#| fig-width: 6.5
+#| fig-height: 3.8
+#| fig-cap: "The upgrade outcome against listening hours (jittered points) with the logistic curve fitted by glm()."
+ggplot(free_users, aes(x = hours, y = upgraded)) +
+  geom_jitter(width = 0, height = 0.03, alpha = 0.15) +
+  geom_smooth(method = "glm", method.args = list(family = binomial), se = FALSE) +
+  labs(x = "Listening hours", y = "Upgraded to Premium (0/1)")
+```
+
 ::: {.callout-note collapse="true" title="Under the hood: maximum likelihood"}
 There is no line and no residual to square, so logistic regression cannot use least squares. It uses **maximum likelihood** instead: for given coefficients, the model assigns every user a probability of upgrading, $P_i$; the *likelihood* of the data is the probability of observing exactly the upgrades and non-upgrades we saw, $\prod_i P_i^{\,y_i} (1 - P_i)^{\,1 - y_i}$ — users who upgraded contribute $P_i$, users who did not contribute $1 - P_i$. The estimates $\hat{\beta}_0$ and $\hat{\beta}_1$ are the values that make this product (or, more conveniently, its logarithm) as large as possible: the coefficients under which the observed data would have been most likely. There is no formula for the maximum; `glm()` finds it by iteration, which is why the output reports a number of "Fisher Scoring iterations". The standard errors, *z*-values, and *p*-values in the output are read like those of `lm()`; the *t*-distribution is replaced by the normal distribution.
 :::
@@ -943,7 +956,7 @@ mean(p_premium - p_free)
 Premium subscribers are about `r abs(round(100 * mean(predict(model_churn, newdata = mutate(smartmix_obs, premium = 1), type = "response") - predict(model_churn, newdata = mutate(smartmix_obs, premium = 0), type = "response")), 1))` percentage points less likely to churn than otherwise identical free users. (Whether this is a *causal* effect of the subscription is, of course, the same question as in @sec-obs-adjust: exogeneity is required here too.)
 
 ::: {.callout-note collapse="true" title="Under the hood: how good is the model? Pseudo-R²"}
-There is no R² for a logistic regression, because there are no squared residuals. The usual substitute is **McFadden's pseudo-R²**, which compares the log-likelihood of the model with that of a model without predictors: $1 - \log L_{\text{model}} / \log L_{\text{null}}$ — in R, `1 - model_upgrade$deviance / model_upgrade$null.deviance`. Values are much lower than those of a linear R²; 0.2 to 0.4 already indicates a good fit. For prediction, the share of correctly classified users (with a cutoff of 0.5) or the area under the ROC curve are the more practical measures.
+There is no R² for a logistic regression, because there are no squared residuals. The usual substitute is **McFadden's pseudo-R²**, which compares the log-likelihood of the model with that of a model without predictors: $1 - \log L_{\text{model}} / \log L_{\text{null}}$. The `performance` package computes it with `r2_mcfadden(model_upgrade)` (by hand: `1 - model_upgrade$deviance / model_upgrade$null.deviance`); for the upgrade model it is `r round(performance::r2_mcfadden(model_upgrade)$R2, 2)`. Values are much lower than those of a linear R²; 0.2 to 0.4 already indicates a good fit. For prediction, the share of correctly classified users (with a cutoff of 0.5) or the area under the ROC curve are the more practical measures.
 :::
 
 ## The diagnostics that change decisions {#sec-obs-diagnostics}
@@ -977,7 +990,7 @@ plot(model_loglog, which = 1)   # residuals vs. fitted, with a smooth line
 fig_influence()
 ```
 
-**3. Is the uncertainty right?** The standard errors of `lm()` assume that the residuals scatter equally at all levels of the prediction. When the scatter grows with the fitted values — a **funnel** in the residual plot (@fig-heteroskedasticity), common for sales and revenues — the coefficients remain unbiased, but their standard errors, and hence the *p*-values and confidence intervals, are wrong. The fix is cheap: **robust standard errors**, which do not rely on this assumption:
+**3. Is the uncertainty right?** The standard errors of `lm()` assume that the residuals scatter equally at all levels of the prediction. When the scatter grows with the fitted values — a **funnel** in the residual plot (@fig-heteroskedasticity), common for sales and revenues — the coefficients remain unbiased, but their standard errors, and hence the *p*-values and confidence intervals, are wrong. A formal check is the **Breusch–Pagan test** (`bptest()` in the `lmtest` package), which tests whether the squared residuals depend on the predictors; a small *p*-value says they do. For the linear campaign model it rejects decisively, for the log-log model it does not. The fix is cheap either way: **robust standard errors**, which do not rely on this assumption:
 
 ```{r}
 #| label: fig-heteroskedasticity
@@ -993,7 +1006,8 @@ fig_heteroskedasticity()
 library(sandwich)
 library(lmtest)
 model_linear <- lm(streams ~ spend + followers + placements, data = campaigns)
-coeftest(model_linear, vcov = vcovHC(model_linear, type = "HC1"))
+bptest(model_linear)                                   # heteroskedasticity test
+coeftest(model_linear, vcov = vcovHC(model_linear, type = "HC1"))   # robust standard errors
 ```
 
 Often, the funnel disappears when the outcome is logged — another reason why the log-log model is the better default for skewed outcomes.
@@ -1227,7 +1241,7 @@ The regression toolkit has one more use, which the next chapter develops: it can
 
 **(LC5.4)** A colleague fits a regression with 25 predictors to 300 customers and reports R² = 0.71 for predicting next month's spending. What should you ask before trusting this number?
 
-**(LC5.5)** In a log-log regression, the coefficient of log(advertising spend) is 0.15. (a) Interpret it. (b) The same analysis in levels gives a coefficient of 0.8 sales per euro. Why might the two models reach different conclusions about whether to double the budget?
+**(LC5.5)** In a log-log regression, the coefficient of log(advertising spend) is 0.15. (a) Interpret it. (b) The same analysis in levels gives a coefficient of 0.8 sales per euro. Why might the two models reach different conclusions about whether a large increase in the advertising budget pays off?
 
 **(LC5.6)** In a log-level model with the outcome log(sales), the coefficient of a dummy for "promotion week" is 0.35. By what percentage do sales differ in promotion weeks? Use both the approximate and the exact interpretation.
 
