@@ -700,13 +700,11 @@ fig_campaign_fits(base_size = 12)
 ```
 
 ::: keybox
-500 promotion campaigns: the first euros buy many streams, later euros fewer. A straight line cannot bend — on **log scales**, the cloud becomes a line again.
+500 promotion campaigns: the first euros buy many streams, later euros fewer. A straight line cannot bend — on **log-scaled axes** (each gridline is ×10 the previous one; the units stay euros and streams), the cloud becomes a line again: equal *multiples* of spend go with equal *multiples* of streams.
 :::
 
 ## The multiplicative model — and why logs make it linear {.smaller}
 
-::: columns
-::: {.column width="55%"}
 **Multiplicative:** each predictor *scales* the outcome
 
 $$
@@ -718,20 +716,25 @@ $$
 $$
 \log(\text{streams}_i) = \beta_0 + \beta_1 \log(\text{spend}_i) + \beta_2 \log(\text{followers}_i) + \varepsilon_i
 $$
-:::
 
+::: columns
 ::: {.column width="45%"}
 ::: keybox
 **Three log rules do the work:**
-$\log(a \cdot b) = \log a + \log b$
-$\log(a^b) = b \log a$
-$\log(e^x) = x$
 
-Additive model: each euro adds $\beta_1$ streams, always. Multiplicative model: each euro adds a **percentage** of the current streams — diminishing returns built in.
-:::
+-   $\log(a \cdot b) = \log a + \log b$ — a product becomes a sum
+-   $\log(a^b) = b \log a$ — a power becomes a factor
+-   $\log(e^x) = x$
 :::
 :::
 
+::: {.column width="55%"}
+::: keybox
+**Additive model:** each euro adds $\beta_1$ streams, always.\
+**Multiplicative model:** each euro adds a **percentage** of the current streams — diminishing returns built in; and the effect of spend is *scaled* by the followers.
+:::
+:::
+:::
 ## Why the log transformation straightens the curve {.smaller}
 
 ```{r log-intuition, fig.width=11.5, fig.height=3.5}
@@ -852,6 +855,32 @@ Elasticity **< 1**: diminishing returns, the line misses at both ends. **= 1**: 
 :::
 
 # 5.8 Yes/no outcomes: logistic regression {.divider background-color="#0a3d6e"}
+
+## The case: who upgrades to Premium? {.midsize}
+
+::: columns
+::: {.column width="55%"}
+**Same data as before — the Smart Mix launch — a new question.** Among the **free users** (`r format(nrow(free_users), big.mark = ",")` of the 2,000), the service recorded whether a user **upgraded to Premium** within three months after the launch.
+
+-   Outcome: `upgraded` — **1** if the user upgraded, **0** if not; `r round(100 * mean(free_users$upgraded))`% did
+-   Question of the growth team: *does listening time predict who upgrades — and how strongly?*
+-   The answer feeds a **targeting** decision: which free users should get the upgrade offer first?
+:::
+
+::: {.column width="45%"}
+::: keybox
+A **yes/no outcome**. Everything so far modeled a *number* (hours, streams). Now the outcome is a **probability** — and a probability has to stay between 0 and 1.
+:::
+
+::: discussion
+What goes wrong if we just run `lm(upgraded ~ hours)`?
+:::
+:::
+:::
+
+::: notes
+Observational again: nobody randomized listening time. For targeting that is fine — we want to predict who upgrades, not whether listening causes upgrades. Keep the prediction-vs-explanation distinction from 5.6 in mind when the coefficients are read.
+:::
 
 ## Why not a straight line? {.midsize}
 
@@ -974,6 +1003,24 @@ fig_logistic_steps(base_size = 11)
 Report effects as **predicted probabilities at chosen values** (10 vs. 30 hours: 5% vs. 59%) or as the **average change** across all users — "the effect of one more hour" has no single answer in percentage points.
 :::
 
+## A second case: who cancels? {.midsize}
+
+::: columns
+::: {.column width="55%"}
+**Churn.** For all 2,000 users, the data record whether the user **cancelled** the service within three months after the launch: `churn` = 1 (`r round(100 * mean(smartmix_obs$churn))`% did), 0 otherwise.
+
+-   Question of the retention team: *which users are at risk — and does Premium status protect against churn, once listening and tenure are taken into account?*
+-   Candidates: `hours`, `premium`, `tenure`, `smart_mix` — the same predictors as in the adjustment models, now for a yes/no outcome
+-   The answer feeds a **retention** decision: whom to contact before they leave
+:::
+
+::: {.column width="45%"}
+::: keybox
+Logistic regression with **several predictors**: the same logic as multiple regression — each coefficient holds the others constant — but on the **log-odds** scale.
+:::
+:::
+:::
+
 ## Several predictors: churn {.smaller}
 
 ```{r glm2, echo=TRUE}
@@ -1032,6 +1079,32 @@ Not on the list: normality of residuals (CLT; glance at the Q-Q plot for extreme
 :::
 
 # 5.10 A quasi-experiment: difference-in-differences {.divider background-color="#0a3d6e"}
+
+## The case: what is a playlist listing worth? {.midsize}
+
+::: columns
+::: {.column width="55%"}
+**Real data from a WU research project.** Labels pay a lot of attention to **editorial playlists**: being listed on a major playlist is supposed to boost a song's streams. But by how much?
+
+-   **`r n_distinct(playlist$song_id)` songs**, weekly streams over **21 weeks** (January to June 2018)
+-   On **March 19, 2018**, `r n_distinct(playlist$song_id[playlist$treated == 1])` of them were added to a major playlist (the **treated** songs); the other `r n_distinct(playlist$song_id[playlist$treated == 0])` were not (the **control** songs)
+-   Question: *how much did the listing increase the treated songs' streams?*
+:::
+
+::: {.column width="45%"}
+::: keybox
+**No randomization:** the curators chose the songs — and they pick songs that are already doing well. A before/after comparison of the treated songs alone would mix the listing effect with the general trend; a treated/control comparison would mix it with the curators' selection.
+:::
+
+::: discussion
+What do we need to isolate the effect of the listing?
+:::
+:::
+:::
+
+::: notes
+This is the quasi-experiment: we did not assign the treatment, but we have a before/after dimension AND a control group. Both differences are needed — that is the next slide.
+:::
 
 ## Playlist listings as a natural experiment {.smaller}
 

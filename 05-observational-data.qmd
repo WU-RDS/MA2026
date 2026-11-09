@@ -642,7 +642,7 @@ How do streams respond to promotion spend? The left panel of @fig-campaign-fits 
 #| echo: false
 #| fig-width: 11
 #| fig-height: 4.3
-#| fig-cap: "Streams and promotion spend for 500 campaigns. Left: original scale with a linear and a log-log fit. Right: both variables logged."
+#| fig-cap: "Streams and promotion spend for 500 campaigns. Left: original scale with a linear and a log-log fit. Right: the same data on log-scaled axes (the units stay euros and streams; each gridline is ten times the previous one) — the cloud becomes a straight line."
 fig_campaign_fits()
 ```
 

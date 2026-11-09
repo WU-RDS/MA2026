@@ -498,6 +498,7 @@ fig_mediator_dag <- function(base_size = 12) {
 }
 
 
+
 # ------------------------------------------------------------------
 # Additions to R/ch05-figures.R (November 8, 2026): functional form and
 # logistic-regression intuition. Paste at the end of ch05-figures.R.
@@ -601,4 +602,34 @@ fig_residuals_linear <- function(c2 = load_campaigns(), base_size = 11) {
     scale_y_continuous(labels = scales::label_number(scale_cut = scales::cut_short_scale())) +
     labs(x = "Fitted values (linear model)", y = "Residuals", subtitle = "A curve in the residuals: the line has the wrong shape") +
     theme_course(base_size)
+}
+
+# --- 5.7: updated fig_campaign_fits — the right panel keeps the original units
+#     on log-scaled axes (each gridline is x10), so students see that the
+#     straight line is about multiples. Overrides the earlier definition.
+fig_campaign_fits <- function(c2 = load_campaigns(), base_size = 12) {
+  lin <- lm(streams ~ spend, c2)
+  ll  <- lm(log(streams) ~ log(spend), c2)
+  grid <- data.frame(spend = seq(200, 60000, length.out = 300))
+  grid$linear <- predict(lin, grid)
+  grid$loglog <- exp(predict(ll, grid))
+  long <- pivot_longer(grid, c(linear, loglog), names_to = "model", values_to = "streams") |>
+    mutate(model = factor(model, levels = c("linear", "loglog"), labels = c("Linear model: streams = a + b \u00d7 spend", "Log-log model: log(streams) = a + b \u00d7 log(spend)")))
+  p1 <- ggplot(c2, aes(spend, streams)) +
+    geom_point(alpha = 0.3, color = wu_grey, size = 1.2) +
+    geom_line(data = long, aes(color = model), linewidth = 1.2) +
+    scale_color_manual(values = c(wu_orange, wu_blue), name = NULL) +
+    scale_x_continuous(labels = scales::label_number(scale_cut = scales::cut_short_scale(), prefix = "\u20ac")) +
+    scale_y_continuous(labels = scales::label_number(scale_cut = scales::cut_short_scale())) +
+    coord_cartesian(xlim = c(0, 40000), ylim = c(0, 700000)) +
+    labs(x = "Promotion spend", y = "Streams (first four weeks)", title = "Original scale") +
+    theme_course(base_size) + guides(color = guide_legend(nrow = 2))
+  p2 <- ggplot(c2, aes(spend, streams)) +
+    geom_point(alpha = 0.3, color = wu_grey, size = 1.2) +
+    geom_smooth(method = "lm", se = FALSE, color = wu_blue, linewidth = 1.2, formula = y ~ x) +
+    scale_x_log10(breaks = c(300, 1000, 3000, 10000, 30000), labels = scales::label_comma(prefix = "\u20ac")) +
+    scale_y_log10(breaks = c(10000, 30000, 100000, 300000, 1000000), labels = scales::label_comma()) +
+    labs(x = "Promotion spend (log scale)", y = "Streams (log scale)", title = "Log-scaled axes: a straight line") +
+    theme_course(base_size)
+  p1 + p2
 }
