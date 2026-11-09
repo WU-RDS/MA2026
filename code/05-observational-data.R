@@ -200,6 +200,16 @@ ggplot(campaigns, aes(log(spend), log(streams))) +
   geom_smooth(method = "lm", se = FALSE) +
   theme_minimal()
 
+# The same chart with the original units on log-scaled axes: each gridline is
+# a multiple (x10) of the previous one, and the log-log model is a straight line
+ggplot(campaigns, aes(spend, streams)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_x_log10(labels = scales::label_comma(prefix = "EUR ")) +
+  scale_y_log10(labels = scales::label_comma()) +
+  labs(x = "Promotion spend (log scale)", y = "Streams (log scale)") +
+  theme_minimal()
+
 # Linear model (level-level)
 model_linear <- lm(streams ~ spend + followers + placements, data = campaigns)
 summary(model_linear)
@@ -211,6 +221,20 @@ summary(model_loglog)
 
 # Exact percentage change for a log-level coefficient
 100 * (exp(coef(model_loglog)["placements"]) - 1)
+
+# What the two models predict on the original scale: the linear model is a
+# straight line, the log-log model (back-transformed with exp()) a curve with
+# diminishing returns
+model_loglog_simple <- lm(log(streams) ~ log(spend), data = campaigns)
+curve_loglog <- tibble(spend = seq(min(campaigns$spend), max(campaigns$spend), length.out = 200)) |>
+  mutate(streams = exp(predict(model_loglog_simple, newdata = pick(spend))))
+
+ggplot(campaigns, aes(spend, streams)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = "lm", se = FALSE, color = "#d99a2b") +      # linear model
+  geom_line(data = curve_loglog, color = "#0f5da8", linewidth = 1.2) +   # log-log model
+  labs(x = "Promotion spend", y = "Streams") +
+  theme_minimal()
 
 
 # ======================================================================
