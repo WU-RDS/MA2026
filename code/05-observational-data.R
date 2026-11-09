@@ -12,7 +12,8 @@
 
 library(tidyverse)
 library(sandwich)     # robust standard errors (section 5.9)
-library(lmtest)       # coeftest()
+library(lmtest)       # coeftest(), bptest()
+library(performance)  # r2_mcfadden() for logistic regression
 options(scipen = 5, digits = 4)
 
 base_url <- "https://raw.githubusercontent.com/wu-rds/MA2026/main/data/"
@@ -211,9 +212,6 @@ summary(model_loglog)
 # Exact percentage change for a log-level coefficient
 100 * (exp(coef(model_loglog)["placements"]) - 1)
 
-# What does doubling the spend do to streams, according to the model?
-100 * (2^coef(model_loglog)["log(spend)"] - 1)
-
 
 # ======================================================================
 # 5.8 Yes/no outcomes: logistic regression
@@ -229,6 +227,14 @@ free_users |>
   group_by(bin) |>
   summarise(n = n(), share_upgraded = mean(upgraded)) |>
   filter(n >= 8)
+
+# The chart that goes with the model: the 0/1 outcome against the predictor, with
+# the logistic curve fitted by glm() (geom_smooth with method = "glm")
+ggplot(free_users, aes(x = hours, y = upgraded)) +
+  geom_jitter(width = 0, height = 0.03, alpha = 0.15) +
+  geom_smooth(method = "glm", method.args = list(family = binomial), se = FALSE, color = "#0f5da8") +
+  labs(x = "Listening hours", y = "Upgraded to Premium (0/1)") +
+  theme_minimal()
 
 # Logistic regression: glm() with family = binomial
 model_upgrade <- glm(upgraded ~ hours, family = binomial, data = free_users)
@@ -253,8 +259,9 @@ p_free    <- predict(model_churn, newdata = mutate(smartmix_obs, premium = 0), t
 p_premium <- predict(model_churn, newdata = mutate(smartmix_obs, premium = 1), type = "response")
 mean(p_premium - p_free)
 
-# McFadden's pseudo R-squared
-1 - model_upgrade$deviance / model_upgrade$null.deviance
+# McFadden's pseudo R-squared (performance package); by hand it would be
+# 1 - model_upgrade$deviance / model_upgrade$null.deviance
+r2_mcfadden(model_upgrade)
 
 
 # ======================================================================
@@ -268,7 +275,12 @@ plot(model_loglog, which = 1)
 # 2. Influence: residuals vs. leverage, with Cook's distance
 plot(model_loglog, which = 5)
 
-# 3. Uncertainty: robust standard errors when the residuals form a funnel
+# 3. Uncertainty: is the spread of the residuals constant? Breusch-Pagan test
+#    (small p-value: the spread depends on the predictors -> heteroskedasticity)
+bptest(model_linear)
+bptest(model_loglog)                                  # the log-log model passes
+
+# Robust standard errors fix the standard errors and p-values (the coefficients stay)
 coeftest(model_linear, vcov = vcovHC(model_linear, type = "HC1"))
 
 
