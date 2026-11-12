@@ -679,7 +679,8 @@ fig_campaign_one <- function(c2 = load_campaigns(), model = c("linear", "multipl
 
 # --- both models side by side on the original scale (slides 41 and 42)
 fig_campaign_two_models <- function(c2 = load_campaigns(), deltas = FALSE, base_size = 12) {
-  fig_campaign_one(c2, "linear", deltas, base_size = base_size) | fig_campaign_one(c2, "multiplicative", deltas, base_size = base_size)
+  fig_campaign_one(c2, "linear", deltas, base_size = base_size) + plot_spacer() +
+    fig_campaign_one(c2, "multiplicative", deltas, base_size = base_size) + plot_layout(widths = c(1, 0.12, 1))
 }
 
 # --- the multiplicative fit on the original scale, and the same data on log-scaled axes (slide 44)
@@ -692,7 +693,7 @@ fig_campaign_curve_vs_logaxes <- function(c2 = load_campaigns(), base_size = 12)
     scale_y_log10(breaks = c(10000, 30000, 100000, 300000, 1000000), labels = scales::label_comma()) +
     labs(x = "Promotion spend (log scale)", y = "Streams (log scale)", title = "Log-scaled axes: a straight line") +
     theme_course(base_size)
-  p1 | p2
+  p1 + plot_spacer() + p2 + plot_layout(widths = c(1, 0.12, 1))
 }
 
 # --- why the log transformation straightens the curve, with the original units on the log axes (slide 46)
