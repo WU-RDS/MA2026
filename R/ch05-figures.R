@@ -680,7 +680,8 @@ fig_campaign_one <- function(c2 = load_campaigns(), model = c("linear", "multipl
 # --- both models side by side on the original scale (slides 41 and 42)
 fig_campaign_two_models <- function(c2 = load_campaigns(), deltas = FALSE, base_size = 12) {
   fig_campaign_one(c2, "linear", deltas, base_size = base_size) + plot_spacer() +
-    fig_campaign_one(c2, "multiplicative", deltas, base_size = base_size) + plot_layout(widths = c(1, 0.12, 1))
+    fig_campaign_one(c2, "multiplicative", deltas, base_size = base_size) +
+    plot_layout(widths = c(1, 0.12, 1))
 }
 
 # --- the multiplicative fit on the original scale, and the same data on log-scaled axes (slide 44)
