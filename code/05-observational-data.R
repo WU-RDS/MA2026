@@ -210,7 +210,15 @@ ggplot(campaigns, aes(spend, streams)) +
   labs(x = "Promotion spend (log scale)", y = "Streams (log scale)") +
   theme_minimal()
 
-# Linear model (level-level)
+# The two simple models side by side: linear (level-level) and log-log
+model_lin_simple <- lm(streams ~ spend, data = campaigns)
+summary(model_lin_simple)                 # one more euro -> +5.6 streams, at every budget
+model_loglog_simple <- lm(log(streams) ~ log(spend), data = campaigns)
+summary(model_loglog_simple)              # +1% spend -> +0.38% streams, at every budget
+# R-squared 0.17 vs. 0.09: the log-log model fits better (not strictly comparable,
+# the outcomes differ; the residual plots in 5.9 tell the same story)
+
+# Linear model (level-level) with all predictors
 model_linear <- lm(streams ~ spend + followers + placements, data = campaigns)
 summary(model_linear)
 
@@ -225,7 +233,6 @@ summary(model_loglog)
 # What the two models predict on the original scale: the linear model is a
 # straight line, the log-log model (back-transformed with exp()) a curve with
 # diminishing returns
-model_loglog_simple <- lm(log(streams) ~ log(spend), data = campaigns)
 curve_loglog <- tibble(spend = seq(min(campaigns$spend), max(campaigns$spend), length.out = 200)) |>
   mutate(streams = exp(predict(model_loglog_simple, newdata = pick(spend))))
 

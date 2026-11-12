@@ -646,6 +646,28 @@ How do streams respond to promotion spend? The left panel of @fig-campaign-fits 
 fig_campaign_fits()
 ```
 
+**Marginal returns, step by step.** @fig-campaign-steps makes the difference between the two fits concrete. In the linear model, every additional €6,000 of promotion buys the same number of streams — about 34,000 — whether the campaign starts from €3,000 or from €24,000: **constant marginal returns**, and the effect of spend is *added* to whatever else the campaign has. In the multiplicative model, the same €6,000 buys about 45,000 streams at a small budget but only 12,000 at a large one: **decreasing marginal returns**, because spend *scales* the streams — its effect is a percentage of what is already there. The two models also read their coefficient differently: in the linear model, one more unit of $x$ adds $\beta_1$ units of $y$ (5.6 streams per euro); in the multiplicative model, one percent more $x$ adds $\beta_1$ percent of $y$ (0.38% of streams per 1% of spend — the elasticity introduced below).
+
+```{r}
+#| label: fig-campaign-steps
+#| echo: false
+#| fig-width: 11
+#| fig-height: 4.2
+#| fig-cap: "What one more step of spend buys. Left: the linear model — each additional €6,000 buys the same number of streams. Right: the multiplicative model — each step buys fewer streams than the last."
+fig_campaign_two_models(deltas = TRUE)
+```
+
+Both models are estimated with `lm()` — the multiplicative one after taking logs, as the next subsection explains. Their outputs side by side:
+
+```{r}
+model_lin_simple <- lm(streams ~ spend, data = campaigns)
+summary(model_lin_simple)
+model_loglog_simple <- lm(log(streams) ~ log(spend), data = campaigns)
+summary(model_loglog_simple)
+```
+
+The linear model explains `r round(100 * summary(model_lin_simple)$r.squared)`% of the variation in streams, the log-log model `r round(100 * summary(model_loglog_simple)$r.squared)`% of the variation in log streams. The two R² values are not strictly comparable, because the outcomes differ, but a gap this large in the same direction as the residual plots of @sec-obs-diagnostics is good evidence that the curved shape fits the data better — and it is one of the criteria for choosing a specification: fit, the residual plot, and above all the plausibility of the assumed shape for the marketing instrument at hand.
+
 ### The log-log model and elasticities
 
 Diminishing returns are what a **multiplicative** model produces. Instead of adding up the contributions of the predictors, it multiplies them:

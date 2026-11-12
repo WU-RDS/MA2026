@@ -667,43 +667,81 @@ Today: functional form and elasticities → logistic regression → diagnostics 
 
 ::: columns
 ::: {.column width="40%"}
-```{r lin-scatter, fig.width=5, fig.height=3.9, out.width="100%"}
+```{r lin-scatter, fig.width=5, fig.height=3.6, out.width="100%"}
 ggplot(campaigns, aes(spend, streams)) +
   geom_point(alpha = 0.3, color = wu_grey, size = 1.3) +
   geom_smooth(method = "lm", se = FALSE, color = wu_orange, linewidth = 1.3, formula = y ~ x) +
   scale_x_continuous(labels = scales::label_number(scale_cut = scales::cut_short_scale(), prefix = "€")) +
   scale_y_continuous(labels = scales::label_number(scale_cut = scales::cut_short_scale())) +
-  labs(x = "Promotion spend", y = "Streams", subtitle = "The linear model: every euro adds the same number of streams") +
+  labs(x = "Promotion spend", y = "Streams (first four weeks)", subtitle = "500 promotion campaigns: streams vs. spend, with the linear fit") +
   theme_course(11)
 ```
 :::
 
 ::: {.column width="60%"}
+**The case.** A label runs **500 promotion campaigns** for new releases; for each we know the **spend** (euros), the artist's followers, the playlist placements, the genre — and the **streams in the first four weeks**. The chart: streams against spend, one dot per campaign, with the linear regression line.
+
 $$
 y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \dots + \varepsilon_i
 $$
 
-**Linearity:** a one-unit change in $x$ has the same effect at every level of $x$ — **constant marginal returns**. Ad spend 10 → 11 € adds as much as 100,000 → 100,001 €. No saturation.
-
-**Additivity:** the effect of one predictor does not depend on the others. Each playlist placement adds the same number of streams for an artist with 1,000 or a million followers.
+**Linearity:** a one-unit change in $x$ has the same effect at every level of $x$ — **constant marginal returns**: 10 → 11 € adds as many streams as 100,000 → 100,001 €. **Additivity:** the effect of one predictor does not depend on the others.
 
 ::: keybox
-**Where this course relaxes them:** linearity → the **multiplicative (log-log) model** (this section: diminishing returns built in) · additivity → the multiplicative model (effects scale each other) and **interaction terms** (Chapter 6) · **detecting** a wrong form → the residual plot (§5.9)
+**Relaxed where:** linearity → the **multiplicative (log-log) model** (this section) · additivity → the multiplicative model and **interactions** (Chapter 6) · **detecting** a wrong form → the residual plot (§5.9)
 :::
 :::
 :::
 
-## Diminishing returns {.smaller}
+## Two models for the same data {.smaller}
 
-```{r fits, fig.width=11.5, fig.height=4.2}
-fig_campaign_fits(base_size = 12)
+::: columns
+::: {.column width="50%"}
+$$
+\text{streams}_i = \beta_0 + \beta_1 \, \text{spend}_i + \varepsilon_i
+$$
+:::
+
+::: {.column width="50%"}
+$$
+\text{streams}_i = \beta_0 \cdot \text{spend}_i^{\,\beta_1} \cdot \varepsilon_i
+$$
+:::
+:::
+
+```{r two-models, fig.width=11.5, fig.height=4.2, out.width="100%"}
+fig_campaign_two_models(deltas = FALSE, base_size = 11)
 ```
 
 ::: keybox
-500 promotion campaigns: the first euros buy many streams, later euros fewer. A straight line cannot bend — on **log-scaled axes** (each gridline is ×10 the previous one; the units stay euros and streams), the cloud becomes a line again: equal *multiples* of spend go with equal *multiples* of streams.
+**Left:** the linear model — a straight line. **Right:** the **multiplicative** model — spend enters as a *power*, and the fitted curve bends: the first euros buy many streams, later euros fewer. Same data, same question, a different assumption about *how* spend works.
 :::
 
-## The multiplicative model — and why logs make it linear {.smaller}
+## Marginal returns: what one more step buys {.smaller}
+
+::: columns
+::: {.column width="100%"}
+```{r two-models-deltas, fig.width=11.5, fig.height=3.1, out.width="100%"}
+fig_campaign_two_models(deltas = TRUE, base_size = 11)
+```
+:::
+:::
+
+::: columns
+::: {.column width="50%"}
+-   **Constant marginal returns:** every extra €6,000 buys the **same** +34K streams
+-   **Additive:** spend adds a fixed number of streams on top of everything else
+-   **Reading $\beta_1$:** +1 unit of $x$ → +$\beta_1$ units of $y$ (5.6 streams per euro)
+:::
+
+::: {.column width="50%"}
+-   **Decreasing marginal returns:** +€6,000 buys +45K streams at a small budget, +12K at a large one
+-   **Multiplicative:** spend *scales* the streams — a **percentage** of what is already there
+-   **Reading $\beta_1$:** +1% of $x$ → +$\beta_1$% of $y$ (0.38% per 1% spend: the **elasticity**)
+:::
+:::
+
+## Estimating the multiplicative model: take logs {.smaller}
 
 **Multiplicative:** each predictor *scales* the outcome
 
@@ -735,6 +773,68 @@ $$
 :::
 :::
 :::
+## The same curve on log-scaled axes {.smaller}
+
+::: columns
+::: {.column width="50%"}
+$$
+\text{streams}_i = \beta_0 \cdot \text{spend}_i^{\,\beta_1} \cdot \varepsilon_i
+$$
+:::
+
+::: {.column width="50%"}
+$$
+\log(\text{streams}_i) = \log \beta_0 + \beta_1 \log(\text{spend}_i) + \log \varepsilon_i
+$$
+:::
+:::
+
+```{r curve-logaxes, fig.width=11.5, fig.height=4.2, out.width="100%"}
+fig_campaign_curve_vs_logaxes(base_size = 11)
+```
+
+::: keybox
+**Left:** the multiplicative model on the original scale — a curve with decreasing marginal returns. **Right:** the same data with **both axes log-scaled** (each gridline is ×10 the previous one; the units stay euros and streams): the curve becomes a **straight line**, and its slope is $\beta_1$. That is the model `lm(log(streams) ~ log(spend))` estimates.
+:::
+
+## Both models in R: the full output {.smaller}
+
+::: {style="font-size: 0.72em;"}
+::: columns
+::: {.column width="50%"}
+$\text{streams}_i = \beta_0 + \beta_1 \, \text{spend}_i + \varepsilon_i$
+
+```{r out-linear, echo=TRUE}
+model_lin_simple <- lm(streams ~ spend, data = campaigns)
+summary(model_lin_simple)
+```
+:::
+
+::: {.column width="50%"}
+$\log(\text{streams}_i) = \beta_0 + \beta_1 \log(\text{spend}_i) + \varepsilon_i$
+
+```{r out-loglog, echo=TRUE}
+model_loglog_simple <- lm(log(streams) ~ log(spend), data = campaigns)
+summary(model_loglog_simple)
+```
+:::
+:::
+
+::: columns
+::: {.column width="50%"}
+**Reading:** one more euro → **+5.6 streams**, at every budget; intercept 92,600 = predicted streams at zero spend.
+:::
+
+::: {.column width="50%"}
+**Reading:** +1% spend → **+0.38% streams** (elasticity), at every budget. **R² 0.17 vs. 0.09:** the log-log model explains more of the variation — a first hint that its shape fits the data better (the residual plots in §5.9 confirm it).
+:::
+:::
+:::
+
+::: notes
+R² of the two models is not strictly comparable (different outcomes: streams vs. log streams), but a large gap in the same direction as the residual plots is good evidence for the functional form. The intercept of the log-log model (8.2) is log(β0): exp(8.2) ≈ 3,700 streams at spend = 1 euro.
+:::
+
 ## Why the log transformation straightens the curve {.smaller}
 
 ```{r log-intuition, fig.width=11.5, fig.height=3.5}
@@ -791,19 +891,27 @@ Not defined at $x$ = 0; no minimum level of $y$. Optimum: zero or infinity in th
 :::
 :::
 
-## The log-log model: elasticities {.smaller}
+## The full log-log model: an elasticity per input {.smaller}
 
+::: {style="font-size: 0.55em;"}
 ```{r loglog, echo=TRUE}
 model_loglog <- lm(log(streams) ~ log(spend) + log(followers) + placements + genre, data = campaigns)
-round(coef(summary(model_loglog)), 3)
+summary(model_loglog)
 ```
-
-::: keybox
-`log(spend)` = **0.33**: a 1% increase in spend goes with 0.33% more streams; +10% spend → **+3.3% streams** — the same *percentage* at every budget. Elasticities have no units and are **comparable**: followers (0.51) matter more than the budget.
 :::
 
+::: columns
+::: {.column width="50%"}
 ::: keybox
-This is a **marketing mix model** in miniature: sales on the marketing inputs, log-log form → an **elasticity per channel** → reallocate the budget toward the channels where a euro buys the largest percentage gain. Real MMMs add carryover (adstock) and saturation — and share this chapter's problem: budgets are not set at random, so spend is **endogenous**. Companies therefore calibrate MMMs with experiments.
+`log(spend)` = **0.33**: +1% spend → +0.33% streams, at every budget. Elasticities have no units and are **comparable**: followers (0.51) matter more than the budget. `placements` = 0.12: a semi-elasticity, +12% per placement.
+:::
+:::
+
+::: {.column width="50%"}
+::: keybox
+A **marketing mix model** in miniature: an **elasticity per channel** → shift budget to where a euro buys the largest percentage gain. Real MMMs add carryover and saturation — and spend is **endogenous**, so companies calibrate them with experiments.
+:::
+:::
 :::
 
 ## Four ways to combine levels and logs {.smaller}

@@ -633,3 +633,90 @@ fig_campaign_fits <- function(c2 = load_campaigns(), base_size = 12) {
     theme_course(base_size)
   p1 + p2
 }
+
+
+# ------------------------------------------------------------------
+# Additions to R/ch05-figures.R (November 12, 2026): the linear vs. the
+# multiplicative model on the campaign data, step by step (section 5.7).
+# Paste at the end of ch05-figures.R. fig_log_intuition() below overrides
+# the earlier version (log-scaled axes now keep the original units).
+# ------------------------------------------------------------------
+
+.campaign_models <- function(c2) {
+  list(lin = lm(streams ~ spend, c2), ll = lm(log(streams) ~ log(spend), c2))
+}
+.euro <- function() scales::label_number(scale_cut = scales::cut_short_scale(), prefix = "\u20ac")
+.num  <- function() scales::label_number(scale_cut = scales::cut_short_scale())
+
+# --- one panel: the scatter with one of the two fits, optionally with marginal steps
+fig_campaign_one <- function(c2 = load_campaigns(), model = c("linear", "multiplicative"), deltas = FALSE,
+                             step = 6000, at = c(3000, 10000, 17000, 24000), base_size = 12) {
+  model <- match.arg(model)
+  m <- .campaign_models(c2)
+  f <- if (model == "linear") function(x) predict(m$lin, data.frame(spend = x)) else function(x) exp(predict(m$ll, data.frame(spend = x)))
+  col <- if (model == "linear") wu_orange else wu_blue
+  grid <- data.frame(spend = seq(300, 40000, length.out = 300)); grid$streams <- f(grid$spend)
+  p <- ggplot(c2, aes(spend, streams)) +
+    geom_point(alpha = 0.25, color = wu_grey, size = 1.1) +
+    geom_line(data = grid, color = col, linewidth = 1.3) +
+    scale_x_continuous(labels = .euro()) + scale_y_continuous(labels = .num()) +
+    coord_cartesian(xlim = c(0, 32000), ylim = c(0, 600000)) +
+    labs(x = "Promotion spend", y = "Streams (first four weeks)",
+         title = if (model == "linear") "Linear model" else "Multiplicative model") +
+    theme_course(base_size)
+  if (deltas) {
+    st <- data.frame(x0 = at, x1 = at + step); st$y0 <- f(st$x0); st$y1 <- f(st$x1)
+    st$label <- paste0("+", format(round((st$y1 - st$y0) / 1000), big.mark = ","), "K")
+    p <- p +
+      geom_segment(data = st, aes(x = x0, xend = x1, y = y0, yend = y0), color = wu_red, linewidth = 0.9) +
+      geom_segment(data = st, aes(x = x1, xend = x1, y = y0, yend = y1), color = wu_red, linewidth = 1.3,
+                   arrow = arrow(length = unit(0.18, "cm"), type = "closed")) +
+      geom_text(data = st, aes(x = x1 + 600, y = (y0 + y1) / 2, label = label), color = wu_red, hjust = 0, size = base_size / 3.4) +
+      labs(subtitle = sprintf("Each red step: +\u20ac%s of spend", format(step, big.mark = ",")))
+  }
+  p
+}
+
+# --- both models side by side on the original scale (slides 41 and 42)
+fig_campaign_two_models <- function(c2 = load_campaigns(), deltas = FALSE, base_size = 12) {
+  fig_campaign_one(c2, "linear", deltas, base_size = base_size) | fig_campaign_one(c2, "multiplicative", deltas, base_size = base_size)
+}
+
+# --- the multiplicative fit on the original scale, and the same data on log-scaled axes (slide 44)
+fig_campaign_curve_vs_logaxes <- function(c2 = load_campaigns(), base_size = 12) {
+  p1 <- fig_campaign_one(c2, "multiplicative", base_size = base_size) + labs(title = "Original scale: a curve")
+  p2 <- ggplot(c2, aes(spend, streams)) +
+    geom_point(alpha = 0.25, color = wu_grey, size = 1.1) +
+    geom_smooth(method = "lm", se = FALSE, color = wu_blue, linewidth = 1.3, formula = y ~ x) +
+    scale_x_log10(breaks = c(300, 1000, 3000, 10000, 30000), labels = scales::label_comma(prefix = "\u20ac")) +
+    scale_y_log10(breaks = c(10000, 30000, 100000, 300000, 1000000), labels = scales::label_comma()) +
+    labs(x = "Promotion spend (log scale)", y = "Streams (log scale)", title = "Log-scaled axes: a straight line") +
+    theme_course(base_size)
+  p1 | p2
+}
+
+# --- why the log transformation straightens the curve, with the original units on the log axes (slide 46)
+fig_log_intuition <- function(base_size = 11) {
+  b0 <- 500; b1 <- 0.4
+  x <- seq(500, 32000, length.out = 300); curve <- data.frame(x, y = b0 * x^b1)
+  pts <- data.frame(x = 1000 * 2^(0:4)) |> mutate(y = b0 * x^b1)
+  steps <- pts |> mutate(x_next = lead(x), y_next = lead(y)) |> filter(!is.na(x_next))
+  pct <- sprintf("+%.0f%%", 100 * (2^b1 - 1))
+  p1 <- ggplot(curve, aes(x, y)) + geom_line(color = wu_blue, linewidth = 1.1) +
+    geom_segment(data = steps, aes(x = x, xend = x_next, y = y, yend = y), color = wu_orange, linewidth = 0.8) +
+    geom_segment(data = steps, aes(x = x_next, xend = x_next, y = y, yend = y_next), color = wu_orange, linewidth = 0.8) +
+    geom_point(data = pts, aes(x, y), color = wu_dark, size = 2.5) +
+    geom_text(data = steps, aes(x = x_next, y = (y + y_next) / 2, label = pct), hjust = -0.15, size = base_size / 3.4, color = wu_orange) +
+    scale_x_continuous(labels = .euro()) + scale_y_continuous(labels = .num()) +
+    labs(title = "Original scale", subtitle = "Each doubling of spend adds the same percentage of streams,\nbut a shrinking number of streams", x = "Promotion spend", y = "Streams") +
+    theme_course(base_size)
+  p2 <- ggplot(curve, aes(x, y)) + geom_line(color = wu_blue, linewidth = 1.1) +
+    geom_segment(data = steps, aes(x = x, xend = x_next, y = y, yend = y), color = wu_orange, linewidth = 0.8) +
+    geom_segment(data = steps, aes(x = x_next, xend = x_next, y = y, yend = y_next), color = wu_orange, linewidth = 0.8) +
+    geom_point(data = pts, aes(x, y), color = wu_dark, size = 2.5) +
+    scale_x_log10(breaks = c(1000, 2000, 4000, 8000, 16000), labels = scales::label_comma(prefix = "\u20ac")) +
+    scale_y_log10(breaks = c(8000, 16000, 32000), labels = scales::label_comma()) +
+    labs(title = "Log-scaled axes (same units)", subtitle = "Equal percentage steps become equal distances:\nthe curve is a straight line with slope 0.4", x = "Promotion spend (log scale)", y = "Streams (log scale)") +
+    theme_course(base_size)
+  p1 | p2
+}
