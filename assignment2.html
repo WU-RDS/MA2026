@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -245,8 +280,22 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-situation" id="toc-the-situation" class="nav-link active" data-scroll-target="#the-situation">The situation</a></li>
+  <li><a href="#setup-the-personal-data" id="toc-setup-the-personal-data" class="nav-link" data-scroll-target="#setup-the-personal-data">Setup: the personal data</a></li>
+  <li><a href="#task-1-describing-the-experiment-1-point" id="toc-task-1-describing-the-experiment-1-point" class="nav-link" data-scroll-target="#task-1-describing-the-experiment-1-point">Task 1: Describing the experiment (1 point)</a></li>
+  <li><a href="#task-2-the-difference-between-two-means-2-points" id="toc-task-2-the-difference-between-two-means-2-points" class="nav-link" data-scroll-target="#task-2-the-difference-between-two-means-2-points">Task 2: The difference between two means (2 points)</a></li>
+  <li><a href="#task-3-how-large-is-the-effect-1-point" id="toc-task-3-how-large-is-the-effect-1-point" class="nav-link" data-scroll-target="#task-3-how-large-is-the-effect-1-point">Task 3: How large is the effect? (1 point)</a></li>
+  <li><a href="#task-4-the-difference-between-two-shares-1-point" id="toc-task-4-the-difference-between-two-shares-1-point" class="nav-link" data-scroll-target="#task-4-the-difference-between-two-shares-1-point">Task 4: The difference between two shares (1 point)</a></li>
+  <li><a href="#task-5-power-and-sample-size-1-point" id="toc-task-5-power-and-sample-size-1-point" class="nav-link" data-scroll-target="#task-5-power-and-sample-size-1-point">Task 5: Power and sample size (1 point)</a></li>
+  <li><a href="#task-6-three-versions-1-point" id="toc-task-6-three-versions-1-point" class="nav-link" data-scroll-target="#task-6-three-versions-1-point">Task 6: Three versions (1 point)</a></li>
+  <li><a href="#in-class-debrief-3-points" id="toc-in-class-debrief-3-points" class="nav-link" data-scroll-target="#in-class-debrief-3-points">In-class debrief (3 points)</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -270,21 +319,498 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled" title="Contents follow soon">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This page shows the tasks of Assignment 2 with <strong>one possible solution</strong> and the <strong>grading hints</strong> we used. Click on a blue box to expand it.</p>
+<p>The solution was computed for the example student ID <strong>12345678</strong>. Since every student worked with a personal version of the experiment data, <strong>your numbers differ</strong> from the ones shown here — some results are significant in one data version and not in another. What matters is the approach, the code, and a correct interpretation of <em>your</em> result. Other correct solutions (e.g., base R instead of the tidyverse, other chart types, Tukey’s HSD instead of Bonferroni) received full points.</p>
+</div>
+</div>
+</div>
+<p><strong>Points:</strong> 7 for the report, 3 for the in-class debrief (10 in total). Unless stated otherwise, half of the points of a sub-task were given if the approach was right but the execution contained an error, and no points if the task was missing or the approach was wrong.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Task</th>
+<th>Topic</th>
+<th style="text-align: center;">Points</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Describing the experiment</td>
+<td style="text-align: center;">1.0</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>The difference between two means</td>
+<td style="text-align: center;">2.0</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>How large is the effect?</td>
+<td style="text-align: center;">1.0</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>The difference between two shares</td>
+<td style="text-align: center;">1.0</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Power and sample size</td>
+<td style="text-align: center;">1.0</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Three versions (ANOVA)</td>
+<td style="text-align: center;">1.0</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Report</strong></td>
+<td style="text-align: center;"><strong>7</strong></td>
+</tr>
+<tr class="even">
+<td>—</td>
+<td>In-class debrief (3 questions)</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td><strong>Total</strong></td>
+<td style="text-align: center;"><strong>10</strong></td>
+</tr>
+</tbody>
+</table>
+<section id="the-situation" class="level2">
+<h2 class="anchored" data-anchor-id="the-situation">The situation</h2>
+<p>The product team of a music streaming service tested a <strong>new onboarding flow</strong>: new users were randomly assigned either to the new flow or to the old one (control). The data set <code>onboarding</code> contains, for each user, the experimental condition (<code>group</code>), the listening hours in the first four weeks (<code>hours</code>), and whether the user upgraded to Premium within 30 days (<code>upgraded</code>, 1/0). In a second, independent experiment, three <strong>push-notification strategies</strong> were tested on other users (<code>push_test</code>: <code>version</code> = “No push”, “Weekly push”, or “Daily push”; <code>sessions</code> = app sessions in the following week).</p>
+</section>
+<section id="setup-the-personal-data" class="level2">
+<h2 class="anchored" data-anchor-id="setup-the-personal-data">Setup: the personal data</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Personal version of the data, based on the student ID</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>student_id <span class="ot">&lt;-</span> <span class="st">"12345678"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">D"</span>, <span class="st">""</span>, student_id)))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>n_ab   <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">150</span><span class="sc">:</span><span class="dv">300</span>, <span class="dv">1</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>lift_h <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">0.25</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>base_p <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="fl">0.04</span>, <span class="fl">0.08</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>lift_p <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">0.5</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>onboarding <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">user_id  =</span> <span class="dv">1</span><span class="sc">:</span>(<span class="dv">2</span> <span class="sc">*</span> n_ab),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">group    =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Control"</span>, <span class="st">"New onboarding"</span>), <span class="at">each =</span> n_ab),</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                    <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"New onboarding"</span>, <span class="st">"Control"</span>)),</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">hours    =</span> <span class="fu">round</span>(<span class="fu">c</span>(<span class="fu">rgamma</span>(n_ab, <span class="dv">2</span>, <span class="at">scale =</span> <span class="dv">10</span>), <span class="fu">rgamma</span>(n_ab, <span class="dv">2</span>, <span class="at">scale =</span> <span class="dv">10</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> lift_h))), <span class="dv">1</span>),</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">upgraded =</span> <span class="fu">c</span>(<span class="fu">rbinom</span>(n_ab, <span class="dv">1</span>, base_p), <span class="fu">rbinom</span>(n_ab, <span class="dv">1</span>, base_p <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> lift_p)))</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>n_push <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">100</span><span class="sc">:</span><span class="dv">180</span>, <span class="dv">1</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>eff    <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>push_test <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">version  =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"No push"</span>, <span class="st">"Weekly push"</span>, <span class="st">"Daily push"</span>), <span class="at">each =</span> n_push),</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>                    <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"No push"</span>, <span class="st">"Weekly push"</span>, <span class="st">"Daily push"</span>)),</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">sessions =</span> <span class="fu">rpois</span>(<span class="dv">3</span> <span class="sc">*</span> n_push, <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">8</span> <span class="sc">+</span> eff[<span class="dv">1</span>], <span class="dv">8</span> <span class="sc">+</span> eff[<span class="dv">2</span>]), <span class="at">each =</span> n_push))</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Example data for student ID <strong>12345678</strong>: <strong>274</strong> users per group in the onboarding experiment (548 in total); <strong>152</strong> users per version in the push experiment (456 in total).</p>
+</section>
+<section id="task-1-describing-the-experiment-1-point" class="level2">
+<h2 class="anchored" data-anchor-id="task-1-describing-the-experiment-1-point">Task 1: Describing the experiment (1 point)</h2>
+<p><strong>1a) (0.5 points)</strong> For each group of the onboarding experiment, compute the number of users and the mean, median, and standard deviation of <code>hours</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 1a">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Contents follow soon
+<span class="screen-reader-only">Note</span>Solution and grading: 1a
 </div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The solution to Assignment 2 will be posted here after the in-class debrief (Group A: Mon, Nov 9 · Group B: Thu, Nov 12).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>onboarding <span class="sc">|&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(group) <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">mean =</span> <span class="fu">mean</span>(hours), <span class="at">median =</span> <span class="fu">median</span>(hours), <span class="at">sd =</span> <span class="fu">sd</span>(hours))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  group              n  mean median    sd
+  &lt;fct&gt;          &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+1 New onboarding   274  24.1   20    17.9
+2 Control          274  19.8   17.5  13.5</code></pre>
+</div>
+</div>
+<p><strong>Grading:</strong> 0.5 for all four statistics per group; 0.25 if one or two were missing.</p>
+</div>
+</div>
+</div>
+<p><strong>1b) (0.5 points)</strong> Create two charts that compare the two groups: <strong>(i)</strong> a boxplot with the individual users overlaid as jittered points (and the group means marked), to inspect the data behind the comparison; <strong>(ii)</strong> a bar chart of the group means with their 95% confidence intervals — the chart that goes with the test in Task 2.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 1b">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 1b
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (i) Inspect the data: boxplot with the individual users and the group means</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(onboarding, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> hours)) <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"#dbe7f3"</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.15</span>, <span class="at">height =</span> <span class="dv">0</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">"point"</span>, <span class="at">color =</span> <span class="st">"#b03a2e"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Listening hours (first four weeks)"</span>) <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="assignment2_files/figure-html/task1b-1.png" class="img-fluid figure-img" width="1400"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (ii) The chart that goes with the test: group means with 95% confidence intervals</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>onboarding_summary <span class="ot">&lt;-</span> onboarding <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(group) <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">mean =</span> <span class="fu">mean</span>(hours), <span class="at">se =</span> <span class="fu">sd</span>(hours) <span class="sc">/</span> <span class="fu">sqrt</span>(n)) <span class="sc">|&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lower =</span> mean <span class="sc">-</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, n <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> se, <span class="at">upper =</span> mean <span class="sc">+</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, n <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> se)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(onboarding_summary, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> mean)) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.55</span>, <span class="at">fill =</span> <span class="st">"#0f5da8"</span>) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper), <span class="at">width =</span> <span class="fl">0.15</span>) <span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Mean listening hours (95% CI)"</span>) <span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="assignment2_files/figure-html/task1b-2.png" class="img-fluid figure-img" width="1400"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The listening hours are right-skewed with a few heavy listeners in both groups (the means lie above the medians); the two distributions overlap strongly, and the difference between the groups is a matter of the means and their uncertainty — which is what chart (ii) shows.</p>
+<p><strong>Grading:</strong> 0.25 for each chart with labeled axes. (i) needed both the boxplots and the individual points (a boxplot alone, or jittered points alone: 0.1); (ii) needed the means <strong>and</strong> their confidence intervals (bars without intervals: 0.1). A histogram or density plot per group instead of (i) was accepted for 0.15.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="task-2-the-difference-between-two-means-2-points" class="level2">
+<h2 class="anchored" data-anchor-id="task-2-the-difference-between-two-means-2-points">Task 2: The difference between two means (2 points)</h2>
+<p><strong>2a) (0.5 points)</strong> Test whether the new onboarding flow changed the average listening time.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 2a">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 2a
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tt <span class="ot">&lt;-</span> <span class="fu">t.test</span>(hours <span class="sc">~</span> group, <span class="at">data =</span> onboarding)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>tt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  hours by group
+t = 3.2, df = 507, p-value = 0.002
+alternative hypothesis: true difference in means between group New onboarding and group Control is not equal to 0
+95 percent confidence interval:
+ 1.657 6.976
+sample estimates:
+mean in group New onboarding        mean in group Control 
+                       24.11                        19.80 </code></pre>
+</div>
+</div>
+<p><strong>Grading:</strong> 0.5 for a two-sample <em>t</em>-test (Welch or with equal variances). A paired test: 0 — the two groups consist of different users (between-subjects design, Chapter 4).</p>
+</div>
+</div>
+</div>
+<p><strong>2b) (1 point)</strong> Interpret the result: What is the estimated difference between the groups? What does the 95% confidence interval tell you? Is the difference statistically significant at the 5% level — and what exactly does the <em>p</em>-value mean here?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 2b">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 2b
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Example answer (for the example data):</strong> Users with the new onboarding flow listened on average 4.32 hours more than users in the control group. The 95% confidence interval of the difference ranges from 1.66 to 6.98 hours: these are the effects that are compatible with the data. The interval does not contain zero, and the difference is statistically significant at the 5% level (<em>p</em> = 0.002). The <em>p</em>-value means: if the new onboarding flow had no effect at all, a difference at least as large as the observed one would occur in about 0.2% of experiments of this size.</p>
+<p><strong>Grading:</strong> estimated difference with its direction (0.25); correct interpretation of the confidence interval (0.25); correct significance decision (0.25); correct interpretation of the <em>p</em>-value as the probability of such data <strong>if there were no effect</strong> (0.25). Interpreting <em>p</em> as “the probability that H0 is true” or “the probability that the result is due to chance”: 0 for this part. For non-significant results, concluding that “the new flow has no effect”: −0.25.</p>
+</div>
+</div>
+</div>
+<p><strong>2c) (0.5 points)</strong> Write a short report of the result for the head of product (effect, uncertainty, test — see Chapter 4, “Reporting the result”).</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 2c">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 2c
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Example answer:</strong> Users with the new onboarding flow listened on average 24.1 hours in their first four weeks, compared with 19.8 hours in the control group (difference: 4.3 hours, 95% CI [1.7; 7]; Welch <em>t</em>-test: <em>t</em>(507) = 3.19, <em>p</em> = 0.002).</p>
+<p><strong>Grading:</strong> effect, confidence interval, and test statistic with <em>p</em>-value in a readable sentence: 0.5; one of the three elements missing: 0.25.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="task-3-how-large-is-the-effect-1-point" class="level2">
+<h2 class="anchored" data-anchor-id="task-3-how-large-is-the-effect-1-point">Task 3: How large is the effect? (1 point)</h2>
+<p>Compute Cohen’s <em>d</em> for the difference in listening time, and express the difference in percent of the control group’s mean. Is the effect small, medium, or large by Cohen’s conventions — and would you consider it relevant for the business? Explain.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: Task 3">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: Task 3
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>d_res <span class="ot">&lt;-</span> <span class="fu">cohen.d</span>(onboarding<span class="sc">$</span>hours, onboarding<span class="sc">$</span>group)<span class="sc">$</span>cohen.d</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>d_res</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       lower effect   upper
+[1,] -0.4411 -0.273 -0.1046</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>control_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(onboarding<span class="sc">$</span>hours[onboarding<span class="sc">$</span>group <span class="sc">==</span> <span class="st">"Control"</span>])</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="dv">100</span> <span class="sc">*</span> d_est <span class="sc">/</span> control_mean     <span class="co"># relative difference in %</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 21.8</code></pre>
+</div>
+</div>
+<p><strong>Example answer:</strong> Cohen’s <em>d</em> is about 0.27 — a small effect by Cohen’s conventions (0.2 small, 0.5 medium, 0.8 large). In relative terms, users with the new flow listened 21.8% more than the control group. Whether this is relevant depends on the business case — e.g., the value of an additional listening hour for retention and revenue, the cost of the new flow, and how long the effect lasts: a small standardized effect can still be economically meaningful for a service with many new users every month.</p>
+<p><strong>Grading:</strong> Cohen’s <em>d</em> computed with a function (or correctly by hand) (0.25); relative difference (0.25); classification by the conventions <strong>and</strong> a reasoned statement on business relevance (0.5). The sign of <em>d</em> depends on the order of the groups; no deduction if the size was interpreted correctly.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="task-4-the-difference-between-two-shares-1-point" class="level2">
+<h2 class="anchored" data-anchor-id="task-4-the-difference-between-two-shares-1-point">Task 4: The difference between two shares (1 point)</h2>
+<p>Compute the upgrade rate in each group and test whether the new onboarding flow changed it. Interpret the result, including the confidence interval of the difference.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: Task 4">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: Task 4
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>upg <span class="ot">&lt;-</span> onboarding <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(group) <span class="sc">|&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">upgrades =</span> <span class="fu">sum</span>(upgraded), <span class="at">rate =</span> <span class="fu">mean</span>(upgraded))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>upg</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 4
+  group              n upgrades   rate
+  &lt;fct&gt;          &lt;int&gt;    &lt;int&gt;  &lt;dbl&gt;
+1 New onboarding   274       18 0.0657
+2 Control          274       12 0.0438</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pt <span class="ot">&lt;-</span> <span class="fu">prop.test</span>(<span class="at">x =</span> upg<span class="sc">$</span>upgrades, <span class="at">n =</span> upg<span class="sc">$</span>n)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>pt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    2-sample test for equality of proportions with continuity correction
+
+data:  upg$upgrades out of upg$n
+X-squared = 0.88, df = 1, p-value = 0.3
+alternative hypothesis: two.sided
+95 percent confidence interval:
+ -0.0198  0.0636
+sample estimates:
+ prop 1  prop 2 
+0.06569 0.04380 </code></pre>
+</div>
+</div>
+<p><strong>Example answer:</strong> 6.6% of the users with the new flow upgraded, compared with 4.4% in the control group (difference: 2.2 percentage points, 95% CI [-2; 6.4] points). The difference is not statistically significant (<em>p</em> = 0.348). The interval is wide and includes both no effect and substantial effects: with so few upgrades, this experiment is too small to tell, which is not the same as showing that the flow has no effect on upgrades.</p>
+<p><strong>Grading:</strong> upgrade rates per group (0.25); <code>prop.test()</code> or <code>chisq.test()</code> (0.25); interpretation including the confidence interval and — for non-significant results — the “too small to tell” argument (0.5). A <em>t</em>-test on the 0/1 variable: 0.25 for the test part (approximately right for large samples, but not the method of the chapter).</p>
+</div>
+</div>
+</div>
+</section>
+<section id="task-5-power-and-sample-size-1-point" class="level2">
+<h2 class="anchored" data-anchor-id="task-5-power-and-sample-size-1-point">Task 5: Power and sample size (1 point)</h2>
+<p><strong>5a) (0.5 points)</strong> Management considers the new onboarding flow worth rolling out if it increases the upgrade rate by at least <strong>20% relative</strong> to the control group. Using the upgrade rate of <em>your</em> control group as the baseline, compute how many users per group a follow-up experiment would need to detect such an increase with 80% power (α = 5%). Compare the result with the size of your experiment.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 5a">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 5a
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>p_control <span class="ot">&lt;-</span> upg<span class="sc">$</span>rate[upg<span class="sc">$</span>group <span class="sc">==</span> <span class="st">"Control"</span>]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>pw <span class="ot">&lt;-</span> <span class="fu">power.prop.test</span>(<span class="at">p1 =</span> p_control, <span class="at">p2 =</span> p_control <span class="sc">*</span> <span class="fl">1.2</span>, <span class="at">power =</span> <span class="fl">0.80</span>, <span class="at">sig.level =</span> <span class="fl">0.05</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>pw</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     Two-sample comparison of proportions power calculation 
+
+              n = 9381
+             p1 = 0.0438
+             p2 = 0.05255
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n is number in *each* group</code></pre>
+</div>
+</div>
+<p><strong>Example answer:</strong> A follow-up experiment would need about 9,381 users per group — about 34 times as many as in the current experiment (274 per group). Differences between small shares need very large samples; the current experiment could only have detected much larger increases in the upgrade rate.</p>
+<p><strong>Grading:</strong> correct call with the student’s own control rate and a 20% relative increase (0.25); comparison with the size of the experiment (0.25). Using the <em>observed</em> treatment rate instead of +20%: 0.25 in total (this is post-hoc power, see Chapter 4).</p>
+</div>
+</div>
+</div>
+<p><strong>5b) (0.5 points)</strong> With the number of users per group in your onboarding experiment, what is the smallest standardized effect (Cohen’s <em>d</em>) on listening time that could be detected with 80% power? What does this imply for your result in Task 2?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: 5b">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: 5b
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>mde <span class="ot">&lt;-</span> <span class="fu">power.t.test</span>(<span class="at">n =</span> n_ab, <span class="at">sd =</span> <span class="dv">1</span>, <span class="at">power =</span> <span class="fl">0.80</span>, <span class="at">sig.level =</span> <span class="fl">0.05</span>)<span class="sc">$</span>delta</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>mde</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2398</code></pre>
+</div>
+</div>
+<p><strong>Example answer:</strong> With 274 users per group, only effects of about <em>d</em> = 0.24 or larger could be detected with 80% power. The observed effect is larger than this, so an effect of this size was reasonably likely to be detected.</p>
+<p><strong>Grading:</strong> correct call (0.25); sensible link to the result of Task 2/3 (0.25).</p>
+</div>
+</div>
+</div>
+</section>
+<section id="task-6-three-versions-1-point" class="level2">
+<h2 class="anchored" data-anchor-id="task-6-three-versions-1-point">Task 6: Three versions (1 point)</h2>
+<p>Analyze the push-notification experiment: Do the three versions differ in the average number of sessions? If so, which versions differ from each other? Explain why you do not simply compare all pairs with separate <em>t</em>-tests.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution and grading: Task 6">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution and grading: Task 6
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>push_test <span class="sc">|&gt;</span> <span class="fu">group_by</span>(version) <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">mean =</span> <span class="fu">mean</span>(sessions))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  version         n  mean
+  &lt;fct&gt;       &lt;int&gt; &lt;dbl&gt;
+1 No push       152  8.03
+2 Weekly push   152  9.01
+3 Daily push    152  9.12</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>push_aov <span class="ot">&lt;-</span> <span class="fu">aov</span>(sessions <span class="sc">~</span> version, <span class="at">data =</span> push_test)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(push_aov)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Df Sum Sq Mean Sq F value Pr(&gt;F)   
+version       2    109    54.6     6.6 0.0015 **
+Residuals   453   3748     8.3                  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairwise.t.test</span>(push_test<span class="sc">$</span>sessions, push_test<span class="sc">$</span>version, <span class="at">p.adjust.method =</span> <span class="st">"bonferroni"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pairwise comparisons using t tests with pooled SD 
+
+data:  push_test$sessions and push_test$version 
+
+            No push Weekly push
+Weekly push 0.010   -          
+Daily push  0.003   1.000      
+
+P value adjustment method: bonferroni </code></pre>
+</div>
+</div>
+<p><strong>Example answer:</strong> The ANOVA shows that the versions differ (<em>F</em> = 6.6, <em>p</em> = 0.001). The Bonferroni-corrected pairwise comparisons show which pairs differ (corrected p-values below 0.05 in the table above). Separate <em>t</em>-tests for all three pairs would inflate the probability of at least one false alarm (the family-wise error rate) to about 1 − 0.95³ ≈ 14%; the ANOVA tests all groups at once, and the corrected post-hoc tests keep the family-wise error rate at 5%.</p>
+<p><strong>Grading:</strong> ANOVA (or Welch ANOVA / Kruskal–Wallis with justification) with correct interpretation (0.5); corrected pairwise comparisons — or the statement that they are not needed after a non-significant ANOVA — <strong>and</strong> the family-wise error argument (0.5). Uncorrected pairwise <em>t</em>-tests: 0.25 for the second part.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="in-class-debrief-3-points" class="level2">
+<h2 class="anchored" data-anchor-id="in-class-debrief-3-points">In-class debrief (3 points)</h2>
+<p>The debrief at the start of the session after the deadline (page 1 of the combined sheet with the Chapter 5, Part I quiz) consisted of three questions about each student’s own results:</p>
+<ol type="1">
+<li><strong>The onboarding experiment</strong> (1 point): (a) which group listened more on average? (b) Was the difference statistically significant at the 5% level? (c) Did the 95% confidence interval of the difference include zero?</li>
+<li><strong>Effect size and relevance</strong> (1 point): what was Cohen’s <em>d</em> for the difference in listening time, and how would you classify it? Name one piece of information you would need in addition to decide whether the new onboarding is worth rolling out.</li>
+<li><strong>The push-notification experiment</strong> (1 point): (a) which version had the highest average number of sessions? (b) Did the ANOVA indicate a difference between the versions? (c) After the Bonferroni correction, how many of the three pairwise comparisons were significant?</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled" title="Expected answers">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Expected answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>All answers depend on the student’s personal data version; they were graded against the student’s own results (for the example ID: New onboarding listened more; the difference was significant; the interval excluded zero; <em>d</em> ≈ 0.27; the push version with the highest mean was Daily push, the ANOVA was significant, and 2 Bonferroni-corrected pair(s) were significant).</p>
+<ol type="1">
+<li>Part (a): 0.4 points for the group with the higher mean; part (b): 0.3 for the correct significance verdict; part (c): 0.3 for the correct answer on the confidence interval. (b) and (c) must be consistent: “significant” means that the 95% interval excludes zero, and vice versa — a student who ticked “significant” and “includes zero” got the point for at most one of the two.</li>
+<li>0.5 points for Cohen’s <em>d</em> (within about 0.05 of the reference value) with the correct category (below 0.2 negligible, 0.2–0.5 small, 0.5–0.8 medium, above 0.8 large). 0.5 points for one sensible piece of additional information: the cost of the new onboarding, the value of an additional listening hour (revenue, retention), the effect on upgrades or churn, the size of the effect in hours rather than in standard deviations, or how long the effect lasts. Not sufficient: “the <em>p</em>-value” or “a larger sample” — these concern significance, not relevance.</li>
+<li>Part (a): 0.4 points for the version with the highest mean; part (b): 0.3 for the correct ANOVA verdict; part (c): 0.3 for the correct number of significant Bonferroni-corrected pairs (a Holm or uncorrected count that matched the student’s own report: 0.15).</li>
+</ol>
+</div>
 </div>
 </div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
