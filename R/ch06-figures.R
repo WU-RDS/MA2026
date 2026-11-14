@@ -2,7 +2,8 @@
 # ch06-figures.R
 # Shared figure functions for Chapter 6 (book chapter AND slide deck).
 # Data: data/smartmix_wave2.csv, data/ad_designs.csv, data/promo_campaigns.csv
-# (all synthetic; see R/ch06-make-data.R).
+# (all synthetic; see R/ch06-make-data.R, which also generates the two
+# coding-block data sets green_label.csv and coffee_story.csv).
 # ------------------------------------------------------------------
 
 library(ggplot2)
@@ -70,7 +71,7 @@ fig_effect_by_plan <- function(d = load_wave2(), base_size = 13) {
     geom_point(size = 4, color = wu_dark) +
     geom_text(aes(label = sprintf("%.1f hours", est)), nudge_x = 0.28, size = base_size / 3.3) +
     coord_cartesian(ylim = c(-0.5, 7)) +
-    labs(x = NULL, y = "Effect of Smart Mix on listening hours (95% CI)") +
+    labs(x = NULL, y = "Effect of Smart Mix (hours, 95% CI)") +
     theme_course(base_size)
 }
 
@@ -182,8 +183,8 @@ fig_subgroup_fishing <- function(base_size = 13) {
     geom_point(data = d |> filter(k %in% c(1, 5, 10, 20)), size = 3, color = wu_dark) +
     geom_text(data = d |> filter(k %in% c(5, 10, 20)), aes(label = sprintf("%.0f%%", 100 * p)), vjust = -1, size = base_size / 3.4) +
     scale_y_continuous(labels = scales::percent) +
-    labs(x = "Number of subgroups examined (no true effect in any of them)",
-         y = "Probability of at least one 'significant' subgroup") +
+    labs(x = "Number of subgroups examined (no true heterogeneity)",
+         y = "P(at least one 'significant' subgroup)") +
     theme_course(base_size)
 }
 
@@ -215,7 +216,7 @@ fig_mediation_diagram <- function(a = NA, b = NA, c = NA, base_size = 13) {
     theme_void()
 }
 
-# --- 6.8: fork, pipe, collider ---------------------------------------------------------
+# --- Fork, pipe, collider (not used in the 2026 chapter; kept for Chapter 5) ---------
 fig_dag_structures <- function(base_size = 12) {
   one <- function(title, nodes, edges, note) {
     ggplot() +
@@ -232,21 +233,4 @@ fig_dag_structures <- function(base_size = 12) {
   coll <- one("Collider (common effect)", data.frame(name = c("X", "Z", "Y"), x = c(0, 1, 2), y = c(0, -0.5, 0)),
               data.frame(x = c(0.2, 1.8), y = c(-0.15, -0.15), xend = c(0.8, 1.2), yend = c(-0.4, -0.4)), "do NOT adjust for Z")
   fork + pipe + coll
-}
-
-# --- A small helper: tidy coefficient tables -------------------------------
-# Rounds estimates, standard errors and test statistics, and formats
-# p-values the way journals report them (three decimals, "< 0.001").
-coef_table <- function(model, digits = 3) {
-  tab <- coef(summary(model))
-  out <- data.frame(
-    Estimate     = round(tab[, 1], digits),
-    `Std. Error` = round(tab[, 2], digits),
-    statistic    = round(tab[, 3], 2),
-    `p-value`    = ifelse(tab[, 4] < 0.001, "< 0.001", sprintf("%.3f", tab[, 4])),
-    check.names = FALSE
-  )
-  names(out)[3] <- colnames(tab)[3]
-  rownames(out) <- rownames(tab)
-  out
 }
