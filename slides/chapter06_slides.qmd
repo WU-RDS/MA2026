@@ -587,10 +587,7 @@ Live demo: book §6.7 — mediation widget, switch on the **unobserved confounde
 
 `r paste0("[", book_url, "#sec-mech-mediation](", book_url, "#sec-mech-mediation)")`
 
-::: {style="border: 3px dashed #b0c4d8; border-radius: 10px; padding: 1.5em; text-align: center; color: #58585a; margin-top: 0.6em;"}
-*Screenshot placeholder: the mediation widget*\
-`img/ch06/widget_mediation.png`
-:::
+![](../img/ch06/widget_mediation.png){width="25%"}
 :::
 
 ::: {.column width="45%"}
