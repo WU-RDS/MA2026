@@ -94,8 +94,9 @@ elasticity <- b["log(spend)"] +
 names(elasticity) <- levels(promo$genre)
 elasticity
 
-# With confidence intervals
+# With confidence intervals, and as a chart (a forest plot of the four elasticities)
 emtrends(model_genre, ~ genre, var = "log(spend)")
+plot(emtrends(model_genre, ~ genre, var = "log(spend)"))
 
 # --- Moderation by a continuous variable ----------------------------------
 model_prior <- lm(hours ~ smart_mix * prior_hours + premium + tenure, data = wave2)
@@ -176,11 +177,11 @@ anova(model_ads)
 # Step 2: which cells differ? Estimated marginal means and adjusted pairwise comparisons
 emm <- emmeans(model_ads, ~ source | disclosure)
 emm
-pairs(emm)                             # Tukey-adjusted (default)
-pairs(emm, adjust = "bonferroni")      # Bonferroni, as in Chapter 4
+pairs(emm, adjust = "bonferroni")      # Bonferroni-adjusted, as in Chapter 4
+pairs(emm)                             # Tukey's HSD (the default of pairs())
 
 # The other direction: disclosure effect within each source
-pairs(emmeans(model_ads, ~ disclosure | source))
+pairs(emmeans(model_ads, ~ disclosure | source), adjust = "bonferroni")
 
 
 # ======================================================================

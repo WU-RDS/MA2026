@@ -158,6 +158,8 @@ Live demo if time: the interaction-plot widget in the book (§6.2) — move the 
 
 ## Face 1: a treatment effect that differs between groups {.smaller}
 
+*Why a manager cares: if Smart Mix mainly helps free users, it belongs in the free tier's roadmap and in the upgrade pitch — not in the Premium feature list.*
+
 ```{r m-plan, echo=TRUE}
 model_plan <- lm(hours ~ smart_mix * premium + prior_hours + tenure, data = wave2)
 round(coef(summary(model_plan)), 3)
@@ -173,6 +175,8 @@ fig_lines_by_plan(base_size = 11)
 ::: {.column width="55%"}
 ::: keybox
 `smart_mix` = effect **for free users** (premium = 0): **5.0 h** · `smart_mix:premium` = how much the effect **differs** for Premium: **−3.1 h** (the heterogeneity test) · effect for Premium = 5.0 − 3.1 = **1.9 h** · `premium` = plan difference **in the control group**.
+
+The chart shows **raw means**; the coefficients hold prior listening and tenure constant — which is why 5.0 and 1.9 are not exactly the gaps in the chart (4.6 and 1.0). Randomization makes both unbiased; the adjusted estimates are more precise.
 :::
 :::
 :::
@@ -229,6 +233,8 @@ The `emtrends()` table as a picture: what the product team should see.
 
 ## Face 2: a slope that differs between groups {.smaller}
 
+*Why a manager cares: if the spend elasticity differs by genre, the next promotion euro should go where a percent of budget buys the most streams.*
+
 ::: columns
 ::: {.column width="52%"}
 ```{r m-genre, echo=TRUE}
@@ -239,7 +245,7 @@ round(coef(summary(model_genre)), 3)
 :::
 
 ::: {.column width="48%"}
-```{r el-genre, fig.width=5.8, fig.height=3.6}
+```{r el-genre, fig.width=5.8, fig.height=3.2}
 fig_elasticity_by_genre(base_size = 11)
 ```
 :::
@@ -268,22 +274,28 @@ elasticity <- b["log(spend)"] +
 names(elasticity) <- levels(promo$genre)
 elasticity
 ```
-:::
 
-::: {.column width="50%"}
 **With confidence intervals:**
 
 ```{r emt-genre, echo=TRUE}
 emtrends(model_genre, ~ genre, var = "log(spend)")
 ```
 :::
-:::
+
+::: {.column width="50%"}
+```{r forest-genre, fig.width=5.5, fig.height=3.3}
+fig_genre_elasticities(base_size = 11)
+```
 
 ::: keybox
-+10% spend → **+2.1%** streams for Pop, **+4.7%** for HipHop/Rap. The intervals of Rock and Electro/Dance overlap Pop's: no evidence that their elasticities differ.
++1% spend → **+0.21%** streams for Pop, **+0.47%** for HipHop/Rap. The intervals of Rock and Electro/Dance overlap Pop's: no evidence that their elasticities differ.
+:::
+:::
 :::
 
 ## Moderation by a continuous variable {.smaller}
+
+*Why a manager cares: if light listeners gain the most, the feature's onboarding should target them — heavy listeners need a different lever.*
 
 ::: columns
 ::: {.column width="50%"}
@@ -345,7 +357,7 @@ model_device <- lm(hours ~ smart_mix * device + prior_hours + premium + tenure, 
 round(coef(summary(model_device)), 3)
 ```
 
-For which device is the effect of Smart Mix largest? Compute the effect for each device from the coefficients (or with `emtrends()`). Are the differences significant?
+For which device is the effect of Smart Mix largest? Compute the effect for each device from the coefficients (or with `emtrends()`). Are the differences significant? (Why a manager cares: a device-specific effect would change the rollout order across the apps.)
 :::
 
 ::: notes
@@ -356,7 +368,13 @@ iOS is the reference: smart_mix = effect for iOS (3.68); add the interaction coe
 
 ## Spend × followers: the uncentered model {.smaller}
 
-Does promotion pay off more for artists with a bigger follower base?
+*Why a manager cares: if promotion pays off more for artists with a large follower base, the label can concentrate its budget on them — or deliberately counter the "rich get richer" dynamic.*
+
+$$
+\log(\text{streams}) = \beta_0 + \beta_1 \log(\text{spend}) + \beta_2 \log(\text{followers}) + \beta_3 \log(\text{spend}) \times \log(\text{followers}) + \dots
+\qquad\Rightarrow\qquad
+\text{Spend elasticity} = \beta_1 + \beta_3 \log(\text{followers})
+$$
 
 ```{r cc1, echo=TRUE}
 model_cc <- lm(log(streams) ~ log(spend) * log(followers) + placements + genre, data = promo)
@@ -364,7 +382,7 @@ round(coef(summary(model_cc)), 3)
 ```
 
 ::: keybox
-A **negative** spend elasticity (−0.90)? It is the elasticity for an artist with `log(followers)` = 0 — **one follower** (log(1) = 0). Nobody in the data is anywhere near that (median: 36,000 followers). The interaction (**+0.113**, *p* < .001) is the real finding: the spend elasticity **grows** with the follower base.
+A **negative** spend elasticity (β₁ = −0.90)? It is the elasticity for an artist with `log(followers)` = 0 — **one follower** (log(1) = 0). Nobody in the data is anywhere near that (median: 36,000 followers). The **interaction** β₃ = **+0.113** (*p* < .001) is the real finding: each additional unit of `log(followers)` — a 2.7 times larger follower base — adds 0.11 to the spend elasticity. Promotion and reach **reinforce each other**: the same percentage budget increase buys a larger percentage gain for a bigger artist.
 :::
 
 ## Centered at the means {.smaller}
@@ -414,6 +432,8 @@ fig_marginal_spend_followers(base_size = 11)
 
 ## Are AI-made ads judged as creative as human-made ads? {.smaller}
 
+*Why a manager cares: whether to disclose AI involvement is a policy decision — the interaction says when disclosure costs creativity points, and when it does not.*
+
 ::: columns
 ::: {.column width="50%"}
 -   **360 respondents** rate the creativity of an ad (0–100)
@@ -423,7 +443,7 @@ fig_marginal_spend_followers(base_size = 11)
 :::
 
 ::: {.column width="50%"}
-```{r cells, fig.width=6, fig.height=3.8}
+```{r cells, fig.width=6, fig.height=3.3}
 fig_ads_cells(base_size = 11)
 ```
 :::
@@ -467,11 +487,11 @@ The ANOVA table tests each factor and the **interaction as a whole** (two coeffi
 
 ```{r emm, echo=TRUE}
 emm <- emmeans(model_ads, ~ source | disclosure)
-pairs(emm)                              # Tukey-adjusted; Bonferroni: pairs(emm, adjust = "bonferroni")
+pairs(emm, adjust = "bonferroni")       # Tukey instead: pairs(emm), the default
 ```
 
 ::: keybox
-From "there is an interaction" to "**where exactly** are the differences": revealed → human beats AI (14 points) and hybrid; not revealed → AI and hybrid beat human by 9–10 points. *p*-values **Tukey-adjusted** within each disclosure condition (Bonferroni gives the same picture with slightly larger *p*-values) — the two-step logic of Chapter 4, with one extra dimension.
+From "there is an interaction" to "**where exactly** are the differences": revealed → human beats AI (14 points) and hybrid; not revealed → AI and hybrid beat human by 9–10 points. *p*-values **Bonferroni-adjusted** for the three comparisons within each disclosure condition, as in Chapter 4 (Tukey's HSD gives the same picture with slightly smaller *p*-values) — the two-step logic of the one-way ANOVA, with one extra dimension.
 :::
 
 ## Your turn (5 min) {.midsize}
@@ -499,8 +519,8 @@ fig_mediation_diagram(base_size = 13)
 
 ::: columns
 ::: {.column width="50%"}
--   **Indirect effect**: Smart Mix → new artists → hours = **a × b**
--   **Direct effect** c′: everything else (convenience, habit, curiosity)
+-   **Indirect effect** = **a × b**: Smart Mix → new artists → hours — the *average causal mediation effect* (**ACME**)
+-   **Direct effect** c′: everything else (convenience, habit, curiosity) — the *average direct effect* (**ADE**)
 -   **Total** = direct + indirect
 :::
 
@@ -587,7 +607,7 @@ Live demo: book §6.7 — mediation widget, switch on the **unobserved confounde
 
 `r paste0("[", book_url, "#sec-mech-mediation](", book_url, "#sec-mech-mediation)")`
 
-![](../img/ch06/widget_mediation.png){width="25%"}
+![](../img/ch06/widget_mediation.png){width="50%"}
 :::
 
 ::: {.column width="45%"}

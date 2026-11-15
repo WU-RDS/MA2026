@@ -79,8 +79,10 @@ fig_lines_by_plan <- function(d = load_wave2(), base_size = 13) {
   m <- d |> group_by(plan, group) |> summarise(hours = mean(hours), .groups = "drop")
   ggplot(m, aes(plan, hours, color = group, group = group)) +
     geom_line(linewidth = 1.2) + geom_point(size = 3.5) +
-    geom_text(aes(label = sprintf("%.1f", hours)), vjust = -1, size = base_size / 3.4, show.legend = FALSE) +
+    geom_text(aes(label = sprintf("%.1f", hours), vjust = ifelse(group == "Smart Mix", -1, 2)),
+              size = base_size / 3.4, show.legend = FALSE) +   # Smart Mix labels above, Control labels below the points
     scale_color_manual(values = c(Control = wu_grey, `Smart Mix` = wu_blue), name = NULL) +
+    scale_x_discrete(expand = expansion(add = 0.5)) +
     coord_cartesian(ylim = c(12, 24)) +
     labs(x = NULL, y = "Mean listening hours", subtitle = "Raw means by group and plan") +
     theme_course(base_size)
@@ -132,6 +134,26 @@ fig_elasticity_by_genre <- function(p = load_promo(), base_size = 13) {
     scale_color_manual(values = c(Pop = wu_grey, `HipHop/Rap` = wu_blue), name = NULL,
                        labels = sprintf("%s (elasticity %.2f)", c("Pop", "HipHop/Rap"), el$elasticity[el$genre %in% c("Pop", "HipHop/Rap")])) +
     labs(x = "log(promotion spend)", y = "log(streams)") +
+    theme_course(base_size)
+}
+
+# --- 6.3: the four genre elasticities with their 95% CIs (forest plot) -------------
+fig_genre_elasticities <- function(p = load_promo(), base_size = 13) {
+  m <- lm(log(streams) ~ log(spend) * genre + log(followers) + placements, data = p)
+  b <- coef(m); V <- vcov(m)
+  el <- data.frame(genre = levels(p$genre)) |>
+    mutate(term = ifelse(genre == "Pop", NA, paste0("log(spend):genre", genre)),
+           est  = b["log(spend)"] + ifelse(is.na(term), 0, b[term]),
+           se   = sqrt(V["log(spend)", "log(spend)"] +
+                       ifelse(is.na(term), 0, V[cbind(term, term)] + 2 * V[cbind("log(spend)", term)])),
+           genre = factor(genre, levels = rev(levels(p$genre))))
+  ggplot(el, aes(x = est, y = genre)) +
+    geom_vline(xintercept = el$est[el$genre == "Pop"], linetype = "dashed", color = wu_grey) +
+    geom_errorbarh(aes(xmin = est - 1.96 * se, xmax = est + 1.96 * se), height = 0.25, color = wu_blue, linewidth = 0.9) +
+    geom_point(size = 3.5, color = wu_blue) +
+    geom_text(aes(x = est + 1.96 * se, label = sprintf("%.2f", est)), hjust = -0.35, size = base_size / 3.4, color = wu_blue) +
+    scale_x_continuous(limits = c(0, 0.65)) +
+    labs(x = "Spend elasticity (95% CI); dashed line: Pop (reference)", y = NULL) +
     theme_course(base_size)
 }
 

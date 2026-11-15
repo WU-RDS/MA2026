@@ -165,7 +165,7 @@ This is the most common interaction in practice, and it has two faces: a **treat
 
 ### A treatment effect that differs between groups
 
-Does Smart Mix help free users more than Premium users? The raw means (@fig-lines-by-plan) suggest so: among free users, the Smart Mix group listens about 4.6 hours more than the control group; among Premium users, about 1 hour more.
+Does Smart Mix help free users more than Premium users? For the product team this is more than a statistical detail: if the effect is concentrated among free users, Smart Mix belongs in the free tier's roadmap and in the upgrade pitch, not in the Premium feature list. The raw means (@fig-lines-by-plan) suggest so: among free users, the Smart Mix group listens about 4.6 hours more than the control group; among Premium users, about 1 hour more.
 
 ```{r}
 #| label: fig-lines-by-plan
@@ -189,6 +189,8 @@ Reading the coefficients with the marginal-effect rule:
 - `smart_mix:premium` (`r round(coef(m_plan)["smart_mix:premium"], 2)`): how much the effect **differs** for Premium users. Its *p*-value tests whether the two effects differ — this is the test of heterogeneity.
 - The effect for Premium users is the sum: `r sprintf("%.2f", coef(m_plan)["smart_mix"])` + (`r sprintf("%.2f", coef(m_plan)["smart_mix:premium"])`) = `r sprintf("%.2f", coef(m_plan)["smart_mix"] + coef(m_plan)["smart_mix:premium"])` hours.
 - `premium` (`r round(coef(m_plan)["premium"], 2)`): the difference between Premium and free users **in the control group** (smart_mix = 0) — not an overall Premium effect.
+
+The coefficients (5.0 and 1.9) are not exactly the gaps in @fig-lines-by-plan (4.6 and 1.0): the chart shows raw means, while the regression holds prior listening and tenure constant. The Smart Mix users of both plans happen to have slightly lower prior listening than their control groups, and the model corrects for this chance imbalance. Because Smart Mix was randomized, both comparisons are unbiased — the adjusted one is simply more precise (@sec-mech-motivation).
 
 Written as a formula, the marginal effect of Smart Mix is
 
@@ -224,7 +226,7 @@ fig_effect_by_plan()
 
 ### A slope that differs between groups
 
-The same model structure answers a different-looking question. In the promotion campaigns of @sec-observational (a second year of campaigns, `promo`), does the **elasticity** of streams with respect to spend differ between genres? Here the continuous variable is `log(spend)` and the groups are genres:
+The same model structure answers a different-looking question. In the promotion campaigns of @sec-observational (a second year of campaigns, `promo`), does the **elasticity** of streams with respect to spend differ between genres? For the label, this is a budget-allocation question: if the elasticity differs, the next promotion euro should go to the genre where a percent of budget buys the most streams. Here the continuous variable is `log(spend)` and the groups are genres:
 
 ```{r}
 #| eval: false
@@ -258,7 +260,16 @@ elasticity
 emtrends(model_genre, ~ genre, var = "log(spend)")
 ```
 
-A 10% increase in spend goes with about 2.1% more streams for Pop campaigns and 4.7% more for HipHop/Rap campaigns; the intervals of Rock and Electro/Dance overlap Pop's.
+A 1% increase in spend goes with about 0.21% more streams for Pop campaigns and 0.47% more for HipHop/Rap campaigns; the intervals of Rock and Electro/Dance overlap Pop's. @fig-genre-elasticities shows the four elasticities with their confidence intervals — the chart to put in front of the label's management (`plot()` on the `emtrends()` object produces a similar one).
+
+```{r}
+#| label: fig-genre-elasticities
+#| echo: false
+#| fig-width: 7
+#| fig-height: 3.4
+#| fig-cap: "The spend elasticity of each genre with its 95% confidence interval. Only HipHop/Rap differs clearly from the reference genre Pop."
+fig_genre_elasticities()
+```
 
 ```{r}
 #| label: fig-elasticity-by-genre
@@ -270,6 +281,8 @@ fig_elasticity_by_genre()
 ```
 
 ### Moderation by a continuous variable
+
+Does Smart Mix help light listeners more than heavy listeners? If so, the feature's onboarding should target light listeners, and heavy listeners need a different lever — a targeting question that only a continuous moderator can answer.
 
 Does the effect of Smart Mix depend on how much a user listened *before*? Now the moderator is continuous, and the interaction `smart_mix * prior_hours` lets the Smart Mix effect change by a constant amount per hour of prior listening:
 
@@ -314,7 +327,13 @@ Fit the interaction of Smart Mix with **device**: `model_device <- lm(hours ~ sm
 
 ## Continuous × continuous {#sec-mech-cont-cont}
 
-When both interacting variables are continuous, the model is the same, but the interpretation needs more care. In the campaign data, is the spend elasticity larger for artists with a bigger follower base — do promotion and reach reinforce each other?
+When both interacting variables are continuous, the model is the same, but the interpretation needs more care. In the campaign data, is the spend elasticity larger for artists with a bigger follower base — do promotion and reach reinforce each other? For the label this decides whether to concentrate promotion budgets on artists who already have an audience, or to deliberately counter the "rich get richer" dynamic. The model is
+
+$$
+\log(\text{streams}) = \beta_0 + \beta_1 \log(\text{spend}) + \beta_2 \log(\text{followers}) + \beta_3 \log(\text{spend}) \times \log(\text{followers}) + \dots,
+$$
+
+and the marginal-effect rule gives the spend elasticity as $\beta_1 + \beta_3 \log(\text{followers})$: it is no longer one number but a function of the follower base, and $\beta_3$ says by how much it changes per unit of $\log(\text{followers})$.
 
 ```{r}
 model_cc <- lm(log(streams) ~ log(spend) * log(followers) + placements + genre, data = promo)
@@ -326,7 +345,7 @@ round(coef(summary(model_cc)), 3)
 b_cc <- coef(model_cc)
 ```
 
-The interaction (`r round(b_cc["log(spend):log(followers)"], 3)`) is clearly positive: the spend elasticity grows with the follower base. But the "main effects" look absurd — `log(spend)` is `r round(b_cc["log(spend)"], 2)`, a *negative* elasticity. The marginal-effect rule explains why: `log(spend)` is the elasticity for an artist with `log(followers)` = 0, i.e., with one follower (log(1) = 0). Nobody in the data is anywhere near that — the median artist has `r format(round(median(promo$followers), -2), big.mark = ",")` followers.
+The interaction (`r round(b_cc["log(spend):log(followers)"], 3)`) is clearly positive: each additional unit of `log(followers)` — a follower base about 2.7 times larger — adds `r round(b_cc["log(spend):log(followers)"], 2)` to the spend elasticity, so the same percentage budget increase buys a larger percentage gain for a bigger artist. Promotion and reach reinforce each other. But the "main effects" look absurd — `log(spend)` is `r round(b_cc["log(spend)"], 2)`, a *negative* elasticity. The marginal-effect rule explains why: `log(spend)` is the elasticity for an artist with `log(followers)` = 0, i.e., with one follower (log(1) = 0). Nobody in the data is anywhere near that — the median artist has `r format(round(median(promo$followers), -2), big.mark = ",")` followers.
 
 ### Centering
 
@@ -385,7 +404,7 @@ Centering subtracts the mean; standardizing additionally divides by the standard
 
 ### The design
 
-Interactions between two categorical variables are the natural analysis of **factorial experiments**, in which two treatments are manipulated at once. The streaming service's marketing team wanted to know whether ads designed with AI are judged as creative as ads designed by humans — and whether it matters if people *know* who made them. `r nrow(ads)` respondents each saw one ad for the service and rated its creativity (0–100). The design has two factors: the **source** of the design (made by a human, by AI, or by a human with AI) and the **disclosure** of the source (revealed to the respondent or not). Each of the 2 × 3 = 6 combinations — the **cells** — had 60 respondents, assigned at random.
+Interactions between two categorical variables are the natural analysis of **factorial experiments**, in which two treatments are manipulated at once. The streaming service's marketing team wanted to know whether ads designed with AI are judged as creative as ads designed by humans — and whether it matters if people *know* who made them. Behind the question is a policy decision: whether to disclose AI involvement in the service's advertising, and the interaction tells the team when disclosure costs creativity points and when it does not. `r nrow(ads)` respondents each saw one ad for the service and rated its creativity (0–100). The design has two factors: the **source** of the design (made by a human, by AI, or by a human with AI) and the **disclosure** of the source (revealed to the respondent or not). Each of the 2 × 3 = 6 combinations — the **cells** — had 60 respondents, assigned at random.
 
 ```{r}
 #| eval: false
@@ -459,14 +478,10 @@ The interaction tells us *that* the effect of the source depends on disclosure; 
 library(emmeans)
 emm <- emmeans(model_ads, ~ source | disclosure)
 emm
-pairs(emm)
-```
-
-The output answers the question at the level a manager needs: when the source is revealed, human designs beat both AI (by about `r round(b_a["sourceAI"] * -1, 0)` points) and hybrid designs, which do not differ from each other; when the source is not revealed, the ranking flips, and the AI and hybrid designs beat the human one by about 9–10 points. The *p*-values are Tukey-adjusted for the three comparisons within each disclosure condition. If you prefer the Bonferroni correction of @sec-experiments, ask for it — the contrasts are the same, only the adjusted *p*-values are slightly larger:
-
-```{r}
 pairs(emm, adjust = "bonferroni")
 ```
+
+The output answers the question at the level a manager needs: when the source is revealed, human designs beat both AI (by about `r round(b_a["sourceAI"] * -1, 0)` points) and hybrid designs, which do not differ from each other; when the source is not revealed, the ranking flips, and the AI and hybrid designs beat the human one by about 9–10 points. The *p*-values are Bonferroni-adjusted for the three comparisons within each disclosure condition — the correction of @sec-experiments. (`pairs(emm)` without the argument uses Tukey's HSD, which is designed for exactly this situation, all pairwise comparisons, and is slightly less conservative; the picture is the same.)
 
 This two-step logic — an overall test of the interaction, then corrected comparisons of the cells — is the same as for the one-way ANOVA, with one extra dimension.
 
@@ -566,8 +581,8 @@ In a two-group experiment with $n$ users per group, the standard error of the tr
 
 Back to the product team's second question. Smart Mix increases listening time — but *how*? The hypothesis: Smart Mix makes users discover new artists, and discovering new artists makes them listen more. If this is right, part of the effect of Smart Mix runs *through* discovery, and the rest does not (@fig-mediation-diagram):
 
-- The **indirect effect** is the part that runs through the mediator: Smart Mix → new artists → hours.
-- The **direct effect** is the rest: Smart Mix → hours, for any other reason (convenience, habit, curiosity).
+- The **indirect effect** is the part that runs through the mediator: Smart Mix → new artists → hours. In the mediation literature it is called the *average causal mediation effect* (ACME).
+- The **direct effect** is the rest: Smart Mix → hours, for any other reason (convenience, habit, curiosity) — the *average direct effect* (ADE).
 - The **total effect** is their sum — the effect we estimated in @sec-mech-motivation.
 
 ```{r}
