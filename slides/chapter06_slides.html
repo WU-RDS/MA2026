@@ -1526,11 +1526,12 @@ display:block!important;
 </section>
 <section id="spend-followers-the-uncentered-model" class="slide level2 smaller">
 <h2>Spend × followers: the uncentered model</h2>
-<p><em>Why a manager cares: if promotion pays off more for artists with a large follower base, the label can concentrate its budget on them — or deliberately counter the “rich get richer” dynamic.</em></p>
+<p><em>Why a manager cares: if promotion pays off more for artists with a large audience, the label can concentrate its budget on them — or deliberately counter “rich get richer”.</em></p>
 <p><span class="math display">
-\log(\text{streams}) = \beta_0 + \beta_1 \log(\text{spend}) + \beta_2 \log(\text{followers}) + \beta_3 \log(\text{spend}) \times \log(\text{followers}) + \dots
-\qquad\Rightarrow\qquad
-\text{Spend elasticity} = \beta_1 + \beta_3 \log(\text{followers})
+\begin{aligned}
+\log(\text{streams}) &amp;= \beta_0 + \beta_1 \log(\text{spend}) + \beta_2 \log(\text{followers}) + \beta_3 \log(\text{spend}) \times \log(\text{followers}) + \dots \\
+\text{Spend elasticity} &amp;= \beta_1 + \beta_3 \log(\text{followers})
+\end{aligned}
 </span></p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href aria-label="1"></a>model_cc <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(streams) <span class="sc">~</span> <span class="fu">log</span>(spend) <span class="sc">*</span> <span class="fu">log</span>(followers) <span class="sc">+</span> placements <span class="sc">+</span> genre, <span class="at">data =</span> promo)</span>
@@ -1547,12 +1548,15 @@ genreElectro/Dance           0.065      0.058   1.129    0.260
 log(spend):log(followers)    0.113      0.017   6.528    0.000</code></pre>
 </div>
 </div>
+<div style="font-size: 0.92em;">
 <div class="keybox">
-<p>A <strong>negative</strong> spend elasticity (β₁ = −0.90)? It is the elasticity for an artist with <code>log(followers)</code> = 0 — <strong>one follower</strong> (log(1) = 0). Nobody in the data is anywhere near that (median: 36,000 followers). The <strong>interaction</strong> β₃ = <strong>+0.113</strong> (<em>p</em> &lt; .001) is the real finding: each additional unit of <code>log(followers)</code> — a 2.7 times larger follower base — adds 0.11 to the spend elasticity. Promotion and reach <strong>reinforce each other</strong>: the same percentage budget increase buys a larger percentage gain for a bigger artist.</p>
+<p>A <strong>negative</strong> spend elasticity (β₁ = −0.90)? It is the elasticity for an artist with <code>log(followers)</code> = 0 — <strong>one follower</strong> (log(1) = 0). Nobody in the data is anywhere near that (median: 36,000 followers). The <strong>interaction</strong> β₃ = <strong>+0.113</strong> (<em>p</em> &lt; .001) is the real finding: each additional unit of <code>log(followers)</code> adds 0.11 to the spend elasticity — and one unit of <code>log(followers)</code> means a follower base <strong>multiplied by e ≈ 2.7</strong> (log(2.7 × followers) = log(followers) + 1). Promotion and reach <strong>reinforce each other</strong>: the same percentage budget increase buys a larger percentage gain for a bigger artist.</p>
+</div>
 </div>
 </section>
 <section id="centered-at-the-means" class="slide level2 smaller">
 <h2>Centered at the means</h2>
+<p><strong>The approach:</strong> subtract each variable’s mean from every observation — nothing else changes. But the <strong>zero point</strong> of each variable is now the <strong>mean of the data</strong>, so the main effects become marginal effects <em>at the average artist</em> instead of at one follower and one euro.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href aria-label="1"></a>promo_c <span class="ot">&lt;-</span> promo <span class="sc">|&gt;</span></span>
 <span id="cb22-2"><a href aria-label="2"></a>  <span class="fu">mutate</span>(<span class="at">log_spend_c =</span> <span class="fu">log</span>(spend) <span class="sc">-</span> <span class="fu">mean</span>(<span class="fu">log</span>(spend)),</span>
