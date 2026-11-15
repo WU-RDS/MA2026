@@ -1,5 +1,151 @@
 # Overview & guidelines {#sec-group-project .unnumbered}
 
-::: {.callout-note title="Contents follow soon"}
-This page will contain the detailed guidelines for the group project: tasks and milestones, requirements for the video presentation and the submission, the peer review, and the grading criteria. The key dates are already listed in the [Introduction](00-introduction.qmd).
+::: {.callout-note appearance="simple"}
+In the group project you run a market research study from start to finish: you turn a managerial question into a **randomized experiment**, build it into a questionnaire, collect real data, analyze them in R, and present your recommendation in a **pre-recorded video**. The project counts for **30% of your grade**. This page contains the guidelines; the [topic list](project-topics.qmd) and the materials on [survey design](survey-design.qmd) are on the following pages.
 :::
+
+## Your tasks
+
+::: {.callout-important title="First step: the topic survey"}
+Fill in the **topic-preference survey** by **Friday, November 20** (Group A) or **Tuesday, November 24** (Group B): <https://wumarketing.eu.qualtrics.com/jfe/form/SV_es3TnCL1apevqaa>. The [topic list](project-topics.qmd) describes the topics; the topics are allocated on the basis of the stated preferences.
+:::
+
+The project has two parts.
+
+1.  **Questionnaire design & data collection.** Your group chooses a topic (from the [list](project-topics.qmd) or your own), formulates a research question and hypotheses, and designs a questionnaire in **Qualtrics** that contains a real experiment: respondents are randomly assigned to one of **two conditions**. You present the draft in **Coaching I**, receive feedback, revise and pretest the questionnaire, and collect about **120 responses** (≈ 20 per group member).
+2.  **Data analysis & presentation.** You import and clean the Qualtrics data in R and analyze them with the methods of the course: a description of the sample, the experimental comparison, *for whom* the effect holds (moderation), and *why* (mediation). **Coaching II** is dedicated to your analysis. You submit a **video presentation** with the slides, the data, and reproducible R code. Afterwards, each student reviews the video of one other group.
+
+::: {.callout-important title="Design requirements"}
+Every project must contain:
+
+- a **between-subjects experiment with two conditions**, with random assignment implemented in Qualtrics (randomizer in the survey flow), and a **manipulation check**;
+- **one dependent variable with real variation** — e.g., willingness to pay in euros, purchase or choice likelihood on a 0–100 scale, or a multi-item attitude scale — measured right after the manipulation;
+- **at least one moderator**, measured *before* the manipulation (so that it cannot be affected by it), with the expected direction of the moderation stated in your Coaching I slides;
+- **at least one mediator**, measured *after* the manipulation and *before* the dependent variable — the mechanism through which you expect the effect to work;
+- **hypotheses stated before data collection**. Analyses that were not planned are welcome, but must be labeled as exploratory in the presentation.
+
+A **2 × 2 design** (two manipulated factors) is possible if your moderator is something you can manipulate, but it spreads 120 respondents over four cells of 30 — discuss it with us in Coaching I.
+:::
+
+## Timeline
+
+| Milestone | Group A (Mondays) | Group B (Thursdays) |
+|---|---|---|
+| State your topic preference in the [topic survey](https://wumarketing.eu.qualtrics.com/jfe/form/SV_es3TnCL1apevqaa) | Fri, Nov 20 | Tue, Nov 24 |
+| Module 8: Survey design (in class) | Mon, Nov 23 | Thu, Nov 26 |
+| Upload the draft questionnaire and slides for Coaching I | Sun, Nov 29 | Wed, Dec 2 |
+| **Coaching I — questionnaire design** *(online)* | Mon, Nov 30, 13:00–17:00 | Thu, Dec 3, 14:00–18:00 |
+| Pretest, revise, and field your survey | December | December |
+| **Coaching II — data analysis** *(online)* | Thu, Jan 7, 13:00–17:00 | Fri, Jan 8, 14:00–18:00 |
+| **Submission: video presentation, slides, data, code** (Canvas) | Wed, Jan 20 | Wed, Jan 20 |
+| **Submission: peer review of one other group's video** | Mon, Jan 25 | Mon, Jan 25 |
+
+: Group project milestones. {.striped}
+
+Plan backwards from the submission date: data collection takes longer than you think (allow two weeks, plus a few days of pretesting before that), and the analysis will raise questions that you want to bring to Coaching II — so your data should be complete by then.
+
+## Part 1: Questionnaire design and data collection
+
+### Coaching I
+
+Coaching I is a working session, not an exam: each group presents its draft for about 10 minutes, followed by feedback from us and from the other groups. Upload two files to Canvas by the deadline in the table:
+
+1.  the **PDF export of your Qualtrics questionnaire** (Tools → Export → Print survey), and
+2.  a **short slide deck** (about 8–10 slides) covering the four blocks below.
+
+**Problem statement and hypotheses**
+
+- What is the managerial problem, and why is it relevant? Which decision depends on the answer?
+- What is the research question? (Causal: *does the manipulation change the outcome?* — plus *for whom* and *why*.)
+- What are your hypotheses — for the main effect, the moderator, and the mediator — and which literature are they based on? Start from the starter paper of your topic.
+
+**Research design and questionnaire structure**
+
+- The two conditions: what exactly differs, and what is held constant? Show the stimuli (the two versions of your ad, product page, post, or scenario).
+- The structure of the questionnaire: introduction → moderator and other variables measured *before* the manipulation → randomizer → stimulus → manipulation check → mediator → dependent variable(s) → demographics (see @sec-survey-design).
+- Where is the randomizer placed in the Qualtrics survey flow, and how do you make sure that each respondent sees exactly one condition?
+
+**Variables, measurement, and scaling**
+
+- Why these variables? How is each one measured, with which scale, and why? Use validated scales from the literature for mediator and moderator where they exist (cite the source) and adapt the wording to your context.
+- Does your dependent variable have enough variation? Which values do you expect in the two conditions?
+
+**Planned analyses**
+
+- Which test answers your main question (e.g., a *t*-test or regression of the outcome on the condition), how will you test the moderation (interaction term), and how the mediation (the three regressions and the bootstrap of @sec-mech-mediation)?
+- Which charts will you show? Sketch them now — it tells you whether you are measuring the right things.
+
+::: {.callout-tip title="What a good draft looks like"}
+A precise question ("Does disclosing that an ad was generated by AI reduce willingness to pay, and is this effect weaker for people who use AI themselves?") beats a broad one ("How do people feel about AI in advertising?"). Two conditions that differ in exactly one thing. A dependent variable in euros or on a 0–100 scale. One moderator and one mediator that you can justify with the paper, each measured with two or three items. Everything else — demographics, a few descriptive questions that make the report interesting — comes last. Thirty questions and less than ten minutes on a phone.
+:::
+
+### After Coaching I: revise, pretest, collect
+
+Revise the questionnaire based on the feedback, then **pretest** it with three to five people who are not in your group and watch them fill it in on a phone: unclear wording, a missing answer option, or a randomizer that always shows the same condition is cheap to fix now and impossible later. Check the Qualtrics settings (force response where needed, progress bar, mobile layout, anonymized responses) — the checklist is in @sec-survey-design.
+
+Then collect the data. Each group member recruits about **20 respondents** (≈ 120 per group). Convenience sampling — family, friends, fellow students — is fine for this project, but aim for a **heterogeneous sample**: if everyone is a 22-year-old business student, you cannot analyze heterogeneity, and your sample is not the market your manager cares about. Respondents must be real people answering once; do not fill in the questionnaire yourselves, and do not use bots or AI to generate responses. Keep the survey anonymous and do not collect personal data you do not need.
+
+## Part 2: Data analysis and video presentation
+
+### Coaching II
+
+Bring your (ideally complete) data set, your R script, and your open questions. We will work through the import of Qualtrics data, the manipulation check, the main comparison, the moderation and mediation analyses, and the charts for your presentation. The how-tos for importing and cleaning Qualtrics exports in R are in @sec-survey-design.
+
+### What to submit
+
+One **.zip file** per group on Canvas by the deadline, containing:
+
+1.  the **video presentation** (mp4; about 10 minutes; every group member presents a part);
+2.  the **slides** (PDF);
+3.  the **data** as exported from Qualtrics (CSV) — anonymized, with a short codebook if the variable names are not self-explanatory;
+4.  the **R script** (or .Rmd) that reproduces every number and chart in the presentation from the raw data — we will run it;
+5.  the **contribution & AI-use statement** (one page: who did what, and how AI tools were used, see below).
+
+### What the presentation should cover
+
+Think of your audience as the decision maker who commissioned the study: they want to know what to do, and why they should believe you. A structure that works:
+
+1.  **The problem and the question** — the managerial decision, the research question, the hypotheses (with the key reference).
+2.  **The design** — the two conditions (show the stimuli), the sample size, the variables, and how they were measured.
+3.  **The sample** — who answered (descriptives of the key variables), and whether randomization produced comparable groups.
+4.  **The manipulation check** — did respondents notice the manipulation?
+5.  **The main result** — the comparison of the two conditions with the estimate, its 95% confidence interval, and the test (the reporting standard of @sec-experiments). One good chart.
+6.  **For whom** — the moderation analysis: the interaction model, the effect of the condition at meaningful values of the moderator, and an honest statement of the uncertainty (with 60 per condition, "we found no evidence that the effect differs" is a legitimate result).
+7.  **Why** — the mediation analysis: total, direct, and indirect effect with the bootstrap interval and the share mediated, and the assumption behind the decomposition.
+8.  **Limitations** — sample, stimuli, single product or context, hypothetical measures.
+9.  **Recommendations** — what the decision maker should do, and what the next experiment should test.
+
+Some rules of the craft:
+
+- **Justify your tests** and use the correct terminology: name the dependent and independent variables, and for every regression state the equation, e.g., $\text{WTP}_i = \beta_0 + \beta_1 \text{Condition}_i + \beta_2 \text{Moderator}_i + \beta_3 (\text{Condition}_i \times \text{Moderator}_i) + \varepsilon_i$.
+- **Report uncertainty**, not only *p*-values: estimates with confidence intervals, effect sizes, and sample sizes per group on every chart.
+- **Visualizations tell the story.** Every chart must answer part of the research question; label axes, show the units, show the number of observations, and make the text legible at presentation size. Boxplots with the individual data points for the comparison of conditions; a marginal-effect plot or an interaction plot for the moderation.
+- **Interpret, then recommend.** Do not end with the regression table. Say what the result means for the decision — and what you would do with a larger budget.
+- Assumption checks, robustness checks, and item statistics go into an **appendix** (slides after the last one), where they are available if someone asks.
+
+### Peer review
+
+After the submission, each student receives the video and slides of one other group and completes a **structured review form** on Canvas (clarity of the question, quality of the design, correctness and interpretation of the analyses, quality of the presentation, usefulness of the recommendation — with one concrete suggestion for improvement). The review is part of your individual project grade (2 of 30 points); the groups receive the anonymized reviews as feedback.
+
+## Grading
+
+The project is graded out of **30 points**. 
+
+| Component | Points | What counts |
+|---|:-:|---|
+| Part 1: questionnaire design (draft, Coaching I presentation, final questionnaire) | 8 | precision of the research question and hypotheses; quality of the manipulation and of the measurement; structure and usability of the questionnaire; use of the feedback |
+| Part 2: analysis and video presentation | 20 | correct and well-justified analyses (comparison, moderation, mediation, uncertainty); reproducible code; quality of the visualizations; interpretation, limitations, and recommendations; clarity of the presentation |
+| Peer review of another group's video | 2 | completeness and usefulness of the review |
+
+: Grading components of the group project. {.striped}
+
+**Individual grades.** All members receive the group's points for Parts 1 and 2, adjusted for individual contributions: a **peer assessment** among the group members and the **contribution & AI-use statement** enter the individual grade. Members who did not contribute to a part receive no points for it.
+
+## Rules
+
+- **Groups** work with five to six members, randomly assigned on Canvas. If a conflict arises in your group, talk to us early.
+- **Real data.** Fabricating, duplicating, or AI-generating responses is academic misconduct and leads to a failing grade for the project for all members involved.
+- **AI tools** may be used for the project (coding help, feedback on the wording of items, polishing slides) within the course's [AI policy](00-introduction.qmd): you must be able to explain every line of code and every analysis you submit, and the contribution & AI-use statement must list the tools and what they were used for. Do not use AI to write survey responses or to invent references — check every reference in the original.
+- **Data protection.** Collect only the data you need, keep responses anonymous (switch on Qualtrics' anonymization and do not ask for names or e-mail addresses), state in the introduction of the survey that participation is voluntary and the data are used for a course project only.
+
+Questions about the project are best asked in the course forum, so that all groups see the answer.
