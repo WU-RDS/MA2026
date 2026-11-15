@@ -76,6 +76,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="book-style.css">
 </head>
@@ -245,8 +274,29 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#your-tasks" id="toc-your-tasks" class="nav-link active" data-scroll-target="#your-tasks">Your tasks</a></li>
+  <li><a href="#timeline" id="toc-timeline" class="nav-link" data-scroll-target="#timeline">Timeline</a></li>
+  <li><a href="#part-1-questionnaire-design-and-data-collection" id="toc-part-1-questionnaire-design-and-data-collection" class="nav-link" data-scroll-target="#part-1-questionnaire-design-and-data-collection">Part 1: Questionnaire design and data collection</a>
+  <ul class="collapse">
+  <li><a href="#coaching-i" id="toc-coaching-i" class="nav-link" data-scroll-target="#coaching-i">Coaching I</a></li>
+  <li><a href="#after-coaching-i-revise-pretest-collect" id="toc-after-coaching-i-revise-pretest-collect" class="nav-link" data-scroll-target="#after-coaching-i-revise-pretest-collect">After Coaching I: revise, pretest, collect</a></li>
+  </ul></li>
+  <li><a href="#part-2-data-analysis-and-video-presentation" id="toc-part-2-data-analysis-and-video-presentation" class="nav-link" data-scroll-target="#part-2-data-analysis-and-video-presentation">Part 2: Data analysis and video presentation</a>
+  <ul class="collapse">
+  <li><a href="#coaching-ii" id="toc-coaching-ii" class="nav-link" data-scroll-target="#coaching-ii">Coaching II</a></li>
+  <li><a href="#what-to-submit" id="toc-what-to-submit" class="nav-link" data-scroll-target="#what-to-submit">What to submit</a></li>
+  <li><a href="#what-the-presentation-should-cover" id="toc-what-the-presentation-should-cover" class="nav-link" data-scroll-target="#what-the-presentation-should-cover">What the presentation should cover</a></li>
+  <li><a href="#peer-review" id="toc-peer-review" class="nav-link" data-scroll-target="#peer-review">Peer review</a></li>
+  </ul></li>
+  <li><a href="#grading" id="toc-grading" class="nav-link" data-scroll-target="#grading">Grading</a></li>
+  <li><a href="#rules" id="toc-rules" class="nav-link" data-scroll-target="#rules">Rules</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -270,21 +320,259 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled" title="Contents follow soon">
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>In the group project you run a market research study from start to finish: you turn a managerial question into a <strong>randomized experiment</strong>, build it into a questionnaire, collect real data, analyze them in R, and present your recommendation in a <strong>pre-recorded video</strong>. The project counts for <strong>30% of your grade</strong>. This page contains the guidelines; the <a href="./project-topics.html">topic list</a> and the materials on <a href="./survey-design.html">survey design</a> are on the following pages.</p>
+</div>
+</div>
+</div>
+<section id="your-tasks" class="level2">
+<h2 class="anchored" data-anchor-id="your-tasks">Your tasks</h2>
+<div class="callout callout-style-default callout-important callout-titled" title="First step: the topic survey">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Contents follow soon
+<span class="screen-reader-only">Important</span>First step: the topic survey
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This page will contain the detailed guidelines for the group project: tasks and milestones, requirements for the video presentation and the submission, the peer review, and the grading criteria. The key dates are already listed in the <a href="./00-introduction.html">Introduction</a>.</p>
+<p>Fill in the <strong>topic-preference survey</strong> by <strong>Friday, November 20</strong> (Group A) or <strong>Tuesday, November 24</strong> (Group B): <a href="https://wumarketing.eu.qualtrics.com/jfe/form/SV_es3TnCL1apevqaa" class="uri">https://wumarketing.eu.qualtrics.com/jfe/form/SV_es3TnCL1apevqaa</a>. The <a href="./project-topics.html">topic list</a> describes the topics; the topics are allocated on the basis of the stated preferences.</p>
 </div>
 </div>
+<p>The project has two parts.</p>
+<ol type="1">
+<li><strong>Questionnaire design &amp; data collection.</strong> Your group chooses a topic (from the <a href="./project-topics.html">list</a> or your own), formulates a research question and hypotheses, and designs a questionnaire in <strong>Qualtrics</strong> that contains a real experiment: respondents are randomly assigned to one of <strong>two conditions</strong>. You present the draft in <strong>Coaching I</strong>, receive feedback, revise and pretest the questionnaire, and collect about <strong>120 responses</strong> (≈ 20 per group member).</li>
+<li><strong>Data analysis &amp; presentation.</strong> You import and clean the Qualtrics data in R and analyze them with the methods of the course: a description of the sample, the experimental comparison, <em>for whom</em> the effect holds (moderation), and <em>why</em> (mediation). <strong>Coaching II</strong> is dedicated to your analysis. You submit a <strong>video presentation</strong> with the slides, the data, and reproducible R code. Afterwards, each student reviews the video of one other group.</li>
+</ol>
+<div class="callout callout-style-default callout-important callout-titled" title="Design requirements">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Design requirements
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Every project must contain:</p>
+<ul>
+<li>a <strong>between-subjects experiment with two conditions</strong>, with random assignment implemented in Qualtrics (randomizer in the survey flow), and a <strong>manipulation check</strong>;</li>
+<li><strong>one dependent variable with real variation</strong> — e.g., willingness to pay in euros, purchase or choice likelihood on a 0–100 scale, or a multi-item attitude scale — measured right after the manipulation;</li>
+<li><strong>at least one moderator</strong>, measured <em>before</em> the manipulation (so that it cannot be affected by it), with the expected direction of the moderation stated in your Coaching I slides;</li>
+<li><strong>at least one mediator</strong>, measured <em>after</em> the manipulation and <em>before</em> the dependent variable — the mechanism through which you expect the effect to work;</li>
+<li><strong>hypotheses stated before data collection</strong>. Analyses that were not planned are welcome, but must be labeled as exploratory in the presentation.</li>
+</ul>
+<p>A <strong>2 × 2 design</strong> (two manipulated factors) is possible if your moderator is something you can manipulate, but it spreads 120 respondents over four cells of 30 — discuss it with us in Coaching I.</p>
+</div>
+</div>
+</section>
+<section id="timeline" class="level2">
+<h2 class="anchored" data-anchor-id="timeline">Timeline</h2>
+<table class="table-striped caption-top table">
+<caption>Group project milestones.</caption>
+<thead>
+<tr class="header">
+<th>Milestone</th>
+<th>Group A (Mondays)</th>
+<th>Group B (Thursdays)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>State your topic preference in the <a href="https://wumarketing.eu.qualtrics.com/jfe/form/SV_es3TnCL1apevqaa">topic survey</a></td>
+<td>Fri, Nov 20</td>
+<td>Tue, Nov 24</td>
+</tr>
+<tr class="even">
+<td>Module 8: Survey design (in class)</td>
+<td>Mon, Nov 23</td>
+<td>Thu, Nov 26</td>
+</tr>
+<tr class="odd">
+<td>Upload the draft questionnaire and slides for Coaching I</td>
+<td>Sun, Nov 29</td>
+<td>Wed, Dec 2</td>
+</tr>
+<tr class="even">
+<td><strong>Coaching I — questionnaire design</strong> <em>(online)</em></td>
+<td>Mon, Nov 30, 13:00–17:00</td>
+<td>Thu, Dec 3, 14:00–18:00</td>
+</tr>
+<tr class="odd">
+<td>Pretest, revise, and field your survey</td>
+<td>December</td>
+<td>December</td>
+</tr>
+<tr class="even">
+<td><strong>Coaching II — data analysis</strong> <em>(online)</em></td>
+<td>Thu, Jan 7, 13:00–17:00</td>
+<td>Fri, Jan 8, 14:00–18:00</td>
+</tr>
+<tr class="odd">
+<td><strong>Submission: video presentation, slides, data, code</strong> (Canvas)</td>
+<td>Wed, Jan 20</td>
+<td>Wed, Jan 20</td>
+</tr>
+<tr class="even">
+<td><strong>Submission: peer review of one other group’s video</strong></td>
+<td>Mon, Jan 25</td>
+<td>Mon, Jan 25</td>
+</tr>
+</tbody>
+</table>
+<p>Plan backwards from the submission date: data collection takes longer than you think (allow two weeks, plus a few days of pretesting before that), and the analysis will raise questions that you want to bring to Coaching II — so your data should be complete by then.</p>
+</section>
+<section id="part-1-questionnaire-design-and-data-collection" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-questionnaire-design-and-data-collection">Part 1: Questionnaire design and data collection</h2>
+<section id="coaching-i" class="level3">
+<h3 class="anchored" data-anchor-id="coaching-i">Coaching I</h3>
+<p>Coaching I is a working session, not an exam: each group presents its draft for about 10 minutes, followed by feedback from us and from the other groups. Upload two files to Canvas by the deadline in the table:</p>
+<ol type="1">
+<li>the <strong>PDF export of your Qualtrics questionnaire</strong> (Tools → Export → Print survey), and</li>
+<li>a <strong>short slide deck</strong> (about 8–10 slides) covering the four blocks below.</li>
+</ol>
+<p><strong>Problem statement and hypotheses</strong></p>
+<ul>
+<li>What is the managerial problem, and why is it relevant? Which decision depends on the answer?</li>
+<li>What is the research question? (Causal: <em>does the manipulation change the outcome?</em> — plus <em>for whom</em> and <em>why</em>.)</li>
+<li>What are your hypotheses — for the main effect, the moderator, and the mediator — and which literature are they based on? Start from the starter paper of your topic.</li>
+</ul>
+<p><strong>Research design and questionnaire structure</strong></p>
+<ul>
+<li>The two conditions: what exactly differs, and what is held constant? Show the stimuli (the two versions of your ad, product page, post, or scenario).</li>
+<li>The structure of the questionnaire: introduction → moderator and other variables measured <em>before</em> the manipulation → randomizer → stimulus → manipulation check → mediator → dependent variable(s) → demographics (see <span class="quarto-unresolved-ref">?sec-survey-design</span>).</li>
+<li>Where is the randomizer placed in the Qualtrics survey flow, and how do you make sure that each respondent sees exactly one condition?</li>
+</ul>
+<p><strong>Variables, measurement, and scaling</strong></p>
+<ul>
+<li>Why these variables? How is each one measured, with which scale, and why? Use validated scales from the literature for mediator and moderator where they exist (cite the source) and adapt the wording to your context.</li>
+<li>Does your dependent variable have enough variation? Which values do you expect in the two conditions?</li>
+</ul>
+<p><strong>Planned analyses</strong></p>
+<ul>
+<li>Which test answers your main question (e.g., a <em>t</em>-test or regression of the outcome on the condition), how will you test the moderation (interaction term), and how the mediation (the three regressions and the bootstrap of <a href="06-mechanisms.html#sec-mech-mediation" class="quarto-xref"><span>Mediation: why does it work?</span></a>)?</li>
+<li>Which charts will you show? Sketch them now — it tells you whether you are measuring the right things.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="What a good draft looks like">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>What a good draft looks like
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A precise question (“Does disclosing that an ad was generated by AI reduce willingness to pay, and is this effect weaker for people who use AI themselves?”) beats a broad one (“How do people feel about AI in advertising?”). Two conditions that differ in exactly one thing. A dependent variable in euros or on a 0–100 scale. One moderator and one mediator that you can justify with the paper, each measured with two or three items. Everything else — demographics, a few descriptive questions that make the report interesting — comes last. Thirty questions and less than ten minutes on a phone.</p>
+</div>
+</div>
+</section>
+<section id="after-coaching-i-revise-pretest-collect" class="level3">
+<h3 class="anchored" data-anchor-id="after-coaching-i-revise-pretest-collect">After Coaching I: revise, pretest, collect</h3>
+<p>Revise the questionnaire based on the feedback, then <strong>pretest</strong> it with three to five people who are not in your group and watch them fill it in on a phone: unclear wording, a missing answer option, or a randomizer that always shows the same condition is cheap to fix now and impossible later. Check the Qualtrics settings (force response where needed, progress bar, mobile layout, anonymized responses) — the checklist is in <span class="quarto-unresolved-ref">?sec-survey-design</span>.</p>
+<p>Then collect the data. Each group member recruits about <strong>20 respondents</strong> (≈ 120 per group). Convenience sampling — family, friends, fellow students — is fine for this project, but aim for a <strong>heterogeneous sample</strong>: if everyone is a 22-year-old business student, you cannot analyze heterogeneity, and your sample is not the market your manager cares about. Respondents must be real people answering once; do not fill in the questionnaire yourselves, and do not use bots or AI to generate responses. Keep the survey anonymous and do not collect personal data you do not need.</p>
+</section>
+</section>
+<section id="part-2-data-analysis-and-video-presentation" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-data-analysis-and-video-presentation">Part 2: Data analysis and video presentation</h2>
+<section id="coaching-ii" class="level3">
+<h3 class="anchored" data-anchor-id="coaching-ii">Coaching II</h3>
+<p>Bring your (ideally complete) data set, your R script, and your open questions. We will work through the import of Qualtrics data, the manipulation check, the main comparison, the moderation and mediation analyses, and the charts for your presentation. The how-tos for importing and cleaning Qualtrics exports in R are in <span class="quarto-unresolved-ref">?sec-survey-design</span>.</p>
+</section>
+<section id="what-to-submit" class="level3">
+<h3 class="anchored" data-anchor-id="what-to-submit">What to submit</h3>
+<p>One <strong>.zip file</strong> per group on Canvas by the deadline, containing:</p>
+<ol type="1">
+<li>the <strong>video presentation</strong> (mp4; about 10 minutes; every group member presents a part);</li>
+<li>the <strong>slides</strong> (PDF);</li>
+<li>the <strong>data</strong> as exported from Qualtrics (CSV) — anonymized, with a short codebook if the variable names are not self-explanatory;</li>
+<li>the <strong>R script</strong> (or .Rmd) that reproduces every number and chart in the presentation from the raw data — we will run it;</li>
+<li>the <strong>contribution &amp; AI-use statement</strong> (one page: who did what, and how AI tools were used, see below).</li>
+</ol>
+</section>
+<section id="what-the-presentation-should-cover" class="level3">
+<h3 class="anchored" data-anchor-id="what-the-presentation-should-cover">What the presentation should cover</h3>
+<p>Think of your audience as the decision maker who commissioned the study: they want to know what to do, and why they should believe you. A structure that works:</p>
+<ol type="1">
+<li><strong>The problem and the question</strong> — the managerial decision, the research question, the hypotheses (with the key reference).</li>
+<li><strong>The design</strong> — the two conditions (show the stimuli), the sample size, the variables, and how they were measured.</li>
+<li><strong>The sample</strong> — who answered (descriptives of the key variables), and whether randomization produced comparable groups.</li>
+<li><strong>The manipulation check</strong> — did respondents notice the manipulation?</li>
+<li><strong>The main result</strong> — the comparison of the two conditions with the estimate, its 95% confidence interval, and the test (the reporting standard of <a href="04-experiments.html" class="quarto-xref"><span>4&nbsp; Learning from Experiments</span></a>). One good chart.</li>
+<li><strong>For whom</strong> — the moderation analysis: the interaction model, the effect of the condition at meaningful values of the moderator, and an honest statement of the uncertainty (with 60 per condition, “we found no evidence that the effect differs” is a legitimate result).</li>
+<li><strong>Why</strong> — the mediation analysis: total, direct, and indirect effect with the bootstrap interval and the share mediated, and the assumption behind the decomposition.</li>
+<li><strong>Limitations</strong> — sample, stimuli, single product or context, hypothetical measures.</li>
+<li><strong>Recommendations</strong> — what the decision maker should do, and what the next experiment should test.</li>
+</ol>
+<p>Some rules of the craft:</p>
+<ul>
+<li><strong>Justify your tests</strong> and use the correct terminology: name the dependent and independent variables, and for every regression state the equation, e.g., <span class="math inline">\(\text{WTP}_i = \beta_0 + \beta_1 \text{Condition}_i + \beta_2 \text{Moderator}_i + \beta_3 (\text{Condition}_i \times \text{Moderator}_i) + \varepsilon_i\)</span>.</li>
+<li><strong>Report uncertainty</strong>, not only <em>p</em>-values: estimates with confidence intervals, effect sizes, and sample sizes per group on every chart.</li>
+<li><strong>Visualizations tell the story.</strong> Every chart must answer part of the research question; label axes, show the units, show the number of observations, and make the text legible at presentation size. Boxplots with the individual data points for the comparison of conditions; a marginal-effect plot or an interaction plot for the moderation.</li>
+<li><strong>Interpret, then recommend.</strong> Do not end with the regression table. Say what the result means for the decision — and what you would do with a larger budget.</li>
+<li>Assumption checks, robustness checks, and item statistics go into an <strong>appendix</strong> (slides after the last one), where they are available if someone asks.</li>
+</ul>
+</section>
+<section id="peer-review" class="level3">
+<h3 class="anchored" data-anchor-id="peer-review">Peer review</h3>
+<p>After the submission, each student receives the video and slides of one other group and completes a <strong>structured review form</strong> on Canvas (clarity of the question, quality of the design, correctness and interpretation of the analyses, quality of the presentation, usefulness of the recommendation — with one concrete suggestion for improvement). The review is part of your individual project grade (2 of 30 points); the groups receive the anonymized reviews as feedback.</p>
+</section>
+</section>
+<section id="grading" class="level2">
+<h2 class="anchored" data-anchor-id="grading">Grading</h2>
+<p>The project is graded out of <strong>30 points</strong>.</p>
+<table class="table-striped caption-top table">
+<caption>Grading components of the group project.</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Component</th>
+<th style="text-align: center;">Points</th>
+<th>What counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Part 1: questionnaire design (draft, Coaching I presentation, final questionnaire)</td>
+<td style="text-align: center;">8</td>
+<td>precision of the research question and hypotheses; quality of the manipulation and of the measurement; structure and usability of the questionnaire; use of the feedback</td>
+</tr>
+<tr class="even">
+<td>Part 2: analysis and video presentation</td>
+<td style="text-align: center;">20</td>
+<td>correct and well-justified analyses (comparison, moderation, mediation, uncertainty); reproducible code; quality of the visualizations; interpretation, limitations, and recommendations; clarity of the presentation</td>
+</tr>
+<tr class="odd">
+<td>Peer review of another group’s video</td>
+<td style="text-align: center;">2</td>
+<td>completeness and usefulness of the review</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Individual grades.</strong> All members receive the group’s points for Parts 1 and 2, adjusted for individual contributions: a <strong>peer assessment</strong> among the group members and the <strong>contribution &amp; AI-use statement</strong> enter the individual grade. Members who did not contribute to a part receive no points for it.</p>
+</section>
+<section id="rules" class="level2">
+<h2 class="anchored" data-anchor-id="rules">Rules</h2>
+<ul>
+<li><strong>Groups</strong> work with five to six members, randomly assigned on Canvas. If a conflict arises in your group, talk to us early.</li>
+<li><strong>Real data.</strong> Fabricating, duplicating, or AI-generating responses is academic misconduct and leads to a failing grade for the project for all members involved.</li>
+<li><strong>AI tools</strong> may be used for the project (coding help, feedback on the wording of items, polishing slides) within the course’s <a href="./00-introduction.html">AI policy</a>: you must be able to explain every line of code and every analysis you submit, and the contribution &amp; AI-use statement must list the tools and what they were used for. Do not use AI to write survey responses or to invent references — check every reference in the original.</li>
+<li><strong>Data protection.</strong> Collect only the data you need, keep responses anonymous (switch on Qualtrics’ anonymization and do not ask for names or e-mail addresses), state in the introduction of the survey that participation is voluntary and the data are used for a course project only.</li>
+</ul>
+<p>Questions about the project are best asked in the course forum, so that all groups see the answer.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
