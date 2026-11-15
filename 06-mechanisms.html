@@ -1581,22 +1581,6 @@ Simulations: 1000</code></pre>
 <section id="sec-lc-06" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="sec-lc-06">Learning check</h2>
 <p><strong>(LC6.1)</strong> In the model <code>hours ~ smart_mix * premium + prior_hours</code>, the coefficient of <code>smart_mix</code> is 5.0 and the coefficient of <code>smart_mix:premium</code> is −3.1. What is the effect of Smart Mix for free users? For Premium users? What does the <em>p</em>-value of the interaction test?</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Free users: 5.0 hours (the coefficient of <code>smart_mix</code> is the effect when <code>premium</code> = 0). Premium users: 5.0 + (−3.1) = 1.9 hours. The <em>p</em>-value of the interaction tests whether the two effects <strong>differ</strong> — the null hypothesis is “the effect of Smart Mix is the same for free and Premium users”. It says nothing about whether either effect is different from zero; for that, the two marginal effects with their own confidence intervals (<code>emtrends()</code>) are needed.</p>
-</div>
-</div>
-</div>
 <p><strong>(LC6.2)</strong> Which statements about interaction models are correct?</p>
 <ul class="task-list">
 <li><label><input type="checkbox">In a model with <code>x * z</code>, the coefficient of <code>x</code> is the effect of <code>x</code> when <code>z</code> = 0</label></li>
@@ -1604,73 +1588,9 @@ Simulations: 1000</code></pre>
 <li><label><input type="checkbox">Centering the variables changes the interaction coefficient</label></li>
 <li><label><input type="checkbox">The model <code>y ~ x:z</code> (without the main terms) is a valid simplification when the main effects are small</label></li>
 </ul>
-<div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Correct: the first statement only. (2) is wrong: a non-significant interaction is not evidence that there is no interaction — with the interaction term in the model, the main effects remain conditional effects at zero of the other variable; if you want to interpret them as overall effects, drop the interaction term and re-estimate. (3) is wrong: centering changes the main effects and the intercept, not the interaction coefficient. (4) is wrong: without the main terms, the “interaction” picks up level differences as if they were slope differences — always use <code>x * z</code>.</p>
-</div>
-</div>
-</div>
 <p><strong>(LC6.3)</strong> A marketing team finds that a discount increases purchases by 12% among new customers and by 2% among existing customers. The interaction has <em>p</em> = 0.08 with 150 customers per group. How should the result be reported?</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>“The discount increased purchases by about 12% among new and 2% among existing customers. The difference between the two effects was not statistically significant (<em>p</em> = 0.08), so we found no evidence that the effect differs between the segments — but with 150 customers per group, the test for a difference in effects has little power (a difference between two effects is estimated far less precisely than an effect), so the result does not show that the effects are equal either.” Report both effects with their confidence intervals, call the moderation exploratory unless it was pre-registered, and suggest testing it in a larger follow-up.</p>
-</div>
-</div>
-</div>
 <p><strong>(LC6.4)</strong> In a 2 × 2 experiment (price framing: monthly vs.&nbsp;yearly; trial: yes vs.&nbsp;no), the regression gives: intercept 40, <code>framingYearly</code> −5, <code>trialYes</code> +8, <code>framingYearly:trialYes</code> +6. Compute all four cell means. Does the trial help more with monthly or with yearly framing?</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-15" class="callout-15-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Monthly, no trial: 40. Yearly, no trial: 40 − 5 = 35. Monthly, trial: 40 + 8 = 48. Yearly, trial: 40 − 5 + 8 + 6 = 49. The trial effect is +8 with monthly framing and +8 + 6 = +14 with yearly framing: the trial helps more with yearly framing — the interaction coefficient (+6) is exactly this difference between the two trial effects.</p>
-</div>
-</div>
-</div>
 <p><strong>(LC6.5)</strong> After a significant interaction in a 2 × 3 design, why are pairwise comparisons of the six cells with ordinary <em>t</em>-tests a problem, and what does <code>emmeans</code> do about it?</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Six cells give 15 pairwise comparisons; running 15 separate <em>t</em>-tests at the 5% level inflates the probability of at least one false alarm far above 5% (the multiple-testing problem of <a href="04-experiments.html" class="quarto-xref"><span>Chapter 4</span></a>). <code>emmeans()</code> computes the model’s cell means with their standard errors, and <code>pairs()</code> adjusts the <em>p</em>-values of the comparisons for the number of tests within each family (Tukey by default, or Bonferroni with <code>adjust = "bonferroni"</code>), so that the family-wise error rate stays at 5%. Comparing within each disclosure condition (<code>~ source | disclosure</code>) also keeps the comparisons to the ones the research question asks for.</p>
-</div>
-</div>
-</div>
 <p><strong>(LC6.6)</strong> Which statements about mediation analysis are correct?</p>
 <ul class="task-list">
 <li><label><input type="checkbox">The indirect effect is the product of the path from treatment to mediator and the path from mediator to outcome</label></li>
@@ -1678,73 +1598,9 @@ Simulations: 1000</code></pre>
 <li><label><input type="checkbox">A bootstrap is used for the confidence interval of the indirect effect because its sampling distribution is not normal</label></li>
 <li><label><input type="checkbox">If the direct effect is not significant, the mediator explains the entire effect</label></li>
 </ul>
-<div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-17" class="callout-17-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Correct: statements 1 and 3. (2) is wrong: randomizing the treatment identifies the total effect, but the mediator is not randomized, so the decomposition requires the additional, untestable assumption of no unobserved confounders of mediator and outcome. (4) is wrong: a non-significant direct effect does not mean it is zero (and the indirect effect can also be estimated with error); report the estimates with their uncertainty instead of declaring “full mediation”.</p>
-</div>
-</div>
-</div>
 <p><strong>(LC6.7)</strong> An analyst wants to estimate the total effect of a loyalty program on annual spending and includes “number of store visits” — which the program itself increases — as a control variable. What does the coefficient of the program estimate now, and what should the analyst do to get the total effect?</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Store visits are a <strong>mediator</strong>: the program increases visits, and visits increase spending. With visits held constant, the coefficient of the program estimates only the <strong>direct</strong> effect — the part of the effect that does not run through more visits — and understates the total effect. For the total effect, leave visits out of the model (and adjust only for variables determined <em>before</em> the program). If the analyst is interested in the mechanism, the mediation analysis of <a href="#sec-mech-mediation" class="quarto-xref"><span>Section 6.7</span></a> gives total, direct and indirect effect together.</p>
-</div>
-</div>
-</div>
 <p><strong>(LC6.8)</strong> A colleague tests the effect of a new checkout page in 25 customer segments and reports that it “works particularly well for returning customers on tablets” (<em>p</em> = 0.02). What is the problem, and what would you recommend for the next test?</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-19" class="callout-19-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>This is subgroup fishing: with 25 segments and no true heterogeneity, the chance of at least one “significant” segment at the 5% level is 1 − 0.95²⁵ ≈ 72%, so a single <em>p</em> = 0.02 among 25 tests is about what noise produces (after a Bonferroni correction, the threshold would be 0.05/25 = 0.002). The finding is a hypothesis, not a result. For the next test: pre-register this segment (and the expected direction) as the one moderator to test, make sure the segment is large enough to detect an interaction, and treat everything else as exploratory.</p>
-</div>
-</div>
-</div>
 <p><strong>(LC6.9)</strong> Your group project experiment compares two versions of a product description. Name one plausible moderator and one plausible mediator for your effect, and explain for each when you would measure it in the questionnaire.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Solution">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-20" class="callout-20-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Example for a product description with vs.&nbsp;without a sustainability claim: a plausible <strong>moderator</strong> is the respondent’s environmental concern (expected: the claim works better for concerned respondents), measured <em>before</em> the manipulation — at the start of the questionnaire — so that the description cannot influence it. A plausible <strong>mediator</strong> is perceived product quality or trust in the brand, measured <em>after</em> the description and <em>before</em> the purchase intention, since it is supposed to be changed by the manipulation and to transmit its effect. Potential confounders of mediator and outcome (e.g., general brand familiarity) should also be measured before the manipulation.</p>
-</div>
-</div>
-</div>
 </section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
