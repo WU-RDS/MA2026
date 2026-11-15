@@ -368,12 +368,13 @@ iOS is the reference: smart_mix = effect for iOS (3.68); add the interaction coe
 
 ## Spend × followers: the uncentered model {.smaller}
 
-*Why a manager cares: if promotion pays off more for artists with a large follower base, the label can concentrate its budget on them — or deliberately counter the "rich get richer" dynamic.*
+*Why a manager cares: if promotion pays off more for artists with a large audience, the label can concentrate its budget on them — or deliberately counter "rich get richer".*
 
 $$
-\log(\text{streams}) = \beta_0 + \beta_1 \log(\text{spend}) + \beta_2 \log(\text{followers}) + \beta_3 \log(\text{spend}) \times \log(\text{followers}) + \dots
-\qquad\Rightarrow\qquad
-\text{Spend elasticity} = \beta_1 + \beta_3 \log(\text{followers})
+\begin{aligned}
+\log(\text{streams}) &= \beta_0 + \beta_1 \log(\text{spend}) + \beta_2 \log(\text{followers}) + \beta_3 \log(\text{spend}) \times \log(\text{followers}) + \dots \\
+\text{Spend elasticity} &= \beta_1 + \beta_3 \log(\text{followers})
+\end{aligned}
 $$
 
 ```{r cc1, echo=TRUE}
@@ -381,11 +382,15 @@ model_cc <- lm(log(streams) ~ log(spend) * log(followers) + placements + genre, 
 round(coef(summary(model_cc)), 3)
 ```
 
+::: {style="font-size: 0.92em;"}
 ::: keybox
-A **negative** spend elasticity (β₁ = −0.90)? It is the elasticity for an artist with `log(followers)` = 0 — **one follower** (log(1) = 0). Nobody in the data is anywhere near that (median: 36,000 followers). The **interaction** β₃ = **+0.113** (*p* < .001) is the real finding: each additional unit of `log(followers)` — a 2.7 times larger follower base — adds 0.11 to the spend elasticity. Promotion and reach **reinforce each other**: the same percentage budget increase buys a larger percentage gain for a bigger artist.
+A **negative** spend elasticity (β₁ = −0.90)? It is the elasticity for an artist with `log(followers)` = 0 — **one follower** (log(1) = 0). Nobody in the data is anywhere near that (median: 36,000 followers). The **interaction** β₃ = **+0.113** (*p* < .001) is the real finding: each additional unit of `log(followers)` adds 0.11 to the spend elasticity — and one unit of `log(followers)` means a follower base **multiplied by e ≈ 2.7** (log(2.7 × followers) = log(followers) + 1). Promotion and reach **reinforce each other**: the same percentage budget increase buys a larger percentage gain for a bigger artist.
+:::
 :::
 
 ## Centered at the means {.smaller}
+
+**The approach:** subtract each variable's mean from every observation — nothing else changes. But the **zero point** of each variable is now the **mean of the data**, so the main effects become marginal effects *at the average artist* instead of at one follower and one euro.
 
 ```{r cc2, echo=TRUE}
 promo_c <- promo |>

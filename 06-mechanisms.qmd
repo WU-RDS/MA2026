@@ -345,7 +345,7 @@ round(coef(summary(model_cc)), 3)
 b_cc <- coef(model_cc)
 ```
 
-The interaction (`r round(b_cc["log(spend):log(followers)"], 3)`) is clearly positive: each additional unit of `log(followers)` — a follower base about 2.7 times larger — adds `r round(b_cc["log(spend):log(followers)"], 2)` to the spend elasticity, so the same percentage budget increase buys a larger percentage gain for a bigger artist. Promotion and reach reinforce each other. But the "main effects" look absurd — `log(spend)` is `r round(b_cc["log(spend)"], 2)`, a *negative* elasticity. The marginal-effect rule explains why: `log(spend)` is the elasticity for an artist with `log(followers)` = 0, i.e., with one follower (log(1) = 0). Nobody in the data is anywhere near that — the median artist has `r format(round(median(promo$followers), -2), big.mark = ",")` followers.
+The interaction (`r round(b_cc["log(spend):log(followers)"], 3)`) is clearly positive: each additional unit of `log(followers)` — a follower base multiplied by e ≈ 2.7, since log(2.7 × followers) = log(followers) + 1 — adds `r round(b_cc["log(spend):log(followers)"], 2)` to the spend elasticity, so the same percentage budget increase buys a larger percentage gain for a bigger artist. Promotion and reach reinforce each other. But the "main effects" look absurd — `log(spend)` is `r round(b_cc["log(spend)"], 2)`, a *negative* elasticity. The marginal-effect rule explains why: `log(spend)` is the elasticity for an artist with `log(followers)` = 0, i.e., with one follower (log(1) = 0). Nobody in the data is anywhere near that — the median artist has `r format(round(median(promo$followers), -2), big.mark = ",")` followers.
 
 ### Centering
 
