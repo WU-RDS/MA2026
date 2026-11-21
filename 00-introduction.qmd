@@ -100,8 +100,8 @@ There are **three individual assignments**. Each is handed out in class, submitt
 
 The group project consists of two parts:
 
-1.  **Questionnaire design & data collection**: your group picks one of **14 proposed topics** (with starter literature) or suggests its own, and designs a questionnaire of **≈ 30 questions** (~5 per member) in **Qualtrics** (free account provided). The design contains a **real experiment** with random assignment of participants to conditions. You present your draft in **Coaching I** (research problem, design, measurement, planned analyses), receive feedback, and revise. Each member then recruits **≈ 20 respondents**, i.e. **≈ 120 responses** per group.
-2.  **Data analysis & presentation**: you import and clean your Qualtrics data in R and analyze it — descriptives, your experimental comparison, and heterogeneity (for whom does it work?). **Coaching II** (online) is dedicated to working through your analysis. You submit a .zip containing the **pre-recorded video presentation**, the data, the reproducible R code, and your slides. Afterwards, each student **peer reviews two other groups' videos** (counts toward participation).
+1.  **Questionnaire design & data collection**: your group picks one of **20 proposed topics** (with starter literature) or suggests its own, and designs a questionnaire of **≈ 30 questions** (~5 per member) in **Qualtrics** (free account provided). The design contains a **real experiment** with random assignment of participants to conditions. You present your draft in **Coaching I** (research problem, design, measurement, planned analyses), receive feedback, and revise. Each member then recruits **≈ 20 respondents**, i.e. **≈ 120 responses** per group.
+2.  **Data analysis & presentation**: you import and clean your Qualtrics data in R and analyze it — descriptives, your experimental comparison, heterogeneity (for whom does it work?), and the mechanism (why does it work?). **Coaching II** (online) is dedicated to working through your analysis. You submit a .zip containing the **pre-recorded video presentation** (10 minutes), the data, the reproducible R code, and your slides. Afterwards, each student **peer reviews the video of one other group** (part of the individual project grade).
 
 What makes a good project?
 
@@ -115,7 +115,7 @@ What makes a good project?
 
 **Individual grades**: a peer assessment among group members and a short **contribution & AI-use statement** enter the individual grade. In addition, each student submits a **peer review of one other group's video**, using a structured form; it is part of the individual project grade (2 of 30 points).
 
-Detailed guidelines, the topic list, and the materials on survey design will be available in the section [Group project](group-project.qmd) of this website.
+Detailed guidelines, the topic list, and the materials on survey design are in the section [Group project](group-project.qmd) of this website.
 
 ### Grading
 
