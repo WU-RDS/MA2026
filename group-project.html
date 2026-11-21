@@ -326,7 +326,7 @@ window.Quarto = {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>In the group project you run a market research study from start to finish: you turn a managerial question into a <strong>randomized experiment</strong>, build it into a questionnaire, collect real data, analyze them in R, and present your recommendation in a <strong>pre-recorded video</strong>. The project counts for <strong>30% of your grade</strong>. This page contains the guidelines; the <a href="./project-topics.html">topic list</a> and the materials on <a href="./survey-design.html">survey design</a> are on the following pages.</p>
+<p>In the group project you run a market research study from start to finish: you turn a managerial question into a <strong>randomized experiment</strong>, build it into a questionnaire, collect real data, analyze them in R, and present your recommendation in a <strong>pre-recorded video of 10 minutes</strong>. The project counts for <strong>30% of your grade</strong>. This page contains the guidelines; the <a href="./project-topics.html">topic list</a> and the materials on <a href="./survey-design.html">survey design</a> are on the following pages.</p>
 </div>
 </div>
 </div>
@@ -348,7 +348,7 @@ window.Quarto = {
 <p>The project has two parts.</p>
 <ol type="1">
 <li><strong>Questionnaire design &amp; data collection.</strong> Your group chooses a topic (from the <a href="./project-topics.html">list</a> or your own), formulates a research question and hypotheses, and designs a questionnaire in <strong>Qualtrics</strong> that contains a real experiment: respondents are randomly assigned to one of <strong>two conditions</strong>. You present the draft in <strong>Coaching I</strong>, receive feedback, revise and pretest the questionnaire, and collect about <strong>120 responses</strong> (≈ 20 per group member).</li>
-<li><strong>Data analysis &amp; presentation.</strong> You import and clean the Qualtrics data in R and analyze them with the methods of the course: a description of the sample, the experimental comparison, <em>for whom</em> the effect holds (moderation), and <em>why</em> (mediation). <strong>Coaching II</strong> is dedicated to your analysis. You submit a <strong>video presentation</strong> with the slides, the data, and reproducible R code. Afterwards, each student reviews the video of one other group.</li>
+<li><strong>Data analysis &amp; presentation.</strong> You import and clean the Qualtrics data in R and analyze them with the methods of the course: a description of the sample, the experimental comparison, <em>for whom</em> the effect holds (moderation), and <em>why</em> (mediation). <strong>Coaching II</strong> is dedicated to your analysis. You submit a <strong>video presentation of 10 minutes</strong> with the slides, the data, and reproducible R code. Afterwards, each student reviews the video of one other group.</li>
 </ol>
 <div class="callout callout-style-default callout-important callout-titled" title="Design requirements">
 <div class="callout-header d-flex align-content-center">
@@ -362,13 +362,26 @@ window.Quarto = {
 <div class="callout-body-container callout-body">
 <p>Every project must contain:</p>
 <ul>
-<li>a <strong>between-subjects experiment with two conditions</strong>, with random assignment implemented in Qualtrics (randomizer in the survey flow), and a <strong>manipulation check</strong>;</li>
-<li><strong>one dependent variable with real variation</strong> — e.g., willingness to pay in euros, purchase or choice likelihood on a 0–100 scale, or a multi-item attitude scale — measured right after the manipulation;</li>
+<li>a <strong>between-subjects experiment with two conditions</strong> that differ in <strong>one respect only</strong>, with random assignment implemented in Qualtrics (a randomizer in the survey flow that shows each respondent one version and stores the condition in the data), and a <strong>manipulation check</strong>;</li>
+<li><strong>one dependent variable with real variation</strong> — e.g., willingness to pay in euros, purchase or choice likelihood on a 0–100 scale, or a multi-item attitude scale — measured after the manipulation;</li>
 <li><strong>at least one moderator</strong>, measured <em>before</em> the manipulation (so that it cannot be affected by it), with the expected direction of the moderation stated in your Coaching I slides;</li>
 <li><strong>at least one mediator</strong>, measured <em>after</em> the manipulation and <em>before</em> the dependent variable — the mechanism through which you expect the effect to work;</li>
-<li><strong>hypotheses stated before data collection</strong>. Analyses that were not planned are welcome, but must be labeled as exploratory in the presentation.</li>
+<li><strong>hypotheses and exclusion rules stated before data collection</strong>. Analyses that were not planned are welcome, but must be labeled as exploratory in the presentation.</li>
 </ul>
 <p>A <strong>2 × 2 design</strong> (two manipulated factors) is possible if your moderator is something you can manipulate, but it spreads 120 respondents over four cells of 30 — discuss it with us in Coaching I.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="An example from start to finish">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>An example from start to finish
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <a href="./survey-design.html">survey design page</a> follows one example study — <em>A seal for the coffee</em> — through all steps of the project. Its materials show what each deliverable can look like: 📋 the <a href="data/coffee_seal_survey.qsf" download="coffee_seal_survey.qsf">questionnaire</a> as a file that you can import into Qualtrics · 📄 the <a href="data/coffee_seal_qualtrics.csv" download="coffee_seal_qualtrics.csv">raw data</a> as exported from Qualtrics · 💻 the <a href="code/08-survey-design.R" download="08-survey-design.R">R script</a> with the complete analysis · 🎤 the <a href="slides/example_presentation_handout.pdf" target="_blank" rel="noopener">final presentation</a> (PDF, 10 minutes).</p>
 </div>
 </div>
 </section>
@@ -390,7 +403,7 @@ window.Quarto = {
 <td>Tue, Nov 24</td>
 </tr>
 <tr class="even">
-<td>Module 8: Survey design (in class)</td>
+<td>Module 8: <a href="./survey-design.html">Survey design</a> (in class)</td>
 <td>Mon, Nov 23</td>
 <td>Thu, Nov 26</td>
 </tr>
@@ -434,9 +447,10 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="coaching-i">Coaching I</h3>
 <p>Coaching I is a working session, not an exam: each group presents its draft for about 10 minutes, followed by feedback from us and from the other groups. Upload two files to Canvas by the deadline in the table:</p>
 <ol type="1">
-<li>the <strong>PDF export of your Qualtrics questionnaire</strong> (Tools → Export → Print survey), and</li>
-<li>a <strong>short slide deck</strong> (about 8–10 slides) covering the four blocks below.</li>
+<li>the <strong>PDF export of your Qualtrics questionnaire</strong> (<em>Tools → Import/Export → Print survey</em>), and</li>
+<li>a <strong>short slide deck</strong> (about 8–10 slides) covering the four blocks below — starting with the one-page <strong>blueprint</strong> of your study (<a href="./survey-design.html#sec-sd-plan">Step 1 of the survey design page</a>) and including a <strong>screenshot of your survey flow</strong>, because the PDF print does not show the randomizer.</li>
 </ol>
+<p>The <a href="./survey-design.html#sec-sd-checklist">checklist for Coaching I</a> on the survey design page lists what we will look at.</p>
 <p><strong>Problem statement and hypotheses</strong></p>
 <ul>
 <li>What is the managerial problem, and why is it relevant? Which decision depends on the answer?</li>
@@ -446,18 +460,20 @@ window.Quarto = {
 <p><strong>Research design and questionnaire structure</strong></p>
 <ul>
 <li>The two conditions: what exactly differs, and what is held constant? Show the stimuli (the two versions of your ad, product page, post, or scenario).</li>
-<li>The structure of the questionnaire: introduction → moderator and other variables measured <em>before</em> the manipulation → randomizer → stimulus → manipulation check → mediator → dependent variable(s) → demographics (see <span class="quarto-unresolved-ref">?sec-survey-design</span>).</li>
-<li>Where is the randomizer placed in the Qualtrics survey flow, and how do you make sure that each respondent sees exactly one condition?</li>
+<li>The structure of the questionnaire: introduction → warm-up → moderator and other variables measured <em>before</em> the manipulation → randomizer → stimulus → mediator → dependent variable(s) → manipulation check → demographics → debriefing (see <a href="./survey-design.html#sec-sd-order">Step 4 of the survey design page</a>).</li>
+<li>Where is the randomizer placed in the Qualtrics survey flow, how do you make sure that each respondent sees exactly one condition, and where is the condition stored in the data? Show a screenshot of the survey flow (<a href="./survey-design.html#sec-sd-build">Step 5</a> explains the set-up; the example survey can be imported into Qualtrics for comparison).</li>
+<li>Has the set-up been tested? Preview the survey until you have seen both versions, and generate test responses to check that the export contains the condition.</li>
 </ul>
 <p><strong>Variables, measurement, and scaling</strong></p>
 <ul>
-<li>Why these variables? How is each one measured, with which scale, and why? Use validated scales from the literature for mediator and moderator where they exist (cite the source) and adapt the wording to your context.</li>
+<li>Why these variables? How is each one measured, with which scale, and why? Use validated scales from the literature for mediator and moderator where they exist (cite the source) and adapt the wording to your context: three items for an abstract construct, a single question for a fact or a concrete judgment (<a href="./survey-design.html#sec-sd-measure">Step 3</a> explains why).</li>
 <li>Does your dependent variable have enough variation? Which values do you expect in the two conditions?</li>
 </ul>
 <p><strong>Planned analyses</strong></p>
 <ul>
 <li>Which test answers your main question (e.g., a <em>t</em>-test or regression of the outcome on the condition), how will you test the moderation (interaction term), and how the mediation (the three regressions and the bootstrap of <a href="06-mechanisms.html#sec-mech-mediation" class="quarto-xref"><span>Mediation: why does it work?</span></a>)?</li>
 <li>Which charts will you show? Sketch them now — it tells you whether you are measuring the right things.</li>
+<li>Which responses will you exclude, and by which rules (e.g., unfinished questionnaires, a failed attention check, speeders)? Write the rules down now. They must not depend on a respondent’s answers to the manipulation check or to the outcome question; an impossible value — a willingness to pay of 85 euros for a pack of coffee — is a matter of data cleaning (<a href="./survey-design.html#sec-sd-analyze">Step 7</a>).</li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled" title="What a good draft looks like">
 <div class="callout-header d-flex align-content-center">
@@ -469,54 +485,55 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>A precise question (“Does disclosing that an ad was generated by AI reduce willingness to pay, and is this effect weaker for people who use AI themselves?”) beats a broad one (“How do people feel about AI in advertising?”). Two conditions that differ in exactly one thing. A dependent variable in euros or on a 0–100 scale. One moderator and one mediator that you can justify with the paper, each measured with two or three items. Everything else — demographics, a few descriptive questions that make the report interesting — comes last. Thirty questions and less than ten minutes on a phone.</p>
+<p>A precise question (“Does disclosing that an ad was generated by AI reduce willingness to pay, and is this effect weaker for people who use AI themselves?”) beats a broad one (“How do people feel about AI in advertising?”). Two conditions that differ in exactly one thing. A dependent variable in euros or on a 0–100 scale. One moderator and one mediator that you can justify with the paper, with three items for each abstract construct. Everything else — demographics, a few descriptive questions that make the report interesting — comes last. Thirty questions and less than ten minutes on a phone.</p>
 </div>
 </div>
 </section>
 <section id="after-coaching-i-revise-pretest-collect" class="level3">
 <h3 class="anchored" data-anchor-id="after-coaching-i-revise-pretest-collect">After Coaching I: revise, pretest, collect</h3>
-<p>Revise the questionnaire based on the feedback, then <strong>pretest</strong> it with three to five people who are not in your group and watch them fill it in on a phone: unclear wording, a missing answer option, or a randomizer that always shows the same condition is cheap to fix now and impossible later. Check the Qualtrics settings (force response where needed, progress bar, mobile layout, anonymized responses) — the checklist is in <span class="quarto-unresolved-ref">?sec-survey-design</span>.</p>
-<p>Then collect the data. Each group member recruits about <strong>20 respondents</strong> (≈ 120 per group). Convenience sampling — family, friends, fellow students — is fine for this project, but aim for a <strong>heterogeneous sample</strong>: if everyone is a 22-year-old business student, you cannot analyze heterogeneity, and your sample is not the market your manager cares about. Respondents must be real people answering once; do not fill in the questionnaire yourselves, and do not use bots or AI to generate responses. Keep the survey anonymous and do not collect personal data you do not need.</p>
+<p>Revise the questionnaire based on the feedback, then <strong>pretest</strong> it with three to five people who are not in your group and watch them fill it in on a phone: unclear wording, a missing answer option, or a randomizer that always shows the same condition is cheap to fix now and impossible later. Check the Qualtrics settings (force response and number validation, back button off, anonymized responses, no multiple submissions, readable on a phone) — the checklist is in <a href="./survey-design.html#sec-sd-build">Step 5 of the survey design page</a>; pretest and launch are covered in <a href="./survey-design.html#sec-sd-field">Step 6</a>. Before the launch, delete all test and pretest responses and publish the survey. Then send <strong>one anonymous link</strong> to everyone: the randomizer assigns the versions, not you. After the launch, do not change the questionnaire any more.</p>
+<p>Then collect the data. Each group member recruits about <strong>20 respondents</strong> (≈ 120 per group). Invite more people than that, because some will not finish and a few will be excluded by your rules: the example study needed 144 recorded responses for 120 usable ones. Decide in advance when the data collection ends, and do not compare the conditions before that day. Convenience sampling — family, friends, fellow students — is fine for this project, but aim for a <strong>heterogeneous sample</strong>: if everyone is a 22-year-old business student, you cannot analyze heterogeneity, and your sample is not the market your manager cares about. Respondents must be real people answering once; do not fill in the questionnaire yourselves, and do not use bots or AI to generate responses. Keep the survey anonymous and do not collect personal data you do not need.</p>
 </section>
 </section>
 <section id="part-2-data-analysis-and-video-presentation" class="level2">
 <h2 class="anchored" data-anchor-id="part-2-data-analysis-and-video-presentation">Part 2: Data analysis and video presentation</h2>
 <section id="coaching-ii" class="level3">
 <h3 class="anchored" data-anchor-id="coaching-ii">Coaching II</h3>
-<p>Bring your (ideally complete) data set, your R script, and your open questions. We will work through the import of Qualtrics data, the manipulation check, the main comparison, the moderation and mediation analyses, and the charts for your presentation. The how-tos for importing and cleaning Qualtrics exports in R are in <span class="quarto-unresolved-ref">?sec-survey-design</span>.</p>
+<p>Bring your (ideally complete) data set, your R script, and your open questions. We will work through the import of Qualtrics data, the manipulation check, the main comparison, the moderation and mediation analyses, and the charts for your presentation. The how-tos for importing and cleaning Qualtrics exports in R are in <a href="./survey-design.html#sec-sd-analyze">Step 7 of the survey design page</a>, together with an R script that you can use as a template.</p>
 </section>
 <section id="what-to-submit" class="level3">
 <h3 class="anchored" data-anchor-id="what-to-submit">What to submit</h3>
 <p>One <strong>.zip file</strong> per group on Canvas by the deadline, containing:</p>
 <ol type="1">
-<li>the <strong>video presentation</strong> (mp4; about 10 minutes; every group member presents a part);</li>
+<li>the <strong>video presentation</strong> (mp4; <strong>10 minutes</strong>; every group member presents a part);</li>
 <li>the <strong>slides</strong> (PDF);</li>
-<li>the <strong>data</strong> as exported from Qualtrics (CSV) — anonymized, with a short codebook if the variable names are not self-explanatory;</li>
+<li>the <strong>data</strong> as exported from Qualtrics (CSV, numeric values) — the complete export: responses that you exclude stay in the file and are removed by your R script. The data must be anonymized; add a short codebook if the variable names are not self-explanatory;</li>
 <li>the <strong>R script</strong> (or .Rmd) that reproduces every number and chart in the presentation from the raw data — we will run it;</li>
 <li>the <strong>contribution &amp; AI-use statement</strong> (one page: who did what, and how AI tools were used, see below).</li>
 </ol>
 </section>
 <section id="what-the-presentation-should-cover" class="level3">
 <h3 class="anchored" data-anchor-id="what-the-presentation-should-cover">What the presentation should cover</h3>
-<p>Think of your audience as the decision maker who commissioned the study: they want to know what to do, and why they should believe you. A structure that works:</p>
+<p>Think of your audience as the decision maker who commissioned the study: they want to know what to do, and why they should believe you. You have <strong>10 minutes</strong>: about ten slides with one message each, and about one minute per slide. A structure that works:</p>
 <ol type="1">
 <li><strong>The problem and the question</strong> — the managerial decision, the research question, the hypotheses (with the key reference).</li>
-<li><strong>The design</strong> — the two conditions (show the stimuli), the sample size, the variables, and how they were measured.</li>
-<li><strong>The sample</strong> — who answered (descriptives of the key variables), and whether randomization produced comparable groups.</li>
-<li><strong>The manipulation check</strong> — did respondents notice the manipulation?</li>
+<li><strong>The design</strong> — the two conditions (show the stimuli), the sample size, the variables, and how they were measured; for every multi-item scale the source, an example item, and Cronbach’s alpha.</li>
+<li><strong>The sample</strong> — how many responses you recorded, how many you excluded by which rule, and how many remain; who answered (descriptives of the key variables); and whether randomization produced comparable groups.</li>
+<li><strong>The manipulation check</strong> — did respondents notice the manipulation? Report the result; do not exclude respondents because of it.</li>
 <li><strong>The main result</strong> — the comparison of the two conditions with the estimate, its 95% confidence interval, and the test (the reporting standard of <a href="04-experiments.html" class="quarto-xref"><span>4&nbsp; Learning from Experiments</span></a>). One good chart.</li>
 <li><strong>For whom</strong> — the moderation analysis: the interaction model, the effect of the condition at meaningful values of the moderator, and an honest statement of the uncertainty (with 60 per condition, “we found no evidence that the effect differs” is a legitimate result).</li>
 <li><strong>Why</strong> — the mediation analysis: total, direct, and indirect effect with the bootstrap interval and the share mediated, and the assumption behind the decomposition.</li>
-<li><strong>Limitations</strong> — sample, stimuli, single product or context, hypothetical measures.</li>
+<li><strong>Limitations</strong> — sample, stimuli, single product or context, hypothetical measures, mechanisms that you did not measure.</li>
 <li><strong>Recommendations</strong> — what the decision maker should do, and what the next experiment should test.</li>
 </ol>
+<p>🎤 The <a href="slides/example_presentation_handout.pdf" target="_blank" rel="noopener">example presentation</a> of the coffee study from the <a href="./survey-design.html#sec-sd-present">survey design page</a> covers the nine points on ten slides, followed by an appendix; its last slide shows how the 10 minutes are divided. It is a model for the structure and the level of detail, not a template: your study needs its own story.</p>
 <p>Some rules of the craft:</p>
 <ul>
 <li><strong>Justify your tests</strong> and use the correct terminology: name the dependent and independent variables, and for every regression state the equation, e.g., <span class="math inline">\(\text{WTP}_i = \beta_0 + \beta_1 \text{Condition}_i + \beta_2 \text{Moderator}_i + \beta_3 (\text{Condition}_i \times \text{Moderator}_i) + \varepsilon_i\)</span>.</li>
 <li><strong>Report uncertainty</strong>, not only <em>p</em>-values: estimates with confidence intervals, effect sizes, and sample sizes per group on every chart.</li>
 <li><strong>Visualizations tell the story.</strong> Every chart must answer part of the research question; label axes, show the units, show the number of observations, and make the text legible at presentation size. Boxplots with the individual data points for the comparison of conditions; a marginal-effect plot or an interaction plot for the moderation.</li>
 <li><strong>Interpret, then recommend.</strong> Do not end with the regression table. Say what the result means for the decision — and what you would do with a larger budget.</li>
-<li>Assumption checks, robustness checks, and item statistics go into an <strong>appendix</strong> (slides after the last one), where they are available if someone asks.</li>
+<li>Assumption checks, robustness checks, and item statistics go into an <strong>appendix</strong> (slides after the last one), where they are available if someone asks. The appendix is not presented and does not count toward the 10 minutes.</li>
 </ul>
 </section>
 <section id="peer-review" class="level3">
