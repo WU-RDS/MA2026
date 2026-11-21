@@ -17,8 +17,15 @@
 
 library(tidyverse)
 library(emmeans)      # install.packages("emmeans") if needed
+library(mediation)    # install.packages("mediation") if needed
 # The psych package is used for two functions below (psych::alpha, psych::cohen.d);
 # install.packages("psych") if needed
+
+# NOTE: the mediation package loads the package MASS, which has a select() function of
+# its own. A plain select() then no longer calls the function from dplyr and stops with
+# an error ("unused arguments"). This script therefore writes dplyr::select() everywhere -
+# do the same in your project.
+
 options(scipen = 5, digits = 4)
 theme_set(theme_minimal(base_size = 13))
 
@@ -26,6 +33,21 @@ base_url <- "https://raw.githubusercontent.com/wu-rds/MA2026/main/data/"
 file <- paste0(base_url, "coffee_seal_qualtrics.csv")
 # For your own project: put the export into your project folder and use
 # file <- "your_export.csv"
+
+
+# ======================================================================
+# Before the data collection: how many respondents do you need? (Chapter 4)
+# ======================================================================
+# Two numbers: the difference between the two conditions that you expect (here:
+# 1 euro) and the standard deviation of the outcome (here: about 2 euros).
+
+power.t.test(delta = 1, sd = 2, sig.level = 0.05, power = 0.80)    # n = respondents PER CONDITION
+
+# The reverse question: which difference can 60 respondents per condition detect?
+power.t.test(n = 60, sd = 2, sig.level = 0.05, power = 0.80)
+
+# For a multi-item scale with seven points, sd is typically between 1 and 1.5 scale
+# points. Do this calculation for your own project and bring it to Coaching I.
 
 
 # ======================================================================
@@ -97,7 +119,7 @@ d <- d |>
          wtp = wtp_text |> str_extract("[0-9]+([.,][0-9]+)?") |> str_replace(",", ".") |> as.numeric())
 
 # Impossible values (Chapter 2): more than 30 euros for 250 g is not a serious answer
-d |> filter(wtp > 30) |> select(ResponseId, wtp_text, wtp)
+d |> filter(wtp > 30) |> dplyr::select(ResponseId, wtp_text, wtp)
 d <- d |> mutate(wtp = if_else(wtp > 30, NA_real_, wtp))
 
 # The analysis sample: respondents with a valid answer to the outcome question
@@ -127,17 +149,17 @@ d <- d |> mutate(env_2r = 8 - env_2)
 
 # Do the items of a scale go together? Correlations and Cronbach's alpha
 # (about 0.7 or more is acceptable, 0.8 or more is good)
-d |> select(env_1, env_2r, env_3) |> cor() |> round(2)
-psych::alpha(select(d, env_1, env_2r, env_3))$total$raw_alpha       # environmental concern
-psych::alpha(select(d, glow_1, glow_2, glow_3))$total$raw_alpha     # warm glow
+d |> dplyr::select(env_1, env_2r, env_3) |> cor() |> round(2)
+psych::alpha(dplyr::select(d, env_1, env_2r, env_3))$total$raw_alpha       # environmental concern
+psych::alpha(dplyr::select(d, glow_1, glow_2, glow_3))$total$raw_alpha     # warm glow
 
 # The complete output: alpha, the correlation of each item with the other items
 # (r.drop), and the alpha of the scale if an item is dropped
-psych::alpha(select(d, glow_1, glow_2, glow_3))
+psych::alpha(dplyr::select(d, glow_1, glow_2, glow_3))
 
 # What if you forget to reverse env_2? Negative correlations, alpha collapses -
 # and psych::alpha() prints a warning that names the item
-# psych::alpha(select(d, env_1, env_2, env_3))$total$raw_alpha
+# psych::alpha(dplyr::select(d, env_1, env_2, env_3))$total$raw_alpha
 
 # The scale score is the mean of the items
 d <- d |>
@@ -189,7 +211,7 @@ ggplot(d, aes(x = condition, y = wtp)) +
        subtitle = "Boxplots with the individual answers; blue: mean with 95% CI")
 
 # --- H2: for whom? Moderation by environmental concern (Chapter 6) ------
-d <- d |> mutate(seal = as.numeric(condition == "Seal"))      # 0/1 version for emtrends()
+d <- d |> mutate(seal = as.numeric(condition == "Seal"))      # 0/1 version for emtrends() and mediate()
 model_h2 <- lm(wtp ~ seal * concern, data = d)
 round(coef(summary(model_h2)), 3)
 confint(model_h2)["seal:concern", ]
@@ -211,38 +233,22 @@ ggplot(effect_by_concern, aes(x = concern, y = seal.trend)) +
 
 # --- H3: why? Mediation by anticipated warm glow (Chapter 6) ------------
 # concern was measured before the stimulus and is a likely confounder of the
-# mediator-outcome relationship: it is a control variable in both models
-model_m <- lm(warm_glow ~ condition + concern, data = d)                # path a
-model_y <- lm(wtp ~ condition + warm_glow + concern, data = d)          # paths b and c'
+# mediator-outcome relationship: it is a control variable in both models.
+# mediate() needs the treatment as a 0/1 variable: seal (created for H2)
+model_m <- lm(warm_glow ~ seal + concern, data = d)                # path a
+model_y <- lm(wtp ~ seal + warm_glow + concern, data = d)          # paths b and c'
 round(coef(summary(model_m)), 3)
 round(coef(summary(model_y)), 3)
 
-a        <- coef(model_m)["conditionSeal"]
-b        <- coef(model_y)["warm_glow"]
-direct   <- coef(model_y)["conditionSeal"]
-indirect <- a * b
-c(indirect = unname(indirect), direct = unname(direct), total = unname(indirect + direct),
-  share_mediated = unname(indirect / (indirect + direct)))
-
-# Bootstrap confidence interval for the indirect effect
+# mediate() draws 1,000 bootstrap samples and estimates both models in each of them.
+# In the output: ACME = indirect effect (a x b), ADE = direct effect (c'),
+# Prop. Mediated = indirect effect as a share of the total effect
 set.seed(1)
-boot_indirect <- replicate(2000, {
-  d_boot <- d[sample(nrow(d), replace = TRUE), ]
-  a_boot <- coef(lm(warm_glow ~ condition + concern, data = d_boot))["conditionSeal"]
-  b_boot <- coef(lm(wtp ~ condition + warm_glow + concern, data = d_boot))["warm_glow"]
-  a_boot * b_boot
-})
-quantile(boot_indirect, c(0.025, 0.975))
+med <- mediate(model_m, model_y, treat = "seal", mediator = "warm_glow", boot = TRUE, sims = 1000)
+summary(med)
 
 # The result supports the mechanism that was MEASURED. It does not rule out
 # mechanisms that were not measured (e.g., expected taste, trust in the brand).
-
-# The same in one call (install.packages("mediation")):
-# library(mediation)
-# set.seed(1)
-# med <- mediate(model_m, model_y, treat = "condition", mediator = "warm_glow",
-#                control.value = "Control", treat.value = "Seal", boot = TRUE, sims = 1000)
-# summary(med)
 
 
 # ======================================================================

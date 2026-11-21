@@ -1252,37 +1252,85 @@ The regression toolkit has one more use, which the next chapter develops: it can
 
 **(LC5.1)** In a regression of listening hours on prior listening hours, the slope is 0.83. Interpret the coefficient in one sentence — and explain why it does not show that listening before the launch *causes* listening after it.
 
+::: {.callout-note collapse="true" title="Solution"}
+Users who listened one hour more in the month before the launch listened, on average, 0.83 hours more in the four weeks after it. The coefficient describes an **association**: it compares *different users* with different listening histories, not the same user with more or less prior listening. Both variables are driven by the same characteristics of a user — enthusiasm for music, free time, a Premium subscription — so prior listening *predicts* later listening without causing it. A causal reading would require that prior listening is unrelated to everything else that drives current listening (exogeneity, @sec-obs-adjust), and nothing suggests that here: nobody assigned listening histories at random.
+:::
+
 **(LC5.2)** Which statements about adjustment in multiple regression are correct?
 
-- [ ] The coefficient of a variable is its association with the outcome, holding the other variables in the model constant
-- [ ] Adding a variable to the model can increase, decrease, or leave unchanged the coefficient of another variable
+- [x] The coefficient of a variable is its association with the outcome, holding the other variables in the model constant
+- [x] Adding a variable to the model can increase, decrease, or leave unchanged the coefficient of another variable
 - [ ] Adjusting for all available variables guarantees an unbiased estimate of a causal effect
-- [ ] Adjusting for a mediator removes part of the effect one wants to estimate
+- [x] Adjusting for a mediator removes part of the effect one wants to estimate
+
+::: {.callout-note collapse="true" title="Solution"}
+Correct: statements 1, 2, and 4. Statement 2: what happens depends on how the added variable is related to the other predictor and to the outcome. The coefficient of Smart Mix fell from `r round(coef(m_naive)[2], 1)` to `r round(coef(m_prior)[2], 1)` hours when prior listening was added, because prior listening goes with both adoption and listening time; a variable that is unrelated to the predictor of interest leaves its coefficient almost unchanged; and a variable that works against the predictor of interest can make its coefficient larger. Statement 3 is wrong for two reasons. Adjustment removes only the part of the confounding that the observed variables capture — the fully adjusted estimate of `r round(coef(m_full)[2], 1)` hours is still above the true effect of 3 hours, because enthusiasm is not observed. And "all available variables" may include variables that must not be adjusted for. Statement 4 names the most important of them: a mediator lies on the causal path, and holding it constant blocks the indirect part of the effect (@fig-mediator-dag).
+:::
 
 **(LC5.3)** A model contains the categorical variable `plan` with the levels "Free", "Premium", and "Family" (reference: Free). The coefficient of `planFamily` is 4.2. Interpret it. How would you test whether the plan matters at all?
 
+::: {.callout-note collapse="true" title="Solution"}
+Users on the Family plan have an outcome that is 4.2 units higher than that of users on the Free plan — the reference category — holding the other variables in the model constant (4.2 listening hours, if the outcome is listening hours). The coefficient says nothing about the difference between Family and Premium: that is the difference between the two dummy coefficients, or the coefficient you get after making Premium the reference with `relevel()`.
+
+The *p*-values of the two dummies test each plan against Free, not the variable as a whole. To test whether the plan matters at all, compare the model with and without the variable: `anova(model_without, model_with)` tests both dummy coefficients at once with an *F*-test (@sec-obs-categorical).
+:::
+
 **(LC5.4)** A colleague fits a regression with 25 predictors to 300 customers and reports R² = 0.71 for predicting next month's spending. What should you ask before trusting this number?
+
+::: {.callout-note collapse="true" title="Solution"}
+Whether the R² was computed **in-sample or out-of-sample**. An R² that is computed on the same 300 customers the model was fitted to flatters the model: with 25 predictors and only 300 observations, the model has plenty of room to fit the noise of this particular sample (overfitting), and R² never falls when a predictor is added. Ask for the performance on customers the model has not seen — a test set — and for the typical prediction error in euros (the RMSE), which says more to a decision maker than a share of explained variation (@sec-obs-prediction).
+
+A good second question is how the 25 predictors were chosen. If they were picked because they correlated with spending in these same data, even the in-sample number is too optimistic. The adjusted R² and the AIC penalize the number of predictors and help with a first comparison, but they do not replace the test set.
+:::
 
 **(LC5.5)** In a log-log regression, the coefficient of log(advertising spend) is 0.15. (a) Interpret it. (b) The same analysis in levels gives a coefficient of 0.8 sales per euro. Why might the two models reach different conclusions about whether a large increase in the advertising budget pays off?
 
+::: {.callout-note collapse="true" title="Solution"}
+Part (a): the coefficient is an **elasticity**. A 1% increase in advertising spend goes with about 0.15% more sales, a 10% increase with about 1.5% — at every level of the budget. An elasticity between 0 and 1 means diminishing returns.
+
+Part (b): the two models make different assumptions about the shape of the response. The linear model assumes **constant marginal returns**: every additional euro brings 0.8 units of sales, the hundred-thousandth as much as the first, so a large increase of the budget looks as profitable per euro as a small one. In the log-log model each additional euro brings less than the one before: doubling the budget raises sales by only $2^{0.15} - 1 \approx$ 11%. A large increase can therefore pay off according to the linear model and not according to the log-log model. Which one to believe is a question of the functional form — saturation is the typical pattern for advertising, and the scatter plot and the residuals show which shape fits the data (@sec-obs-form, @sec-obs-diagnostics). And for both models: the coefficient is the effect of advertising only if spend is exogenous, which is doubtful when budgets follow expected sales.
+:::
+
 **(LC5.6)** In a log-level model with the outcome log(sales), the coefficient of a dummy for "promotion week" is 0.35. By what percentage do sales differ in promotion weeks? Use both the approximate and the exact interpretation.
+
+::: {.callout-note collapse="true" title="Solution"}
+Approximately: $100 \cdot 0.35$ = 35% higher sales in promotion weeks. Exactly: $100 \cdot (e^{0.35} - 1)$ = 41.9%. The approximation is good for coefficients up to about 0.1; at 0.35 it is already seven percentage points off. Report the exact value: sales are about 42% higher in promotion weeks, holding the other variables in the model constant.
+:::
 
 **(LC5.7)** Which statements about logistic regression are correct?
 
-- [ ] It is used when the outcome is a yes/no variable
+- [x] It is used when the outcome is a yes/no variable
 - [ ] Its coefficients can be read directly as changes in probability
-- [ ] Predicted probabilities for different predictor values can be compared to express effects in percentage points
-- [ ] It always lies between 0 and 1 in its predictions
+- [x] Predicted probabilities for different predictor values can be compared to express effects in percentage points
+- [x] It always lies between 0 and 1 in its predictions
+
+::: {.callout-note collapse="true" title="Solution"}
+Correct: statements 1, 3, and 4. Statement 2 is wrong: a coefficient is a change in the *log-odds*, and its exponential is an odds ratio. The change in probability that goes with it depends on where on the S-curve an observation lies — small at the flat ends, largest around 50% (@fig-logistic-steps). This is why effects are best reported as differences between predicted probabilities at chosen values (statement 3). Statement 4 is the reason for the model: the logistic function turns any value of the linear predictor into a probability between 0 and 1, whereas a straight line predicts probabilities below 0 and above 1.
+:::
 
 **(LC5.8)** An analyst reports a difference-in-differences estimate of a price promotion on sales in treated stores. Which statements are correct?
 
-- [ ] The estimate uses the change in the control stores to estimate what would have happened in the treated stores without the promotion
+- [x] The estimate uses the change in the control stores to estimate what would have happened in the treated stores without the promotion
 - [ ] It requires that the treated and control stores had the same sales level before the promotion
-- [ ] It requires that both groups would have followed parallel trends without the promotion
-- [ ] A placebo test in the pre-period can make the parallel trends assumption more plausible, but cannot prove it
+- [x] It requires that both groups would have followed parallel trends without the promotion
+- [x] A placebo test in the pre-period can make the parallel trends assumption more plausible, but cannot prove it
+
+::: {.callout-note collapse="true" title="Solution"}
+Correct: statements 1, 3, and 4. Statement 2 is wrong: a difference in *levels* between the groups is harmless, because it is subtracted out — in the regression it is the coefficient of `treated`. The playlisted songs of @sec-obs-did started far above the control songs. What the estimate needs is that both groups would have *changed* in the same way without the treatment (statement 3). Statement 4: the assumption is about what the treated stores would have done after the promotion started, without it — something that is never observed. Parallel trends before the promotion and a placebo test make the assumption plausible, not certain.
+:::
 
 **(LC5.9)** The residual plot of a regression of revenue on advertising shows a funnel: the residuals scatter more widely for large fitted values. What does this mean for the coefficients and for the *p*-values — and what is the simplest fix?
 
+::: {.callout-note collapse="true" title="Solution"}
+The funnel is **heteroskedasticity**: the scatter around the line is not the same at all levels of the prediction. The coefficients remain unbiased. The standard errors that `lm()` reports, however, assume equal scatter and are wrong — and with them the *p*-values and the confidence intervals. The simplest fix is **robust standard errors**, which do not rely on this assumption: `coeftest(model, vcov = vcovHC(model, type = "HC1"))` with the packages `sandwich` and `lmtest`; the Breusch–Pagan test (`bptest(model)`) confirms the diagnosis (@sec-obs-diagnostics). For an outcome such as revenue it is also worth looking at the log-log model: a funnel often disappears when the outcome is logged.
+:::
+
 **(LC5.10)** Your group project experiment randomizes two versions of a product description. Afterwards, you also want to know whether the effect differs between frequent and occasional buyers. Which tool from this chapter do you need — and in which chapter is it developed?
+
+::: {.callout-note collapse="true" title="Solution"}
+An **interaction term**: a regression of the outcome on the condition, on the type of buyer, and on their product, `lm(outcome ~ condition * frequent_buyer)`. The coefficient of the interaction is the difference between frequent and occasional buyers in the effect of the description. It is the construction of the difference-in-differences regression (@sec-obs-did), where `treated * post` gave the difference between two differences; @sec-mechanisms develops it in its general role, as the tool for moderation.
+
+Two things to settle before the data collection: ask about buying frequency *before* respondents see the description, so that the answer cannot be affected by it; and write down that you will test this difference — a difference between subgroups that you discover afterwards is an exploratory finding.
+:::
 
 ## References {.unnumbered}

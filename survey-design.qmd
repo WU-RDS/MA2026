@@ -29,8 +29,8 @@ pv  <- function(p) sub("^0", "", sprintf("%.3f", p))          # p-values without
 # measurement block of Step 3: one item vs. the scale, inter-item correlations
 ovt        <- single_vs_scale(coffee)
 r_rest     <- cor(coffee$glow_1, (coffee$glow_2 + coffee$glow_3) / 2)
-env_items  <- select(coffee, env_1, env_2r, env_3)
-glow_items <- select(coffee, glow_1, glow_2, glow_3)
+env_items  <- dplyr::select(coffee, env_1, env_2r, env_3)
+glow_items <- dplyr::select(coffee, glow_1, glow_2, glow_3)
 mean_r     <- function(x) { r <- cor(x); mean(r[lower.tri(r)]) }
 ```
 
@@ -42,7 +42,7 @@ This page is the manual for Part 1 of the [group project](group-project.qmd): a 
 
 | Step | What you decide | Builds on |
 |:-------------|:-----------------------------------|:------------------------|
-| [[1&nbsp;·&nbsp;Plan](#sec-sd-plan)]{style="white-space: nowrap;"} | The blueprint: question, hypotheses, and the role of every variable | @sec-design, @sec-mech-project |
+| [[1&nbsp;·&nbsp;Plan](#sec-sd-plan)]{style="white-space: nowrap;"} | The blueprint: question, hypotheses, the role of every variable, and the sample size | @sec-design, @sec-exp-power, @sec-mech-project |
 | [[2&nbsp;·&nbsp;Manipulate](#sec-sd-manipulate)]{style="white-space: nowrap;"} | The two versions of the stimulus and the manipulation check | @sec-randomization, @sec-exp-power |
 | [[3&nbsp;·&nbsp;Measure](#sec-sd-measure)]{style="white-space: nowrap;"} | The questions and scales for outcome, mediator, and moderator | @sec-desc-measurement |
 | [[4&nbsp;·&nbsp;Order](#sec-sd-order)]{style="white-space: nowrap;"} | Which block is asked when | @sec-cast, @sec-mech-mediation |
@@ -59,7 +59,7 @@ This page is the manual for Part 1 of the [group project](group-project.qmd): a 
 
 After working through this page you will be able to:
 
-- Translate a managerial question into a **blueprint** with two conditions, an outcome, a moderator, a mediator, and hypotheses stated in advance
+- Translate a managerial question into a **blueprint** with two conditions, an outcome, a moderator, a mediator, hypotheses stated in advance, and a **sample size** that can detect the effect you expect
 - Design a **manipulation** in which the two versions differ in exactly one respect — and check whether respondents noticed it
 - Choose **measures** with enough variation and reliability: a dependent variable in euros or on a wide scale, single questions for facts, and reflective multi-item scales from the literature for abstract constructs — and assess such a scale with Cronbach's alpha
 - Put the blocks of a questionnaire into the **order** that the causal logic requires
@@ -88,7 +88,7 @@ This is the data set that the coffee study delivers in the end — one row per r
 
 ```{r}
 #| echo: false
-coffee |> select(condition, concern, warm_glow, wtp, mc_seal, cups, age, gender) |> head(5)
+coffee |> dplyr::select(condition, concern, warm_glow, wtp, mc_seal, cups, age, gender) |> head(5)
 ```
 
 The file you analyzed in @sec-mechanisms had the same structure: a treatment column (there called `version`), a moderator, a mediator, and the outcome. Here the treatment column is called `condition` — a name that the team typed into the survey flow (Step 5).
@@ -137,8 +137,9 @@ Before you write a single question, fill in a one-page blueprint (@tbl-sd-bluepr
 | **Manipulation check** | "The coffee on the product page carried a seal for sustainable farming" (1–7), asked after the outcome |
 | **Controls and descriptives** | Cups of coffee per day (before the stimulus); age and gender (at the end) |
 | **Hypotheses** | **H1:** WTP is higher with the seal than without it. **H2:** The difference increases with environmental concern. **H3:** The effect is mediated by anticipated warm glow |
-| **Planned analyses** | H1: *t*-test and `lm(wtp ~ condition)`; H2: interaction model and the effect at low, medium, and high concern; H3: the two mediation regressions and a bootstrap of the indirect effect |
-| **Sample and exclusions** | About 120 completed responses; excluded: previews, unfinished responses, failed attention check, speeders (faster than one third of the median duration) |
+| **Planned analyses** | H1: *t*-test and `lm(wtp ~ condition)`; H2: interaction model and the effect at low, medium, and high concern; H3: the two mediation regressions and the indirect effect with a bootstrap interval (`mediate()`) |
+| **Sample size** | Planned for a difference of 1 euro at a standard deviation of 2 euros: 64 respondents per condition for 80% power ([calculation below](#sec-sd-samplesize)) |
+| **Exclusions** | Previews, unfinished responses, failed attention check, speeders (faster than one third of the median duration) |
 
 : The blueprint of the coffee study {#tbl-sd-blueprint .striped}
 
@@ -147,6 +148,37 @@ Three remarks on filling it in:
 - **Use the starter paper as a quarry.** The method section of your starter paper tells you how the authors manipulated the treatment; the measures section or the web appendix lists the items of their scales. You do not replicate the paper — but you should not invent a manipulation or a scale that somebody else has already developed and validated.
 - **State the direction.** "Environmental concern moderates the effect" is not a hypothesis; "the effect is larger for respondents with higher environmental concern, because a seal means more to people who care about what it certifies" is one — a similar pattern has been found in a tasting study with "eco-friendly" coffee [@sorqvist2013], and you have seen it for the shipping label in the coding block of @sec-mechanisms. If you cannot say in which direction a moderator works and why, choose a different one.
 - **Fix the plan before you see data.** Hypotheses, the main analysis, and the exclusion rules are written down now. Everything you discover later is welcome — as an *exploratory* finding, labeled as such (@sec-exp-nhst, @sec-mech-pitfalls).
+
+### How many respondents do you need? {#sec-sd-samplesize}
+
+One row of the blueprint is a calculation, and you know it from @sec-exp-power: the number of respondents follows from the difference that the study should be able to detect. It needs two numbers.
+
+- **The difference between the two conditions that you expect**, in the unit of your outcome. Ask which difference would still matter for the decision, or take the evidence of earlier studies — with caution, because published effects tend to be overestimated (@sec-exp-nhst). The coffee team plans for **1 euro**: a smaller premium would hardly justify a certification, and the storytelling study, with its +`r sprintf("%.2f", abs(diff(tt6$estimate)))` euros, suggests that a difference of this size is realistic.
+- **The standard deviation of the outcome**: how much do respondents differ from each other in their answers? In the storytelling study, the willingness to pay for the same pack of coffee varied with a standard deviation of about **2 euros**. If you have no earlier data, ask ten people your outcome question. For a multi-item scale with seven points, a standard deviation between 1 and 1.5 scale points is typical (in the coffee study: `r sprintf("%.1f", sd(coffee$warm_glow))` for the warm glow scale, `r sprintf("%.1f", sd(coffee$concern))` for environmental concern).
+
+```{r}
+power.t.test(delta = 1, sd = 2, sig.level = 0.05, power = 0.80)
+```
+
+The team needs **`r ceiling(power.t.test(delta = 1, sd = 2, power = 0.80)$n)` respondents per condition**, `r 2 * ceiling(power.t.test(delta = 1, sd = 2, power = 0.80)$n)` in total, to detect a difference of 1 euro with a probability of 80%. This is a little more than the about 120 respondents of a project in this course — feasible, with some extra effort in recruiting. The same function answers the reverse question: which difference can a study with 60 respondents per condition detect?
+
+```{r}
+power.t.test(n = 60, sd = 2, sig.level = 0.05, power = 0.80)$delta
+```
+
+About 1 euro — half a standard deviation (*d* = 0.5). @tbl-sd-samplesize shows how quickly the required sample grows when the expected effect is smaller.
+
+```{r}
+#| label: tbl-sd-samplesize
+#| echo: false
+#| tbl-cap: "Respondents per condition that a comparison of two groups needs to detect an effect with 80% power (5% significance level, two-sided). The standardized effect *d* is the expected difference divided by the standard deviation of the outcome."
+d_plan <- c(0.2, 0.3, 0.4, 0.5, 0.6, 0.8)
+n_plan <- sapply(d_plan, function(x) ceiling(power.t.test(delta = x, sd = 1, sig.level = 0.05, power = 0.80)$n))
+knitr::kable(rbind(c("**Per condition**", n_plan), c("**In total**", 2 * n_plan)),
+             col.names = c("Expected effect (*d*)", sprintf("%.1f", d_plan)), align = c("l", rep("r", length(d_plan))))
+```
+
+**Do this calculation for your own project and bring it to Coaching I.** If it asks for many more respondents than your group can recruit, do not hope for the best — change the design: make the manipulation stronger ([Step 2](#sec-sd-manipulate)), measure the outcome more precisely ([Step 3](#sec-sd-measure): @fig-sd-measure-power shows how much the measure matters), and measure a control variable before the stimulus that explains a part of the outcome (@sec-mech-motivation). And keep in mind what the calculation covers: it refers to H1. The interaction of H2 is estimated far less precisely than a difference between two groups (@sec-mech-project) — plan the moderation as a hypothesis whose direction you can examine, not as a result you can count on.
 
 ::: {.callout-tip title="Your turn (15 min, in your project group)"}
 Fill in the blueprint for your topic: the decision, the two conditions, the outcome and its unit, one moderator with the expected direction, one mediator, and H1 to H3 in one sentence each. If your group cannot agree on a row, you have found the first item on your agenda for this week.
@@ -168,7 +200,7 @@ The two versions of the stimulus. Outside the seal, the two pages are identical 
 
 **One difference.** Describe the difference between your two versions in one short sentence: *the product page shows a seal for certified sustainable farming — or it does not.* If you need the word "and", the manipulation is confounded. The cleanest manipulations add, remove, or exchange **one element** of an otherwise identical stimulus: a seal, a label, a disclosure, a claim, the format of a number. Build one version, copy it, and change this one element. What would go wrong otherwise: a seal *and* a more attractive photo (then the "seal effect" may be a photo effect), a seal *and* an additional paragraph about the farm's environmental program (an effect of length and information), or a different coffee in each version (a product effect).
 
-**Strong enough to be seen.** With 60 respondents per condition, you can only detect medium-to-large effects — a standardized difference of about *d* = 0.5 (@sec-exp-power). This is the price of a clean manipulation: a single element is easily overlooked. A small logo in a corner of the page will most likely end in "not significant", whatever the truth is. Make the one element impossible to miss — the seal of the coffee study is large, sits on the product picture, and says in words what it certifies — and check afterwards whether respondents noticed it.
+**Strong enough to be seen.** With 60 respondents per condition, you can only detect medium-to-large effects — a standardized difference of about *d* = 0.5 (@sec-exp-power; the calculation is in [Step 1](#sec-sd-samplesize)). This is the price of a clean manipulation: a single element is easily overlooked. A small logo in a corner of the page will most likely end in "not significant", whatever the truth is. Make the one element impossible to miss — the seal of the coffee study is large, sits on the product picture, and says in words what it certifies — and check afterwards whether respondents noticed it.
 
 **Realistic.** The stimulus should look like the real thing: a product page, an ad, a social-media post, a package. A slide, a mock-up tool, or an image generator is sufficient to build one — as long as everything except the manipulated element is identical in both versions. A **fictitious brand** — and here also a fictitious seal — keeps respondents from bringing their opinions about a real brand or a real certification into the study; this removes noise, at the price of some realism. If you describe a situation in words ("Imagine you are looking for …"), describe everything a respondent needs to answer the later questions — otherwise each respondent fills the gaps differently.
 
@@ -464,11 +496,10 @@ Where a question stands decides what its answers can be used for. The principle 
 ```{r}
 #| label: fig-sd-order
 #| echo: false
-#| column: page-right
-#| fig-width: 11.5
-#| fig-height: 4.1
-#| fig-cap: "The questionnaire follows the causal diagram. The moderator and the controls are measured before the randomizer and cannot be affected by the condition; mediator and outcome follow the stimulus in causal order; the manipulation check and the demographics come last."
-fig_questionnaire_order(base_size = 13)
+#| fig-width: 7.8
+#| fig-height: 5.85
+#| fig-cap: "The questionnaire follows the causal diagram, from top to bottom. The moderator and the controls are measured before the randomizer and cannot be affected by the condition; mediator and outcome follow the stimulus in causal order; the manipulation check and the demographics come last. The blocks are numbered as in the table below."
+fig_questionnaire_order(base_size = 12, layout = "vertical")
 ```
 
 | Block | What is in it | Why here |
@@ -648,7 +679,7 @@ Publish the survey and distribute **one anonymous link** (*Distributions → Ano
 
 ### Who answers — and what that means
 
-You need about 120 respondents for your analysis — about 20 per group member. Aim for about 140 started questionnaires, because some respondents will not finish and a few will be excluded. Family, friends, and fellow students are a **convenience sample**, and it is worth being precise about what this does and does not threaten:
+Your sample size calculation ([Step 1](#sec-sd-samplesize)) says how many respondents you need in the analysis; the guidelines ask for about 120 — about 20 per group member. Aim for about 140 started questionnaires, because some respondents will not finish and a few will be excluded. Family, friends, and fellow students are a **convenience sample**, and it is worth being precise about what this does and does not threaten:
 
 - It does **not** threaten the causal comparison. Whoever answers is assigned to a version by the randomizer, so the two groups are comparable — however unusual your respondents are (@sec-randomization).
 - It **does** limit what the result says about the market. The effect you estimate is the effect *among people like your respondents* (@sec-unc-populations). If all of them are 23-year-old business students, you know little about the customers your manager cares about — and you cannot study heterogeneity, because your moderator hardly varies. Recruit broadly, across age groups and backgrounds, and describe in your report who answered.
@@ -761,10 +792,14 @@ d <- d |>
            str_extract("[0-9]+([.,][0-9]+)?") |>
            str_replace(",", ".") |>
            as.numeric())
-d |> filter(wtp > 30) |> select(wtp_text, wtp)
+d |> filter(wtp > 30) |> dplyr::select(wtp_text, wtp)
 ```
 
 One respondent entered 85 euros for 250 g of coffee — perhaps 8.5 was meant, but you cannot know. The value is impossible rather than extreme (@sec-desc-trust); it is set to missing, and the respondent leaves the analysis sample. A validation rule in Qualtrics (a number between 0 and 30) would have prevented both problems.
+
+::: {.callout-note title="Why `dplyr::select()` instead of `select()`?"}
+Several R packages contain a function called `select()`. The `mediation` package, which the last analysis of this page uses, loads one of them (the package `MASS`). From that moment, a plain `select()` calls the wrong function, and code that worked before stops with an error such as `unused arguments`. With the package name in front — `dplyr::select()` — R always takes the function from dplyr, whichever packages are loaded and in whatever order. The code on this page and the R script of this module are written this way; do the same in your project.
+:::
 
 ```{r}
 gender_labels <- c("female", "male", "non-binary / other",
@@ -783,13 +818,13 @@ Environmental concern and warm glow are reflective scales with three items each 
 
 ```{r}
 d <- d |> mutate(env_2r = 8 - env_2)
-d |> select(env_1, env_2r, env_3) |> cor() |> round(2)
+d |> dplyr::select(env_1, env_2r, env_3) |> cor() |> round(2)
 # Cronbach's alpha: environmental concern, then warm glow
-psych::alpha(select(d, env_1, env_2r, env_3))$total$raw_alpha
-psych::alpha(select(d, glow_1, glow_2, glow_3))$total$raw_alpha
+psych::alpha(dplyr::select(d, env_1, env_2r, env_3))$total$raw_alpha
+psych::alpha(dplyr::select(d, glow_1, glow_2, glow_3))$total$raw_alpha
 ```
 
-Both values are above 0.7: the items of each scale go together ([Cronbach's alpha](#sec-sd-alpha)). Report the alpha of every multi-item scale in your presentation. If you forget to reverse an item, you will notice it here: its correlations with the other items are negative, and alpha collapses — for the concern scale to `r f2(cronbach_alpha(select(d, env_1, env_2, env_3)))` (and `psych::alpha()` prints a warning that names the item).
+Both values are above 0.7: the items of each scale go together ([Cronbach's alpha](#sec-sd-alpha)). Report the alpha of every multi-item scale in your presentation. If you forget to reverse an item, you will notice it here: its correlations with the other items are negative, and alpha collapses — for the concern scale to `r f2(cronbach_alpha(dplyr::select(d, env_1, env_2, env_3)))` (and `psych::alpha()` prints a warning that names the item).
 
 ```{r}
 d <- d |>
@@ -887,34 +922,28 @@ fig_seal_by_concern(d)
 
 This is what an honest moderation result of a project of this size typically looks like. Note what made the analysis possible at all: the moderator was measured before the stimulus, with a scale that varies between respondents.
 
-**H3: Why?** The two mediation regressions and the bootstrap of the indirect effect (@sec-mech-mediation, @fig-sd-mediation). Environmental concern, measured before the stimulus, is a control variable in both models, because it plausibly affects both the warm glow and the willingness to pay:
+**H3: Why?** The two mediation regressions, and `mediate()` from the `mediation` package [@imai2010] for the indirect effect with its bootstrap interval (@sec-mech-mediation, @fig-sd-mediation). Environmental concern, measured before the stimulus, is a control variable in both models, because it plausibly affects both the warm glow and the willingness to pay:
 
 ```{r}
+#| message: false
+library(mediation)   # install.packages("mediation")
 # path a: from the treatment to the mediator
-model_m <- lm(warm_glow ~ condition + concern, data = d)
+model_m <- lm(warm_glow ~ seal + concern, data = d)
 # paths b and c': from the mediator to the outcome; the direct effect
-model_y <- lm(wtp ~ condition + warm_glow + concern, data = d)
-a <- coef(model_m)["conditionSeal"]
-b <- coef(model_y)["warm_glow"]
-c(indirect = unname(a * b),
-  direct   = unname(coef(model_y)["conditionSeal"]))
-
-# bootstrap: resample the respondents, estimate both models again
+model_y <- lm(wtp ~ seal + warm_glow + concern, data = d)
+# indirect and direct effect, with 1,000 bootstrap samples
 set.seed(1)
-boot_indirect <- replicate(2000, {
-  d_boot <- d[sample(nrow(d), replace = TRUE), ]
-  m_boot <- lm(warm_glow ~ condition + concern, data = d_boot)
-  y_boot <- lm(wtp ~ condition + warm_glow + concern,
-               data = d_boot)
-  coef(m_boot)["conditionSeal"] * coef(y_boot)["warm_glow"]
-})
-quantile(boot_indirect, c(0.025, 0.975))
+med <- mediate(model_m, model_y, treat = "seal", mediator = "warm_glow",
+               boot = TRUE, sims = 1000)
+summary(med)
 ```
+
+`mediate()` takes the two models, the name of the treatment — as a 0/1 variable, here `seal` from H2 — and the name of the mediator. With `boot = TRUE` it does what @sec-mech-mediation did by hand: it draws 1,000 bootstrap samples of the respondents, estimates both models in each of them, and reports percentile intervals. In the output, **ACME** (average causal mediation effect) is the indirect effect *a* × *b*, **ADE** (average direct effect) is the direct effect *c′*, and *Prop. Mediated* is the indirect effect as a share of the total effect.
 
 ```{r}
 #| echo: false
-ind <- unname(a * b); dir <- unname(coef(model_y)["conditionSeal"]); bci <- quantile(boot_indirect, c(0.025, 0.975))
-p_dir <- coef(summary(model_y))["conditionSeal", 4]
+ind <- med$d0; dir <- med$z0; tot <- med$tau.coef
+bci <- med$d0.ci; dci <- med$z0.ci; tci <- med$tau.ci; sci <- med$n0.ci
 ```
 
 ```{r}
@@ -926,7 +955,9 @@ p_dir <- coef(summary(model_y))["conditionSeal", 4]
 fig_coffee_mediation(d)
 ```
 
-> Of the total effect of `r f2(ind + dir)` euros, `r f2(ind)` euros (bootstrap 95% CI [`r f2(bci[1])`; `r f2(bci[2])`], about `r round(100 * ind / (ind + dir))`%) ran through the anticipated warm glow; the remaining direct effect of `r f2(dir)` euros cannot be distinguished from zero (*p* = `r pv(p_dir)`). The split into a direct and an indirect effect assumes that there are no unobserved confounders of warm glow and willingness to pay.
+> Of the total effect of `r f2(tot)` euros (95% CI [`r f2(tci[1])`; `r f2(tci[2])`]), `r f2(ind)` euros ran through the anticipated warm glow (indirect effect, bootstrap 95% CI [`r f2(bci[1])`; `r f2(bci[2])`]) — about `r round(100 * med$n0)`% of the effect. The remaining direct effect of `r f2(dir)` euros (95% CI [`r f2(dci[1])`; `r f2(dci[2])`]) cannot be distinguished from zero. The split into a direct and an indirect effect assumes that there are no unobserved confounders of warm glow and willingness to pay.
+
+Read the share with care: it is the ratio of two estimates, and its interval runs from `r round(100 * sci[1])`% to more than 100% (a share above 100% would mean that the direct effect is negative). With `r nrow(d)` respondents, "most of the effect" is what the data support — not a precise percentage.
 
 The result supports the mechanism that the study measured. It does not rule out the mechanisms that were not measured ([Step 1](#sec-sd-mechanisms)): respondents who expect a certified coffee to taste better, or who trust the brand more, may report a warmer glow as well.
 
@@ -953,6 +984,7 @@ The solutions will be available after the session.
 For Coaching I you upload the PDF print of your questionnaire (*Tools → Import/Export → Print survey*) and a short slide deck ([guidelines](group-project.qmd)). The print shows the questions, not the survey flow — add a **screenshot of your survey flow** to the slides. Before you upload, check:
 
 - [ ] **Blueprint:** one decision, one research question, two conditions; H1 to H3 written down, with the expected direction of the moderation
+- [ ] **Sample size:** the difference you expect for H1 and where this number comes from; the respondents per condition that `power.t.test()` asks for; and what you do if this is more than you can recruit ([Step 1](#sec-sd-samplesize))
 - [ ] **Manipulation:** the two versions differ in exactly one respect, unmistakably; everything else is identical; the manipulation check asks about what was varied
 - [ ] **Outcome:** euros, a 0–100 scale, or a multi-item scale — not a single yes/no question
 - [ ] **Moderator and mediator:** reflective scales with three items each, from a cited source, with seven scale points; single questions only for facts and concrete judgments

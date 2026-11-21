@@ -81,7 +81,12 @@ fig_study_diagram <- function(labels = c(X = "Sustainability seal:\nwithout vs. 
 # ------------------------------------------------------------------
 # 2. The questionnaire follows the causal diagram
 # ------------------------------------------------------------------
-fig_questionnaire_order <- function(base_size = 12, example = TRUE) {
+# layout = "horizontal": the wide version for slides (blocks from left to right).
+# layout = "vertical":   the version for the text column of the page (blocks from top to
+#                        bottom, numbered as in the table of blocks); readable at 750 px.
+fig_questionnaire_order <- function(base_size = 12, example = TRUE, layout = c("horizontal", "vertical")) {
+  layout <- match.arg(layout)
+  if (layout == "vertical") return(fig_questionnaire_order_vertical(base_size = base_size, example = example))
   s <- base_size / 3.1
   blocks <- data.frame(
     pos   = 1:9,
@@ -122,6 +127,56 @@ fig_questionnaire_order <- function(base_size = 12, example = TRUE) {
     coord_cartesian(xlim = c(0.5, 9.5), ylim = c(-0.7, 2.5), clip = "off") +
     theme_void()
   if (example) p <- p + geom_text(aes(x = pos, y = -0.14, label = ex), color = "grey25", size = s * 0.8, lineheight = 0.9, vjust = 1)
+  p
+}
+
+fig_questionnaire_order_vertical <- function(base_size = 12, example = TRUE) {
+  pt <- function(x) x / ggplot2::.pt                     # font sizes in points
+  y_row  <- c(9.6, 8.6, 7.6, 5.3, 4.3, 3.3, 2.3, 1.3, 0.3)
+  y_rand <- 6.72                                         # the randomizer: between block 3 and block 4
+  blocks <- data.frame(
+    y     = y_row,
+    label = c("1   Welcome", "2   Warm-up", "3   Moderator + controls", "4   Stimulus", "5   Mediator", "6   Outcome (DV)",
+              "7   Manipulation check", "8   Demographics", "9   Thank you, debriefing"),
+    ex    = c("topic, duration, anonymity", "cups of coffee per day", "environmental concern (3 items),\nattention check",
+              "product page without OR with the seal", "warm glow (3 items)", "willingness to pay (euros)",
+              "\"the coffee carried a seal\" (1–7)", "age, gender", "brand and seal are fictitious"),
+    fill  = c("#e9e9e9", "#e9e9e9", wu_orange, wu_blue, wu_green, wu_blue, "#c9d6e6", "#e9e9e9", "#e9e9e9"),
+    col   = c("grey15", "grey15", "white", "white", "white", "white", "grey15", "grey15", "grey15")
+  )
+  x0 <- 0.45; x1 <- 3.75; xd <- 8.7                      # block column from x0 to x1; diagram column at xd
+  ar <- arrow(length = unit(0.2, "cm"), type = "closed")
+  nodes <- data.frame(x = xd, y = y_row[3:6], lab = c("W", "X", "M", "Y"), fill = c(wu_orange, wu_blue, wu_green, wu_blue))
+  p <- ggplot(blocks) +
+    # before / after shading and the randomizer
+    annotate("rect", xmin = 0, xmax = 10, ymin = y_rand, ymax = 10.95, fill = "#fdf3e1", color = NA) +
+    annotate("rect", xmin = 0, xmax = 10, ymin = -0.35, ymax = y_rand, fill = "#eef3f8", color = NA) +
+    annotate("segment", x = 0, xend = 10, y = y_rand, yend = y_rand, color = wu_red, linewidth = 0.9, linetype = "dashed") +
+    annotate("label", x = (x0 + x1) / 2, y = y_rand, label = "RANDOMIZER", color = "white", fill = wu_red, fontface = "bold",
+             size = pt(base_size * 0.95), label.r = unit(0.15, "lines")) +
+    annotate("text", x = x0, y = 10.45, label = "BEFORE the manipulation: cannot be affected by it", color = "#8a5a00",
+             fontface = "bold", size = pt(base_size), hjust = 0) +
+    annotate("text", x = x0, y = 6.17, label = "AFTER the manipulation: can be affected by it", color = wu_dark,
+             fontface = "bold", size = pt(base_size), hjust = 0) +
+    # time runs from top to bottom
+    annotate("segment", x = 0.2, xend = 0.2, y = 9.98, yend = -0.12, arrow = ar, color = "grey45", linewidth = 0.6) +
+    # the blocks of the questionnaire
+    geom_rect(aes(xmin = x0, xmax = x1, ymin = y - 0.38, ymax = y + 0.38, fill = fill), color = "white") +
+    geom_text(aes(x = x0 + 0.16, y = y, label = label, color = col), fontface = "bold", size = pt(base_size), hjust = 0) +
+    # the causal diagram, unfolded along the questionnaire
+    annotate("segment", x = xd, xend = xd, y = y_row[4] - 0.34, yend = y_row[5] + 0.34, arrow = ar, color = wu_grey, linewidth = 0.8) +
+    annotate("segment", x = xd, xend = xd, y = y_row[5] - 0.34, yend = y_row[6] + 0.34, arrow = ar, color = wu_grey, linewidth = 0.8) +
+    annotate("curve", x = xd + 0.27, xend = xd + 0.27, y = y_row[4] - 0.12, yend = y_row[6] + 0.12, curvature = -0.75, arrow = ar,
+             color = wu_grey, linewidth = 0.8) +
+    annotate("curve", x = xd + 0.29, xend = xd + 0.74, y = y_row[3] - 0.05, yend = y_row[5] + 0.22, curvature = -0.3, arrow = ar,
+             color = wu_orange, linewidth = 0.8, linetype = "dashed") +
+    geom_point(data = nodes, aes(x, y, fill = fill), shape = 21, size = base_size * 0.74, color = "white", stroke = 1) +
+    geom_text(data = nodes, aes(x, y, label = lab), color = "white", fontface = "bold", size = pt(base_size * 1.12)) +
+    scale_fill_identity() + scale_color_identity() +
+    coord_cartesian(xlim = c(0, 10), ylim = c(-0.35, 10.95), expand = FALSE, clip = "off") +
+    theme_void()
+  if (example) p <- p + geom_text(aes(x = x1 + 0.25, y = y, label = ex), color = "grey25", size = pt(base_size * 0.95),
+                                  hjust = 0, lineheight = 0.95)
   p
 }
 
@@ -291,7 +346,7 @@ fig_wtp_by_condition <- function(d = clean_coffee(), base_size = 13) {
     summarise(n = n(), mean = mean(wtp), se = sd(wtp) / sqrt(n()), .groups = "drop") |>
     mutate(lo = mean - qt(0.975, n - 1) * se, hi = mean + qt(0.975, n - 1) * se,
            lab = paste0(condition, "\n(n = ", n, ")"))
-  d <- d |> left_join(m |> select(condition, lab), by = "condition")
+  d <- d |> left_join(m |> dplyr::select(condition, lab), by = "condition")
   top <- max(d$wtp) + 0.9
   ggplot(d, aes(lab, wtp)) +
     geom_boxplot(width = 0.5, outlier.shape = NA, color = "grey45", fill = "grey96") +
@@ -470,6 +525,24 @@ fig_item_vs_rest <- function(d, base_size = 12, items = c("glow_1", "glow_2", "g
     scale_y_continuous(breaks = 1:7, limits = c(0.7, 7.3)) +
     labs(x = xlab, y = ylab) +
     theme_course(base_size)
+}
+
+# The mediation analysis of the coffee study with the mediation package: the same models,
+# the same seed and the same number of bootstrap samples as in Step 7 of the page and in
+# the R script, so that the page and the decks report identical numbers. mediation::mediate()
+# is called without attaching the package (attaching it masks dplyr::select()).
+coffee_mediation <- function(d = clean_coffee(), mediator = "warm_glow", sims = 1000, seed = 1) {
+  d$mediator_ <- d[[mediator]]
+  model_m <- lm(mediator_ ~ seal + concern, data = d)
+  model_y <- lm(wtp ~ seal + mediator_ + concern, data = d)
+  set.seed(seed)
+  med <- suppressMessages(mediation::mediate(model_m, model_y, treat = "seal", mediator = "mediator_",
+                                             boot = TRUE, sims = sims))
+  list(a = unname(coef(model_m)["seal"]), b = unname(coef(model_y)["mediator_"]),
+       indirect = med$d0, indirect_ci = unname(med$d0.ci), indirect_p = med$d0.p,
+       direct = med$z0, direct_ci = unname(med$z0.ci), direct_p = med$z0.p,
+       total = med$tau.coef, total_ci = unname(med$tau.ci), total_p = med$tau.p,
+       share = med$n0, share_ci = unname(med$n0.ci), sims = sims, n = med$nobs, mediate = med)
 }
 
 # What changes if a construct is measured with one item instead of the scale?

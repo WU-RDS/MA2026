@@ -80,6 +80,7 @@ The [checklist for Coaching I](survey-design.qmd#sec-sd-checklist) on the survey
 **Planned analyses**
 
 - Which test answers your main question (e.g., a *t*-test or regression of the outcome on the condition), how will you test the moderation (interaction term), and how the mediation (the three regressions and the bootstrap of @sec-mech-mediation)?
+- **How many respondents do you need?** Calculate the required sample size for your main comparison with `power.t.test()` (@sec-exp-power): which difference between the two conditions do you expect, how much do the answers to your outcome question vary, and where do these two numbers come from? Compare the result with the about 60 respondents per condition that you can realistically collect. If it asks for many more, change the design — a stronger manipulation, a more precise measure — rather than hoping for the best. [Step 1 of the survey design page](survey-design.qmd#sec-sd-samplesize) shows the calculation for the example study; show yours on a slide.
 - Which charts will you show? Sketch them now — it tells you whether you are measuring the right things.
 - Which responses will you exclude, and by which rules (e.g., unfinished questionnaires, a failed attention check, speeders)? Write the rules down now. They must not depend on a respondent's answers to the manipulation check or to the outcome question; an impossible value — a willingness to pay of 85 euros for a pack of coffee — is a matter of data cleaning ([Step 7](survey-design.qmd#sec-sd-analyze)).
 

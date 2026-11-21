@@ -71,17 +71,17 @@ em  <- as.data.frame(summary(emtrends(m2, ~ concern, var = "seal", at = list(con
 b3  <- coef(summary(m2))["seal:concern", ]; ci3 <- confint(m2)["seal:concern", ]
 
 # --- H3 -------------------------------------------------------------------------------------------
-mm <- lm(warm_glow ~ condition + concern, data = d)               # path a
-my <- lm(wtp ~ condition + warm_glow + concern, data = d)         # paths b and c'
-a  <- unname(coef(mm)["conditionSeal"]); b <- unname(coef(my)["warm_glow"])
-ind <- a * b; dir <- unname(coef(my)["conditionSeal"]); ci_dir <- confint(my)["conditionSeal", ]
-set.seed(1)
-boot <- replicate(2000, {
-  db <- d[sample(nrow(d), replace = TRUE), ]
-  coef(lm(warm_glow ~ condition + concern, data = db))["conditionSeal"] *
-    coef(lm(wtp ~ condition + warm_glow + concern, data = db))["warm_glow"]
-})
-bci <- quantile(boot, c(0.025, 0.975))
+mm <- lm(warm_glow ~ seal + concern, data = d)                    # path a
+my <- lm(wtp ~ seal + warm_glow + concern, data = d)              # paths b and c'
+a  <- unname(coef(mm)["seal"]); b <- unname(coef(my)["warm_glow"])
+# indirect and direct effect with bootstrap intervals from mediation::mediate(), exactly as in
+# Step 7 of the survey design page: treatment seal (0/1), set.seed(1), 1,000 bootstrap samples
+med <- coffee_mediation(d)
+ind <- med$indirect; bci <- med$indirect_ci; dir <- med$direct; ci_dir <- med$direct_ci
+tot <- med$total; ci_tot <- med$total_ci; share <- med$share; ci_share <- med$share_ci
+
+# --- the sample size planned before the data collection ------------------------------------------
+n_plan <- ceiling(power.t.test(delta = 1, sd = 2, sig.level = 0.05, power = 0.80)$n)
 
 # --- robustness (appendix) ---------------------------------------------------------------------
 wx <- wilcox.test(wtp ~ condition, data = d)
@@ -140,7 +140,7 @@ fig_study_diagram(base_size = 13)
 :::
 
 ::: keybox
-The hypotheses, the main analysis, and the exclusion rules were written down before the first response came in.
+The hypotheses, the main analysis, the sample size, and the exclusion rules were written down before the first response came in.
 :::
 
 ## The design: one product page, without or with the seal {.midsize}
@@ -183,8 +183,9 @@ The hypotheses, the main analysis, and the exclusion rules were written down bef
 ::: columns
 ::: {.column width="50%"}
 ::: {style="padding-right: 1.2em;"}
+-   **Planned:** `r n_plan` per condition, to detect 1 euro (*d*&nbsp;=&nbsp;0.5) with 80% power · **reached:** `r bal$n[1]` and `r bal$n[2]`
 -   **Who:** friends, family, and fellow students, `r month.name[as.integer(format(dates[1], "%m"))]` `r as.integer(format(dates[1], "%d"))` to `r as.integer(format(dates[2], "%d"))`, one anonymous link
--   **`r n_rec` recorded responses → `r nrow(d)` in the analysis.** Four rules fixed in advance removed `r n_prev` previews, `r n_unf` unfinished questionnaires, `r n_att` failed attention checks, and `r n_spd` speeders; `r n_imp` respondent entered an impossible value (85 euros)
+-   **`r n_rec` recorded responses → `r nrow(d)` in the analysis.** Four rules fixed in advance removed `r n_prev` previews, `r n_unf` unfinished questionnaires, `r n_att` failed attention checks, and `r n_spd` speeders; `r n_imp` impossible value (85 euros)
 -   Age `r min(d$age)` to `r max(d$age)` (median `r median(d$age)`) · `r sum(d$gender == "female")` women, `r sum(d$gender == "male")` men, `r sum(!d$gender %in% c("female", "male"))` other or not stated · `r f1(mean(d$cups))` cups of coffee per day
 :::
 :::
@@ -265,7 +266,7 @@ tibble(`Environmental concern` = c("3 (low)", "4.5 (middle)", "6 (high)"),
 **In line with H2, but not established:** the effect grows by β~3~ = `r f2(b3[1])` euros per scale point, 95% CI `r ci(ci3[1], ci3[2])`, `r pe(b3[4])`. With `r nrow(d)` respondents, we cannot rule out that the seal works equally well for everyone.
 :::
 
-## Why? About `r round(100 * ind / (ind + dir))`% of the effect runs through the warm glow {.midsize}
+## Why? About `r round(100 * share)`% of the effect runs through the warm glow {.midsize}
 
 ::: columns
 ::: {.column width="52%"}
@@ -287,7 +288,7 @@ $$\text{WTP}_i = \beta_0 + c'\,\text{Seal}_i + b\,\text{Glow}_i + \beta_3\,\text
 ::: {.column width="48%"}
 -   The seal raises the anticipated warm glow by **`r f2(a)` scale points** (path *a*)
 -   One point more warm glow goes with **`r f2(b)` euros** more willingness to pay (path *b*)
--   **Indirect effect *a* × *b* = `r f2(ind)` euros**, bootstrap 95% CI `r ci(bci[1], bci[2])` — about `r round(100 * ind / (ind + dir))`% of the total effect of `r f2(ind + dir)` euros
+-   **Indirect effect *a* × *b* = `r f2(ind)` euros**, bootstrap 95% CI `r ci(bci[1], bci[2])` — about `r round(100 * share)`% of the total effect of `r f2(tot)` euros
 -   Direct effect: `r f2(dir)` euros, 95% CI `r ci(ci_dir[1], ci_dir[2])`
 
 ::: keybox
@@ -438,7 +439,7 @@ reg_table(my, c("Intercept", "Seal&nbsp;(*c′*)", "Warm&nbsp;glow&nbsp;(*b*)", 
 :::
 
 ::: keybox
-Indirect effect *a* × *b* = `r f2(a)` × `r f2(b)` = **`r f2(ind)` euros**; percentile bootstrap with 2,000 resamples: 95% CI `r ci(bci[1], bci[2])`. Total effect = indirect + direct = `r f2(ind + dir)` euros.
+**Mediation analysis with `mediate()`** (R package *mediation*, Tingley et al. 2014; percentile bootstrap, 1,000 resamples): indirect effect *a* × *b* = `r f2(a)` × `r f2(b)` = **`r f2(ind)` euros**, 95% CI `r ci(bci[1], bci[2])` · direct effect `r f2(dir)` `r ci(ci_dir[1], ci_dir[2])` · total effect `r f2(tot)` `r ci(ci_tot[1], ci_tot[2])` · share mediated `r f2(share)` `r ci(ci_share[1], ci_share[2])`. The share is a ratio of two estimates and therefore imprecise; the intervals of the two regression tables are not bootstrapped and differ slightly.
 :::
 
 ## A5 · Is the main result robust? {.midsize}
@@ -473,6 +474,7 @@ Twelve questions in Qualtrics. The randomizer contains two groups; each stores t
 -   Dunlap, R. E., Van Liere, K. D., Mertig, A. G., & Jones, R. E. (2000). Measuring endorsement of the New Ecological Paradigm: A revised NEP scale. *Journal of Social Issues, 56*(3), 425–442.
 -   Hartmann, P., & Apaolaza-Ibáñez, V. (2012). Consumer attitude and purchase intention toward green energy brands: The roles of psychological benefits and environmental concern. *Journal of Business Research, 65*(9), 1254–1263.
 -   Sörqvist, P., Hedblom, D., Holmgren, M., Haga, A., Langeborg, L., Nöstl, A., & Kågström, J. (2013). Who needs cream and sugar when there is eco-labeling? Taste and willingness to pay for "eco-friendly" coffee. *PLoS ONE, 8*(12), e80719.
+-   Tingley, D., Yamamoto, T., Hirose, K., Keele, L., & Imai, K. (2014). mediation: R package for causal mediation analysis. *Journal of Statistical Software, 59*(5), 1–38.
 
 ## About this example {.smaller}
 

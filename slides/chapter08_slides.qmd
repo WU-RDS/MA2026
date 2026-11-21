@@ -204,7 +204,8 @@ Each mechanism is a different managerial story, and a study of this size can mea
 | **Moderator (W)** | Environmental concern, 3 items, **before** the stimulus — expected: *larger* effect with higher concern |
 | **Mediator (M)** | Anticipated warm glow, 3 items, **after** the stimulus |
 | **Hypotheses** | H1: WTP higher with the seal · H2: difference increases with concern · H3: mediated by warm glow |
-| **Analyses, exclusions** | *t*-test and `lm()` · interaction model · mediation with bootstrap · previews, unfinished, failed attention check, speeders |
+| **Sample size** | Expected: +1 euro at a standard deviation of 2 euros → `power.t.test()`: **64 per condition** for 80% power |
+| **Analyses, exclusions** | *t*-test and `lm()` · interaction model · mediation with `mediate()` · previews, unfinished, failed attention check, speeders |
 
 ::: keybox
 Use the **starter paper as a quarry** (manipulation, scales) · state the **direction** of the moderation · fix hypotheses, main analysis, and exclusion rules **before you see data**.
@@ -567,8 +568,8 @@ Jarvis, MacKenzie & Podsakoff (2003), *JCR*; Diamantopoulos & Winklhofer (2001),
 ## Cronbach's alpha: the reliability of a reflective scale {.midsize}
 
 ```{r alpha-calc}
-env_items  <- select(coffee, env_1, env_2r, env_3)
-glow_items <- select(coffee, glow_1, glow_2, glow_3)
+env_items  <- dplyr::select(coffee, env_1, env_2r, env_3)
+glow_items <- dplyr::select(coffee, glow_1, glow_2, glow_3)
 mean_r <- function(x) { r <- cor(x); mean(r[lower.tri(r)]) }
 ```
 
@@ -758,7 +759,7 @@ The stimulus gets a page of its own. The back button stays off.
 
 ::: columns
 ::: {.column width="56%"}
-![](../img/ch08/qualtrics_blocks.png){width="100%"}
+![](../img/ch08/qualtrics_blocks.png){width="25%"}
 :::
 
 ::: {.column width="44%"}
@@ -837,7 +838,7 @@ fig_survey_flow(base_size = 14, label_x = 2.6)
 
 ## The randomizer in Qualtrics {.midsize .nostretch}
 
-![](../img/ch08/qualtrics_randomizer.png){width="66%" fig-align="center"}
+![](../img/ch08/qualtrics_randomizer.png){width="25%" fig-align="center"}
 
 *Survey* tab → *Survey flow* → *Add Below* → *Randomizer* · *Add a New Element Here* → *Group* · *Embedded Data*: *Create New Field or Choose From Dropdown* → *Set A Value Now*
 
@@ -1093,7 +1094,7 @@ d <- d |>
   mutate(wtp_text = wtp,                                   # keep what was typed
          wtp = wtp_text |> str_extract("[0-9]+([.,][0-9]+)?") |>
            str_replace(",", ".") |> as.numeric())
-d |> filter(wtp > 30) |> select(wtp_text, wtp) |> as.data.frame()
+d |> filter(wtp > 30) |> dplyr::select(wtp_text, wtp) |> as.data.frame()
 ```
 
 ::: keybox
@@ -1114,8 +1115,8 @@ d <- d |>
 ::: {.column width="58%"}
 ```{r scales, echo=TRUE}
 d <- d |> mutate(env_2r = 8 - env_2)       # reverse the second item
-d |> select(env_1, env_2r, env_3) |> cor() |> round(2)
-psych::alpha(select(d, env_1, env_2r, env_3))$total$raw_alpha
+d |> dplyr::select(env_1, env_2r, env_3) |> cor() |> round(2)
+psych::alpha(dplyr::select(d, env_1, env_2r, env_3))$total$raw_alpha
 ```
 
 ```{r scales2, echo=TRUE}
@@ -1127,12 +1128,12 @@ d <- d |>
 
 ::: {.column width="42%"}
 -   A reversed item on a 1–7 scale: **8 minus the answer** ("… has been greatly exaggerated" runs the other way)
--   **Cronbach's alpha** (Step 3) for each reflective scale: concern `r f2(cronbach_alpha(select(d, env_1, env_2r, env_3)))`, warm glow `r f2(cronbach_alpha(select(d, glow_1, glow_2, glow_3)))` — both above 0.7
+-   **Cronbach's alpha** (Step 3) for each reflective scale: concern `r f2(cronbach_alpha(dplyr::select(d, env_1, env_2r, env_3)))`, warm glow `r f2(cronbach_alpha(dplyr::select(d, glow_1, glow_2, glow_3)))` — both above 0.7
 -   The **scale** is the mean of its items
 -   Analysis sample: ***n* = `r nrow(d)`**
 
 ::: keybox
-Forgot to reverse the second item? Then alpha is **`r f2(cronbach_alpha(select(d, env_1, env_2, env_3)))`** instead of `r f2(cronbach_alpha(select(d, env_1, env_2r, env_3)))` — the check finds the mistake for you.
+Forgot to reverse the second item? Then alpha is **`r f2(cronbach_alpha(dplyr::select(d, env_1, env_2, env_3)))`** instead of `r f2(cronbach_alpha(dplyr::select(d, env_1, env_2r, env_3)))` — the check finds the mistake for you.
 :::
 :::
 :::
@@ -1234,18 +1235,9 @@ Possible only because the moderator was measured **before** the stimulus, with a
 ## H3: why? {.midsize}
 
 ```{r h3-calc}
-model_m <- lm(warm_glow ~ condition + concern, data = d)
-model_y <- lm(wtp ~ condition + warm_glow + concern, data = d)
-a <- coef(model_m)["conditionSeal"]; b <- coef(model_y)["warm_glow"]
-ind <- unname(a * b); dir <- unname(coef(model_y)["conditionSeal"])
-set.seed(1)
-boot_indirect <- replicate(2000, {
-  d_boot <- d[sample(nrow(d), replace = TRUE), ]
-  a_boot <- coef(lm(warm_glow ~ condition + concern, data = d_boot))["conditionSeal"]
-  b_boot <- coef(lm(wtp ~ condition + warm_glow + concern, data = d_boot))["warm_glow"]
-  a_boot * b_boot
-})
-bci <- quantile(boot_indirect, c(0.025, 0.975))
+# mediation::mediate() as on the page and in the script: seal as 0/1 treatment, set.seed(1), 1,000 bootstrap samples
+med <- coffee_mediation(d)
+ind <- med$indirect; dir <- med$direct; bci <- med$indirect_ci
 ```
 
 ::: columns
@@ -1255,14 +1247,21 @@ fig_coffee_mediation(d, base_size = 12)
 ```
 
 ```{r h3-code, echo=TRUE, eval=FALSE}
-model_m <- lm(warm_glow ~ condition + concern, data = d)
-model_y <- lm(wtp ~ condition + warm_glow + concern, data = d)
+model_m <- lm(warm_glow ~ seal + concern, data = d)
+model_y <- lm(wtp ~ seal + warm_glow + concern, data = d)
+med <- mediate(model_m, model_y, treat = "seal",
+               mediator = "warm_glow", boot = TRUE, sims = 1000)
+summary(med)   # ACME: indirect effect, ADE: direct effect
 ```
+
+::: {style="font-size: 0.74em;"}
+`library(mediation)` brings a second `select()` (from MASS) — from then on, write **`dplyr::select()`**, as the script does.
+:::
 :::
 
 ::: {.column width="48%"}
 ::: keybox
-Of the total effect of `r f2(ind + dir)` euros, **`r f2(ind)` euros** (bootstrap 95% CI [`r f2(bci[1])`; `r f2(bci[2])`], about `r round(100 * ind / (ind + dir))`%) ran through the anticipated warm glow; the direct effect of `r f2(dir)` euros cannot be distinguished from zero.
+Of the total effect of `r f2(med$total)` euros, **`r f2(ind)` euros** (bootstrap 95% CI [`r f2(bci[1])`; `r f2(bci[2])`], about `r round(100 * med$share)`%) ran through the anticipated warm glow; the direct effect of `r f2(dir)` euros cannot be distinguished from zero.
 :::
 
 -   `concern` is a control in both models: measured before the stimulus, and a likely confounder of warm glow and willingness to pay
@@ -1307,6 +1306,7 @@ At the end: two tables present tasks 2 and 3.
 ::: columns
 ::: {.column width="50%"}
 -   **Blueprint:** one decision, two conditions, H1–H3 with the direction of the moderation
+-   **Sample size:** the difference you expect for H1 → `power.t.test()`: feasible with about 60 per condition?
 -   **Manipulation:** exactly one difference, unmistakable; the check asks about what was varied
 -   **Outcome:** euros, 0–100, or a multi-item scale — not a single yes/no question
 -   **Moderator and mediator:** reflective scales with three items each, from a cited source, seven points
@@ -1344,14 +1344,14 @@ At the end: two tables present tasks 2 and 3.
 
 -   Group A: Mon, Nov 30, 13:00–17:00 · upload by Sun, Nov 29
 -   Group B: Thu, Dec 3, 14:00–18:00 · upload by Wed, Dec 2
--   About 10 minutes per group: blueprint, stimuli, questionnaire structure and survey flow, measures, planned analyses
+-   About 10 minutes per group: blueprint with the sample size calculation, stimuli, questionnaire structure and survey flow, measures, planned analyses
 
 **Final exam:** Tue, Dec 15, 10:00–12:00, D5.0.001
 :::
 
 ::: {.column width="45%"}
 ::: keybox
-**This week in your group:** finish the blueprint → build the two stimuli → collect the scales from your starter paper → build blocks and the randomizer → test with previews and test responses.
+**This week in your group:** finish the blueprint and calculate the sample size → build the two stimuli → collect the scales from your starter paper → build blocks and the randomizer → test with previews and test responses.
 :::
 
 Website: *Group project → Survey design* — all seven steps, the R script, and the example study to download: the **survey** (to import into Qualtrics), the **raw data**, and the **final presentation**.
