@@ -342,6 +342,7 @@ window.Quarto = {
   <li><a href="#the-causal-diagram-of-your-study" id="toc-the-causal-diagram-of-your-study" class="nav-link" data-scroll-target="#the-causal-diagram-of-your-study">The causal diagram of your study</a></li>
   <li><a href="#sec-sd-mechanisms" id="toc-sec-sd-mechanisms" class="nav-link" data-scroll-target="#sec-sd-mechanisms">The mediator is a choice — and it decides what the manager learns</a></li>
   <li><a href="#the-blueprint" id="toc-the-blueprint" class="nav-link" data-scroll-target="#the-blueprint">The blueprint</a></li>
+  <li><a href="#sec-sd-samplesize" id="toc-sec-sd-samplesize" class="nav-link" data-scroll-target="#sec-sd-samplesize">How many respondents do you need?</a></li>
   </ul></li>
   <li><a href="#sec-sd-manipulate" id="toc-sec-sd-manipulate" class="nav-link" data-scroll-target="#sec-sd-manipulate">Step 2 · Manipulate: two versions, one difference</a>
   <ul class="collapse">
@@ -399,7 +400,7 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./group-project.html">Group project</a></li><li class="breadcrumb-item"><a href="./survey-design.html">Survey design</a></li></ol></nav>
 <div class="quarto-title">
@@ -456,8 +457,8 @@ Table&nbsp;1: Seven steps from the question to the result
 <tbody>
 <tr class="odd">
 <td style="text-align: left;"><span style="white-space: nowrap;"><a href="#sec-sd-plan">1&nbsp;·&nbsp;Plan</a></span></td>
-<td style="text-align: left;">The blueprint: question, hypotheses, and the role of every variable</td>
-<td style="text-align: left;"><a href="01-foundations.html#sec-design" class="quarto-xref"><span>From business problem to research design</span></a>, <a href="06-mechanisms.html#sec-mech-project" class="quarto-xref"><span>Moderation and mediation in your group project</span></a></td>
+<td style="text-align: left;">The blueprint: question, hypotheses, the role of every variable, and the sample size</td>
+<td style="text-align: left;"><a href="01-foundations.html#sec-design" class="quarto-xref"><span>From business problem to research design</span></a>, <a href="04-experiments.html#sec-exp-power" class="quarto-xref"><span>How many users do we need?</span></a>, <a href="06-mechanisms.html#sec-mech-project" class="quarto-xref"><span>Moderation and mediation in your group project</span></a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><span style="white-space: nowrap;"><a href="#sec-sd-manipulate">2&nbsp;·&nbsp;Manipulate</a></span></td>
@@ -498,7 +499,7 @@ Table&nbsp;1: Seven steps from the question to the result
 <style>#tbl-sd-steps a.quarto-xref { white-space: normal; }</style>
 <p>After working through this page you will be able to:</p>
 <ul>
-<li>Translate a managerial question into a <strong>blueprint</strong> with two conditions, an outcome, a moderator, a mediator, and hypotheses stated in advance</li>
+<li>Translate a managerial question into a <strong>blueprint</strong> with two conditions, an outcome, a moderator, a mediator, hypotheses stated in advance, and a <strong>sample size</strong> that can detect the effect you expect</li>
 <li>Design a <strong>manipulation</strong> in which the two versions differ in exactly one respect — and check whether respondents noticed it</li>
 <li>Choose <strong>measures</strong> with enough variation and reliability: a dependent variable in euros or on a wide scale, single questions for facts, and reflective multi-item scales from the literature for abstract constructs — and assess such a scale with Cronbach’s alpha</li>
 <li>Put the blocks of a questionnaire into the <strong>order</strong> that the causal logic requires</li>
@@ -657,10 +658,6 @@ Table&nbsp;4: The blueprint of the coffee study
 </figcaption>
 <div aria-describedby="tbl-sd-blueprint-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped caption-top table">
-<colgroup>
-<col style="width: 21%">
-<col style="width: 78%">
-</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Element</th>
@@ -706,11 +703,15 @@ Table&nbsp;4: The blueprint of the coffee study
 </tr>
 <tr class="even">
 <td style="text-align: left;"><strong>Planned analyses</strong></td>
-<td style="text-align: left;">H1: <em>t</em>-test and <code>lm(wtp ~ condition)</code>; H2: interaction model and the effect at low, medium, and high concern; H3: the two mediation regressions and a bootstrap of the indirect effect</td>
+<td style="text-align: left;">H1: <em>t</em>-test and <code>lm(wtp ~ condition)</code>; H2: interaction model and the effect at low, medium, and high concern; H3: the two mediation regressions and the indirect effect with a bootstrap interval (<code>mediate()</code>)</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><strong>Sample and exclusions</strong></td>
-<td style="text-align: left;">About 120 completed responses; excluded: previews, unfinished responses, failed attention check, speeders (faster than one third of the median duration)</td>
+<td style="text-align: left;"><strong>Sample size</strong></td>
+<td style="text-align: left;">Planned for a difference of 1 euro at a standard deviation of 2 euros: 64 respondents per condition for 80% power (<a href="#sec-sd-samplesize">calculation below</a>)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Exclusions</strong></td>
+<td style="text-align: left;">Previews, unfinished responses, failed attention check, speeders (faster than one third of the median duration)</td>
 </tr>
 </tbody>
 </table>
@@ -723,6 +724,85 @@ Table&nbsp;4: The blueprint of the coffee study
 <li><strong>State the direction.</strong> “Environmental concern moderates the effect” is not a hypothesis; “the effect is larger for respondents with higher environmental concern, because a seal means more to people who care about what it certifies” is one — a similar pattern has been found in a tasting study with “eco-friendly” coffee <span class="citation" data-cites="sorqvist2013">(<a href="#ref-sorqvist2013" role="doc-biblioref">Sörqvist et al. 2013</a>)</span>, and you have seen it for the shipping label in the coding block of <a href="06-mechanisms.html" class="quarto-xref"><span>6&nbsp; Mechanisms &amp; Heterogeneity</span></a>. If you cannot say in which direction a moderator works and why, choose a different one.</li>
 <li><strong>Fix the plan before you see data.</strong> Hypotheses, the main analysis, and the exclusion rules are written down now. Everything you discover later is welcome — as an <em>exploratory</em> finding, labeled as such (<a href="04-experiments.html#sec-exp-nhst" class="quarto-xref"><span>Using p-values responsibly</span></a>, <a href="06-mechanisms.html#sec-mech-pitfalls" class="quarto-xref"><span>The pitfalls of looking for heterogeneity</span></a>).</li>
 </ul>
+</section>
+<section id="sec-sd-samplesize" class="level3">
+<h3 class="anchored" data-anchor-id="sec-sd-samplesize">How many respondents do you need?</h3>
+<p>One row of the blueprint is a calculation, and you know it from <a href="04-experiments.html#sec-exp-power" class="quarto-xref"><span>How many users do we need?</span></a>: the number of respondents follows from the difference that the study should be able to detect. It needs two numbers.</p>
+<ul>
+<li><strong>The difference between the two conditions that you expect</strong>, in the unit of your outcome. Ask which difference would still matter for the decision, or take the evidence of earlier studies — with caution, because published effects tend to be overestimated (<a href="04-experiments.html#sec-exp-nhst" class="quarto-xref"><span>Using p-values responsibly</span></a>). The coffee team plans for <strong>1 euro</strong>: a smaller premium would hardly justify a certification, and the storytelling study, with its +1.66 euros, suggests that a difference of this size is realistic.</li>
+<li><strong>The standard deviation of the outcome</strong>: how much do respondents differ from each other in their answers? In the storytelling study, the willingness to pay for the same pack of coffee varied with a standard deviation of about <strong>2 euros</strong>. If you have no earlier data, ask ten people your outcome question. For a multi-item scale with seven points, a standard deviation between 1 and 1.5 scale points is typical (in the coffee study: 1.1 for the warm glow scale, 1.3 for environmental concern).</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">power.t.test</span>(<span class="at">delta =</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="dv">2</span>, <span class="at">sig.level =</span> <span class="fl">0.05</span>, <span class="at">power =</span> <span class="fl">0.80</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     Two-sample t test power calculation 
+
+              n = 63.77
+          delta = 1
+             sd = 2
+      sig.level = 0.05
+          power = 0.8
+    alternative = two.sided
+
+NOTE: n is number in *each* group</code></pre>
+</div>
+</div>
+<p>The team needs <strong>64 respondents per condition</strong>, 128 in total, to detect a difference of 1 euro with a probability of 80%. This is a little more than the about 120 respondents of a project in this course — feasible, with some extra effort in recruiting. The same function answers the reverse question: which difference can a study with 60 respondents per condition detect?</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">power.t.test</span>(<span class="at">n =</span> <span class="dv">60</span>, <span class="at">sd =</span> <span class="dv">2</span>, <span class="at">sig.level =</span> <span class="fl">0.05</span>, <span class="at">power =</span> <span class="fl">0.80</span>)<span class="sc">$</span>delta</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.031</code></pre>
+</div>
+</div>
+<p>About 1 euro — half a standard deviation (<em>d</em> = 0.5). <a href="#tbl-sd-samplesize" class="quarto-xref">Table&nbsp;<span>5</span></a> shows how quickly the required sample grows when the expected effect is smaller.</p>
+<div class="cell">
+<div id="tbl-sd-samplesize" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sd-samplesize-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5: Respondents per condition that a comparison of two groups needs to detect an effect with 80% power (5% significance level, two-sided). The standardized effect <em>d</em> is the expected difference divided by the standard deviation of the outcome.
+</figcaption>
+<div aria-describedby="tbl-sd-samplesize-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Expected effect (<em>d</em>)</th>
+<th style="text-align: right;">0.2</th>
+<th style="text-align: right;">0.3</th>
+<th style="text-align: right;">0.4</th>
+<th style="text-align: right;">0.5</th>
+<th style="text-align: right;">0.6</th>
+<th style="text-align: right;">0.8</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Per condition</strong></td>
+<td style="text-align: right;">394</td>
+<td style="text-align: right;">176</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">26</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>In total</strong></td>
+<td style="text-align: right;">788</td>
+<td style="text-align: right;">352</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: right;">52</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p><strong>Do this calculation for your own project and bring it to Coaching I.</strong> If it asks for many more respondents than your group can recruit, do not hope for the best — change the design: make the manipulation stronger (<a href="#sec-sd-manipulate">Step 2</a>), measure the outcome more precisely (<a href="#sec-sd-measure">Step 3</a>: <a href="#fig-sd-measure-power" class="quarto-xref">Figure&nbsp;<span>4</span></a> shows how much the measure matters), and measure a control variable before the stimulus that explains a part of the outcome (<a href="06-mechanisms.html#sec-mech-motivation" class="quarto-xref"><span>Motivation: the average effect hides the interesting part</span></a>). And keep in mind what the calculation covers: it refers to H1. The interaction of H2 is estimated far less precisely than a difference between two groups (<a href="06-mechanisms.html#sec-mech-project" class="quarto-xref"><span>Moderation and mediation in your group project</span></a>) — plan the moderation as a hypothesis whose direction you can examine, not as a result you can count on.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Your turn (15 min, in your project group)">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -781,7 +861,7 @@ Figure&nbsp;2: The two versions of the stimulus. Outside the seal, the two pages
 <section id="what-makes-a-good-manipulation" class="level3">
 <h3 class="anchored" data-anchor-id="what-makes-a-good-manipulation">What makes a good manipulation</h3>
 <p><strong>One difference.</strong> Describe the difference between your two versions in one short sentence: <em>the product page shows a seal for certified sustainable farming — or it does not.</em> If you need the word “and”, the manipulation is confounded. The cleanest manipulations add, remove, or exchange <strong>one element</strong> of an otherwise identical stimulus: a seal, a label, a disclosure, a claim, the format of a number. Build one version, copy it, and change this one element. What would go wrong otherwise: a seal <em>and</em> a more attractive photo (then the “seal effect” may be a photo effect), a seal <em>and</em> an additional paragraph about the farm’s environmental program (an effect of length and information), or a different coffee in each version (a product effect).</p>
-<p><strong>Strong enough to be seen.</strong> With 60 respondents per condition, you can only detect medium-to-large effects — a standardized difference of about <em>d</em> = 0.5 (<a href="04-experiments.html#sec-exp-power" class="quarto-xref"><span>How many users do we need?</span></a>). This is the price of a clean manipulation: a single element is easily overlooked. A small logo in a corner of the page will most likely end in “not significant”, whatever the truth is. Make the one element impossible to miss — the seal of the coffee study is large, sits on the product picture, and says in words what it certifies — and check afterwards whether respondents noticed it.</p>
+<p><strong>Strong enough to be seen.</strong> With 60 respondents per condition, you can only detect medium-to-large effects — a standardized difference of about <em>d</em> = 0.5 (<a href="04-experiments.html#sec-exp-power" class="quarto-xref"><span>How many users do we need?</span></a>; the calculation is in <a href="#sec-sd-samplesize">Step 1</a>). This is the price of a clean manipulation: a single element is easily overlooked. A small logo in a corner of the page will most likely end in “not significant”, whatever the truth is. Make the one element impossible to miss — the seal of the coffee study is large, sits on the product picture, and says in words what it certifies — and check afterwards whether respondents noticed it.</p>
 <p><strong>Realistic.</strong> The stimulus should look like the real thing: a product page, an ad, a social-media post, a package. A slide, a mock-up tool, or an image generator is sufficient to build one — as long as everything except the manipulated element is identical in both versions. A <strong>fictitious brand</strong> — and here also a fictitious seal — keeps respondents from bringing their opinions about a real brand or a real certification into the study; this removes noise, at the price of some realism. If you describe a situation in words (“Imagine you are looking for …”), describe everything a respondent needs to answer the later questions — otherwise each respondent fills the gaps differently.</p>
 <p><strong>One version per respondent.</strong> The project uses a between-subjects design (<a href="01-foundations.html#sec-randomization" class="quarto-xref"><span>Randomization</span></a>): the randomizer shows each respondent exactly one version. Respondents who see both versions compare them, guess what you are after, and answer accordingly.</p>
 <p><strong>On one page, impossible to skip.</strong> Put the stimulus on its own page, before any question about it. In Qualtrics, a <em>Timing</em> question on the same page records how long respondents stay on it and can hold back the “next” button for a few seconds.</p>
@@ -849,11 +929,11 @@ Figure&nbsp;3: The two versions of the storytelling study.
 </section>
 <section id="sec-sd-measure" class="level2">
 <h2 class="anchored" data-anchor-id="sec-sd-measure">Step 3 · Measure: from constructs to questions</h2>
-<p>“Willingness to pay”, “warm glow”, and “environmental concern” are <strong>constructs</strong>: ideas in the heads of researchers. Respondents answer <strong>questions</strong>. Measurement is the translation from one to the other, and it decides whether your analysis can find what your design created. <a href="#tbl-sd-measures" class="quarto-xref">Table&nbsp;<span>5</span></a> is the measurement plan of the coffee study: for each variable of the blueprint the question and its source, the answer format, and the name of the column in the data.</p>
+<p>“Willingness to pay”, “warm glow”, and “environmental concern” are <strong>constructs</strong>: ideas in the heads of researchers. Respondents answer <strong>questions</strong>. Measurement is the translation from one to the other, and it decides whether your analysis can find what your design created. <a href="#tbl-sd-measures" class="quarto-xref">Table&nbsp;<span>6</span></a> is the measurement plan of the coffee study: for each variable of the blueprint the question and its source, the answer format, and the name of the column in the data.</p>
 <div id="tbl-sd-measures" class="striped quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[24,45,17,14]">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sd-measures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5: The measurement plan of the coffee study
+Table&nbsp;6: The measurement plan of the coffee study
 </figcaption>
 <div aria-describedby="tbl-sd-measures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped caption-top table">
@@ -954,11 +1034,11 @@ Figure&nbsp;4: The measure decides what 120 respondents can show. Simulation: 60
 </section>
 <section id="sec-sd-scales" class="level3">
 <h3 class="anchored" data-anchor-id="sec-sd-scales">Scales for the mediator and the moderator</h3>
-<p>Attitudes and perceptions are measured with <strong>itemized rating scales</strong>. Two formats cover almost everything you need. A <strong>Likert scale</strong> asks for the agreement with statements; the coffee study uses it for the mediator and for the moderator (<a href="#tbl-sd-likert" class="quarto-xref">Table&nbsp;<span>6</span></a>, <a href="#tbl-sd-likert-env" class="quarto-xref">Table&nbsp;<span>7</span></a>). A <strong>semantic differential</strong> places the answer between two opposite adjectives; it is the usual format for evaluations of a product, a brand, or an ad (<a href="#tbl-sd-semdiff" class="quarto-xref">Table&nbsp;<span>8</span></a>).</p>
+<p>Attitudes and perceptions are measured with <strong>itemized rating scales</strong>. Two formats cover almost everything you need. A <strong>Likert scale</strong> asks for the agreement with statements; the coffee study uses it for the mediator and for the moderator (<a href="#tbl-sd-likert" class="quarto-xref">Table&nbsp;<span>7</span></a>, <a href="#tbl-sd-likert-env" class="quarto-xref">Table&nbsp;<span>8</span></a>). A <strong>semantic differential</strong> places the answer between two opposite adjectives; it is the usual format for evaluations of a product, a brand, or an ad (<a href="#tbl-sd-semdiff" class="quarto-xref">Table&nbsp;<span>9</span></a>).</p>
 <div id="tbl-sd-likert" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sd-likert-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6: A Likert scale: the mediator of the coffee study, anticipated warm glow (items adapted from <span class="citation" data-cites="hartmann2012">Hartmann and Apaolaza-Ibáñez (<a href="#ref-hartmann2012" role="doc-biblioref">2012</a>)</span>)
+Table&nbsp;7: A Likert scale: the mediator of the coffee study, anticipated warm glow (items adapted from <span class="citation" data-cites="hartmann2012">Hartmann and Apaolaza-Ibáñez (<a href="#ref-hartmann2012" role="doc-biblioref">2012</a>)</span>)
 </figcaption>
 <div aria-describedby="tbl-sd-likert-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -1023,7 +1103,7 @@ Table&nbsp;6: A Likert scale: the mediator of the coffee study, anticipated warm
 <div id="tbl-sd-likert-env" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sd-likert-env-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7: The moderator of the coffee study, environmental concern (three items of the revised NEP scale, <span class="citation" data-cites="dunlap2000">Dunlap et al. (<a href="#ref-dunlap2000" role="doc-biblioref">2000</a>)</span>; the original uses five scale points). The second item is <strong>reverse-scored</strong>: agreement means <em>low</em> concern.
+Table&nbsp;8: The moderator of the coffee study, environmental concern (three items of the revised NEP scale, <span class="citation" data-cites="dunlap2000">Dunlap et al. (<a href="#ref-dunlap2000" role="doc-biblioref">2000</a>)</span>; the original uses five scale points). The second item is <strong>reverse-scored</strong>: agreement means <em>low</em> concern.
 </figcaption>
 <div aria-describedby="tbl-sd-likert-env-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -1088,7 +1168,7 @@ Table&nbsp;7: The moderator of the coffee study, environmental concern (three it
 <div id="tbl-sd-semdiff" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sd-semdiff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;8: A semantic differential: a typical measure of the attitude toward a product (an example of the format; it is not part of the coffee study)
+Table&nbsp;9: A semantic differential: a typical measure of the attitude toward a product (an example of the format; it is not part of the coffee study)
 </figcaption>
 <div aria-describedby="tbl-sd-semdiff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -1188,11 +1268,11 @@ Figure&nbsp;5: Reliability and validity. Each dot is one measurement of the same
 <section id="sec-sd-single-multi" class="level3">
 <h3 class="anchored" data-anchor-id="sec-sd-single-multi">One question or several?</h3>
 <p>A <strong>construct</strong> is an abstract concept — environmental concern, warm glow, satisfaction — that cannot be observed directly; it is <em>latent</em>. What you observe are the answers to <strong>items</strong>: single questions or statements. A <strong>multi-item scale</strong> combines the answers to several items into one score, usually their mean.</p>
-<p>Whether one item is enough depends on what you measure (<a href="#tbl-sd-single-multi" class="quarto-xref">Table&nbsp;<span>9</span></a>). Facts and concrete judgments — age, the number of cups per day, a willingness to pay, “How much do you like this ad?” — are understood in the same way by everybody, and one good question captures them <span class="citation" data-cites="bergkvist2007">(<a href="#ref-bergkvist2007" role="doc-biblioref">Bergkvist and Rossiter 2007</a>)</span>. Abstract constructs have several facets and no single natural wording. Here every single answer contains a good deal of random error, and scales with several items do better under most conditions <span class="citation" data-cites="diamantopoulos2012">(<a href="#ref-diamantopoulos2012" role="doc-biblioref">Diamantopoulos et al. 2012</a>)</span>. How far the use of single items should go is still debated <span class="citation" data-cites="kamakura2015 bergkvist2015">(<a href="#ref-kamakura2015" role="doc-biblioref">Kamakura 2015</a>; <a href="#ref-bergkvist2015" role="doc-biblioref">Bergkvist 2015</a>)</span>. For your project the rule is simple: single questions for facts and concrete judgments, and <strong>three items each</strong> for the mediator and the moderator — a compromise between reliability and length.</p>
+<p>Whether one item is enough depends on what you measure (<a href="#tbl-sd-single-multi" class="quarto-xref">Table&nbsp;<span>10</span></a>). Facts and concrete judgments — age, the number of cups per day, a willingness to pay, “How much do you like this ad?” — are understood in the same way by everybody, and one good question captures them <span class="citation" data-cites="bergkvist2007">(<a href="#ref-bergkvist2007" role="doc-biblioref">Bergkvist and Rossiter 2007</a>)</span>. Abstract constructs have several facets and no single natural wording. Here every single answer contains a good deal of random error, and scales with several items do better under most conditions <span class="citation" data-cites="diamantopoulos2012">(<a href="#ref-diamantopoulos2012" role="doc-biblioref">Diamantopoulos et al. 2012</a>)</span>. How far the use of single items should go is still debated <span class="citation" data-cites="kamakura2015 bergkvist2015">(<a href="#ref-kamakura2015" role="doc-biblioref">Kamakura 2015</a>; <a href="#ref-bergkvist2015" role="doc-biblioref">Bergkvist 2015</a>)</span>. For your project the rule is simple: single questions for facts and concrete judgments, and <strong>three items each</strong> for the mediator and the moderator — a compromise between reliability and length.</p>
 <div id="tbl-sd-single-multi" class="striped quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[20,40,40]">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sd-single-multi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;9: Single-item and multi-item measures
+Table&nbsp;10: Single-item and multi-item measures
 </figcaption>
 <div aria-describedby="tbl-sd-single-multi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped caption-top table">
@@ -1249,12 +1329,12 @@ Figure&nbsp;6: One statement against the other two statements of the same scale.
 </div>
 </div>
 </div>
-<p>The noise has consequences (<a href="#tbl-sd-one-vs-three" class="quarto-xref">Table&nbsp;<span>10</span></a>). Averaging over three statements cancels a part of the random error — the logic by which the mean of many respondents is more precise than a single one (<a href="03-uncertainty.html#sec-unc-se" class="quarto-xref"><span>The standard error</span></a>), applied to questions. With one statement instead of three, the seal seems to change the warm glow less (measured in standard deviations of the answers), warm glow is less closely related to willingness to pay, and the mediation analysis finds an indirect effect of only 0.48 to 0.72 euros instead of 1.03. Nothing about the respondents has changed, only the precision of the measurement. Random error in a variable weakens its relationships with all other variables; in a mediation analysis, an unreliable mediator makes the mechanism look weaker than it is.</p>
+<p>The noise has consequences (<a href="#tbl-sd-one-vs-three" class="quarto-xref">Table&nbsp;<span>11</span></a>). Averaging over three statements cancels a part of the random error — the logic by which the mean of many respondents is more precise than a single one (<a href="03-uncertainty.html#sec-unc-se" class="quarto-xref"><span>The standard error</span></a>), applied to questions. With one statement instead of three, the seal seems to change the warm glow less (measured in standard deviations of the answers), warm glow is less closely related to willingness to pay, and the mediation analysis finds an indirect effect of only 0.48 to 0.72 euros instead of 1.03. Nothing about the respondents has changed, only the precision of the measurement. Random error in a variable weakens its relationships with all other variables; in a mediation analysis, an unreliable mediator makes the mechanism look weaker than it is.</p>
 <div class="cell">
 <div id="tbl-sd-one-vs-three" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sd-one-vs-three-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;10: The same analyses with one statement instead of three. Effect of the seal: standardized difference between the two conditions (Cohen’s <em>d</em>). Indirect effect and share mediated: as in the mediation analysis of Step 7, with environmental concern as a control variable.
+Table&nbsp;11: The same analyses with one statement instead of three. Effect of the seal: standardized difference between the two conditions (Cohen’s <em>d</em>). Indirect effect and share mediated: as in the mediation analysis of Step 7, with environmental concern as a control variable.
 </figcaption>
 <div aria-describedby="tbl-sd-one-vs-three-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1333,7 +1413,7 @@ Figure&nbsp;7: Formative and reflective measurement of the same construct. Forma
 <li>In a <strong>reflective</strong> measurement, the items are effects of the construct. Because buying the coffee promises a respondent a good feeling, she agrees that she can feel good because she helps to protect the environment, that she can feel better because she does not harm it, and that she has the feeling of contributing to the well-being of humanity and nature. The items are interchangeable expressions of the same thing: they must be correlated, and dropping one of them does not change what is measured. Additional items increase the <strong>reliability</strong>. The result is called a <strong>scale</strong>.</li>
 <li>In a <strong>formative</strong> measurement, the items are causes or components of the construct. The daily coffee consumption is made up of the cups at home, at work, and in cafés. The items are not interchangeable and need not be correlated — somebody who drinks all their coffee at work is not measured badly. Dropping an item changes the meaning of the construct. Additional items increase the <strong>validity</strong>, because they cover more of the construct. The result is called an <strong>index</strong>.</li>
 </ul>
-<p><a href="#fig-sd-models-coffee" class="quarto-xref">Figure&nbsp;<span>8</span></a> shows these two examples from the world of the coffee study, and <a href="#tbl-sd-refl-form" class="quarto-xref">Table&nbsp;<span>11</span></a> summarizes how to tell the two kinds apart and what follows from the answer <span class="citation" data-cites="jarvis2003 diamantopoulos2001">(<a href="#ref-jarvis2003" role="doc-biblioref">Jarvis et al. 2003</a>; <a href="#ref-diamantopoulos2001" role="doc-biblioref">Diamantopoulos and Winklhofer 2001</a>)</span>.</p>
+<p><a href="#fig-sd-models-coffee" class="quarto-xref">Figure&nbsp;<span>8</span></a> shows these two examples from the world of the coffee study, and <a href="#tbl-sd-refl-form" class="quarto-xref">Table&nbsp;<span>12</span></a> summarizes how to tell the two kinds apart and what follows from the answer <span class="citation" data-cites="jarvis2003 diamantopoulos2001">(<a href="#ref-jarvis2003" role="doc-biblioref">Jarvis et al. 2003</a>; <a href="#ref-diamantopoulos2001" role="doc-biblioref">Diamantopoulos and Winklhofer 2001</a>)</span>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-sd-models-coffee" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1351,7 +1431,7 @@ Figure&nbsp;8: A formative index and a reflective scale: coffee consumption is m
 <div id="tbl-sd-refl-form" class="striped quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[24,38,38]">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sd-refl-form-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;11: Reflective scales and formative indices
+Table&nbsp;12: Reflective scales and formative indices
 </figcaption>
 <div aria-describedby="tbl-sd-refl-form-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped caption-top table">
@@ -1416,12 +1496,12 @@ Table&nbsp;11: Reflective scales and formative indices
 <p><span class="math display">\[
 \alpha = \frac{k \, \bar{r}}{1 + (k - 1) \, \bar{r}}
 \]</span></p>
-<p>For items that are positively correlated, alpha lies between 0 and 1. It estimates the share of the variance of the scale score that is <em>not</em> random error, and is thus a measure of reliability — more precisely, of the <em>internal consistency</em> of the items. (A negative alpha is a warning sign: an item is coded in the wrong direction.) Two things make it larger (<a href="#tbl-sd-alpha" class="quarto-xref">Table&nbsp;<span>12</span></a>): stronger correlations between the items, and more items.</p>
+<p>For items that are positively correlated, alpha lies between 0 and 1. It estimates the share of the variance of the scale score that is <em>not</em> random error, and is thus a measure of reliability — more precisely, of the <em>internal consistency</em> of the items. (A negative alpha is a warning sign: an item is coded in the wrong direction.) Two things make it larger (<a href="#tbl-sd-alpha" class="quarto-xref">Table&nbsp;<span>13</span></a>): stronger correlations between the items, and more items.</p>
 <div class="cell">
 <div id="tbl-sd-alpha" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sd-alpha-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;12: Cronbach’s alpha by the number of items and the mean correlation between them
+Table&nbsp;13: Cronbach’s alpha by the number of items and the mean correlation between them
 </figcaption>
 <div aria-describedby="tbl-sd-alpha-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1475,7 +1555,7 @@ Table&nbsp;12: Cronbach’s alpha by the number of items and the mean correlatio
 <ul>
 <li><strong>Conventions.</strong> By a widely used convention, values of about 0.7 or more are acceptable and values of 0.8 or more are good; <span class="citation" data-cites="malhotra2020">Malhotra (<a href="#ref-malhotra2020" role="doc-biblioref">2020, chap. 9</a>)</span> calls a value of 0.6 or less unsatisfactory. For a scale with three items, 0.7 is a realistic target.</li>
 <li><strong>Higher is not always better.</strong> An alpha above 0.95 usually means that the items ask the same question in slightly different words.</li>
-<li><strong>Alpha depends on the number of items.</strong> Six items that correlate at 0.3 reach about the same alpha as three items that correlate at 0.5 (<a href="#tbl-sd-alpha" class="quarto-xref">Table&nbsp;<span>12</span></a>). Do not compare scales of different length by their alpha alone.</li>
+<li><strong>Alpha depends on the number of items.</strong> Six items that correlate at 0.3 reach about the same alpha as three items that correlate at 0.5 (<a href="#tbl-sd-alpha" class="quarto-xref">Table&nbsp;<span>13</span></a>). Do not compare scales of different length by their alpha alone.</li>
 <li><strong>Alpha is not validity.</strong> It tells you that the items measure the <em>same</em> thing, not that they measure the <em>right</em> thing.</li>
 <li><strong>Alpha is for reflective scales only.</strong> The components of a formative index need not be correlated; a low alpha says nothing about its quality.</li>
 <li><strong>Recode reverse-scored items first.</strong> Otherwise they correlate negatively with the other items, and alpha collapses (Step 7).</li>
@@ -1500,7 +1580,7 @@ Table&nbsp;12: Cronbach’s alpha by the number of items and the mean correlatio
 <div id="tbl-sd-wording" class="striped quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sd-wording-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;13: Eight rules for the wording of questions
+Table&nbsp;14: Eight rules for the wording of questions
 </figcaption>
 <div aria-describedby="tbl-sd-wording-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped caption-top table">
@@ -1580,18 +1660,18 @@ Table&nbsp;13: Eight rules for the wording of questions
 </div>
 </section>
 </section>
-<section id="sec-sd-order" class="level2 page-columns page-full">
+<section id="sec-sd-order" class="level2">
 <h2 class="anchored" data-anchor-id="sec-sd-order">Step 4 · Order: the questionnaire follows the causal diagram</h2>
 <p>Where a question stands decides what its answers can be used for. The principle fits in one sentence: <strong>everything that is asked after the stimulus can be changed by it.</strong> A variable that the stimulus may have changed cannot serve as a moderator, as a control variable, or as a criterion for excluding respondents — conditioning on such a variable breaks the comparison that the randomizer created <span class="citation" data-cites="montgomery2018">(<a href="#ref-montgomery2018" role="doc-biblioref">Montgomery et al. 2018</a>)</span>. A variable that the stimulus <em>should</em> change — the mediator, the outcome — must come after it. The causal diagram of <a href="#fig-sd-diagram" class="quarto-xref">Figure&nbsp;<span>1</span></a> therefore dictates the order of the questionnaire (<a href="#fig-sd-order" class="quarto-xref">Figure&nbsp;<span>9</span></a>).</p>
-<div class="cell page-columns page-full">
-<div class="cell-output-display page-columns page-full">
-<div id="fig-sd-order" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
-<figure class="quarto-float quarto-float-fig figure page-columns page-full">
-<div aria-describedby="fig-sd-order-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
-<a href="survey-design_files/figure-html/fig-sd-order-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;9: The questionnaire follows the causal diagram. The moderator and the controls are measured before the randomizer and cannot be affected by the condition; mediator and outcome follow the stimulus in causal order; the manipulation check and the demographics come last."><img src="survey-design_files/figure-html/fig-sd-order-1.png" class="img-fluid figure-img column-page-right" width="2300"></a>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-sd-order" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sd-order-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="survey-design_files/figure-html/fig-sd-order-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;9: The questionnaire follows the causal diagram, from top to bottom. The moderator and the controls are measured before the randomizer and cannot be affected by the condition; mediator and outcome follow the stimulus in causal order; the manipulation check and the demographics come last. The blocks are numbered as in the table below."><img src="survey-design_files/figure-html/fig-sd-order-1.png" class="img-fluid figure-img" width="1560"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sd-order-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9: The questionnaire follows the causal diagram. The moderator and the controls are measured before the randomizer and cannot be affected by the condition; mediator and outcome follow the stimulus in causal order; the manipulation check and the demographics come last.
+Figure&nbsp;9: The questionnaire follows the causal diagram, from top to bottom. The moderator and the controls are measured before the randomizer and cannot be affected by the condition; mediator and outcome follow the stimulus in causal order; the manipulation check and the demographics come last. The blocks are numbered as in the table below.
 </figcaption>
 </figure>
 </div>
@@ -1600,7 +1680,7 @@ Figure&nbsp;9: The questionnaire follows the causal diagram. The moderator and t
 <div id="tbl-sd-blocks" class="striped quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sd-blocks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;14: The blocks of the questionnaire, in order
+Table&nbsp;15: The blocks of the questionnaire, in order
 </figcaption>
 <div aria-describedby="tbl-sd-blocks-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped caption-top table">
@@ -1738,7 +1818,7 @@ Figure&nbsp;10: The blocks of the coffee study in the Qualtrics survey builder, 
 <div id="tbl-sd-qtypes" class="striped quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sd-qtypes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;15: Question types and settings for the building blocks of the questionnaire
+Table&nbsp;16: Question types and settings for the building blocks of the questionnaire
 </figcaption>
 <div aria-describedby="tbl-sd-qtypes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped caption-top table">
@@ -1861,7 +1941,7 @@ Figure&nbsp;13: The randomizer of the coffee study in the Qualtrics survey flow.
 </section>
 <section id="four-ways-to-get-it-wrong" class="level3">
 <h3 class="anchored" data-anchor-id="four-ways-to-get-it-wrong">Four ways to get it wrong</h3>
-<p><a href="#fig-sd-mistakes" class="quarto-xref">Figure&nbsp;<span>14</span></a> shows the four classic mistakes in the survey flow; <a href="#tbl-sd-mistakes" class="quarto-xref">Table&nbsp;<span>16</span></a> adds four more that do not show in the flow, and tells you how to recognize each of them.</p>
+<p><a href="#fig-sd-mistakes" class="quarto-xref">Figure&nbsp;<span>14</span></a> shows the four classic mistakes in the survey flow; <a href="#tbl-sd-mistakes" class="quarto-xref">Table&nbsp;<span>17</span></a> adds four more that do not show in the flow, and tells you how to recognize each of them.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-sd-mistakes" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1879,7 +1959,7 @@ Figure&nbsp;14: Four classic mistakes in the survey flow (the red frames mark th
 <div id="tbl-sd-mistakes" class="striped quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sd-mistakes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;16: Eight ways to get the randomizer wrong, and how to notice them
+Table&nbsp;17: Eight ways to get the randomizer wrong, and how to notice them
 </figcaption>
 <div aria-describedby="tbl-sd-mistakes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="table-striped caption-top table">
@@ -2043,7 +2123,7 @@ Figure&nbsp;16: The anonymous link in the Distributions tab.
 </section>
 <section id="who-answers-and-what-that-means" class="level3">
 <h3 class="anchored" data-anchor-id="who-answers-and-what-that-means">Who answers — and what that means</h3>
-<p>You need about 120 respondents for your analysis — about 20 per group member. Aim for about 140 started questionnaires, because some respondents will not finish and a few will be excluded. Family, friends, and fellow students are a <strong>convenience sample</strong>, and it is worth being precise about what this does and does not threaten:</p>
+<p>Your sample size calculation (<a href="#sec-sd-samplesize">Step 1</a>) says how many respondents you need in the analysis; the guidelines ask for about 120 — about 20 per group member. Aim for about 140 started questionnaires, because some respondents will not finish and a few will be excluded. Family, friends, and fellow students are a <strong>convenience sample</strong>, and it is worth being precise about what this does and does not threaten:</p>
 <ul>
 <li>It does <strong>not</strong> threaten the causal comparison. Whoever answers is assigned to a version by the randomizer, so the two groups are comparable — however unusual your respondents are (<a href="01-foundations.html#sec-randomization" class="quarto-xref"><span>Randomization</span></a>).</li>
 <li>It <strong>does</strong> limit what the result says about the market. The effect you estimate is the effect <em>among people like your respondents</em> (<a href="03-uncertainty.html#sec-unc-populations" class="quarto-xref"><span>Populations and samples</span></a>). If all of them are 23-year-old business students, you know little about the customers your manager cares about — and you cannot study heterogeneity, because your moderator hardly varies. Recruit broadly, across age groups and backgrounds, and describe in your report who answered.</li>
@@ -2073,11 +2153,11 @@ Figure&nbsp;17: The export dialog in the Data &amp; Analysis tab.
 </section>
 <section id="import-three-header-rows" class="level3">
 <h3 class="anchored" data-anchor-id="import-three-header-rows">Import: three header rows</h3>
-<p>A Qualtrics CSV file starts with <strong>three</strong> header rows: the variable names (your question labels), the question texts, and internal import IDs. The data begin in row 4 (<a href="#tbl-sd-header-rows" class="quarto-xref">Table&nbsp;<span>17</span></a>).</p>
+<p>A Qualtrics CSV file starts with <strong>three</strong> header rows: the variable names (your question labels), the question texts, and internal import IDs. The data begin in row 4 (<a href="#tbl-sd-header-rows" class="quarto-xref">Table&nbsp;<span>18</span></a>).</p>
 <div id="tbl-sd-header-rows" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[28,30,42]">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sd-header-rows-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;17: The first four rows of the export, for two of its 30 columns. The first recorded response is one of the group’s own previews (<code>Status</code> = 1).
+Table&nbsp;18: The first four rows of the export, for two of its 30 columns. The first recorded response is one of the group’s own previews (<code>Status</code> = 1).
 </figcaption>
 <div aria-describedby="tbl-sd-header-rows-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -2121,23 +2201,23 @@ Table&nbsp;17: The first four rows of the export, for two of its 30 columns. The
 </div>
 <p>Read the names from the first row, then the data from the fourth:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>base_url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/wu-rds/MA2026/main/data/"</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(base_url, <span class="st">"coffee_seal_qualtrics.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>base_url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/wu-rds/MA2026/main/data/"</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(base_url, <span class="st">"coffee_seal_qualtrics.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># row 1: the names</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>col_names <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">read_csv</span>(file, <span class="at">n_max =</span> <span class="dv">0</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>))</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># row 4 onwards: the data</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(file, <span class="at">skip =</span> <span class="dv">3</span>, <span class="at">col_names =</span> col_names,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># row 1: the names</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>col_names <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">read_csv</span>(file, <span class="at">n_max =</span> <span class="dv">0</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># row 4 onwards: the data</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>raw <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(file, <span class="at">skip =</span> <span class="dv">3</span>, <span class="at">col_names =</span> col_names,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The second header row is a ready-made codebook — it tells you which question is behind which column:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>codebook <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(file, <span class="at">n_max =</span> <span class="dv">1</span>, <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="at">.default =</span> <span class="st">"c"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"variable"</span>,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"question"</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>codebook <span class="sc">|&gt;</span> <span class="fu">filter</span>(variable <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"env_2"</span>, <span class="st">"glow_1"</span>, <span class="st">"wtp"</span>, <span class="st">"condition"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>codebook <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(file, <span class="at">n_max =</span> <span class="dv">1</span>, <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="at">.default =</span> <span class="st">"c"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"variable"</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"question"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>codebook <span class="sc">|&gt;</span> <span class="fu">filter</span>(variable <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"env_2"</span>, <span class="st">"glow_1"</span>, <span class="st">"wtp"</span>, <span class="st">"condition"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 2
   variable  question                                                      
@@ -2154,8 +2234,8 @@ Table&nbsp;17: The first four rows of the export, for two of its 30 columns. The
 <h3 class="anchored" data-anchor-id="who-is-in-the-file">Who is in the file?</h3>
 <p>The first columns of every export describe the response, not the respondent’s answers. Four of them matter:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Status: 0 = a real response, 1 = a preview</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(raw, Status, DistributionChannel)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Status: 0 = a real response, 1 = a preview</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(raw, Status, DistributionChannel)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 3
   Status DistributionChannel     n
@@ -2163,8 +2243,8 @@ Table&nbsp;17: The first four rows of the export, for two of its 30 columns. The
 1      0 anonymous             141
 2      1 preview                 3</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finished: 1 = reached the end of the survey</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(raw, Finished)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finished: 1 = reached the end of the survey</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(raw, Finished)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 2
   Finished     n
@@ -2172,8 +2252,8 @@ Table&nbsp;17: The first four rows of the export, for two of its 30 columns. The
 1        0    12
 2        1   132</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># condition: the field written by the randomizer</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(raw, condition)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># condition: the field written by the randomizer</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(raw, condition)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   condition     n
@@ -2189,26 +2269,26 @@ Table&nbsp;17: The first four rows of the export, for two of its 30 columns. The
 <h3 class="anchored" data-anchor-id="exclusions-rules-that-were-fixed-in-advance">Exclusions: rules that were fixed in advance</h3>
 <p>The blueprint of Step 1 named four exclusion rules. Apply them one at a time and note how many responses each rule removes — your report must say so:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> raw <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">duration =</span> <span class="st">`</span><span class="at">Duration (in seconds)</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Status <span class="sc">==</span> <span class="dv">0</span>)               <span class="co"># (1) no previews</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> raw <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">duration =</span> <span class="st">`</span><span class="at">Duration (in seconds)</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Status <span class="sc">==</span> <span class="dv">0</span>)               <span class="co"># (1) no previews</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 141</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">filter</span>(Finished <span class="sc">==</span> <span class="dv">1</span>)     <span class="co"># (2) finished</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">filter</span>(Finished <span class="sc">==</span> <span class="dv">1</span>)     <span class="co"># (2) finished</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 129</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">filter</span>(attn <span class="sc">==</span> <span class="dv">2</span>)         <span class="co"># (3) attention check: 2 = "Tea"</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">filter</span>(attn <span class="sc">==</span> <span class="dv">2</span>)         <span class="co"># (3) attention check: 2 = "Tea"</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 125</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (4) no speeders: at least one third of the median duration</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">filter</span>(duration <span class="sc">&gt;=</span> <span class="fu">median</span>(duration) <span class="sc">/</span> <span class="dv">3</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (4) no speeders: at least one third of the median duration</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">filter</span>(duration <span class="sc">&gt;=</span> <span class="fu">median</span>(duration) <span class="sc">/</span> <span class="dv">3</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 121</code></pre>
 </div>
@@ -2219,7 +2299,7 @@ Table&nbsp;17: The first four rows of the export, for two of its 30 columns. The
 <h3 class="anchored" data-anchor-id="cleaning-what-respondents-typed">Cleaning: what respondents typed</h3>
 <p>The willingness-to-pay question had no number validation. This is what some respondents made of it:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(wtp, <span class="st">"^[0-9]+(</span><span class="sc">\\</span><span class="st">.[0-9]+)?$"</span>)) <span class="sc">|&gt;</span> <span class="fu">pull</span>(wtp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">str_detect</span>(wtp, <span class="st">"^[0-9]+(</span><span class="sc">\\</span><span class="st">.[0-9]+)?$"</span>)) <span class="sc">|&gt;</span> <span class="fu">pull</span>(wtp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "10.5 Euro" "11,00"     "8,50"      "8 €"       "ca. 5"    
 [6] "€5"        "7,50"      "6,00"     </code></pre>
@@ -2227,13 +2307,13 @@ Table&nbsp;17: The first four rows of the export, for two of its 30 columns. The
 </div>
 <p>Extract the number, accept a comma as the decimal sign, and convert it:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wtp_text =</span> wtp,</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">wtp =</span> wtp_text <span class="sc">|&gt;</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>           <span class="fu">str_extract</span>(<span class="st">"[0-9]+([.,][0-9]+)?"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">str_replace</span>(<span class="st">","</span>, <span class="st">"."</span>) <span class="sc">|&gt;</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">as.numeric</span>())</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span> <span class="fu">filter</span>(wtp <span class="sc">&gt;</span> <span class="dv">30</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(wtp_text, wtp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wtp_text =</span> wtp,</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">wtp =</span> wtp_text <span class="sc">|&gt;</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>           <span class="fu">str_extract</span>(<span class="st">"[0-9]+([.,][0-9]+)?"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">str_replace</span>(<span class="st">","</span>, <span class="st">"."</span>) <span class="sc">|&gt;</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">as.numeric</span>())</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span> <span class="fu">filter</span>(wtp <span class="sc">&gt;</span> <span class="dv">30</span>) <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(wtp_text, wtp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 2
   wtp_text   wtp
@@ -2242,15 +2322,28 @@ Table&nbsp;17: The first four rows of the export, for two of its 30 columns. The
 </div>
 </div>
 <p>One respondent entered 85 euros for 250 g of coffee — perhaps 8.5 was meant, but you cannot know. The value is impossible rather than extreme (<a href="02-describing-data.html#sec-desc-trust" class="quarto-xref"><span>Not trusting your data too early</span></a>); it is set to missing, and the respondent leaves the analysis sample. A validation rule in Qualtrics (a number between 0 and 30) would have prevented both problems.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Why `dplyr::select()` instead of `select()`?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Why <code>dplyr::select()</code> instead of <code>select()</code>?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Several R packages contain a function called <code>select()</code>. The <code>mediation</code> package, which the last analysis of this page uses, loads one of them (the package <code>MASS</code>). From that moment, a plain <code>select()</code> calls the wrong function, and code that worked before stops with an error such as <code>unused arguments</code>. With the package name in front — <code>dplyr::select()</code> — R always takes the function from dplyr, whichever packages are loaded and in whatever order. The code on this page and the R script of this module are written this way; do the same in your project.</p>
+</div>
+</div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>gender_labels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"female"</span>, <span class="st">"male"</span>, <span class="st">"non-binary / other"</span>,</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"prefer not to say"</span>)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wtp =</span> <span class="fu">if_else</span>(wtp <span class="sc">&gt;</span> <span class="dv">30</span>, <span class="cn">NA_real_</span>, wtp),</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">condition =</span> <span class="fu">factor</span>(condition, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Control"</span>, <span class="st">"Seal"</span>)),</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">gender =</span> <span class="fu">factor</span>(gender, <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">labels =</span> gender_labels)) <span class="sc">|&gt;</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(wtp))       <span class="co"># the analysis sample: a valid outcome</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>gender_labels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"female"</span>, <span class="st">"male"</span>, <span class="st">"non-binary / other"</span>,</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"prefer not to say"</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wtp =</span> <span class="fu">if_else</span>(wtp <span class="sc">&gt;</span> <span class="dv">30</span>, <span class="cn">NA_real_</span>, wtp),</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">condition =</span> <span class="fu">factor</span>(condition, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Control"</span>, <span class="st">"Seal"</span>)),</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">gender =</span> <span class="fu">factor</span>(gender, <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">labels =</span> gender_labels)) <span class="sc">|&gt;</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(wtp))       <span class="co"># the analysis sample: a valid outcome</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 120</code></pre>
 </div>
@@ -2260,29 +2353,29 @@ Table&nbsp;17: The first four rows of the export, for two of its 30 columns. The
 <h3 class="anchored" data-anchor-id="from-items-to-scales">From items to scales</h3>
 <p>Environmental concern and warm glow are reflective scales with three items each (<a href="#sec-sd-reflective-formative">Step 3</a>). The second item on environmental concern (“… has been greatly exaggerated”) is worded in the opposite direction, so that a high number means <em>low</em> concern. Reverse it (on a scale from 1 to 7: 8 minus the answer), check the reliability of each scale with Cronbach’s alpha, and average the items:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">env_2r =</span> <span class="dv">8</span> <span class="sc">-</span> env_2)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span> <span class="fu">select</span>(env_1, env_2r, env_3) <span class="sc">|&gt;</span> <span class="fu">cor</span>() <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">env_2r =</span> <span class="dv">8</span> <span class="sc">-</span> env_2)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">select</span>(env_1, env_2r, env_3) <span class="sc">|&gt;</span> <span class="fu">cor</span>() <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       env_1 env_2r env_3
 env_1    1.0   0.60  0.60
 env_2r   0.6   1.00  0.59
 env_3    0.6   0.59  1.00</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cronbach's alpha: environmental concern, then warm glow</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(<span class="fu">select</span>(d, env_1, env_2r, env_3))<span class="sc">$</span>total<span class="sc">$</span>raw_alpha</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cronbach's alpha: environmental concern, then warm glow</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(dplyr<span class="sc">::</span><span class="fu">select</span>(d, env_1, env_2r, env_3))<span class="sc">$</span>total<span class="sc">$</span>raw_alpha</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.8152</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(<span class="fu">select</span>(d, glow_1, glow_2, glow_3))<span class="sc">$</span>total<span class="sc">$</span>raw_alpha</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(dplyr<span class="sc">::</span><span class="fu">select</span>(d, glow_1, glow_2, glow_3))<span class="sc">$</span>total<span class="sc">$</span>raw_alpha</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.7723</code></pre>
 </div>
 </div>
 <p>Both values are above 0.7: the items of each scale go together (<a href="#sec-sd-alpha">Cronbach’s alpha</a>). Report the alpha of every multi-item scale in your presentation. If you forget to reverse an item, you will notice it here: its correlations with the other items are negative, and alpha collapses — for the concern scale to −0.95 (and <code>psych::alpha()</code> prints a warning that names the item).</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">concern   =</span> <span class="fu">rowMeans</span>(<span class="fu">pick</span>(env_1, env_2r, env_3)),</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">warm_glow =</span> <span class="fu">rowMeans</span>(<span class="fu">pick</span>(glow_1, glow_2, glow_3)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">concern   =</span> <span class="fu">rowMeans</span>(<span class="fu">pick</span>(env_1, env_2r, env_3)),</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">warm_glow =</span> <span class="fu">rowMeans</span>(<span class="fu">pick</span>(glow_1, glow_2, glow_3)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><a href="#fig-sd-exclusions" class="quarto-xref">Figure&nbsp;<span>18</span></a> summarizes the way from the export to the analysis sample. A chart or a sentence of this kind belongs in every report.</p>
 <div class="cell">
@@ -2300,7 +2393,7 @@ Figure&nbsp;18: From the export to the analysis sample of the coffee study. The 
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Under the hood: when alpha is too low">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -2309,7 +2402,7 @@ Figure&nbsp;18: From the export to the analysis sample of the coffee study. The 
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>With an alpha far below 0.7, look at the correlations between the items first. Usually one item behaves differently from the others — because it was not reversed, or because respondents understood it differently. The full output of <code>psych::alpha()</code> helps: <code>r.drop</code> is the correlation of each item with the mean of the other items, and <code>raw_alpha</code> under <em>Reliability if an item is dropped</em> shows what the alpha of the scale would be without that item. Dropping an item of a published scale needs a reason that you can state; with three items you are then left with two, and you should say so in your report. For a formative index none of this applies: its items need not be correlated.</p>
 </div>
@@ -2320,10 +2413,10 @@ Figure&nbsp;18: From the export to the analysis sample of the coffee study. The 
 <h3 class="anchored" data-anchor-id="checks-before-the-results">Checks before the results</h3>
 <p><strong>Did the randomizer work?</strong> The groups should be about equally large and similar in everything that was measured before the stimulus:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(condition) <span class="sc">|&gt;</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">concern =</span> <span class="fu">mean</span>(concern), <span class="at">cups =</span> <span class="fu">mean</span>(cups),</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">age =</span> <span class="fu">mean</span>(age), <span class="at">share_female =</span> <span class="fu">mean</span>(gender <span class="sc">==</span> <span class="st">"female"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(condition) <span class="sc">|&gt;</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">concern =</span> <span class="fu">mean</span>(concern), <span class="at">cups =</span> <span class="fu">mean</span>(cups),</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">age =</span> <span class="fu">mean</span>(age), <span class="at">share_female =</span> <span class="fu">mean</span>(gender <span class="sc">==</span> <span class="st">"female"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 6
   condition     n concern  cups   age share_female
@@ -2335,9 +2428,9 @@ Figure&nbsp;18: From the export to the analysis sample of the coffee study. The 
 <p>The groups are similar, not identical — randomization balances the groups on average, not in every sample (<a href="01-foundations.html#sec-randomization" class="quarto-xref"><span>Randomization</span></a>). Differences of this size are what chance produces with 60 respondents per group.</p>
 <p><strong>Did respondents notice the manipulation?</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(condition) <span class="sc">|&gt;</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_check =</span> <span class="fu">mean</span>(mc_seal), <span class="at">sd_check =</span> <span class="fu">sd</span>(mc_seal))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(condition) <span class="sc">|&gt;</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_check =</span> <span class="fu">mean</span>(mc_seal), <span class="at">sd_check =</span> <span class="fu">sd</span>(mc_seal))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 3
   condition mean_check sd_check
@@ -2352,7 +2445,7 @@ Figure&nbsp;18: From the export to the analysis sample of the coffee study. The 
 <h3 class="anchored" data-anchor-id="the-three-analyses">The three analyses</h3>
 <p><strong>H1: Does it work?</strong> The comparison of the two conditions, with the reporting standard of <a href="04-experiments.html#sec-exp-reporting" class="quarto-xref"><span>Reporting the result</span></a> (<a href="#fig-sd-wtp" class="quarto-xref">Figure&nbsp;<span>19</span></a>):</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(wtp <span class="sc">~</span> condition, <span class="at">data =</span> d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(wtp <span class="sc">~</span> condition, <span class="at">data =</span> d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Welch Two Sample t-test
@@ -2366,7 +2459,7 @@ sample estimates:
 mean in group Control    mean in group Seal 
                 7.252                 8.522 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">cohen.d</span>(d<span class="sc">$</span>wtp, d<span class="sc">$</span>condition)<span class="sc">$</span>cohen.d</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">cohen.d</span>(d<span class="sc">$</span>wtp, d<span class="sc">$</span>condition)<span class="sc">$</span>cohen.d</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      lower effect upper
 [1,] 0.2596 0.6276 0.993</code></pre>
@@ -2391,9 +2484,9 @@ Figure&nbsp;19: Willingness to pay by condition: boxplots with the individual an
 </blockquote>
 <p><strong>H2: For whom?</strong> The interaction of the condition with the moderator, and the effect of the seal at low, medium, and high environmental concern (<a href="06-mechanisms.html#sec-mech-cont-cat" class="quarto-xref"><span>Continuous × categorical</span></a>, <a href="#fig-sd-moderation" class="quarto-xref">Figure&nbsp;<span>20</span></a>):</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">seal =</span> <span class="fu">as.numeric</span>(condition <span class="sc">==</span> <span class="st">"Seal"</span>))</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>model_h2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wtp <span class="sc">~</span> seal <span class="sc">*</span> concern, <span class="at">data =</span> d)</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(model_h2)), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">seal =</span> <span class="fu">as.numeric</span>(condition <span class="sc">==</span> <span class="st">"Seal"</span>))</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>model_h2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wtp <span class="sc">~</span> seal <span class="sc">*</span> concern, <span class="at">data =</span> d)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">coef</span>(<span class="fu">summary</span>(model_h2)), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             Estimate Std. Error t value Pr(&gt;|t|)
 (Intercept)     5.036      0.856   5.887    0.000
@@ -2401,8 +2494,8 @@ seal           -0.879      1.172  -0.750    0.455
 concern         0.501      0.187   2.687    0.008
 seal:concern    0.490      0.255   1.921    0.057</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">emtrends</span>(model_h2, <span class="sc">~</span> concern, <span class="at">var =</span> <span class="st">"seal"</span>,</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">at =</span> <span class="fu">list</span>(<span class="at">concern =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="fl">4.5</span>, <span class="dv">6</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">emtrends</span>(model_h2, <span class="sc">~</span> concern, <span class="at">var =</span> <span class="st">"seal"</span>,</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">at =</span> <span class="fu">list</span>(<span class="at">concern =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="fl">4.5</span>, <span class="dv">6</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> concern seal.trend    SE  df lower.CL upper.CL
      3.0      0.592 0.485 116   -0.368     1.55
@@ -2431,35 +2524,39 @@ Figure&nbsp;20: The effect of the seal on willingness to pay, by environmental c
 <p>The estimated effect of the seal increases with environmental concern — from 0.59 euros (95% CI [−0.37; 1.55]) at a concern of 3 to 2.06 euros ([1.03; 3.09]) at a concern of 6. The interaction (<em>b</em> = 0.49 per scale point, 95% CI [−0.02; 1.00], <em>p</em> = .057) is not significant at the 5% level: the data are in line with H2, but with 120 respondents they cannot establish it.</p>
 </blockquote>
 <p>This is what an honest moderation result of a project of this size typically looks like. Note what made the analysis possible at all: the moderator was measured before the stimulus, with a scale that varies between respondents.</p>
-<p><strong>H3: Why?</strong> The two mediation regressions and the bootstrap of the indirect effect (<a href="06-mechanisms.html#sec-mech-mediation" class="quarto-xref"><span>Mediation: why does it work?</span></a>, <a href="#fig-sd-mediation" class="quarto-xref">Figure&nbsp;<span>21</span></a>). Environmental concern, measured before the stimulus, is a control variable in both models, because it plausibly affects both the warm glow and the willingness to pay:</p>
+<p><strong>H3: Why?</strong> The two mediation regressions, and <code>mediate()</code> from the <code>mediation</code> package <span class="citation" data-cites="imai2010">(<a href="#ref-imai2010" role="doc-biblioref">Imai et al. 2010</a>)</span> for the indirect effect with its bootstrap interval (<a href="06-mechanisms.html#sec-mech-mediation" class="quarto-xref"><span>Mediation: why does it work?</span></a>, <a href="#fig-sd-mediation" class="quarto-xref">Figure&nbsp;<span>21</span></a>). Environmental concern, measured before the stimulus, is a control variable in both models, because it plausibly affects both the warm glow and the willingness to pay:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># path a: from the treatment to the mediator</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>model_m <span class="ot">&lt;-</span> <span class="fu">lm</span>(warm_glow <span class="sc">~</span> condition <span class="sc">+</span> concern, <span class="at">data =</span> d)</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co"># paths b and c': from the mediator to the outcome; the direct effect</span></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>model_y <span class="ot">&lt;-</span> <span class="fu">lm</span>(wtp <span class="sc">~</span> condition <span class="sc">+</span> warm_glow <span class="sc">+</span> concern, <span class="at">data =</span> d)</span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">coef</span>(model_m)[<span class="st">"conditionSeal"</span>]</span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">coef</span>(model_y)[<span class="st">"warm_glow"</span>]</span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">indirect =</span> <span class="fu">unname</span>(a <span class="sc">*</span> b),</span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">direct   =</span> <span class="fu">unname</span>(<span class="fu">coef</span>(model_y)[<span class="st">"conditionSeal"</span>]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mediation)   <span class="co"># install.packages("mediation")</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="co"># path a: from the treatment to the mediator</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>model_m <span class="ot">&lt;-</span> <span class="fu">lm</span>(warm_glow <span class="sc">~</span> seal <span class="sc">+</span> concern, <span class="at">data =</span> d)</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="co"># paths b and c': from the mediator to the outcome; the direct effect</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>model_y <span class="ot">&lt;-</span> <span class="fu">lm</span>(wtp <span class="sc">~</span> seal <span class="sc">+</span> warm_glow <span class="sc">+</span> concern, <span class="at">data =</span> d)</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="co"># indirect and direct effect, with 1,000 bootstrap samples</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>med <span class="ot">&lt;-</span> <span class="fu">mediate</span>(model_m, model_y, <span class="at">treat =</span> <span class="st">"seal"</span>, <span class="at">mediator =</span> <span class="st">"warm_glow"</span>,</span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">boot =</span> <span class="cn">TRUE</span>, <span class="at">sims =</span> <span class="dv">1000</span>)</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(med)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>indirect   direct 
-  1.0309   0.2535 </code></pre>
+<pre><code>
+Causal Mediation Analysis 
+
+Nonparametric Bootstrap Confidence Intervals with the Percentile Method
+
+               Estimate 95% CI Lower 95% CI Upper p-value    
+ACME              1.031        0.621        1.503  &lt;2e-16 ***
+ADE               0.253       -0.360        0.853   0.428    
+Total Effect      1.284        0.628        1.910   0.002 ** 
+Prop. Mediated    0.803        0.511        1.478   0.002 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Sample Size Used: 120 
+
+
+Simulations: 1000 </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bootstrap: resample the respondents, estimate both models again</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>boot_indirect <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">2000</span>, {</span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  d_boot <span class="ot">&lt;-</span> d[<span class="fu">sample</span>(<span class="fu">nrow</span>(d), <span class="at">replace =</span> <span class="cn">TRUE</span>), ]</span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  m_boot <span class="ot">&lt;-</span> <span class="fu">lm</span>(warm_glow <span class="sc">~</span> condition <span class="sc">+</span> concern, <span class="at">data =</span> d_boot)</span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  y_boot <span class="ot">&lt;-</span> <span class="fu">lm</span>(wtp <span class="sc">~</span> condition <span class="sc">+</span> warm_glow <span class="sc">+</span> concern,</span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> d_boot)</span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coef</span>(m_boot)[<span class="st">"conditionSeal"</span>] <span class="sc">*</span> <span class="fu">coef</span>(y_boot)[<span class="st">"warm_glow"</span>]</span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(boot_indirect, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  2.5%  97.5% 
-0.6194 1.5438 </code></pre>
 </div>
-</div>
+<p><code>mediate()</code> takes the two models, the name of the treatment — as a 0/1 variable, here <code>seal</code> from H2 — and the name of the mediator. With <code>boot = TRUE</code> it does what <a href="06-mechanisms.html#sec-mech-mediation" class="quarto-xref"><span>Mediation: why does it work?</span></a> did by hand: it draws 1,000 bootstrap samples of the respondents, estimates both models in each of them, and reports percentile intervals. In the output, <strong>ACME</strong> (average causal mediation effect) is the indirect effect <em>a</em> × <em>b</em>, <strong>ADE</strong> (average direct effect) is the direct effect <em>c′</em>, and <em>Prop. Mediated</em> is the indirect effect as a share of the total effect.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-sd-mediation" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -2475,8 +2572,9 @@ Figure&nbsp;21: Mediation in the coffee study: the seal raises the anticipated w
 </div>
 </div>
 <blockquote class="blockquote">
-<p>Of the total effect of 1.28 euros, 1.03 euros (bootstrap 95% CI [0.62; 1.54], about 80%) ran through the anticipated warm glow; the remaining direct effect of 0.25 euros cannot be distinguished from zero (<em>p</em> = .403). The split into a direct and an indirect effect assumes that there are no unobserved confounders of warm glow and willingness to pay.</p>
+<p>Of the total effect of 1.28 euros (95% CI [0.63; 1.91]), 1.03 euros ran through the anticipated warm glow (indirect effect, bootstrap 95% CI [0.62; 1.50]) — about 80% of the effect. The remaining direct effect of 0.25 euros (95% CI [−0.36; 0.85]) cannot be distinguished from zero. The split into a direct and an indirect effect assumes that there are no unobserved confounders of warm glow and willingness to pay.</p>
 </blockquote>
+<p>Read the share with care: it is the ratio of two estimates, and its interval runs from 51% to more than 100% (a share above 100% would mean that the direct effect is negative). With 120 respondents, “most of the effect” is what the data support — not a precise percentage.</p>
 <p>The result supports the mechanism that the study measured. It does not rule out the mechanisms that were not measured (<a href="#sec-sd-mechanisms">Step 1</a>): respondents who expect a certified coffee to taste better, or who trust the brand more, may report a warmer glow as well.</p>
 </section>
 <section id="sec-sd-present" class="level3">
@@ -2511,6 +2609,7 @@ Figure&nbsp;21: Mediation in the coffee study: the seal raises the anticipated w
 <p>For Coaching I you upload the PDF print of your questionnaire (<em>Tools → Import/Export → Print survey</em>) and a short slide deck (<a href="./group-project.html">guidelines</a>). The print shows the questions, not the survey flow — add a <strong>screenshot of your survey flow</strong> to the slides. Before you upload, check:</p>
 <ul class="task-list">
 <li><label><input type="checkbox"><strong>Blueprint:</strong> one decision, one research question, two conditions; H1 to H3 written down, with the expected direction of the moderation</label></li>
+<li><label><input type="checkbox"><strong>Sample size:</strong> the difference you expect for H1 and where this number comes from; the respondents per condition that <code>power.t.test()</code> asks for; and what you do if this is more than you can recruit (<a href="#sec-sd-samplesize">Step 1</a>)</label></li>
 <li><label><input type="checkbox"><strong>Manipulation:</strong> the two versions differ in exactly one respect, unmistakably; everything else is identical; the manipulation check asks about what was varied</label></li>
 <li><label><input type="checkbox"><strong>Outcome:</strong> euros, a 0–100 scale, or a multi-item scale — not a single yes/no question</label></li>
 <li><label><input type="checkbox"><strong>Moderator and mediator:</strong> reflective scales with three items each, from a cited source, with seven scale points; single questions only for facts and concrete judgments</label></li>
@@ -2589,6 +2688,9 @@ Hartmann, Patrick, and Vanessa Apaolaza-Ibáñez. 2012. <span>“Consumer Attitu
 </div>
 <div id="ref-hauser2018" class="csl-entry" role="listitem">
 Hauser, David J., Phoebe C. Ellsworth, and Richard Gonzalez. 2018. <span>“Are Manipulation Checks Necessary?”</span> <em>Frontiers in Psychology</em> 9: 998. <a href="https://doi.org/10.3389/fpsyg.2018.00998">https://doi.org/10.3389/fpsyg.2018.00998</a>.
+</div>
+<div id="ref-imai2010" class="csl-entry" role="listitem">
+Imai, Kosuke, Luke Keele, and Dustin Tingley. 2010. <span>“A General Approach to Causal Mediation Analysis.”</span> <em>Psychological Methods</em> 15 (4): 309–34.
 </div>
 <div id="ref-jarvis2003" class="csl-entry" role="listitem">
 Jarvis, Cheryl Burke, Scott B. MacKenzie, and Philip M. Podsakoff. 2003. <span>“A Critical Review of Construct Indicators and Measurement Model Misspecification in Marketing and Consumer Research.”</span> <em>Journal of Consumer Research</em> 30 (2): 199–218. <a href="https://doi.org/10.1086/376806">https://doi.org/10.1086/376806</a>.

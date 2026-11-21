@@ -2438,33 +2438,197 @@ Table&nbsp;5.7: The coefficients of the DiD regression
 <section id="sec-lc-05" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="sec-lc-05">Learning check</h2>
 <p><strong>(LC5.1)</strong> In a regression of listening hours on prior listening hours, the slope is 0.83. Interpret the coefficient in one sentence — and explain why it does not show that listening before the launch <em>causes</em> listening after it.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Users who listened one hour more in the month before the launch listened, on average, 0.83 hours more in the four weeks after it. The coefficient describes an <strong>association</strong>: it compares <em>different users</em> with different listening histories, not the same user with more or less prior listening. Both variables are driven by the same characteristics of a user — enthusiasm for music, free time, a Premium subscription — so prior listening <em>predicts</em> later listening without causing it. A causal reading would require that prior listening is unrelated to everything else that drives current listening (exogeneity, <a href="#sec-obs-adjust" class="quarto-xref"><span>Section 5.4</span></a>), and nothing suggests that here: nobody assigned listening histories at random.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC5.2)</strong> Which statements about adjustment in multiple regression are correct?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">The coefficient of a variable is its association with the outcome, holding the other variables in the model constant</label></li>
-<li><label><input type="checkbox">Adding a variable to the model can increase, decrease, or leave unchanged the coefficient of another variable</label></li>
+<li><label><input type="checkbox" checked="">The coefficient of a variable is its association with the outcome, holding the other variables in the model constant</label></li>
+<li><label><input type="checkbox" checked="">Adding a variable to the model can increase, decrease, or leave unchanged the coefficient of another variable</label></li>
 <li><label><input type="checkbox">Adjusting for all available variables guarantees an unbiased estimate of a causal effect</label></li>
-<li><label><input type="checkbox">Adjusting for a mediator removes part of the effect one wants to estimate</label></li>
+<li><label><input type="checkbox" checked="">Adjusting for a mediator removes part of the effect one wants to estimate</label></li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Correct: statements 1, 2, and 4. Statement 2: what happens depends on how the added variable is related to the other predictor and to the outcome. The coefficient of Smart Mix fell from 9.3 to 4.9 hours when prior listening was added, because prior listening goes with both adoption and listening time; a variable that is unrelated to the predictor of interest leaves its coefficient almost unchanged; and a variable that works against the predictor of interest can make its coefficient larger. Statement 3 is wrong for two reasons. Adjustment removes only the part of the confounding that the observed variables capture — the fully adjusted estimate of 4.5 hours is still above the true effect of 3 hours, because enthusiasm is not observed. And “all available variables” may include variables that must not be adjusted for. Statement 4 names the most important of them: a mediator lies on the causal path, and holding it constant blocks the indirect part of the effect (<a href="#fig-mediator-dag" class="quarto-xref">Figure&nbsp;<span>5.10</span></a>).</p>
+</div>
+</div>
+</div>
 <p><strong>(LC5.3)</strong> A model contains the categorical variable <code>plan</code> with the levels “Free”, “Premium”, and “Family” (reference: Free). The coefficient of <code>planFamily</code> is 4.2. Interpret it. How would you test whether the plan matters at all?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Users on the Family plan have an outcome that is 4.2 units higher than that of users on the Free plan — the reference category — holding the other variables in the model constant (4.2 listening hours, if the outcome is listening hours). The coefficient says nothing about the difference between Family and Premium: that is the difference between the two dummy coefficients, or the coefficient you get after making Premium the reference with <code>relevel()</code>.</p>
+<p>The <em>p</em>-values of the two dummies test each plan against Free, not the variable as a whole. To test whether the plan matters at all, compare the model with and without the variable: <code>anova(model_without, model_with)</code> tests both dummy coefficients at once with an <em>F</em>-test (<a href="#sec-obs-categorical" class="quarto-xref"><span>Section 5.5</span></a>).</p>
+</div>
+</div>
+</div>
 <p><strong>(LC5.4)</strong> A colleague fits a regression with 25 predictors to 300 customers and reports R² = 0.71 for predicting next month’s spending. What should you ask before trusting this number?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-23" class="callout-23-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Whether the R² was computed <strong>in-sample or out-of-sample</strong>. An R² that is computed on the same 300 customers the model was fitted to flatters the model: with 25 predictors and only 300 observations, the model has plenty of room to fit the noise of this particular sample (overfitting), and R² never falls when a predictor is added. Ask for the performance on customers the model has not seen — a test set — and for the typical prediction error in euros (the RMSE), which says more to a decision maker than a share of explained variation (<a href="#sec-obs-prediction" class="quarto-xref"><span>Section 5.6</span></a>).</p>
+<p>A good second question is how the 25 predictors were chosen. If they were picked because they correlated with spending in these same data, even the in-sample number is too optimistic. The adjusted R² and the AIC penalize the number of predictors and help with a first comparison, but they do not replace the test set.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC5.5)</strong> In a log-log regression, the coefficient of log(advertising spend) is 0.15. (a) Interpret it. (b) The same analysis in levels gives a coefficient of 0.8 sales per euro. Why might the two models reach different conclusions about whether a large increase in the advertising budget pays off?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-24" class="callout-24-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Part (a): the coefficient is an <strong>elasticity</strong>. A 1% increase in advertising spend goes with about 0.15% more sales, a 10% increase with about 1.5% — at every level of the budget. An elasticity between 0 and 1 means diminishing returns.</p>
+<p>Part (b): the two models make different assumptions about the shape of the response. The linear model assumes <strong>constant marginal returns</strong>: every additional euro brings 0.8 units of sales, the hundred-thousandth as much as the first, so a large increase of the budget looks as profitable per euro as a small one. In the log-log model each additional euro brings less than the one before: doubling the budget raises sales by only <span class="math inline">\(2^{0.15} - 1 \approx\)</span> 11%. A large increase can therefore pay off according to the linear model and not according to the log-log model. Which one to believe is a question of the functional form — saturation is the typical pattern for advertising, and the scatter plot and the residuals show which shape fits the data (<a href="#sec-obs-form" class="quarto-xref"><span>Section 5.7</span></a>, <a href="#sec-obs-diagnostics" class="quarto-xref"><span>Section 5.9</span></a>). And for both models: the coefficient is the effect of advertising only if spend is exogenous, which is doubtful when budgets follow expected sales.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC5.6)</strong> In a log-level model with the outcome log(sales), the coefficient of a dummy for “promotion week” is 0.35. By what percentage do sales differ in promotion weeks? Use both the approximate and the exact interpretation.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-25" class="callout-25-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Approximately: <span class="math inline">\(100 \cdot 0.35\)</span> = 35% higher sales in promotion weeks. Exactly: <span class="math inline">\(100 \cdot (e^{0.35} - 1)\)</span> = 41.9%. The approximation is good for coefficients up to about 0.1; at 0.35 it is already seven percentage points off. Report the exact value: sales are about 42% higher in promotion weeks, holding the other variables in the model constant.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC5.7)</strong> Which statements about logistic regression are correct?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">It is used when the outcome is a yes/no variable</label></li>
+<li><label><input type="checkbox" checked="">It is used when the outcome is a yes/no variable</label></li>
 <li><label><input type="checkbox">Its coefficients can be read directly as changes in probability</label></li>
-<li><label><input type="checkbox">Predicted probabilities for different predictor values can be compared to express effects in percentage points</label></li>
-<li><label><input type="checkbox">It always lies between 0 and 1 in its predictions</label></li>
+<li><label><input type="checkbox" checked="">Predicted probabilities for different predictor values can be compared to express effects in percentage points</label></li>
+<li><label><input type="checkbox" checked="">It always lies between 0 and 1 in its predictions</label></li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-26" class="callout-26-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Correct: statements 1, 3, and 4. Statement 2 is wrong: a coefficient is a change in the <em>log-odds</em>, and its exponential is an odds ratio. The change in probability that goes with it depends on where on the S-curve an observation lies — small at the flat ends, largest around 50% (<a href="#fig-logistic-steps" class="quarto-xref">Figure&nbsp;<span>5.23</span></a>). This is why effects are best reported as differences between predicted probabilities at chosen values (statement 3). Statement 4 is the reason for the model: the logistic function turns any value of the linear predictor into a probability between 0 and 1, whereas a straight line predicts probabilities below 0 and above 1.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC5.8)</strong> An analyst reports a difference-in-differences estimate of a price promotion on sales in treated stores. Which statements are correct?</p>
 <ul class="task-list">
-<li><label><input type="checkbox">The estimate uses the change in the control stores to estimate what would have happened in the treated stores without the promotion</label></li>
+<li><label><input type="checkbox" checked="">The estimate uses the change in the control stores to estimate what would have happened in the treated stores without the promotion</label></li>
 <li><label><input type="checkbox">It requires that the treated and control stores had the same sales level before the promotion</label></li>
-<li><label><input type="checkbox">It requires that both groups would have followed parallel trends without the promotion</label></li>
-<li><label><input type="checkbox">A placebo test in the pre-period can make the parallel trends assumption more plausible, but cannot prove it</label></li>
+<li><label><input type="checkbox" checked="">It requires that both groups would have followed parallel trends without the promotion</label></li>
+<li><label><input type="checkbox" checked="">A placebo test in the pre-period can make the parallel trends assumption more plausible, but cannot prove it</label></li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-27-contents" aria-controls="callout-27" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-27" class="callout-27-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Correct: statements 1, 3, and 4. Statement 2 is wrong: a difference in <em>levels</em> between the groups is harmless, because it is subtracted out — in the regression it is the coefficient of <code>treated</code>. The playlisted songs of <a href="#sec-obs-did" class="quarto-xref"><span>Section 5.10</span></a> started far above the control songs. What the estimate needs is that both groups would have <em>changed</em> in the same way without the treatment (statement 3). Statement 4: the assumption is about what the treated stores would have done after the promotion started, without it — something that is never observed. Parallel trends before the promotion and a placebo test make the assumption plausible, not certain.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC5.9)</strong> The residual plot of a regression of revenue on advertising shows a funnel: the residuals scatter more widely for large fitted values. What does this mean for the coefficients and for the <em>p</em>-values — and what is the simplest fix?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-28-contents" aria-controls="callout-28" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-28" class="callout-28-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The funnel is <strong>heteroskedasticity</strong>: the scatter around the line is not the same at all levels of the prediction. The coefficients remain unbiased. The standard errors that <code>lm()</code> reports, however, assume equal scatter and are wrong — and with them the <em>p</em>-values and the confidence intervals. The simplest fix is <strong>robust standard errors</strong>, which do not rely on this assumption: <code>coeftest(model, vcov = vcovHC(model, type = "HC1"))</code> with the packages <code>sandwich</code> and <code>lmtest</code>; the Breusch–Pagan test (<code>bptest(model)</code>) confirms the diagnosis (<a href="#sec-obs-diagnostics" class="quarto-xref"><span>Section 5.9</span></a>). For an outcome such as revenue it is also worth looking at the log-log model: a funnel often disappears when the outcome is logged.</p>
+</div>
+</div>
+</div>
 <p><strong>(LC5.10)</strong> Your group project experiment randomizes two versions of a product description. Afterwards, you also want to know whether the effect differs between frequent and occasional buyers. Which tool from this chapter do you need — and in which chapter is it developed?</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-29-contents" aria-controls="callout-29" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-29" class="callout-29-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>An <strong>interaction term</strong>: a regression of the outcome on the condition, on the type of buyer, and on their product, <code>lm(outcome ~ condition * frequent_buyer)</code>. The coefficient of the interaction is the difference between frequent and occasional buyers in the effect of the description. It is the construction of the difference-in-differences regression (<a href="#sec-obs-did" class="quarto-xref"><span>Section 5.10</span></a>), where <code>treated * post</code> gave the difference between two differences; <a href="06-mechanisms.html" class="quarto-xref"><span>Chapter 6</span></a> develops it in its general role, as the tool for moderation.</p>
+<p>Two things to settle before the data collection: ask about buying frequency <em>before</em> respondents see the description, so that the answer cannot be affected by it; and write down that you will test this difference — a difference between subgroups that you discover afterwards is an exploratory finding.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
