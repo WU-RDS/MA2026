@@ -759,7 +759,7 @@ The stimulus gets a page of its own. The back button stays off.
 
 ::: columns
 ::: {.column width="56%"}
-![](../img/ch08/qualtrics_blocks.png){width="25%"}
+![](../img/ch08/qualtrics_blocks.png){width="75%"}
 :::
 
 ::: {.column width="44%"}
